@@ -14,7 +14,7 @@ interface AppShellProps {
 export function AppShell({ items, activeScreen, activeLabel, onSelect, children }: AppShellProps) {
   return (
     <div className="grid-overlay min-h-screen text-slate-200">
-      <div className="grid min-h-screen xl:grid-cols-[300px_1fr]">
+      <div className="grid min-h-screen lg:grid-cols-[300px_1fr]">
         <Sidebar items={items} activeScreen={activeScreen} onSelect={onSelect} />
         <div className="min-w-0">
           <TopBar activeLabel={activeLabel} />

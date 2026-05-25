@@ -4,28 +4,28 @@ import { mockCertificate } from "../data/mockCertificates";
 
 const verifierSteps = [
   {
-    title: "Receive certification artifact",
-    description: "An external verifier receives a certification artifact and its declared execution envelope references."
+    title: "Receive sample certification artifact",
+    description: "A demo external verifier receives a sample certification artifact and declared execution envelope references."
   },
   {
-    title: "Retrieve policy manifest",
-    description: "The verifier loads the policy manifest referenced by the certification record."
+    title: "Retrieve sample policy manifest",
+    description: "The verifier flow loads the policy manifest referenced by the mock certification record."
   },
   {
-    title: "Replay artifact",
-    description: "The verifier replays the artifact under the declared execution envelope."
+    title: "Replay sample artifact",
+    description: "The demo verifier simulates replay under the declared execution envelope."
   },
   {
-    title: "Recompute digest",
-    description: "The verifier recomputes the verification digest from normalized evidence."
+    title: "Simulated recomputation",
+    description: "The demo verifier simulates recomputing the verification digest from normalized mock evidence."
   },
   {
-    title: "Compare session root",
-    description: "The recomputed digest is checked against append-only session-root continuity."
+    title: "Mock session-root comparison",
+    description: "The demo verifier simulates comparing the recomputed digest against sample session-root continuity."
   },
   {
-    title: "Emit audit receipt",
-    description: "The verifier emits an audit receipt for downstream governance consumers."
+    title: "Demo audit receipt",
+    description: "The verifier flow displays a sample audit receipt shape for downstream governance consumers."
   }
 ];
 
@@ -33,10 +33,10 @@ const auditReceipt = {
   receiptId: "audit_receipt_demo_000184",
   certificateId: mockCertificate.certificateId,
   policyManifestId: mockCertificate.policyManifestId,
-  digestRecomputed: true,
-  sessionRootCompared: true,
+  digestRecomputed: "simulated",
+  sessionRootCompared: "mock comparison",
   verifier: "external.verifier.demo",
-  result: "verification digest and session root accepted"
+  result: "demo accepted outcome from mock evidence"
 };
 
 export function ExternalVerifier() {
@@ -46,7 +46,7 @@ export function ExternalVerifier() {
         <p className="font-mono text-xs uppercase tracking-[0.24em] text-ridge-cyan">External verifier</p>
         <h1 className="mt-3 text-3xl font-semibold text-slate-50">Third-party verification flow</h1>
         <p className="mt-4 max-w-4xl text-sm leading-7 text-slate-400">
-          RIDGE-certified artifacts can be consumed by an external verifier that recomputes digests, compares session roots, and emits an audit receipt. The downstream governance consumer decides how to use that receipt.
+          RIDGE-certified artifacts can be consumed by an external verifier that recomputes digests, compares session roots, and emits an audit receipt. In this prototype, those verifier outcomes are simulated with mock evidence; the downstream governance consumer decides how to use a real receipt.
         </p>
       </section>
 
@@ -56,7 +56,7 @@ export function ExternalVerifier() {
         ))}
       </section>
 
-      <CodePanel title="Audit receipt mock" subtitle="external verifier output shape" value={auditReceipt} />
+      <CodePanel title="Demo audit receipt" subtitle="simulated external verifier output shape" value={auditReceipt} />
     </div>
   );
 }

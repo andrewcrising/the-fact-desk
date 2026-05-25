@@ -44,10 +44,10 @@ export function Overview() {
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <MetricCard label="Artifacts verified" value="184" detail="Canonical execution artifacts processed in the mock diligence session." tone="cyan" />
-        <MetricCard label="Replay equivalence" value="99.98%" detail="Passing replay comparisons under the declared execution envelope." tone="mint" />
-        <MetricCard label="Certification records" value="37" detail="Certification artifacts prepared for external verifier review." tone="cyan" />
-        <MetricCard label="Session-root continuity" value="Intact" detail="Append-only lineage preserves predecessor-linked evidence continuity." tone="amber" />
+        <MetricCard label="Sample artifacts displayed" value="184 demo" detail="Mock canonical execution artifacts shown for the diligence prototype." tone="cyan" />
+        <MetricCard label="Demo replay equivalence" value="99.98%" detail="Sample replay comparisons under the declared execution envelope." tone="mint" />
+        <MetricCard label="Mock certification records" value="37 sample" detail="Demo certification artifacts prepared for external verifier review." tone="cyan" />
+        <MetricCard label="Sample session-root continuity" value="Intact" detail="Mock append-only lineage preserving predecessor-linked evidence continuity." tone="amber" />
       </section>
 
       <section>

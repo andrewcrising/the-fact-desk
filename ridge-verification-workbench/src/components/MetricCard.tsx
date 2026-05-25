@@ -16,7 +16,7 @@ export function MetricCard({ label, value, detail, tone = "cyan" }: MetricCardPr
     <article className="panel overflow-hidden rounded-2xl p-5">
       <div className={`mb-4 h-1.5 rounded-full bg-gradient-to-r ${toneClasses[tone]}`} />
       <p className="text-xs uppercase tracking-[0.24em] text-slate-500">{label}</p>
-      <div className="mt-3 text-3xl font-semibold text-slate-50">{value}</div>
+      <div className="mt-3 break-words text-3xl font-semibold text-slate-50">{value}</div>
       <p className="mt-3 text-sm leading-6 text-slate-400">{detail}</p>
     </article>
   );

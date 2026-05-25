@@ -16,16 +16,16 @@ export function ReplayVerification() {
             <p className="font-mono text-xs uppercase tracking-[0.24em] text-ridge-cyan">Deterministic replay</p>
             <h1 className="mt-3 text-3xl font-semibold text-slate-50">Replay verification comparison</h1>
             <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-400">
-              RIDGE compares original and replay artifacts to verify replay equivalence. A discrepancy result emits evidence for downstream governance consumers; it does not change or block the underlying execution.
+              RIDGE compares original and replay artifacts to verify replay equivalence. This screen uses sample replay outcomes; a real discrepancy result would emit evidence for downstream governance consumers without changing or blocking the underlying execution.
             </p>
           </div>
-          <div className="flex rounded-xl border border-ridge-border bg-ridge-panelSoft p-1">
+          <div className="flex flex-wrap gap-1 rounded-xl border border-ridge-border bg-ridge-panelSoft p-1">
             {replayScenarios.map((item) => (
               <button
                 key={item.id}
                 type="button"
                 onClick={() => setScenarioId(item.id)}
-                className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
+                className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition sm:flex-none ${
                   scenarioId === item.id ? "bg-ridge-cyan/15 text-ridge-cyan" : "text-slate-400 hover:text-slate-100"
                 }`}
               >
@@ -37,9 +37,9 @@ export function ReplayVerification() {
       </section>
 
       <section className="grid gap-4 md:grid-cols-3">
-        <Summary label="Digest comparison" value={scenario.originalDigest === scenario.replayDigest ? "Match" : "Mismatch"} failed={failed} />
-        <Summary label="Equivalence result" value={scenario.equivalenceResult} failed={failed} />
-        <Summary label="Tolerance check" value={scenario.toleranceCheck} failed={failed} />
+        <Summary label="Sample digest comparison" value={scenario.originalDigest === scenario.replayDigest ? "Match" : "Mismatch"} failed={failed} />
+        <Summary label="Demo equivalence result" value={scenario.equivalenceResult} failed={failed} />
+        <Summary label="Mock tolerance check" value={scenario.toleranceCheck} failed={failed} />
       </section>
 
       <section className="panel overflow-hidden rounded-3xl">
@@ -63,7 +63,7 @@ export function ReplayVerification() {
                   <td className="px-5 py-4 font-mono text-slate-400">{field.original}</td>
                   <td className="px-5 py-4 font-mono text-slate-400">{field.replay}</td>
                   <td className="px-5 py-4">
-                    <StatusBadge status={field.result === "mismatch" ? "discrepancy" : "verified"} label={field.result} />
+                    <StatusBadge status={field.result === "mismatch" ? "discrepancy" : "verified"} label={field.result === "mismatch" ? "sample mismatch" : `sample ${field.result}`} />
                   </td>
                 </tr>
               ))}
@@ -86,7 +86,7 @@ export function ReplayVerification() {
         </section>
       ) : null}
 
-      <CodePanel title="Replay comparison object" subtitle={scenario.label} value={scenario} />
+      <CodePanel title="Mock replay comparison object" subtitle={scenario.label} value={scenario} />
     </div>
   );
 }
