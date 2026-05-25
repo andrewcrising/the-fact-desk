@@ -66,6 +66,10 @@ NEXT_PUBLIC_USE_MERGED_STORIES=true
 
 ## Deploy to Vercel
 
+**Quick guide:** see [DEPLOY.md](./DEPLOY.md) for step-by-step GitHub + Vercel instructions.
+
+Summary:
+
 ### Mock-only public demo
 
 1. Import repo → Next.js defaults.
