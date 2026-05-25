@@ -37,15 +37,26 @@ npm run preview
 
 ## Deployment
 
-This Vite app can be deployed to Vercel, Netlify, or Cloudflare Pages after connecting the GitHub repo.
+This Vite app can be deployed to Vercel, Netlify, or Cloudflare Pages after connecting the GitHub repo. No backend or environment variables are required for v1.
 
-Typical settings:
+### Deployment checklist
 
-- Build command: `npm run build`
-- Output directory: `dist`
-- Install command: `npm install`
+- Run `npm install`.
+- Run `npm run build`.
+- Connect the repo to Vercel, Netlify, or Cloudflare Pages.
+- Set the build command to `npm run build`.
+- Set the output directory to `dist`.
+- Confirm demo/mock language remains visible before public sharing.
 
-No backend or environment variables are required for v1.
+## Future Access Options
+
+These are future deployment options and are not active v1 functionality:
+
+- Public demo mode.
+- Private diligence portal.
+- NDA-gated review.
+- Paid access mode.
+- Enterprise integration mode.
 
 ## Future backend features
 
@@ -65,6 +76,6 @@ RIDGE produces deterministic execution evidence. Downstream governance, audit, c
 
 This workbench intentionally excludes DIAL timing, interval, scheduling, allocation, turnover, fairness, routing, and optimization logic.
 
-It also excludes DSEA enforcement, intervention, override, kill-switch, and safety arbitration logic.
+It also excludes safety enforcement, intervention, override, kill-switch, and safety arbitration logic.
 
 The app avoids broad full-stack AI governance framing, speculative valuation claims, legal conclusions, and medical, trading, or consumer-app concepts.

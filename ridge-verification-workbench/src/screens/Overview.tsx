@@ -1,6 +1,25 @@
 import { FlowStep } from "../components/FlowStep";
 import { MetricCard } from "../components/MetricCard";
 
+
+const demoShows = [
+  "canonical execution artifact representation",
+  "deterministic replay comparison",
+  "verification digest and session-root continuity",
+  "sample certification artifact generation",
+  "append-only lineage visualization",
+  "simulated external verification / audit receipt"
+];
+
+const demoDoesNotDo = [
+  "does not perform live AI inference",
+  "does not replace model-serving infrastructure",
+  "does not replace observability or governance tools",
+  "does not enforce safety policies",
+  "does not schedule, allocate, or optimize workloads",
+  "does not include production authentication or payments"
+];
+
 const lifecycle = [
   {
     title: "Execution Intake",
@@ -38,9 +57,17 @@ export function Overview() {
             RIDGE Verification Workbench
           </h1>
           <p className="mt-6 text-lg leading-8 text-slate-300">
-            A web-based technical diligence prototype showing deterministic execution evidence for replayable, certifiable AI outcomes. RIDGE operates at the execution-resolution layer, producing canonical artifacts, verification digests, session roots, and certification evidence for downstream governance consumers.
+            RIDGE Verification Workbench is a front-end technical diligence demo showing how deterministic AI execution evidence can be represented, replayed, certified, linked through session-root lineage, and externally verified.
           </p>
+          <div className="mt-6 rounded-2xl border border-ridge-amber/30 bg-ridge-amber/10 p-4 text-sm leading-6 text-ridge-amber">
+            <strong className="font-semibold">Demo prototype:</strong> This prototype uses mocked sample artifacts and simulated verifier outcomes. It does not perform live runtime integration, production replay, authentication, or payment gating.
+          </div>
         </div>
+      </section>
+
+      <section className="grid gap-4 lg:grid-cols-2">
+        <InfoCard title="What this demo shows" items={demoShows} />
+        <InfoCard title="What this demo does not do" items={demoDoesNotDo} />
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -67,5 +94,22 @@ export function Overview() {
         </div>
       </section>
     </div>
+  );
+}
+
+
+function InfoCard({ title, items }: { title: string; items: string[] }) {
+  return (
+    <article className="panel rounded-2xl p-5">
+      <h2 className="text-lg font-semibold text-slate-50">{title}</h2>
+      <ul className="mt-4 space-y-3 text-sm leading-6 text-slate-400">
+        {items.map((item) => (
+          <li key={item} className="flex gap-3">
+            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-ridge-cyan" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </article>
   );
 }

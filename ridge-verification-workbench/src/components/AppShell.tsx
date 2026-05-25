@@ -19,6 +19,9 @@ export function AppShell({ items, activeScreen, activeLabel, onSelect, children 
         <div className="min-w-0">
           <TopBar activeLabel={activeLabel} />
           <main className="mx-auto w-full max-w-7xl px-5 py-8 md:px-8">{children}</main>
+          <footer className="border-t border-ridge-border/70 px-5 py-5 text-center text-xs leading-6 text-slate-500 md:px-8">
+            RIDGE Verification Workbench - demo prototype using mocked artifacts. For technical evaluation only.
+          </footer>
         </div>
       </div>
     </div>
