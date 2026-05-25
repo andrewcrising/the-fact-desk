@@ -1,5 +1,6 @@
 import { StoryFeed } from "@/components/stories/StoryFeed";
 import { Sidebar } from "@/components/sidebar/Sidebar";
+import type { LiveDataSource } from "@/lib/live-data";
 import type { Story } from "@/types/story";
 import { Suspense } from "react";
 
@@ -7,6 +8,8 @@ interface DashboardProps {
   stories: Story[];
   livePreviewStories?: Story[];
   showLiveBeta?: boolean;
+  liveFeedSource?: LiveDataSource;
+  liveFeedFetchedAt?: string | null;
 }
 
 function FeedFallback() {
@@ -22,6 +25,8 @@ export function Dashboard({
   stories,
   livePreviewStories = [],
   showLiveBeta = false,
+  liveFeedSource = "cache",
+  liveFeedFetchedAt = null,
 }: DashboardProps) {
   return (
     <div className="desk-canvas flex-1">
@@ -32,6 +37,8 @@ export function Dashboard({
               stories={stories}
               livePreviewStories={livePreviewStories}
               showLiveBeta={showLiveBeta}
+              liveFeedSource={liveFeedSource}
+              liveFeedFetchedAt={liveFeedFetchedAt}
             />
           </Suspense>
         </main>

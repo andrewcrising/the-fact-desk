@@ -8,10 +8,14 @@ import {
   isLiveBetaEnabled,
 } from "@/lib/story-repository";
 
-export default function Home() {
+export const revalidate = 900;
+
+export default async function Home() {
   const stories = getHomepageStories();
   const showLiveBeta = isLiveBetaEnabled();
-  const livePreviewStories = showLiveBeta ? getLivePreviewStories() : [];
+  const liveFeed = showLiveBeta
+    ? await getLivePreviewStories()
+    : { stories: [], source: "cache" as const, fetchedAt: null };
 
   return (
     <>
@@ -19,10 +23,12 @@ export default function Home() {
       <Hero />
       <Dashboard
         stories={stories}
-        livePreviewStories={livePreviewStories}
+        livePreviewStories={liveFeed.stories}
+        liveFeedSource={liveFeed.source}
+        liveFeedFetchedAt={liveFeed.fetchedAt}
         showLiveBeta={showLiveBeta}
       />
-      <SiteFooter />
+      <SiteFooter showLiveBeta={showLiveBeta} />
     </>
   );
 }

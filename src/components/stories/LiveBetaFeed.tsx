@@ -2,11 +2,14 @@ import { ConfidenceLabel } from "@/components/ui/ConfidenceLabel";
 import { DeskCard } from "@/components/ui/DeskCard";
 import { DeskLabel } from "@/components/ui/DeskLabel";
 import { SignalLabel } from "@/components/ui/SignalLabel";
+import type { LiveDataSource } from "@/lib/live-data";
 import { formatSourceSpread, formatStoryTime } from "@/lib/stories";
 import type { Story } from "@/types/story";
 
 interface LiveBetaFeedProps {
   stories: Story[];
+  source?: LiveDataSource;
+  fetchedAt?: string | null;
 }
 
 function LiveBetaCard({ story }: { story: Story }) {
@@ -61,18 +64,34 @@ function LiveBetaCard({ story }: { story: Story }) {
   );
 }
 
-export function LiveBetaFeed({ stories }: LiveBetaFeedProps) {
+export function LiveBetaFeed({
+  stories,
+  source = "cache",
+  fetchedAt,
+}: LiveBetaFeedProps) {
+  const statusLine =
+    source === "live"
+      ? "Live RSS · refreshes about every 15 minutes"
+      : "Cached RSS fallback · run ingest locally or wait for cron";
+
   return (
     <section
       id="live-beta"
       aria-labelledby="live-beta-heading"
-      className="border-t border-[var(--border)] pt-5"
+      className="border-t border-[var(--border)] pt-4"
     >
-      <div className="mb-3">
-        <DeskLabel id="live-beta-heading">Live Beta Feed</DeskLabel>
-        <p className="mt-1 text-[11px] text-[var(--muted-light)]">
-          Live RSS beta · single-source · not fully analyzed
-        </p>
+      <div className="mb-2 flex flex-wrap items-end justify-between gap-2">
+        <div>
+          <DeskLabel id="live-beta-heading">Live Beta Feed</DeskLabel>
+          <p className="mt-0.5 text-[11px] text-[var(--muted-light)]">
+            Live RSS beta · single-source · not fully analyzed
+          </p>
+        </div>
+        {fetchedAt && (
+          <p className="font-mono text-[10px] text-[var(--muted-light)]">
+            {statusLine} · {formatStoryTime(fetchedAt)}
+          </p>
+        )}
       </div>
 
       {stories.length === 0 ? (

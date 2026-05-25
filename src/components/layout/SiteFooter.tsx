@@ -1,10 +1,15 @@
-export function SiteFooter() {
+interface SiteFooterProps {
+  showLiveBeta?: boolean;
+}
+
+export function SiteFooter({ showLiveBeta = false }: SiteFooterProps) {
   return (
     <footer className="mt-auto border-t border-[var(--border)] bg-white">
       <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
         <p className="mb-3 text-center text-[11px] leading-relaxed text-[var(--muted-light)] sm:text-xs">
-          Prototype preview using mock data. Live ingestion and source scoring
-          are in progress.
+          {showLiveBeta
+            ? "Mock briefing desk with live RSS beta feed. Live stories link to original sources and are not fully analyzed."
+            : "Prototype preview using mock data. Live ingestion and source scoring are in progress."}
         </p>
         <div className="flex flex-col gap-2 text-[11px] leading-relaxed text-[var(--muted-light)] sm:flex-row sm:items-center sm:justify-between">
           <p className="font-medium text-[var(--muted)]">

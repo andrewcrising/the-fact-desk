@@ -1,19 +1,22 @@
 import { NAV_LINKS } from "@/data/navigation";
+import { isLiveBetaEnabled } from "@/lib/story-repository";
 import Link from "next/link";
 
 export function TopNav() {
+  const liveBeta = isLiveBetaEnabled();
+
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-white">
       <div className="border-b border-[var(--border-subtle)] bg-[#fafbfc]">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1.5 text-[10px] font-medium uppercase tracking-widest text-[var(--muted-light)] sm:px-6 lg:px-8">
           <span>Evidence-first news intelligence</span>
           <span className="hidden font-mono normal-case tracking-normal sm:inline">
-            Prototype · mock data
+            {liveBeta ? "Mock desk + live RSS beta" : "Prototype · mock data"}
           </span>
         </div>
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 py-2 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-2 py-2 lg:flex-row lg:items-center lg:justify-between lg:py-2">
           <Link href="/" className="group flex items-center gap-2.5">
             <div

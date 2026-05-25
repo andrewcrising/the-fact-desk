@@ -1,87 +1,58 @@
 # Deploy The Fact Desk to Vercel
 
-Your project is committed locally on branch `main`. Follow these steps once.
+Repo: **https://github.com/andrewcrising/the-fact-desk**
 
-## Step 1 — Push to GitHub
+## Mock demo (default)
 
-Open **PowerShell** in this folder:
+Vercel env — all `false` or unset:
 
-```powershell
-cd C:\Users\andre\the-fact-desk
+```
+NEXT_PUBLIC_SHOW_LIVE_BETA=false
+NEXT_PUBLIC_USE_MERGED_STORIES=false
+NEXT_PUBLIC_USE_RSS_CACHE=false
 ```
 
-### Option A: GitHub CLI (recommended)
+## Enable live RSS on production
 
-```powershell
-gh auth login
-```
-
-Choose: **GitHub.com** → **HTTPS** → **Login with browser**.
-
-Then create the repo and push:
-
-```powershell
-gh repo create the-fact-desk --public --source=. --remote=origin --push
-```
-
-If the repo name is taken, pick another:
-
-```powershell
-gh repo create the-fact-desk-app --public --source=. --remote=origin --push
-```
-
-### Option B: GitHub website
-
-1. Go to [github.com/new](https://github.com/new)
-2. Repository name: `the-fact-desk`
-3. Public → **Create repository** (no README)
-4. Run:
-
-```powershell
-git remote add origin https://github.com/YOUR_USERNAME/the-fact-desk.git
-git push -u origin main
-```
-
-Replace `YOUR_USERNAME` with your GitHub username.
-
----
-
-## Step 2 — Import on Vercel
-
-1. Go to [vercel.com/new](https://vercel.com/new)
-2. **Import** your `the-fact-desk` GitHub repository
-3. Framework: **Next.js** (auto-detected)
-4. Build command: `npm run build` (default)
-5. **Environment variables** (mock demo — recommended):
-
-| Name | Value |
-|------|-------|
-| `NEXT_PUBLIC_SHOW_LIVE_BETA` | `false` |
-| `NEXT_PUBLIC_USE_MERGED_STORIES` | `false` |
-| `NEXT_PUBLIC_USE_RSS_CACHE` | `false` |
-
-6. Click **Deploy**
-
-Vercel gives you a URL like `https://the-fact-desk.vercel.app`.
-
----
-
-## Optional — Live Beta on Vercel
-
-`data/live-stories.json` is in the repo (cached RSS stories).
-
-Set on Vercel → Settings → Environment Variables:
+1. Vercel → Project → **Settings → Environment Variables**
+2. Add:
 
 ```
 NEXT_PUBLIC_SHOW_LIVE_BETA=true
 ```
 
-Redeploy. Mock desk stays; Live Beta Feed appears at the bottom.
+3. **Redeploy**
 
----
+The homepage keeps the mock briefing desk. A **Live Beta Feed** section at the bottom fetches NPR, BBC, and CISA RSS every ~15 minutes (server cache). Stories link to original sources.
 
-## Verify after deploy
+Optional — hourly cron refresh (included in `vercel.json`):
 
-- `/` — homepage
-- `/story/disaster-relief-audit-preliminary` — detail page
-- `/api/live-preview` — cached live JSON
+```
+CRON_SECRET=your-random-secret
+```
+
+Vercel Cron calls `/api/cron/revalidate-live` to refresh the RSS cache.
+
+## Verify live data
+
+- Homepage → scroll to **Live Beta Feed**
+- `GET /api/live-preview` — JSON with `source: "live"` or `"cache"`
+- `GET /api/test-rss` — single-feed proof
+
+## Local development
+
+```bash
+npm run dev
+# .env.local
+NEXT_PUBLIC_SHOW_LIVE_BETA=true
+```
+
+Optional local cache file:
+
+```bash
+npm run ingest:rss
+```
+
+## Next: persistent storage
+
+For production-scale ingestion, add **Supabase/Postgres** or **Vercel Blob** so cron writes stories to a database instead of only `unstable_cache`.

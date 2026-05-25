@@ -1,22 +1,16 @@
-import {
-  getCachedLiveStories,
-  getLiveCacheMeta,
-  isLiveBetaEnabled,
-} from "@/lib/story-repository";
-import { ingestEnabledFeeds } from "@/lib/ingest/ingest-feeds";
+import { getLiveFeed } from "@/lib/live-data";
+import { isLiveBetaEnabled } from "@/lib/story-repository";
 import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-/**
- * GET /api/live-preview
- * Returns cached live stories. Optional ?fresh=1 triggers live fetch (preview only).
- */
+/** GET /api/live-preview — returns current live feed (cached fetch + file fallback). */
 export async function GET(request: NextRequest) {
   const fresh = request.nextUrl.searchParams.get("fresh") === "1";
 
   try {
     if (fresh) {
+      const { ingestEnabledFeeds } = await import("@/lib/ingest/ingest-feeds");
       const stories = await ingestEnabledFeeds();
       return NextResponse.json({
         ok: true,
@@ -27,17 +21,15 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    const stories = getCachedLiveStories();
-    const meta = getLiveCacheMeta();
+    const result = await getLiveFeed();
 
     return NextResponse.json({
       ok: true,
-      source: "cache",
-      count: stories.length,
-      generatedAt: meta.generatedAt,
-      feedCount: meta.feedCount,
+      source: result.source,
+      count: result.stories.length,
+      generatedAt: result.fetchedAt,
       liveBetaEnabled: isLiveBetaEnabled(),
-      stories,
+      stories: result.stories,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";

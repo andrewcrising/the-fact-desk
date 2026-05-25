@@ -12,6 +12,7 @@ import {
   storiesBySignal,
   storiesLowConfidence,
 } from "@/lib/stories";
+import type { LiveDataSource } from "@/lib/live-data";
 import type { Story, StoryCategory } from "@/types/story";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
@@ -25,12 +26,16 @@ interface StoryFeedProps {
   stories: Story[];
   livePreviewStories?: Story[];
   showLiveBeta?: boolean;
+  liveFeedSource?: LiveDataSource;
+  liveFeedFetchedAt?: string | null;
 }
 
 export function StoryFeed({
   stories: homepageStories,
   livePreviewStories = [],
   showLiveBeta = false,
+  liveFeedSource = "cache",
+  liveFeedFetchedAt = null,
 }: StoryFeedProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -187,7 +192,13 @@ export function StoryFeed({
         )}
       </section>
 
-      {showLiveBeta && <LiveBetaFeed stories={livePreviewStories} />}
+      {showLiveBeta && (
+        <LiveBetaFeed
+          stories={livePreviewStories}
+          source={liveFeedSource}
+          fetchedAt={liveFeedFetchedAt}
+        />
+      )}
     </div>
   );
 }

@@ -53,12 +53,13 @@ export function getMergedStories(): Story[] {
   return [...mock, ...live];
 }
 
-/** Live Beta section — cached ingest only, never throws. */
-export function getLivePreviewStories(): Story[] {
+/** Live Beta section — live RSS fetch with cache + file fallback. */
+export async function getLivePreviewStories() {
   if (!isLiveBetaEnabled()) {
-    return [];
+    return { stories: [], source: "cache" as const, fetchedAt: null };
   }
-  return getCachedLiveStories();
+  const { getLiveFeed } = await import("@/lib/live-data");
+  return getLiveFeed();
 }
 
 /** Main homepage mock desk. Merged only when explicitly enabled. */
