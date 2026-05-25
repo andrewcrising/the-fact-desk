@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f4f5f7;
+  --foreground: #111827;
+  --card: #ffffff;
+  --border: #d8dce3;
+  --border-subtle: #e8eaef;
+  --muted: #5c6578;
+  --muted-light: #8b93a3;
+  --accent: #1a365d;
+  --accent-muted: #2c5282;
+  --desk-rule: #c5cad4;
+  --lead-accent: #1a365d;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-desk-border: var(--border);
+  --color-desk-muted: var(--muted);
+  --font-sans: var(--font-source-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-source-serif), ui-serif, Georgia, serif;
+  --font-mono: var(--font-ibm-plex-mono), ui-monospace, monospace;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-feature-settings: "kern" 1, "liga" 1;
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Newsroom utility patterns */
+.desk-rule {
+  border-color: var(--border-subtle);
+}
+
+.desk-kicker {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.desk-card {
+  background: var(--card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 2px;
+  box-shadow: 0 1px 2px rgb(17 24 39 / 0.04);
+}
+
+.desk-card-featured {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgb(17 24 39 / 0.06);
+}
+
+/* Subtle paper texture on main canvas */
+.desk-canvas {
+  background-color: var(--background);
+  background-image: linear-gradient(
+    180deg,
+    rgb(255 255 255 / 0.6) 0%,
+    transparent 120px
+  );
+}
