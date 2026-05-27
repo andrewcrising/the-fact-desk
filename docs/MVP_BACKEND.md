@@ -12,6 +12,9 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 ADMIN_API_TOKEN=choose-a-long-random-admin-token
 CRON_SECRET=choose-a-long-random-cron-token
 ALLOW_MOCK_FALLBACK=false
+AI_DRAFT_ASSIST_ENABLED=false
+OPENAI_API_KEY=optional-openai-key
+OPENAI_MODEL=gpt-4o-mini
 ```
 
 Notes:
@@ -19,6 +22,7 @@ Notes:
 - `SUPABASE_SERVICE_ROLE_KEY` is server-only. Never expose it in browser code.
 - `ADMIN_API_TOKEN` protects editorial write/admin APIs.
 - `CRON_SECRET` protects scheduled ingest/revalidation APIs.
+- `AI_DRAFT_ASSIST_ENABLED` and `OPENAI_API_KEY` enable admin-only AI Draft Assist.
 - Without Supabase env vars, public pages fall back to `src/data/stories.ts` only in development or when `ALLOW_MOCK_FALLBACK=true`.
 
 ## Database setup
@@ -79,6 +83,7 @@ Admin protected:
 - `POST /api/stories/[id]/archive`
 - `POST /api/stories/[id]/promote`
 - `POST /api/stories/[id]/evidence-assist`
+- `POST /api/stories/[id]/draft-assist`
 - `GET /api/feed-items`
 - `PATCH /api/feed-items/[id]`
 - `POST /api/feed-items/[id]/promote`
@@ -127,6 +132,39 @@ It returns:
 
 The route is admin-protected and read-only. It does not update story fields and
 does not publish stories. Editors explicitly apply suggestions in the admin UI.
+
+## AI Draft Assist
+
+`POST /api/stories/[id]/draft-assist` is admin-protected and disabled unless:
+
+```bash
+AI_DRAFT_ASSIST_ENABLED=true
+OPENAI_API_KEY=...
+```
+
+It loads:
+
+- current story fields
+- attached story sources
+- related feed items
+- Evidence Assist profile
+
+It returns structured draft suggestions only:
+
+- summary
+- what happened
+- why it matters
+- coverage angle
+- uncertainty note
+- confidence rationale
+- source spread explanation
+- editorial warnings
+- claims to verify
+- metadata limitations
+
+The route does not mutate stories and cannot publish. Editors must explicitly
+apply suggestions, save the draft, and publish separately. Public pages never
+show raw AI output.
 
 ## Public rendering behavior
 

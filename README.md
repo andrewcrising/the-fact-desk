@@ -35,6 +35,9 @@ ADMIN_API_TOKEN=
 CRON_SECRET=
 # optional development-only fallback
 ALLOW_MOCK_FALLBACK=false
+# optional admin-only AI Draft Assist
+AI_DRAFT_ASSIST_ENABLED=false
+OPENAI_API_KEY=
 ```
 
 ## Mock demo (default)

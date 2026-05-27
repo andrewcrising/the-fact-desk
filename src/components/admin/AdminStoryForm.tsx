@@ -3,6 +3,7 @@
 import { AdminTokenField } from "@/components/admin/AdminTokenField";
 import { useAdminToken } from "@/components/admin/useAdminToken";
 import { STORY_CATEGORIES } from "@/data/navigation";
+import type { AiDraftAssistOutput } from "@/lib/ai/editorial-draft-assist";
 import type { EvidenceProfile } from "@/lib/evidence-scoring";
 import type { PersistedStory } from "@/types/editorial";
 import type { Confidence, EvidenceLevel, Signal } from "@/types/story";
@@ -24,6 +25,13 @@ const CONFIDENCES: Confidence[] = [
 ];
 
 const EVIDENCE_LEVELS: EvidenceLevel[] = ["Low", "Moderate", "Strong"];
+
+type DraftAssistEditableKey =
+  | "suggested_summary"
+  | "suggested_what_happened"
+  | "suggested_why_it_matters"
+  | "suggested_coverage_angle"
+  | "suggested_uncertainty_note";
 
 interface AdminStoryFormProps {
   storyId?: string;
@@ -88,12 +96,41 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
   const [state, setState] = useState<StoryFormState>(emptyState);
   const [savedStory, setSavedStory] = useState<PersistedStory | null>(null);
   const [evidenceAssist, setEvidenceAssist] = useState<EvidenceProfile | null>(null);
+  const [draftAssist, setDraftAssist] = useState<AiDraftAssistOutput | null>(null);
+  const [draftAssistError, setDraftAssistError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [assistLoading, setAssistLoading] = useState(false);
+  const [draftAssistLoading, setDraftAssistLoading] = useState(false);
+  const [aiSuggestionsApplied, setAiSuggestionsApplied] = useState(false);
+  const [aiSuggestionsSaved, setAiSuggestionsSaved] = useState(false);
 
   function update<K extends keyof StoryFormState>(key: K, value: StoryFormState[K]) {
     setState((current) => ({ ...current, [key]: value }));
+  }
+
+  function updateDraftAssist<K extends DraftAssistEditableKey>(
+    key: K,
+    value: AiDraftAssistOutput[K],
+  ) {
+    setDraftAssist((current) =>
+      current ? { ...current, [key]: value } : current,
+    );
+  }
+
+  function applyAiSuggestion(key: keyof StoryFormState, value: string) {
+    update(key, value);
+    setAiSuggestionsApplied(true);
+    setAiSuggestionsSaved(false);
+  }
+
+  function applyAllSafeAiSuggestions() {
+    if (!draftAssist) return;
+    applyAiSuggestion("summary", draftAssist.suggested_summary);
+    applyAiSuggestion("whatHappened", draftAssist.suggested_what_happened);
+    applyAiSuggestion("whyItMatters", draftAssist.suggested_why_it_matters);
+    applyAiSuggestion("coverageAngle", draftAssist.suggested_coverage_angle);
+    applyAiSuggestion("uncertaintyNote", draftAssist.suggested_uncertainty_note);
   }
 
   const adminFetch = useCallback(async (path: string, init: RequestInit = {}) => {
@@ -137,6 +174,32 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
     },
     [adminFetch],
   );
+
+  async function generateDraftAssist() {
+    if (!savedStory) return;
+
+    setDraftAssistLoading(true);
+    setDraftAssistError("");
+    try {
+      const response = await adminFetch(`/api/stories/${savedStory.id}/draft-assist`, {
+        method: "POST",
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) {
+        throw new Error(data.error ?? "Unable to generate AI Draft Assist");
+      }
+      setDraftAssist(data.suggestions as AiDraftAssistOutput);
+      setMessage("AI Draft Assist suggestions generated. Review before applying.");
+    } catch (error) {
+      setDraftAssistError(
+        error instanceof Error
+          ? error.message
+          : "Unable to generate AI Draft Assist",
+      );
+    } finally {
+      setDraftAssistLoading(false);
+    }
+  }
 
   useEffect(() => {
     if (!storyId || !token) return;
@@ -211,6 +274,7 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
       const data = await response.json();
       if (!response.ok || !data.ok) throw new Error(data.error ?? "Save failed");
       setSavedStory(data.story);
+      setAiSuggestionsSaved(true);
       setMessage("Story saved.");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Save failed");
@@ -226,6 +290,10 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
       const profile =
         (await loadEvidenceAssist(savedStory.id, { silent: true })) ??
         evidenceAssist;
+      if (profile?.source_count === 0) {
+        setMessage("Cannot publish without source links. Attach at least one source first.");
+        return;
+      }
       if (
         profile?.warnings.length &&
         !window.confirm(
@@ -235,6 +303,25 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
         )
       ) {
         setMessage("Publish cancelled. Review evidence posture before publishing.");
+        return;
+      }
+      const aiWarnings = [
+        aiSuggestionsApplied && !aiSuggestionsSaved
+          ? "AI suggestions were applied locally but not saved as a draft yet."
+          : null,
+        draftAssist?.claims_to_verify.length
+          ? `AI Draft Assist listed claims to verify: ${draftAssist.claims_to_verify.join("; ")}`
+          : null,
+      ].filter((item): item is string => Boolean(item));
+      if (
+        aiWarnings.length > 0 &&
+        !window.confirm(
+          `AI Draft Assist cautions:\n\n${aiWarnings.join(
+            "\n",
+          )}\n\nPublish anyway after human review?`,
+        )
+      ) {
+        setMessage("Publish cancelled. Review AI Draft Assist cautions first.");
         return;
       }
 
@@ -643,6 +730,225 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
               Save the story and source links, then recalculate to see source
               spread, evidence suggestions, and publish warnings.
             </p>
+          )}
+        </section>
+
+        <section className="border border-[var(--border-subtle)] bg-white p-3">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p className="desk-kicker mb-1">AI Draft Assist</p>
+              <p className="max-w-2xl text-xs leading-relaxed text-[var(--muted)]">
+                Admin-only draft suggestions grounded in saved story fields,
+                attached sources, feed items, and Evidence Assist. AI suggestions
+                require human review before saving or publishing.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={generateDraftAssist}
+              disabled={!token || !savedStory || draftAssistLoading}
+              className="border border-[var(--border)] px-3 py-2 text-xs font-semibold uppercase tracking-wide disabled:opacity-50"
+            >
+              {draftAssistLoading ? "Generating..." : "Generate draft assist"}
+            </button>
+          </div>
+
+          {draftAssistError && (
+            <p className="mt-3 border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-950">
+              {draftAssistError}
+            </p>
+          )}
+
+          {!draftAssist && !draftAssistError && (
+            <p className="mt-3 text-xs text-[var(--muted-light)]">
+              If AI Draft Assist is not configured, this panel will report that
+              OPENAI_API_KEY and AI_DRAFT_ASSIST_ENABLED are required.
+            </p>
+          )}
+
+          {draftAssist && (
+            <div className="mt-3 space-y-3">
+              <p className="border border-[var(--border-subtle)] bg-[#fafbfc] px-3 py-2 text-xs leading-relaxed text-[var(--muted)]">
+                Review and edit these suggestions. Applying updates this form
+                only; you still need to click Save draft, then Publish separately.
+              </p>
+
+              <label className="grid gap-1 text-sm">
+                <span className="desk-kicker">Suggested summary</span>
+                <textarea
+                  rows={3}
+                  value={draftAssist.suggested_summary}
+                  onChange={(event) =>
+                    updateDraftAssist("suggested_summary", event.target.value)
+                  }
+                  className="border border-[var(--border)] px-3 py-2"
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    applyAiSuggestion("summary", draftAssist.suggested_summary)
+                  }
+                  className="w-fit text-xs font-semibold uppercase tracking-wide text-[var(--accent)]"
+                >
+                  Apply summary
+                </button>
+              </label>
+
+              <label className="grid gap-1 text-sm">
+                <span className="desk-kicker">Suggested what happened</span>
+                <textarea
+                  rows={4}
+                  value={draftAssist.suggested_what_happened}
+                  onChange={(event) =>
+                    updateDraftAssist("suggested_what_happened", event.target.value)
+                  }
+                  className="border border-[var(--border)] px-3 py-2"
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    applyAiSuggestion(
+                      "whatHappened",
+                      draftAssist.suggested_what_happened,
+                    )
+                  }
+                  className="w-fit text-xs font-semibold uppercase tracking-wide text-[var(--accent)]"
+                >
+                  Apply what happened
+                </button>
+              </label>
+
+              <label className="grid gap-1 text-sm">
+                <span className="desk-kicker">Suggested why it matters</span>
+                <textarea
+                  rows={4}
+                  value={draftAssist.suggested_why_it_matters}
+                  onChange={(event) =>
+                    updateDraftAssist("suggested_why_it_matters", event.target.value)
+                  }
+                  className="border border-[var(--border)] px-3 py-2"
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    applyAiSuggestion(
+                      "whyItMatters",
+                      draftAssist.suggested_why_it_matters,
+                    )
+                  }
+                  className="w-fit text-xs font-semibold uppercase tracking-wide text-[var(--accent)]"
+                >
+                  Apply why it matters
+                </button>
+              </label>
+
+              <label className="grid gap-1 text-sm">
+                <span className="desk-kicker">Suggested coverage angle</span>
+                <textarea
+                  rows={3}
+                  value={draftAssist.suggested_coverage_angle}
+                  onChange={(event) =>
+                    updateDraftAssist("suggested_coverage_angle", event.target.value)
+                  }
+                  className="border border-[var(--border)] px-3 py-2"
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    applyAiSuggestion(
+                      "coverageAngle",
+                      draftAssist.suggested_coverage_angle,
+                    )
+                  }
+                  className="w-fit text-xs font-semibold uppercase tracking-wide text-[var(--accent)]"
+                >
+                  Apply coverage angle
+                </button>
+              </label>
+
+              <label className="grid gap-1 text-sm">
+                <span className="desk-kicker">Suggested uncertainty note</span>
+                <textarea
+                  rows={3}
+                  value={draftAssist.suggested_uncertainty_note}
+                  onChange={(event) =>
+                    updateDraftAssist(
+                      "suggested_uncertainty_note",
+                      event.target.value,
+                    )
+                  }
+                  className="border border-[var(--border)] px-3 py-2"
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    applyAiSuggestion(
+                      "uncertaintyNote",
+                      draftAssist.suggested_uncertainty_note,
+                    )
+                  }
+                  className="w-fit text-xs font-semibold uppercase tracking-wide text-[var(--accent)]"
+                >
+                  Apply uncertainty note
+                </button>
+              </label>
+
+              <div className="grid gap-3 text-xs sm:grid-cols-2">
+                <div>
+                  <p className="desk-kicker mb-1">Confidence rationale</p>
+                  <p className="leading-relaxed text-[var(--muted)]">
+                    {draftAssist.confidence_rationale || "No rationale returned."}
+                  </p>
+                </div>
+                <div>
+                  <p className="desk-kicker mb-1">Source spread explanation</p>
+                  <p className="leading-relaxed text-[var(--muted)]">
+                    {draftAssist.source_spread_explanation || "No explanation returned."}
+                  </p>
+                </div>
+              </div>
+
+              {draftAssist.editorial_warnings.length > 0 && (
+                <div className="border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-950">
+                  <p className="font-semibold">Editorial warnings</p>
+                  <ul className="mt-1 list-disc pl-4">
+                    {draftAssist.editorial_warnings.map((warning) => (
+                      <li key={warning}>{warning}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {draftAssist.claims_to_verify.length > 0 && (
+                <div className="border border-[var(--border-subtle)] bg-[#fafbfc] px-3 py-2 text-xs leading-relaxed text-[var(--muted)]">
+                  <p className="font-semibold text-[var(--foreground)]">Claims to verify</p>
+                  <ul className="mt-1 list-disc pl-4">
+                    {draftAssist.claims_to_verify.map((claim) => (
+                      <li key={claim}>{claim}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {draftAssist.metadata_limitations.length > 0 && (
+                <div className="text-xs leading-relaxed text-[var(--muted-light)]">
+                  <p className="font-semibold">Metadata limitations</p>
+                  <ul className="mt-1 list-disc pl-4">
+                    {draftAssist.metadata_limitations.map((limitation) => (
+                      <li key={limitation}>{limitation}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <button
+                type="button"
+                onClick={applyAllSafeAiSuggestions}
+                className="border border-[var(--accent)] px-3 py-2 text-xs font-semibold uppercase tracking-wide text-[var(--accent)]"
+              >
+                Apply all safe suggestions
+              </button>
+            </div>
           )}
         </section>
 

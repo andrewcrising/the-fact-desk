@@ -170,7 +170,7 @@ Health stories should be especially careful with:
 Prefer primary research, guidelines, regulatory notices, and established medical
 sources. Make uncertainty and limitations visible.
 
-## AI-assistance policy for future features
+## AI-assistance policy
 
 AI may assist with:
 
@@ -194,6 +194,11 @@ AI may not:
 
 Future AI-assisted drafting must preserve source links, cite evidence posture,
 and require human review before publication.
+
+The current AI Draft Assist feature is admin-only and suggestion-only. It may
+draft neutral briefing copy from provided metadata, source excerpts, feed items,
+and Evidence Assist output. It must not publish, invent sources, fabricate facts,
+or overwrite human-entered fields without explicit editor action.
 
 ## Human review requirement
 

@@ -35,9 +35,13 @@ NEXT_PUBLIC_SHOW_LIVE_BETA=false
 NEXT_PUBLIC_USE_RSS_CACHE=false
 NEXT_PUBLIC_USE_MERGED_STORIES=false
 ALLOW_MOCK_FALLBACK=false
+AI_DRAFT_ASSIST_ENABLED=false
+OPENAI_API_KEY=
+OPENAI_MODEL=gpt-4o-mini
 ```
 
 Production recommendation: leave `ALLOW_MOCK_FALLBACK` unset or `false`.
+Enable AI Draft Assist only for admin use after confirming editorial guardrails.
 
 ## 3. Seed demo data
 
