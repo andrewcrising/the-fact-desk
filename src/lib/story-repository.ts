@@ -16,6 +16,7 @@ import {
 import { readLiveStoriesCache } from "@/lib/live-stories-cache";
 import { readRssCache } from "@/lib/rss-cache";
 import { slugify } from "@/lib/slug";
+import { urlOrigin } from "@/lib/url";
 import type {
   PersistedStory,
   StoryInput,
@@ -69,6 +70,13 @@ export function isLiveBetaEnabled(): boolean {
 
 export function isMergedStoriesEnabled(): boolean {
   return process.env.NEXT_PUBLIC_USE_MERGED_STORIES === "true";
+}
+
+export function isMockFallbackAllowed(): boolean {
+  return (
+    process.env.ALLOW_MOCK_FALLBACK === "true" ||
+    process.env.NODE_ENV !== "production"
+  );
 }
 
 function tagsFromJson(value: unknown): string[] {
@@ -200,6 +208,7 @@ export async function getLivePreviewStories() {
 export async function listStories(query: StoryQuery = {}): Promise<PersistedStory[]> {
   const supabase = getSupabaseAdmin();
   if (!supabase) {
+    if (!isMockFallbackAllowed()) return [];
     if (query.status && query.status !== "published" && query.status !== "all") return [];
     return getMockStories();
   }
@@ -222,12 +231,12 @@ export async function listStories(query: StoryQuery = {}): Promise<PersistedStor
   const { data, error } = await request;
   if (error) {
     if (query.status && query.status !== "published" && query.status !== "all") throw error;
-    return getMockStories();
+    return isMockFallbackAllowed() ? getMockStories() : [];
   }
 
   const stories = await Promise.all(((data ?? []) as StoryRow[]).map(mapPersistedStory));
   if (stories.length === 0 && (!query.status || query.status === "published")) {
-    return getMockStories();
+    return isMockFallbackAllowed() ? getMockStories() : [];
   }
 
   return stories;
@@ -240,7 +249,11 @@ export async function getHomepageStories(): Promise<PersistedStory[]> {
 
 export async function getStoryBySlug(slug: string): Promise<PersistedStory | undefined> {
   const supabase = getSupabaseAdmin();
-  if (!supabase) return getMockStories().find((s) => s.slug === slug);
+  if (!supabase) {
+    return isMockFallbackAllowed()
+      ? getMockStories().find((s) => s.slug === slug)
+      : undefined;
+  }
 
   const { data, error } = await supabase
     .from("stories")
@@ -249,8 +262,12 @@ export async function getStoryBySlug(slug: string): Promise<PersistedStory | und
     .eq("status", "published")
     .maybeSingle();
 
-  if (error) return getMockStories().find((s) => s.slug === slug);
-  if (!data) return getMockStories().find((s) => s.slug === slug);
+  if (error) {
+    return isMockFallbackAllowed()
+      ? getMockStories().find((s) => s.slug === slug)
+      : undefined;
+  }
+  if (!data) return undefined;
   return mapPersistedStory(data as StoryRow);
 }
 
@@ -331,6 +348,10 @@ export async function updateStory(
   id: string,
   input: StoryUpdateInput,
 ): Promise<PersistedStory> {
+  if (input.status === "published") {
+    throw new Error("Use the publish endpoint to publish stories.");
+  }
+
   const supabase = requireSupabaseAdmin();
   const row = toStoryRow(input);
   const cleanRow = Object.fromEntries(
@@ -418,7 +439,7 @@ export async function replaceStorySources(
       ? { id: sourceInput.sourceId }
       : await getOrCreateSource({
           name: sourceInput.sourceName,
-          homepageUrl: sourceInput.url,
+          homepageUrl: urlOrigin(sourceInput.url),
           sourceType: "manual",
         });
 

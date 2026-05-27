@@ -6,6 +6,8 @@ export type FeedItemStatus = "new" | "reviewed" | "promoted" | "ignored" | "erro
 
 export type StoryStatus = "draft" | "published" | "archived" | "corrected";
 
+export type EditorialSelectionStatus = "draft_created" | "attached" | "ignored";
+
 export interface SourceRecord {
   id: string;
   name: string;

@@ -196,6 +196,33 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
     }
   }
 
+  async function storyAction(endpoint: "archive" | "promote") {
+    if (!savedStory) return;
+    setLoading(true);
+    try {
+      const response = await adminFetch(`/api/stories/${savedStory.id}/${endpoint}`, {
+        method: "POST",
+        body: JSON.stringify(
+          endpoint === "promote"
+            ? { homepageRank: state.homepageRank || 1, isLead: true }
+            : {},
+        ),
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) throw new Error(data.error ?? `${endpoint} failed`);
+      setSavedStory(data.story);
+      if (endpoint === "promote") {
+        update("isLead", true);
+        if (!state.homepageRank) update("homepageRank", "1");
+      }
+      setMessage(endpoint === "promote" ? "Story set as homepage lead." : "Story archived.");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : `${endpoint} failed`);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div className="space-y-4">
       <AdminTokenField token={token} onTokenChange={setToken} />
@@ -207,8 +234,15 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
               {savedStory ? "Edit story" : "New draft story"}
             </h1>
             <p className="text-sm text-[var(--muted)]">
-              Save as draft first, then publish when the briefing is ready.
+              Save draft edits first. Publish makes the story public; archive
+              removes it from the public desk.
             </p>
+            {savedStory && (
+              <p className="mt-1 text-xs text-[var(--muted-light)]">
+                Current status: {savedStory.status}
+                {savedStory.status === "published" ? ` · /story/${savedStory.slug}` : ""}
+              </p>
+            )}
           </div>
           <Link href="/admin/stories" className="text-sm text-[var(--accent)] hover:underline">
             Back to stories
@@ -370,7 +404,8 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
             className="border border-[var(--border)] px-3 py-2"
           />
           <span className="text-xs text-[var(--muted-light)]">
-            One source per line: source name | URL | optional title.
+            One source per line: source name | URL | optional title. These show
+            as the story evidence/source list.
           </span>
         </label>
 
@@ -390,6 +425,30 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
           >
             Publish
           </button>
+          <button
+            type="button"
+            onClick={() => storyAction("promote")}
+            disabled={!token || loading || !savedStory || savedStory.status !== "published"}
+            className="border border-[var(--border)] px-4 py-2 text-xs font-semibold uppercase tracking-wide disabled:opacity-50"
+          >
+            Set as lead
+          </button>
+          <button
+            type="button"
+            onClick={() => storyAction("archive")}
+            disabled={!token || loading || !savedStory || savedStory.status === "archived"}
+            className="border border-[var(--border)] px-4 py-2 text-xs font-semibold uppercase tracking-wide disabled:opacity-50"
+          >
+            Archive
+          </button>
+          {savedStory?.status === "published" && (
+            <Link
+              href={`/story/${savedStory.slug}`}
+              className="border border-[var(--border)] px-4 py-2 text-xs font-semibold uppercase tracking-wide"
+            >
+              View public story
+            </Link>
+          )}
         </div>
       </form>
     </div>

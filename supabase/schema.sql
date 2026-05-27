@@ -20,6 +20,8 @@ create table if not exists public.sources (
   homepage_url text,
   feed_url text unique,
   source_type text not null default 'rss',
+  constraint sources_source_type_check
+    check (source_type in ('rss', 'manual', 'api', 'wire', 'other')),
   credibility_score numeric,
   political_or_editorial_label text,
   active boolean not null default true,
@@ -69,6 +71,12 @@ create table if not exists public.stories (
   category text not null,
   signal text not null,
   confidence text not null,
+  constraint stories_category_check
+    check (category in ('Politics', 'Markets', 'Technology', 'World', 'Health', 'Courts', 'Energy', 'Culture')),
+  constraint stories_signal_check
+    check (signal in ('Top Signal', 'Under-covered', 'Cross-angle', 'Developing')),
+  constraint stories_confidence_check
+    check (confidence in ('Confirmed', 'Developing', 'Disputed', 'Single-source')),
   status text not null default 'draft'
     check (status in ('draft', 'published', 'archived', 'corrected')),
   homepage_rank integer,
@@ -102,6 +110,8 @@ create table if not exists public.story_sources (
 
 create index if not exists story_sources_story_idx on public.story_sources(story_id);
 create index if not exists story_sources_feed_item_idx on public.story_sources(feed_item_id);
+create unique index if not exists story_sources_story_url_idx
+  on public.story_sources(story_id, url);
 
 create table if not exists public.editorial_selections (
   id uuid primary key default gen_random_uuid(),
@@ -109,11 +119,14 @@ create table if not exists public.editorial_selections (
   story_id uuid references public.stories(id) on delete set null,
   selection_reason text not null,
   score numeric,
-  status text not null default 'draft_created',
+  status text not null default 'draft_created'
+    check (status in ('draft_created', 'attached', 'ignored')),
   created_at timestamptz not null default now()
 );
 
 create index if not exists editorial_selections_feed_item_idx
+  on public.editorial_selections(feed_item_id);
+create unique index if not exists editorial_selections_feed_item_unique_idx
   on public.editorial_selections(feed_item_id);
 
 create table if not exists public.subscribers (

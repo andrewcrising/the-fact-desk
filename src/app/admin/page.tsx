@@ -1,3 +1,4 @@
+import { AdminSetupNotice } from "@/components/admin/AdminSetupNotice";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { TopNav } from "@/components/layout/TopNav";
 import Link from "next/link";
@@ -8,6 +9,7 @@ export default function AdminHomePage() {
       <TopNav />
       <main className="desk-canvas flex-1">
         <div className="mx-auto max-w-5xl space-y-4 px-4 py-8 sm:px-6 lg:px-8">
+          <AdminSetupNotice />
           <section className="desk-card p-6">
             <p className="desk-kicker mb-2">Editorial MVP</p>
             <h1 className="font-serif text-3xl font-semibold">Admin desk</h1>
@@ -17,8 +19,8 @@ export default function AdminHomePage() {
               and set homepage placement.
             </p>
             <p className="mt-3 text-xs leading-relaxed text-[var(--muted-light)]">
-              API writes require an ADMIN_API_TOKEN bearer token. Configure Supabase
-              before using these tools against durable storage.
+              API writes require an ADMIN_API_TOKEN bearer token. Paste that token
+              into admin pages; it is stored only in this browser for MVP convenience.
             </p>
           </section>
 

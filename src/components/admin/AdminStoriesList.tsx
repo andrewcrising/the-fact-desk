@@ -18,6 +18,15 @@ export function AdminStoriesList() {
   const [status, setStatus] = useState("all");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const groups =
+    status === "all"
+      ? ([
+          ["Drafts", stories.filter((story) => story.status === "draft")],
+          ["Published", stories.filter((story) => story.status === "published")],
+          ["Archived", stories.filter((story) => story.status === "archived")],
+          ["Corrected", stories.filter((story) => story.status === "corrected")],
+        ] as const)
+      : ([[`${status[0].toUpperCase()}${status.slice(1)} stories`, stories]] as const);
 
   async function adminFetch(path: string, init: RequestInit = {}) {
     return fetch(path, {
@@ -54,6 +63,7 @@ export function AdminStoriesList() {
       });
       const data = await response.json();
       if (!response.ok || !data.ok) throw new Error(data.error ?? "Action failed");
+      setMessage(`${endpoint[0].toUpperCase()}${endpoint.slice(1)} action complete.`);
       await loadStories();
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Action failed");
@@ -71,7 +81,8 @@ export function AdminStoriesList() {
           <div>
             <h1 className="font-serif text-2xl font-semibold">Stories</h1>
             <p className="text-sm text-[var(--muted)]">
-              Draft, published, archived, and corrected story lifecycle.
+              Review drafts, publish public briefings, set homepage placement,
+              and archive stories that should leave the public desk.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -120,59 +131,75 @@ export function AdminStoriesList() {
       </div>
 
       <div className="space-y-3">
-        {stories.map((story) => (
-          <article key={story.id} className="desk-card p-4">
-            <div className="flex flex-wrap items-start justify-between gap-3">
-              <div>
-                <p className="desk-kicker mb-1">
-                  {story.status} · {story.category} · {story.signal}
-                  {story.isLead ? " · lead" : ""}
-                </p>
-                <h2 className="font-serif text-lg font-semibold">{story.title}</h2>
-                <p className="mt-2 text-sm text-[var(--muted)]">{story.summary}</p>
-                <p className="mt-2 text-xs text-[var(--muted-light)]">
-                  Sources: {story.sources.join(", ")}
-                </p>
-              </div>
-              <div className="flex shrink-0 flex-wrap gap-2">
-                <Link
-                  href={`/admin/stories/${story.id}/edit`}
-                  className="border border-[var(--border)] px-3 py-2 text-xs font-semibold uppercase tracking-wide"
-                >
-                  Edit
-                </Link>
-                {story.status !== "published" && (
+        {groups.map(([title, groupStories]) =>
+          groupStories.length > 0 ? (
+            <section key={title} className="space-y-2">
+              <h2 className="desk-kicker px-1 text-[var(--muted)]">{title}</h2>
+              {groupStories.map((story) => (
+                <article key={story.id} className="desk-card p-4">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <p className="desk-kicker mb-1">
+                        {story.status} · {story.category} · {story.signal}
+                        {story.isLead ? " · lead" : ""}
+                        {story.homepageRank ? ` · rank ${story.homepageRank}` : ""}
+                      </p>
+                      <h3 className="font-serif text-lg font-semibold">{story.title}</h3>
+                      <p className="mt-2 text-sm text-[var(--muted)]">{story.summary}</p>
+                      <p className="mt-2 text-xs text-[var(--muted-light)]">
+                        Sources: {story.sources.join(", ")}
+                      </p>
+                    </div>
+                    <div className="flex shrink-0 flex-wrap gap-2">
+                      <Link
+                        href={`/admin/stories/${story.id}/edit`}
+                        className="border border-[var(--border)] px-3 py-2 text-xs font-semibold uppercase tracking-wide"
+                      >
+                        Edit
+                      </Link>
+                      {story.status === "published" && (
+                        <Link
+                          href={`/story/${story.slug}`}
+                          className="border border-[var(--border)] px-3 py-2 text-xs font-semibold uppercase tracking-wide"
+                        >
+                          View public
+                        </Link>
+                      )}
+                      {story.status !== "published" && (
+                        <button
+                          type="button"
+                          onClick={() => action(story.id, "publish")}
+                          disabled={!token || loading}
+                          className="border border-[var(--accent)] px-3 py-2 text-xs font-semibold uppercase tracking-wide text-[var(--accent)] disabled:opacity-50"
+                        >
+                          Publish
+                        </button>
+                      )}
                   <button
                     type="button"
-                    onClick={() => action(story.id, "publish")}
-                    disabled={!token || loading}
-                    className="border border-[var(--accent)] px-3 py-2 text-xs font-semibold uppercase tracking-wide text-[var(--accent)] disabled:opacity-50"
-                  >
-                    Publish
-                  </button>
-                )}
-                <button
-                  type="button"
-                  onClick={() => action(story.id, "promote", { homepageRank: 1, isLead: true })}
-                  disabled={!token || loading}
-                  className="border border-[var(--border)] px-3 py-2 text-xs font-semibold uppercase tracking-wide disabled:opacity-50"
-                >
-                  Lead
-                </button>
-                {story.status !== "archived" && (
-                  <button
-                    type="button"
-                    onClick={() => action(story.id, "archive")}
-                    disabled={!token || loading}
-                    className="border border-[var(--border)] px-3 py-2 text-xs font-semibold uppercase tracking-wide disabled:opacity-50"
-                  >
-                    Archive
-                  </button>
-                )}
-              </div>
-            </div>
-          </article>
-        ))}
+                        onClick={() => action(story.id, "promote", { homepageRank: 1, isLead: true })}
+                        disabled={!token || loading || story.status !== "published"}
+                        className="border border-[var(--border)] px-3 py-2 text-xs font-semibold uppercase tracking-wide disabled:opacity-50"
+                      >
+                        Set as lead
+                      </button>
+                      {story.status !== "archived" && (
+                        <button
+                          type="button"
+                          onClick={() => action(story.id, "archive")}
+                          disabled={!token || loading}
+                          className="border border-[var(--border)] px-3 py-2 text-xs font-semibold uppercase tracking-wide disabled:opacity-50"
+                        >
+                          Archive
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </section>
+          ) : null,
+        )}
 
         {!loading && stories.length === 0 && (
           <div className="desk-card p-6 text-sm text-[var(--muted)]">

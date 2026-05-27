@@ -12,6 +12,12 @@ interface ApiListResponse {
   error?: string;
 }
 
+interface PromoteResponse {
+  ok: boolean;
+  story?: { id: string; title: string };
+  error?: string;
+}
+
 export function AdminFeedInbox() {
   const { token, setToken } = useAdminToken();
   const [status, setStatus] = useState("new");
@@ -69,12 +75,34 @@ export function AdminFeedInbox() {
       const response = await adminFetch(`/api/feed-items/${id}/promote`, {
         method: "POST",
       });
-      const data = await response.json();
+      const data = (await response.json()) as PromoteResponse;
       if (!response.ok || !data.ok) throw new Error(data.error ?? "Promotion failed");
-      setMessage("Draft story created.");
+      setMessage(
+        data.story
+          ? `Draft story created: ${data.story.title}. Open it from Stories.`
+          : "Draft story created.",
+      );
       await loadFeedItems();
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Promotion failed");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function markReviewed(id: string) {
+    setLoading(true);
+    try {
+      const response = await adminFetch(`/api/feed-items/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ status: "reviewed" }),
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) throw new Error(data.error ?? "Review failed");
+      setMessage("Feed item marked reviewed.");
+      await loadFeedItems();
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Review failed");
     } finally {
       setLoading(false);
     }
@@ -107,6 +135,7 @@ export function AdminFeedInbox() {
             <h1 className="font-serif text-2xl font-semibold">Feed Inbox</h1>
             <p className="text-sm text-[var(--muted)]">
               RSS items stay private here until promoted into draft stories.
+              Run ingest, review candidates, then create drafts for publication.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -116,7 +145,7 @@ export function AdminFeedInbox() {
               disabled={!token || loading}
               className="border border-[var(--accent)] bg-[var(--accent)] px-3 py-2 text-xs font-semibold uppercase tracking-wide text-white disabled:opacity-50"
             >
-              Ingest RSS
+              Run RSS ingest
             </button>
             <button
               type="button"
@@ -176,7 +205,7 @@ export function AdminFeedInbox() {
                   rel="noreferrer"
                   className="mt-2 block truncate text-xs text-[var(--accent)]"
                 >
-                  {item.canonicalUrl}
+                  Open source URL: {item.canonicalUrl}
                 </a>
               </div>
               <div className="flex shrink-0 flex-wrap gap-2">
@@ -186,7 +215,15 @@ export function AdminFeedInbox() {
                   disabled={!token || loading || item.status === "promoted"}
                   className="border border-[var(--accent)] px-3 py-2 text-xs font-semibold uppercase tracking-wide text-[var(--accent)] disabled:opacity-50"
                 >
-                  Create draft
+                  Create draft from item
+                </button>
+                <button
+                  type="button"
+                  onClick={() => markReviewed(item.id)}
+                  disabled={!token || loading || item.status === "reviewed"}
+                  className="border border-[var(--border)] px-3 py-2 text-xs font-semibold uppercase tracking-wide disabled:opacity-50"
+                >
+                  Mark reviewed
                 </button>
                 <button
                   type="button"

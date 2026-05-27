@@ -98,8 +98,10 @@ export function parseStoryUpdateInput(body: unknown): StoryUpdateInput {
   if (category) input.category = category;
   if (signal) input.signal = signal;
   if (confidence) input.confidence = confidence;
-  if (body.status === "draft" || body.status === "published" || body.status === "archived" || body.status === "corrected") {
+  if (body.status === "draft" || body.status === "archived" || body.status === "corrected") {
     input.status = body.status;
+  } else if (body.status === "published") {
+    throw new Error("Use the publish action to publish stories.");
   }
   if ("homepageRank" in body) input.homepageRank = asNumber(body.homepageRank);
   if ("isLead" in body) input.isLead = asBoolean(body.isLead) ?? false;

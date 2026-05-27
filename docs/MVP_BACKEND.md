@@ -11,6 +11,7 @@ NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 ADMIN_API_TOKEN=choose-a-long-random-admin-token
 CRON_SECRET=choose-a-long-random-cron-token
+ALLOW_MOCK_FALLBACK=false
 ```
 
 Notes:
@@ -18,7 +19,7 @@ Notes:
 - `SUPABASE_SERVICE_ROLE_KEY` is server-only. Never expose it in browser code.
 - `ADMIN_API_TOKEN` protects editorial write/admin APIs.
 - `CRON_SECRET` protects scheduled ingest/revalidation APIs.
-- Without Supabase env vars, public pages fall back to `src/data/stories.ts` for local demo safety.
+- Without Supabase env vars, public pages fall back to `src/data/stories.ts` only in development or when `ALLOW_MOCK_FALLBACK=true`.
 
 ## Database setup
 
@@ -40,6 +41,7 @@ The schema creates:
 
 ```bash
 npm install
+npm run seed
 npm run dev
 ```
 
@@ -58,7 +60,7 @@ Open `/admin`, paste `ADMIN_API_TOKEN`, then:
 Public:
 
 - `GET /api/stories`
-- `GET /api/stories/[slug]`
+- `GET /api/stories/[id-or-slug]`
 - `POST /api/newsletter/signup`
 
 Admin protected:
@@ -106,10 +108,21 @@ Fallback behavior:
 - Raw `feed_items` and draft stories never appear publicly.
 - Live RSS beta remains a separate external-link preview unless explicitly shown by env flag.
 
+## Seed data
+
+Run:
+
+```bash
+npm run seed
+```
+
+The seed script is idempotent and creates initial RSS sources, demo published
+stories, one draft story, and inbox feed items for the admin workflow.
+
 ## Vercel deployment
 
 1. Add the Supabase/admin/cron env vars in Vercel.
-2. Configure a Vercel Cron job to call `POST /api/ingest/rss` with `Authorization: Bearer <CRON_SECRET>`.
+2. `vercel.json` schedules `GET /api/ingest/rss` hourly. The route also supports `POST` for manual calls.
 3. Keep `NEXT_PUBLIC_SHOW_LIVE_BETA=false` for the clean MVP unless you want the raw external-link beta preview.
 
 ## Remaining post-MVP work

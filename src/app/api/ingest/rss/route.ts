@@ -28,3 +28,11 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+/**
+ * Vercel Cron issues GET requests. Keep POST for manual/admin callers and GET
+ * for scheduled jobs; both require the same bearer-token protection.
+ */
+export async function GET(request: NextRequest) {
+  return POST(request);
+}

@@ -11,6 +11,7 @@ npm install
 npm run dev          # local server → http://localhost:3000
 npm run build        # production build (Vercel uses this)
 npm run test         # focused MVP backend utility tests
+npm run seed         # seed Supabase demo sources/stories/inbox items
 npm run ingest:rss   # fetch RSS → data/live-stories.json
 ```
 
@@ -21,6 +22,7 @@ The app now supports a Supabase/Postgres-backed editorial lifecycle:
 `raw RSS/feed item → editorial inbox candidate → draft story → published story → archived/corrected story`
 
 See [docs/MVP_BACKEND.md](./docs/MVP_BACKEND.md) for schema setup, required env vars, API routes, admin workflow, and Vercel notes.
+Use [docs/DEPLOYMENT_CHECKLIST.md](./docs/DEPLOYMENT_CHECKLIST.md) for the end-to-end local/Vercel checklist.
 
 Required production env vars:
 
@@ -29,6 +31,8 @@ NEXT_PUBLIC_SUPABASE_URL=
 SUPABASE_SERVICE_ROLE_KEY=
 ADMIN_API_TOKEN=
 CRON_SECRET=
+# optional development-only fallback
+ALLOW_MOCK_FALLBACK=false
 ```
 
 ## Mock demo (default)
@@ -41,7 +45,7 @@ NEXT_PUBLIC_USE_MERGED_STORIES=false
 NEXT_PUBLIC_USE_RSS_CACHE=false
 ```
 
-Homepage and `/story/[slug]` pages use published stories from Supabase when configured. If Supabase is missing or unavailable, they safely fall back to mock data from `src/data/stories.ts`.
+Homepage and `/story/[slug]` pages use published stories from Supabase when configured. Mock data from `src/data/stories.ts` is a development fallback only unless `ALLOW_MOCK_FALLBACK=true`.
 
 ## Live Beta Feed (local / preview)
 

@@ -75,5 +75,7 @@ export function asConfidence(value: unknown): Confidence | undefined {
 }
 
 export function isEmail(value: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  const email = value.trim().toLowerCase();
+  if (email.length > 254) return false;
+  return /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9-]+(?:\.[a-z0-9-]+)+$/.test(email);
 }

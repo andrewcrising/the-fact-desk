@@ -11,7 +11,7 @@ import type {
   IngestSummary,
   PersistedStory,
 } from "@/types/editorial";
-import { createStory, replaceStorySources } from "@/lib/story-repository";
+import { createStory, getStoryById } from "@/lib/story-repository";
 
 const PER_FEED_LIMIT = 12;
 
@@ -178,6 +178,23 @@ export async function promoteFeedItemToDraft(id: string): Promise<PersistedStory
     throw new Error("Feed item not found");
   }
 
+  const supabase = requireSupabaseAdmin();
+  const { data: existingSelection, error: selectionError } = await supabase
+    .from("editorial_selections")
+    .select("story_id")
+    .eq("feed_item_id", id)
+    .maybeSingle();
+
+  if (selectionError) throw selectionError;
+  if (existingSelection?.story_id) {
+    const existingStory = await getStoryById(existingSelection.story_id as string);
+    if (existingStory) return existingStory;
+  }
+
+  if (item.status === "promoted") {
+    throw new Error("Feed item has already been promoted.");
+  }
+
   const story = await createStory({
     title: item.title,
     slug: slugWithSuffix(item.title),
@@ -203,7 +220,6 @@ export async function promoteFeedItemToDraft(id: string): Promise<PersistedStory
 
   await updateFeedItemStatus(id, "promoted");
 
-  const supabase = requireSupabaseAdmin();
   await supabase.from("editorial_selections").insert({
     feed_item_id: id,
     story_id: story.id,
@@ -211,13 +227,5 @@ export async function promoteFeedItemToDraft(id: string): Promise<PersistedStory
     status: "draft_created",
   });
 
-  return replaceStorySources(story.id, [
-    {
-      sourceName: item.sourceName ?? "RSS",
-      url: item.canonicalUrl,
-      title: item.title,
-      feedItemId: item.id,
-      publishedAt: item.publishedAt,
-    },
-  ]);
+  return story;
 }

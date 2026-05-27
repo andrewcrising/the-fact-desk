@@ -33,7 +33,7 @@ export function DailyBriefSignup() {
     <SidebarPanel title="Daily Brief">
       <p className="mb-4 text-[13px] leading-relaxed text-[var(--muted)]">
         Morning digest of top signals, corrections, and under-covered stories —
-        evidence first.
+        evidence first. MVP signup collection only; delivery is not enabled yet.
       </p>
       {submitted ? (
         <p className="border border-emerald-200 bg-emerald-50/80 px-3 py-2.5 text-[13px] text-emerald-900">
@@ -44,6 +44,13 @@ export function DailyBriefSignup() {
           <label htmlFor="brief-email" className="sr-only">
             Email address
           </label>
+          <input
+            name="company"
+            tabIndex={-1}
+            autoComplete="off"
+            className="hidden"
+            aria-hidden="true"
+          />
           <input
             id="brief-email"
             name="email"

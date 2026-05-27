@@ -20,8 +20,8 @@ export function AdminTokenField({ token, onTokenChange }: AdminTokenFieldProps) 
         className="w-full border border-[var(--border)] bg-white px-3 py-2 text-sm text-[var(--foreground)] focus:border-[var(--accent)] focus:outline-none"
       />
       <p className="mt-2 text-xs leading-relaxed text-[var(--muted-light)]">
-        Stored in this browser only and sent as Authorization: Bearer for admin
-        API calls.
+        Use the value from ADMIN_API_TOKEN. It is stored only in this browser via
+        localStorage and sent as Authorization: Bearer for admin API calls.
       </p>
     </div>
   );

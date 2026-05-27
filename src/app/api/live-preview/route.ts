@@ -25,6 +25,17 @@ export async function GET(request: NextRequest) {
       });
     }
 
+    if (!isLiveBetaEnabled()) {
+      return NextResponse.json({
+        ok: true,
+        source: "disabled",
+        count: 0,
+        generatedAt: null,
+        liveBetaEnabled: false,
+        stories: [],
+      });
+    }
+
     const result = await getLiveFeed();
 
     return NextResponse.json({
