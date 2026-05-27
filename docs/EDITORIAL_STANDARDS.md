@@ -45,6 +45,10 @@ The expected lifecycle is:
 Raw feed items and drafts should not appear publicly. Publication requires human
 review unless that policy is explicitly changed later.
 
+Automation may create or update drafts and, in guarded mode, publish only stories
+that meet explicit evidence thresholds. Manual review remains the fallback and
+override layer.
+
 ## Source handling
 
 Editors should attach sources that support the public briefing. Prefer:

@@ -30,6 +30,14 @@ export type StoryStatus = "draft" | "published" | "archived" | "corrected";
 
 export type EditorialSelectionStatus = "draft_created" | "attached" | "ignored";
 
+export type AutomationMode =
+  | "manual_review"
+  | "auto_draft"
+  | "guarded_auto_publish"
+  | "full_auto_briefing";
+
+export type AutomationRunStatus = "running" | "completed" | "failed";
+
 export interface SourceRecord {
   id: string;
   name: string;
@@ -133,4 +141,22 @@ export interface IngestSummary {
   newItemsInserted: number;
   duplicatesSkipped: number;
   errors: Array<{ feedUrl: string; message: string }>;
+}
+
+export interface AutomationRunRecord {
+  id: string;
+  mode: AutomationMode;
+  startedAt: string;
+  completedAt: string | null;
+  status: AutomationRunStatus;
+  feedsChecked: number;
+  newFeedItems: number;
+  clustersCreated: number;
+  draftsCreated: number;
+  draftsUpdated: number;
+  storiesAutoPublished: number;
+  storiesNeedingReview: number;
+  errors: Array<Record<string, unknown>>;
+  warnings: string[];
+  createdAt: string;
 }

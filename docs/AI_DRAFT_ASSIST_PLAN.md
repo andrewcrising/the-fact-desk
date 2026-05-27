@@ -96,6 +96,9 @@ Example:
 ## Current implementation notes
 
 - AI call is server-side only.
+- Automation may use AI Draft Assist in `auto_draft` or `guarded_auto_publish`
+  mode, but generated text still passes through evidence policy and manual
+  override remains available.
 - Output is validated as JSON before returning to the UI.
 - Public pages never show raw AI output, claims to verify, metadata limitations,
   or internal warnings unless an editor explicitly saves text into approved story

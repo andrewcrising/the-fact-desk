@@ -15,6 +15,8 @@ ALLOW_MOCK_FALLBACK=false
 AI_DRAFT_ASSIST_ENABLED=false
 OPENAI_API_KEY=optional-openai-key
 OPENAI_MODEL=gpt-4o-mini
+FACT_DESK_AUTOMATION_MODE=manual_review
+FACT_DESK_HEALTH_AUTO_PUBLISH_ENABLED=false
 ```
 
 Notes:
@@ -23,6 +25,8 @@ Notes:
 - `ADMIN_API_TOKEN` protects editorial write/admin APIs.
 - `CRON_SECRET` protects scheduled ingest/revalidation APIs.
 - `AI_DRAFT_ASSIST_ENABLED` and `OPENAI_API_KEY` enable admin-only AI Draft Assist.
+- `FACT_DESK_AUTOMATION_MODE` controls the self-updating pipeline. Default is `manual_review`.
+- `FACT_DESK_HEALTH_AUTO_PUBLISH_ENABLED` must remain false unless health auto-publish has been explicitly approved.
 - Without Supabase env vars, public pages fall back to `src/data/stories.ts` only in development or when `ALLOW_MOCK_FALLBACK=true`.
 
 ## Database setup
@@ -84,6 +88,7 @@ Admin protected:
 - `POST /api/stories/[id]/promote`
 - `POST /api/stories/[id]/evidence-assist`
 - `POST /api/stories/[id]/draft-assist`
+- `POST /api/automation/run-briefing-pipeline`
 - `GET /api/feed-items`
 - `PATCH /api/feed-items/[id]`
 - `POST /api/feed-items/[id]/promote`
@@ -91,6 +96,7 @@ Admin protected:
 Admin or cron protected:
 
 - `POST /api/ingest/rss`
+- `GET /api/automation/run-briefing-pipeline`
 - `GET /api/cron/revalidate-live`
 - `GET /api/live-preview?fresh=1`
 
@@ -111,6 +117,15 @@ The response includes:
 - new items inserted
 - duplicates skipped
 - feed errors
+
+## Automation pipeline
+
+See [AUTOMATION_PIPELINE.md](./AUTOMATION_PIPELINE.md).
+
+The pipeline can ingest, cluster, draft, score, and optionally guarded-publish
+stories depending on `FACT_DESK_AUTOMATION_MODE`.
+
+Default mode is `manual_review`, which keeps publishing human-reviewed.
 
 ## Evidence Assist
 

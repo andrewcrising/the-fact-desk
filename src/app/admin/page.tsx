@@ -24,7 +24,7 @@ export default function AdminHomePage() {
             </p>
           </section>
 
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-4">
             <Link href="/admin/feed-inbox" className="desk-card p-4 hover:border-[var(--accent)]">
               <p className="desk-kicker mb-2">Step 1</p>
               <h2 className="font-serif text-xl font-semibold">Feed Inbox</h2>
@@ -44,6 +44,13 @@ export default function AdminHomePage() {
               <h2 className="font-serif text-xl font-semibold">New Story</h2>
               <p className="mt-2 text-sm text-[var(--muted)]">
                 Create a draft directly with source attachments.
+              </p>
+            </Link>
+            <Link href="/admin/automation" className="desk-card p-4 hover:border-[var(--accent)]">
+              <p className="desk-kicker mb-2">Automation</p>
+              <h2 className="font-serif text-xl font-semibold">Pipeline</h2>
+              <p className="mt-2 text-sm text-[var(--muted)]">
+                Run self-updating briefing pipeline and review automation logs.
               </p>
             </Link>
           </div>

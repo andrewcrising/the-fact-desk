@@ -1,7 +1,7 @@
 {
   "crons": [
     {
-      "path": "/api/ingest/rss",
+      "path": "/api/automation/run-briefing-pipeline",
       "schedule": "0 */1 * * *"
     }
   ]

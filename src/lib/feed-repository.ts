@@ -74,6 +74,19 @@ export async function listFeedItems(query: FeedItemQuery = {}): Promise<FeedItem
   return ((data ?? []) as FeedItemRow[]).map(mapFeedItem);
 }
 
+export async function countFeedItemsByStatus(
+  status: FeedItemStatus,
+): Promise<number> {
+  const supabase = requireSupabaseAdmin();
+  const { count, error } = await supabase
+    .from("feed_items")
+    .select("id", { count: "exact", head: true })
+    .eq("status", status);
+
+  if (error) throw error;
+  return count ?? 0;
+}
+
 export async function getFeedItemById(id: string): Promise<FeedItem | null> {
   const supabase = requireSupabaseAdmin();
   const { data, error } = await supabase

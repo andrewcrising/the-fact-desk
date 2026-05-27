@@ -25,6 +25,8 @@ See [docs/MVP_BACKEND.md](./docs/MVP_BACKEND.md) for schema setup, required env 
 Use [docs/DEPLOYMENT_CHECKLIST.md](./docs/DEPLOYMENT_CHECKLIST.md) for the end-to-end local/Vercel checklist.
 See [docs/EDITORIAL_STANDARDS.md](./docs/EDITORIAL_STANDARDS.md) for evidence-ranking standards and human-review policy.
 See [docs/AI_DRAFT_ASSIST_PLAN.md](./docs/AI_DRAFT_ASSIST_PLAN.md) for future AI-assisted drafting guardrails.
+See [docs/AUTOMATION_PIPELINE.md](./docs/AUTOMATION_PIPELINE.md) for self-updating pipeline modes and safety thresholds.
+See [docs/PREFERENCE_MODEL.md](./docs/PREFERENCE_MODEL.md) for future topic/source-balance preference design.
 
 Required production env vars:
 
@@ -38,6 +40,8 @@ ALLOW_MOCK_FALLBACK=false
 # optional admin-only AI Draft Assist
 AI_DRAFT_ASSIST_ENABLED=false
 OPENAI_API_KEY=
+FACT_DESK_AUTOMATION_MODE=manual_review
+FACT_DESK_HEALTH_AUTO_PUBLISH_ENABLED=false
 ```
 
 ## Mock demo (default)

@@ -38,10 +38,13 @@ ALLOW_MOCK_FALLBACK=false
 AI_DRAFT_ASSIST_ENABLED=false
 OPENAI_API_KEY=
 OPENAI_MODEL=gpt-4o-mini
+FACT_DESK_AUTOMATION_MODE=manual_review
+FACT_DESK_HEALTH_AUTO_PUBLISH_ENABLED=false
 ```
 
 Production recommendation: leave `ALLOW_MOCK_FALLBACK` unset or `false`.
 Enable AI Draft Assist only for admin use after confirming editorial guardrails.
+Keep `FACT_DESK_AUTOMATION_MODE=manual_review` until automation dry runs are reviewed.
 
 ## 3. Seed demo data
 
@@ -112,12 +115,13 @@ Paste `ADMIN_API_TOKEN` into admin pages when prompted.
 
 ```json
 {
-  "path": "/api/ingest/rss",
+  "path": "/api/automation/run-briefing-pipeline",
   "schedule": "0 */1 * * *"
 }
 ```
 
-`/api/ingest/rss` supports GET for Vercel Cron and POST for manual/admin calls. Both require:
+`/api/automation/run-briefing-pipeline` supports GET for Vercel Cron and POST
+for manual/admin calls. Both require:
 
 ```bash
 Authorization: Bearer <CRON_SECRET or ADMIN_API_TOKEN>
@@ -192,9 +196,13 @@ After deployment:
 14. Archive the story.
 15. Confirm it disappears from the public homepage.
 16. Submit a test newsletter signup.
-17. Confirm `/api/ingest/rss` rejects a request without bearer auth.
-18. Confirm `/api/ingest/rss` accepts `Authorization: Bearer <CRON_SECRET>`.
-19. Confirm Vercel Cron is configured to call durable ingest route `/api/ingest/rss`.
+17. Confirm `/api/automation/run-briefing-pipeline` rejects a request without bearer auth.
+18. Confirm `/api/automation/run-briefing-pipeline?dry_run=true` accepts `Authorization: Bearer <CRON_SECRET>`.
+19. Confirm Vercel Cron is configured to call durable automation route `/api/automation/run-briefing-pipeline`.
+20. Visit `/admin/automation`.
+21. Confirm the current automation mode.
+22. Run **Dry run pipeline** and review report warnings.
+23. Do not enable `guarded_auto_publish` until dry runs and audit logs are reviewed.
 
 ## 11. Operational safety notes
 

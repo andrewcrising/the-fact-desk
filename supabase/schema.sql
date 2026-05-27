@@ -163,6 +163,42 @@ create table if not exists public.subscribers (
   created_at timestamptz not null default now()
 );
 
+create table if not exists public.automation_runs (
+  id uuid primary key default gen_random_uuid(),
+  mode text not null
+    check (mode in ('manual_review', 'auto_draft', 'guarded_auto_publish', 'full_auto_briefing')),
+  started_at timestamptz not null default now(),
+  completed_at timestamptz,
+  status text not null default 'running'
+    check (status in ('running', 'completed', 'failed')),
+  feeds_checked integer not null default 0,
+  new_feed_items integer not null default 0,
+  clusters_created integer not null default 0,
+  drafts_created integer not null default 0,
+  drafts_updated integer not null default 0,
+  stories_auto_published integer not null default 0,
+  stories_needing_review integer not null default 0,
+  errors jsonb not null default '[]'::jsonb,
+  warnings jsonb not null default '[]'::jsonb,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists automation_runs_created_idx
+  on public.automation_runs(created_at desc);
+
+create table if not exists public.story_automation_events (
+  id uuid primary key default gen_random_uuid(),
+  story_id uuid references public.stories(id) on delete cascade,
+  event_type text not null,
+  mode text not null
+    check (mode in ('manual_review', 'auto_draft', 'guarded_auto_publish', 'full_auto_briefing')),
+  details jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists story_automation_events_story_idx
+  on public.story_automation_events(story_id, created_at desc);
+
 -- Recommended for MVP server-only access:
 -- alter table public.sources enable row level security;
 -- alter table public.feed_items enable row level security;
@@ -170,3 +206,5 @@ create table if not exists public.subscribers (
 -- alter table public.story_sources enable row level security;
 -- alter table public.editorial_selections enable row level security;
 -- alter table public.subscribers enable row level security;
+-- alter table public.automation_runs enable row level security;
+-- alter table public.story_automation_events enable row level security;
