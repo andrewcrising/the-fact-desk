@@ -6,7 +6,7 @@ import { STORY_CATEGORIES } from "@/data/navigation";
 import type { PersistedStory } from "@/types/editorial";
 import type { Confidence, Signal } from "@/types/story";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const SIGNALS: Signal[] = [
   "Top Signal",
@@ -87,7 +87,7 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
     setState((current) => ({ ...current, [key]: value }));
   }
 
-  async function adminFetch(path: string, init: RequestInit = {}) {
+  const adminFetch = useCallback(async (path: string, init: RequestInit = {}) => {
     return fetch(path, {
       ...init,
       headers: {
@@ -96,7 +96,7 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
         ...init.headers,
       },
     });
-  }
+  }, [token]);
 
   useEffect(() => {
     if (!storyId || !token) return;
@@ -132,7 +132,7 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
     }
 
     void loadStory();
-  }, [storyId, token]);
+  }, [adminFetch, storyId, token]);
 
   function payload() {
     return {

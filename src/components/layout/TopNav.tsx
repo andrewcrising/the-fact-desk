@@ -54,20 +54,20 @@ export function TopNav() {
                 {link.label}
               </Link>
             ))}
-            <a
+            <Link
               href="/#health-desk"
               className="shrink-0 px-2.5 py-1.5 text-[12px] font-medium text-[var(--muted-light)] hover:text-[var(--foreground)] sm:text-[13px]"
             >
               Health Desk
-            </a>
+            </Link>
           </nav>
 
-          <a
-            href="#brief-email"
+          <Link
+            href="/#brief-email"
             className="shrink-0 self-start border border-[var(--accent)] bg-[var(--accent)] px-4 py-2 text-xs font-semibold uppercase tracking-wide text-white hover:bg-[var(--accent-muted)] lg:self-center"
           >
             Daily Brief
-          </a>
+          </Link>
         </div>
       </div>
     </header>

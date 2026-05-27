@@ -19,22 +19,26 @@ import type {
 function parseSourceAttachments(value: unknown): StorySourceInput[] | undefined {
   if (!Array.isArray(value)) return undefined;
 
-  return value
-    .filter(isRecord)
-    .map((item) => {
-      const sourceName = asString(item.sourceName);
-      const url = asString(item.url);
-      if (!sourceName || !url) return null;
-      return {
-        sourceId: asString(item.sourceId),
-        sourceName,
-        url,
-        title: asString(item.title),
-        feedItemId: asOptionalString(item.feedItemId),
-        publishedAt: asOptionalString(item.publishedAt),
-      };
-    })
-    .filter((item): item is StorySourceInput => item !== null);
+  const sources: StorySourceInput[] = [];
+
+  for (const item of value) {
+    if (!isRecord(item)) continue;
+
+    const sourceName = asString(item.sourceName);
+    const url = asString(item.url);
+    if (!sourceName || !url) continue;
+
+    sources.push({
+      sourceId: asString(item.sourceId),
+      sourceName,
+      url,
+      title: asString(item.title),
+      feedItemId: asOptionalString(item.feedItemId),
+      publishedAt: asOptionalString(item.publishedAt),
+    });
+  }
+
+  return sources;
 }
 
 export function parseStoryInput(body: unknown): StoryInput {

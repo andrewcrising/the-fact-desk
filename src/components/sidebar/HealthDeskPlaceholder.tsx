@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export function HealthDeskPlaceholder() {
   return (
     <section
@@ -12,9 +14,9 @@ export function HealthDeskPlaceholder() {
         <p className="text-[11px] leading-snug text-[var(--muted)]">
           Health stories use the same published-story lifecycle; this preview
           remains secondary while the desk grows.{" "}
-          <a href="/#health-desk" className="text-[var(--accent)] hover:underline">
+          <Link href="/#health-desk" className="text-[var(--accent)] hover:underline">
             View section →
-          </a>
+          </Link>
         </p>
       </div>
     </section>

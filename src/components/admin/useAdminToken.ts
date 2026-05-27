@@ -1,15 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const STORAGE_KEY = "fact-desk-admin-token";
 
 export function useAdminToken() {
-  const [token, setToken] = useState("");
-
-  useEffect(() => {
-    setToken(window.localStorage.getItem(STORAGE_KEY) ?? "");
-  }, []);
+  const [token, setToken] = useState(() =>
+    typeof window === "undefined"
+      ? ""
+      : window.localStorage.getItem(STORAGE_KEY) ?? "",
+  );
 
   function saveToken(nextToken: string) {
     setToken(nextToken);
