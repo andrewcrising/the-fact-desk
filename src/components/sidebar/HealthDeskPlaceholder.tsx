@@ -12,8 +12,8 @@ export function HealthDeskPlaceholder() {
       </div>
       <div className="px-3 py-2.5">
         <p className="text-[11px] leading-snug text-[var(--muted)]">
-          Health stories use the same published-story lifecycle; this preview
-          remains secondary while the desk grows.{" "}
+          Public health and research signals use the same story lifecycle. Not
+          medical advice; this preview remains secondary while the desk grows.{" "}
           <Link href="/#health-desk" className="text-[var(--accent)] hover:underline">
             View section →
           </Link>

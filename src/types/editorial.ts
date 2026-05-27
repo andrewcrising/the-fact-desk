@@ -1,4 +1,10 @@
-import type { Confidence, Signal, Story, StoryCategory } from "@/types/story";
+import type {
+  Confidence,
+  EvidenceLevel,
+  Signal,
+  Story,
+  StoryCategory,
+} from "@/types/story";
 
 export type SourceType = "rss" | "manual" | "api" | "wire" | "other";
 
@@ -65,9 +71,11 @@ export interface StoryInput {
   whatHappened: string;
   whyItMatters: string;
   coverageAngle?: string | null;
+  uncertaintyNote?: string | null;
   category: StoryCategory;
   signal: Signal;
   confidence: Confidence;
+  evidenceLevel?: EvidenceLevel;
   status?: StoryStatus;
   homepageRank?: number | null;
   isLead?: boolean;

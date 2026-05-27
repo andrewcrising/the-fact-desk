@@ -206,12 +206,15 @@ function normalizeItem(
       "This story is newly ingested and has not yet been fully analyzed.",
     category: resolveCategory(options.category),
     confidence: "Single-source",
+    evidenceLevel: "Low",
     signal: resolveSignal(options.signal),
     sources: [sourceName],
     sourceUrls: item.link ? [item.link] : undefined,
     publishedAt,
     updatedAt: publishedAt,
     tags: buildTags(sourceName),
+    uncertaintyNote:
+      "Raw RSS item; not yet reviewed, ranked, or corroborated by The Fact Desk.",
   };
 }
 

@@ -84,14 +84,15 @@ Paste `ADMIN_API_TOKEN` into admin pages when prompted.
 5. Click **Create draft from item** on a feed item.
 6. Open **Stories**.
 7. Edit the new draft.
-8. Add or verify source lines.
-9. Click **Save draft**.
-10. Click **Publish**.
-11. Optionally set homepage rank and click **Set as lead**.
-12. Visit `/`.
-13. Confirm the story appears publicly.
-14. Click the story and confirm `/story/[slug]` renders.
-15. Archive the story and confirm it leaves the public homepage.
+8. Set confidence, evidence level, coverage angle, and uncertainty note.
+9. Add or verify source lines.
+10. Click **Save draft**.
+11. Click **Publish**.
+12. Optionally set homepage rank and click **Set as lead**.
+13. Visit `/`.
+14. Confirm the story appears publicly with confidence/evidence/source context.
+15. Click the story and confirm `/story/[slug]` renders.
+16. Archive the story and confirm it leaves the public homepage.
 
 ## 6. Vercel deployment
 
@@ -180,15 +181,16 @@ After deployment:
 7. Click **Run RSS ingest**.
 8. Promote one feed item into a draft.
 9. Open Stories and edit the draft.
-10. Publish it.
-11. Confirm it appears on `/`.
-12. Click the story and confirm `/story/[slug]` works.
-13. Archive the story.
-14. Confirm it disappears from the public homepage.
-15. Submit a test newsletter signup.
-16. Confirm `/api/ingest/rss` rejects a request without bearer auth.
-17. Confirm `/api/ingest/rss` accepts `Authorization: Bearer <CRON_SECRET>`.
-18. Confirm Vercel Cron is configured to call durable ingest route `/api/ingest/rss`.
+10. Confirm confidence, evidence level, uncertainty note, and source list are set.
+11. Publish it.
+12. Confirm it appears on `/` with evidence/source context.
+13. Click the story and confirm `/story/[slug]` works.
+14. Archive the story.
+15. Confirm it disappears from the public homepage.
+16. Submit a test newsletter signup.
+17. Confirm `/api/ingest/rss` rejects a request without bearer auth.
+18. Confirm `/api/ingest/rss` accepts `Authorization: Bearer <CRON_SECRET>`.
+19. Confirm Vercel Cron is configured to call durable ingest route `/api/ingest/rss`.
 
 ## 11. Operational safety notes
 

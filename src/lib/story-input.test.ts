@@ -12,10 +12,14 @@ describe("story input validation", () => {
       category: "World",
       signal: "Developing",
       confidence: "Single-source",
+      evidenceLevel: "Low",
+      uncertaintyNote: "Only one source has reported this so far.",
       tags: "seed, draft",
     });
 
     assert.equal(input.status, "draft");
+    assert.equal(input.evidenceLevel, "Low");
+    assert.equal(input.uncertaintyNote, "Only one source has reported this so far.");
     assert.deepEqual(input.tags, ["seed", "draft"]);
   });
 

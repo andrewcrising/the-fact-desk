@@ -141,6 +141,7 @@ export function AdminStoriesList() {
                     <div>
                       <p className="desk-kicker mb-1">
                         {story.status} · {story.category} · {story.signal}
+                        {story.evidenceLevel ? ` · ${story.evidenceLevel} evidence` : ""}
                         {story.isLead ? " · lead" : ""}
                         {story.homepageRank ? ` · rank ${story.homepageRank}` : ""}
                       </p>

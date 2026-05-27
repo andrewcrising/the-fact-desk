@@ -227,6 +227,8 @@ describe("Supabase editorial lifecycle integration", { skip }, () => {
           whatHappened: "Edited what happened.",
           whyItMatters: "Edited why it matters.",
           confidence: "Confirmed",
+          evidenceLevel: "Strong",
+          uncertaintyNote: "Integration uncertainty note.",
           signal: "Top Signal",
           category: "Technology",
           tags: ["integration", runId],
@@ -240,6 +242,8 @@ describe("Supabase editorial lifecycle integration", { skip }, () => {
     const updatedStory = updated.story as PersistedStory;
     assert.equal(updatedStory.title, `${runId} edited lifecycle story`);
     assert.equal(updatedStory.confidence, "Confirmed");
+    assert.equal(updatedStory.evidenceLevel, "Strong");
+    assert.equal(updatedStory.uncertaintyNote, "Integration uncertainty note.");
     assert.deepEqual(updatedStory.tags, ["integration", runId]);
 
     const createSecondResponse = await createStoryRoute(
@@ -254,6 +258,8 @@ describe("Supabase editorial lifecycle integration", { skip }, () => {
           category: "World",
           signal: "Developing",
           confidence: "Single-source",
+          evidenceLevel: "Low",
+          uncertaintyNote: "Second integration story uncertainty.",
           tags: [runId],
           sourceAttachments: [
             {

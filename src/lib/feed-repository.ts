@@ -202,9 +202,12 @@ export async function promoteFeedItemToDraft(id: string): Promise<PersistedStory
     whatHappened: item.summary ? `${item.title}. ${item.summary}` : item.title,
     whyItMatters: "Editorial review needed before publication.",
     coverageAngle: "Created from an RSS inbox item; verify and expand before publishing.",
+    uncertaintyNote:
+      "This draft is based on a raw feed item and needs human source review before publication.",
     category: "World",
     signal: "Developing",
     confidence: "Single-source",
+    evidenceLevel: "Low",
     status: "draft",
     tags: ["rss-inbox"],
     sourceAttachments: [

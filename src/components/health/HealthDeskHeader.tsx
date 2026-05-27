@@ -1,10 +1,10 @@
 const HEALTH_TICKER = [
-  "Weight loss",
-  "Muscle gain",
-  "Longevity",
-  "Functional medicine",
+  "Public health",
+  "Clinical research",
+  "Policy guidance",
+  "Evidence reviews",
   "Safety flags",
-  "Updated evidence",
+  "Not medical advice",
 ] as const;
 
 export function HealthDeskIntro() {
@@ -17,11 +17,11 @@ export function HealthDeskIntro() {
         id="health-desk-heading"
         className="font-serif text-base font-semibold leading-tight tracking-tight text-[var(--foreground)] sm:text-lg"
       >
-        Health guidance separated by evidence, goals, and safety.
+        Health policy and research signals, separated by evidence and safety.
       </h2>
       <p className="mt-1 max-w-2xl text-[12px] leading-snug text-[var(--muted)]">
-        Published health stories appear here through the same editorial lifecycle;
-        topic lanes remain a beta preview.
+        Published health stories use the same editorial lifecycle. This is a
+        public briefing surface, not personalized medical advice.
       </p>
     </header>
   );

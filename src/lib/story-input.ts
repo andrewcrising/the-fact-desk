@@ -3,6 +3,7 @@ import {
   asBoolean,
   asCategory,
   asConfidence,
+  asEvidenceLevel,
   asNumber,
   asOptionalString,
   asSignal,
@@ -51,6 +52,7 @@ export function parseStoryInput(body: unknown): StoryInput {
   const category = asCategory(body.category);
   const signal = asSignal(body.signal);
   const confidence = asConfidence(body.confidence);
+  const evidenceLevel = asEvidenceLevel(body.evidenceLevel) ?? "Moderate";
 
   if (!title || !summary || !whatHappened || !whyItMatters) {
     throw new Error("title, summary, whatHappened, and whyItMatters are required");
@@ -66,9 +68,11 @@ export function parseStoryInput(body: unknown): StoryInput {
     whatHappened,
     whyItMatters,
     coverageAngle: asOptionalString(body.coverageAngle),
+    uncertaintyNote: asOptionalString(body.uncertaintyNote),
     category,
     signal,
     confidence,
+    evidenceLevel,
     status: body.status === "published" ? "published" : "draft",
     homepageRank: asNumber(body.homepageRank),
     isLead: asBoolean(body.isLead) ?? false,
@@ -88,6 +92,7 @@ export function parseStoryUpdateInput(body: unknown): StoryUpdateInput {
   const category = asCategory(body.category);
   const signal = asSignal(body.signal);
   const confidence = asConfidence(body.confidence);
+  const evidenceLevel = asEvidenceLevel(body.evidenceLevel);
 
   if (title) input.title = title;
   if (asString(body.slug)) input.slug = slugify(asString(body.slug)!);
@@ -95,9 +100,11 @@ export function parseStoryUpdateInput(body: unknown): StoryUpdateInput {
   if (whatHappened) input.whatHappened = whatHappened;
   if (whyItMatters) input.whyItMatters = whyItMatters;
   if ("coverageAngle" in body) input.coverageAngle = asOptionalString(body.coverageAngle);
+  if ("uncertaintyNote" in body) input.uncertaintyNote = asOptionalString(body.uncertaintyNote);
   if (category) input.category = category;
   if (signal) input.signal = signal;
   if (confidence) input.confidence = confidence;
+  if (evidenceLevel) input.evidenceLevel = evidenceLevel;
   if (body.status === "draft" || body.status === "archived" || body.status === "corrected") {
     input.status = body.status;
   } else if (body.status === "published") {

@@ -26,7 +26,13 @@ import type {
   StoryStatus,
   StoryUpdateInput,
 } from "@/types/editorial";
-import type { Confidence, Signal, Story, StoryCategory } from "@/types/story";
+import type {
+  Confidence,
+  EvidenceLevel,
+  Signal,
+  Story,
+  StoryCategory,
+} from "@/types/story";
 
 interface StoryRow {
   id: string;
@@ -36,9 +42,11 @@ interface StoryRow {
   what_happened: string;
   why_it_matters: string;
   coverage_angle: string | null;
+  uncertainty_note: string | null;
   category: StoryCategory;
   signal: Signal;
   confidence: Confidence;
+  evidence_level: EvidenceLevel;
   status: StoryStatus;
   homepage_rank: number | null;
   is_lead: boolean;
@@ -127,6 +135,7 @@ async function mapPersistedStory(row: StoryRow): Promise<PersistedStory> {
     whyItMatters: row.why_it_matters,
     category: row.category,
     confidence: row.confidence,
+    evidenceLevel: row.evidence_level,
     signal: row.signal,
     sources: sourceNames,
     sourceUrls: storySources.map((source) => source.url),
@@ -134,6 +143,7 @@ async function mapPersistedStory(row: StoryRow): Promise<PersistedStory> {
     updatedAt: row.updated_at,
     tags: tagsFromJson(row.tags),
     coverageAngle: row.coverage_angle ?? undefined,
+    uncertaintyNote: row.uncertainty_note ?? undefined,
     status: row.status,
     homepageRank: row.homepage_rank,
     isLead: row.is_lead,
@@ -305,14 +315,19 @@ function toStoryRow(input: StoryInput | StoryUpdateInput) {
     summary: input.summary,
     what_happened: input.whatHappened,
     why_it_matters: input.whyItMatters,
-    coverage_angle: input.coverageAngle ?? null,
+    coverage_angle:
+      "coverageAngle" in input ? input.coverageAngle ?? null : undefined,
+    uncertainty_note:
+      "uncertaintyNote" in input ? input.uncertaintyNote ?? null : undefined,
     category: input.category,
     signal: input.signal,
     confidence: input.confidence,
+    evidence_level: input.evidenceLevel,
     status: input.status,
-    homepage_rank: input.homepageRank ?? null,
+    homepage_rank:
+      "homepageRank" in input ? input.homepageRank ?? null : undefined,
     is_lead: input.isLead,
-    tags: input.tags ?? [],
+    tags: "tags" in input ? input.tags ?? [] : undefined,
   };
 }
 

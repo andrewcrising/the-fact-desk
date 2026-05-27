@@ -1,5 +1,10 @@
 import { STORY_CATEGORIES } from "@/data/navigation";
-import type { Confidence, Signal, StoryCategory } from "@/types/story";
+import type {
+  Confidence,
+  EvidenceLevel,
+  Signal,
+  StoryCategory,
+} from "@/types/story";
 
 const CONFIDENCES: Confidence[] = [
   "Confirmed",
@@ -14,6 +19,8 @@ const SIGNALS: Signal[] = [
   "Cross-angle",
   "Developing",
 ];
+
+const EVIDENCE_LEVELS: EvidenceLevel[] = ["Low", "Moderate", "Strong"];
 
 export function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -71,6 +78,12 @@ export function asSignal(value: unknown): Signal | undefined {
 export function asConfidence(value: unknown): Confidence | undefined {
   return CONFIDENCES.includes(value as Confidence)
     ? (value as Confidence)
+    : undefined;
+}
+
+export function asEvidenceLevel(value: unknown): EvidenceLevel | undefined {
+  return EVIDENCE_LEVELS.includes(value as EvidenceLevel)
+    ? (value as EvidenceLevel)
     : undefined;
 }
 

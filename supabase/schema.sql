@@ -68,15 +68,19 @@ create table if not exists public.stories (
   what_happened text not null,
   why_it_matters text not null,
   coverage_angle text,
+  uncertainty_note text,
   category text not null,
   signal text not null,
   confidence text not null,
+  evidence_level text not null default 'Moderate',
   constraint stories_category_check
     check (category in ('Politics', 'Markets', 'Technology', 'World', 'Health', 'Courts', 'Energy', 'Culture')),
   constraint stories_signal_check
     check (signal in ('Top Signal', 'Under-covered', 'Cross-angle', 'Developing')),
   constraint stories_confidence_check
     check (confidence in ('Confirmed', 'Developing', 'Disputed', 'Single-source')),
+  constraint stories_evidence_level_check
+    check (evidence_level in ('Low', 'Moderate', 'Strong')),
   status text not null default 'draft'
     check (status in ('draft', 'published', 'archived', 'corrected')),
   homepage_rank integer,
@@ -86,6 +90,21 @@ create table if not exists public.stories (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+-- Safe for existing MVP databases created before the editorial-alignment fields.
+alter table public.stories
+  add column if not exists uncertainty_note text;
+alter table public.stories
+  add column if not exists evidence_level text not null default 'Moderate';
+
+do $$
+begin
+  alter table public.stories
+    add constraint stories_evidence_level_check
+    check (evidence_level in ('Low', 'Moderate', 'Strong'));
+exception
+  when duplicate_object then null;
+end $$;
 
 create index if not exists stories_status_idx on public.stories(status);
 create index if not exists stories_homepage_idx

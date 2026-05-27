@@ -4,7 +4,7 @@ import { AdminTokenField } from "@/components/admin/AdminTokenField";
 import { useAdminToken } from "@/components/admin/useAdminToken";
 import { STORY_CATEGORIES } from "@/data/navigation";
 import type { PersistedStory } from "@/types/editorial";
-import type { Confidence, Signal } from "@/types/story";
+import type { Confidence, EvidenceLevel, Signal } from "@/types/story";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
@@ -22,6 +22,8 @@ const CONFIDENCES: Confidence[] = [
   "Single-source",
 ];
 
+const EVIDENCE_LEVELS: EvidenceLevel[] = ["Low", "Moderate", "Strong"];
+
 interface AdminStoryFormProps {
   storyId?: string;
 }
@@ -33,9 +35,11 @@ interface StoryFormState {
   whatHappened: string;
   whyItMatters: string;
   coverageAngle: string;
+  uncertaintyNote: string;
   category: string;
   signal: string;
   confidence: string;
+  evidenceLevel: string;
   tags: string;
   homepageRank: string;
   isLead: boolean;
@@ -49,9 +53,11 @@ const emptyState: StoryFormState = {
   whatHappened: "",
   whyItMatters: "",
   coverageAngle: "",
+  uncertaintyNote: "",
   category: "World",
   signal: "Developing",
   confidence: "Single-source",
+  evidenceLevel: "Moderate",
   tags: "",
   homepageRank: "",
   isLead: false,
@@ -116,9 +122,11 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
           whatHappened: story.whatHappened,
           whyItMatters: story.whyItMatters,
           coverageAngle: story.coverageAngle ?? "",
+          uncertaintyNote: story.uncertaintyNote ?? "",
           category: story.category,
           signal: story.signal,
           confidence: story.confidence,
+          evidenceLevel: story.evidenceLevel ?? "Moderate",
           tags: story.tags.join(", "),
           homepageRank: story.homepageRank?.toString() ?? "",
           isLead: story.isLead,
@@ -142,9 +150,11 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
       whatHappened: state.whatHappened,
       whyItMatters: state.whyItMatters,
       coverageAngle: state.coverageAngle,
+      uncertaintyNote: state.uncertaintyNote,
       category: state.category,
       signal: state.signal,
       confidence: state.confidence,
+      evidenceLevel: state.evidenceLevel,
       tags: state.tags,
       homepageRank: state.homepageRank,
       isLead: state.isLead,
@@ -323,9 +333,28 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
             onChange={(event) => update("coverageAngle", event.target.value)}
             className="border border-[var(--border)] px-3 py-2"
           />
+          <span className="text-xs text-[var(--muted-light)]">
+            Explain why this belongs on The Fact Desk: source spread,
+            under-covered significance, or public-interest relevance.
+          </span>
         </label>
 
-        <div className="grid gap-3 sm:grid-cols-3">
+        <label className="grid gap-1 text-sm">
+          <span className="desk-kicker">Uncertainty note</span>
+          <textarea
+            rows={3}
+            value={state.uncertaintyNote}
+            onChange={(event) => update("uncertaintyNote", event.target.value)}
+            placeholder="What remains unknown, disputed, or not independently confirmed?"
+            className="border border-[var(--border)] px-3 py-2"
+          />
+          <span className="text-xs text-[var(--muted-light)]">
+            Use this to make limits visible. Leave blank only when uncertainty is
+            already fully covered in the briefing.
+          </span>
+        </label>
+
+        <div className="grid gap-3 sm:grid-cols-4">
           <label className="grid gap-1 text-sm">
             <span className="desk-kicker">Category</span>
             <select
@@ -350,6 +379,10 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
                 <option key={signal}>{signal}</option>
               ))}
             </select>
+            <span className="text-xs text-[var(--muted-light)]">
+              Developing = unfolding; Under-covered = important but limited
+              pickup; Cross-angle = credible sources differ in emphasis.
+            </span>
           </label>
 
           <label className="grid gap-1 text-sm">
@@ -363,6 +396,27 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
                 <option key={confidence}>{confidence}</option>
               ))}
             </select>
+            <span className="text-xs text-[var(--muted-light)]">
+              Confirmed = well established; Developing = credible but moving;
+              Single-source = limited sourcing; Disputed = conflicting accounts.
+            </span>
+          </label>
+
+          <label className="grid gap-1 text-sm">
+            <span className="desk-kicker">Evidence level</span>
+            <select
+              value={state.evidenceLevel}
+              onChange={(event) => update("evidenceLevel", event.target.value)}
+              className="border border-[var(--border)] px-3 py-2"
+            >
+              {EVIDENCE_LEVELS.map((level) => (
+                <option key={level}>{level}</option>
+              ))}
+            </select>
+            <span className="text-xs text-[var(--muted-light)]">
+              Strong = primary documents or multiple reliable sources; Moderate
+              = credible reporting; Low = early or thin signal.
+            </span>
           </label>
         </div>
 

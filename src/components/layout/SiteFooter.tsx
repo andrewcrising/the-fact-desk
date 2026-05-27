@@ -15,7 +15,7 @@ export function SiteFooter({ showLiveBeta = false }: SiteFooterProps) {
           <p className="font-medium text-[var(--muted)]">
             © {new Date().getFullYear()} The Fact Desk
           </p>
-          <p>Editorial labels are signals, not verdicts.</p>
+          <p>Editorial labels summarize evidence posture, not final truth.</p>
         </div>
       </div>
     </footer>

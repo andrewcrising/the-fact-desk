@@ -37,6 +37,14 @@ The schema creates:
 - `editorial_selections`
 - `subscribers`
 
+Stories include editorial posture fields for evidence-ranked publishing:
+
+- `confidence`
+- `evidence_level`
+- `signal`
+- `coverage_angle`
+- `uncertainty_note`
+
 ## Local workflow
 
 ```bash

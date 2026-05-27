@@ -28,9 +28,11 @@ interface SeedStory {
   what_happened: string;
   why_it_matters: string;
   coverage_angle: string;
+  uncertainty_note: string | null;
   category: string;
   signal: string;
   confidence: string;
+  evidence_level: "Low" | "Moderate" | "Strong";
   status: "draft" | "published";
   homepage_rank: number | null;
   is_lead: boolean;
@@ -123,9 +125,12 @@ const stories: SeedStory[] = [
       "Rate expectations affect borrowing costs, equity valuations, and consumer credit conditions.",
     coverage_angle:
       "Financial outlets emphasized market pricing while public-radio coverage focused on household borrowing costs.",
+    uncertainty_note:
+      "The next policy path depends on upcoming labor and inflation data.",
     category: "Markets",
     signal: "Top Signal",
     confidence: "Confirmed",
+    evidence_level: "Strong",
     status: "published",
     homepage_rank: 1,
     is_lead: true,
@@ -143,9 +148,12 @@ const stories: SeedStory[] = [
       "Industrial advisories can indicate operational risk for energy, manufacturing, and public infrastructure operators.",
     coverage_angle:
       "Technical sources focused on CVEs; broader coverage remains limited unless exploitation is confirmed.",
+    uncertainty_note:
+      "Exploit scope and affected deployments require continued verification.",
     category: "Technology",
     signal: "Under-covered",
     confidence: "Single-source",
+    evidence_level: "Moderate",
     status: "published",
     homepage_rank: 2,
     is_lead: false,
@@ -163,9 +171,12 @@ const stories: SeedStory[] = [
       "Clear guidance helps clinicians, families, and workplaces distinguish routine seasonal precautions from emerging risk signals.",
     coverage_angle:
       "Public health sources emphasized prevention; local outlets focused on school and workplace impacts.",
+    uncertainty_note:
+      "Regional surveillance can change quickly; check source updates before drawing broad conclusions.",
     category: "Health",
     signal: "Cross-angle",
     confidence: "Developing",
+    evidence_level: "Moderate",
     status: "published",
     homepage_rank: 3,
     is_lead: false,
@@ -182,9 +193,12 @@ const stories: SeedStory[] = [
     why_it_matters:
       "Grid reliability rules can affect utilities, industrial customers, and state energy planning.",
     coverage_angle: "Draft seed story for editor workflow testing.",
+    uncertainty_note:
+      "Stakeholder comments and final rule text have not been fully reviewed.",
     category: "Energy",
     signal: "Developing",
     confidence: "Single-source",
+    evidence_level: "Low",
     status: "draft",
     homepage_rank: null,
     is_lead: false,

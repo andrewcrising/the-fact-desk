@@ -137,7 +137,7 @@ export function StoryFeed({
         <StorySection
           id="under-covered"
           title="Under-covered"
-          description="Important stories with limited mainstream pickup."
+            description="Public-interest signals with limited mainstream pickup."
           stories={underCovered}
         />
 
@@ -182,7 +182,7 @@ export function StoryFeed({
           <StorySection
             id="health-desk-stories"
             title="Health desk preview"
-            description="Early health signals from the main desk — full Health Desk coming soon."
+            description="Health policy and research signals only; not medical advice."
             stories={healthStories}
           />
         ) : (
