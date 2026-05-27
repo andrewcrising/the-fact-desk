@@ -119,6 +119,22 @@ npm run seed
 The seed script is idempotent and creates initial RSS sources, demo published
 stories, one draft story, and inbox feed items for the admin workflow.
 
+## Integration tests
+
+Supabase-backed integration tests are opt-in and skipped by default:
+
+```bash
+export NODE_ENV=test
+export RUN_INTEGRATION_TESTS=true
+export SUPABASE_TEST_URL=https://your-test-project.supabase.co
+export SUPABASE_TEST_SERVICE_ROLE_KEY=your-test-service-role-key
+export SUPABASE_TEST_ALLOW_REMOTE=true
+npm run test:integration
+```
+
+Do not point `SUPABASE_TEST_URL` at production. The tests write records with a
+unique run ID and clean them up afterward.
+
 ## Vercel deployment
 
 1. Add the Supabase/admin/cron env vars in Vercel.

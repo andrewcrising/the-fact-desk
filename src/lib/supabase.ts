@@ -39,6 +39,11 @@ export function getSupabaseAdmin(): SupabaseClient | null {
   return cachedAdminClient;
 }
 
+export function resetSupabaseAdminForTests() {
+  if (process.env.NODE_ENV === "production") return;
+  cachedAdminClient = undefined;
+}
+
 export class DatabaseUnavailableError extends Error {
   constructor(message = "Supabase is not configured") {
     super(message);
