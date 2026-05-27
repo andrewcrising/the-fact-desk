@@ -12,7 +12,7 @@ export default function StoryNotFound() {
             Briefing not found
           </h1>
           <p className="mt-2 text-[var(--muted)]">
-            This story slug is not in the mock desk yet.
+            This story is not published, was archived, or does not exist.
           </p>
           <Link
             href="/"

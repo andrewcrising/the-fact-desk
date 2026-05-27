@@ -5,10 +5,28 @@ import { FormEvent, useState } from "react";
 
 export function DailyBriefSignup() {
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSubmitted(true);
+    setError("");
+    const formData = new FormData(e.currentTarget);
+    const email = String(formData.get("email") ?? "");
+
+    try {
+      const response = await fetch("/api/newsletter/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) {
+        throw new Error(data.error ?? "Unable to subscribe");
+      }
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unable to subscribe");
+    }
   }
 
   return (
@@ -19,7 +37,7 @@ export function DailyBriefSignup() {
       </p>
       {submitted ? (
         <p className="border border-emerald-200 bg-emerald-50/80 px-3 py-2.5 text-[13px] text-emerald-900">
-          Thanks — you&apos;re on the list. (Mock signup; no email sent.)
+          Thanks — you&apos;re on the list.
         </p>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-2.5">
@@ -28,6 +46,7 @@ export function DailyBriefSignup() {
           </label>
           <input
             id="brief-email"
+            name="email"
             type="email"
             required
             placeholder="you@example.com"
@@ -39,6 +58,9 @@ export function DailyBriefSignup() {
           >
             Subscribe
           </button>
+          {error && (
+            <p className="text-[12px] leading-relaxed text-red-700">{error}</p>
+          )}
         </form>
       )}
     </SidebarPanel>

@@ -12,11 +12,15 @@ const labelToConfidence: Record<string, Confidence> = {
 export function LiveSignals() {
   return (
     <SidebarPanel
-      title="Live Signals"
+      title="Live Signals (beta)"
       action={
         <span className="h-2 w-2 rounded-full bg-emerald-600" title="Desk active" />
       }
     >
+      <p className="mb-2 text-[11px] leading-relaxed text-[var(--muted-light)]">
+        Demo signal examples until sidebar metrics are connected to published
+        story data.
+      </p>
       <ul className="divide-y divide-[var(--border-subtle)]">
         {liveSignals.map((signal) => {
           const confidence =

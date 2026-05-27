@@ -10,7 +10,25 @@ Calm evidence-ranked news briefing (Next.js, TypeScript, Tailwind).
 npm install
 npm run dev          # local server → http://localhost:3000
 npm run build        # production build (Vercel uses this)
+npm run test         # focused MVP backend utility tests
 npm run ingest:rss   # fetch RSS → data/live-stories.json
+```
+
+## MVP backend
+
+The app now supports a Supabase/Postgres-backed editorial lifecycle:
+
+`raw RSS/feed item → editorial inbox candidate → draft story → published story → archived/corrected story`
+
+See [docs/MVP_BACKEND.md](./docs/MVP_BACKEND.md) for schema setup, required env vars, API routes, admin workflow, and Vercel notes.
+
+Required production env vars:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+ADMIN_API_TOKEN=
+CRON_SECRET=
 ```
 
 ## Mock demo (default)
@@ -23,7 +41,7 @@ NEXT_PUBLIC_USE_MERGED_STORIES=false
 NEXT_PUBLIC_USE_RSS_CACHE=false
 ```
 
-Homepage and `/story/[slug]` pages use mock data from `src/data/stories.ts`.
+Homepage and `/story/[slug]` pages use published stories from Supabase when configured. If Supabase is missing or unavailable, they safely fall back to mock data from `src/data/stories.ts`.
 
 ## Live Beta Feed (local / preview)
 
@@ -42,7 +60,7 @@ NEXT_PUBLIC_SHOW_LIVE_BETA=true
 
 3. Restart `npm run dev`.
 
-The **mock desk stays unchanged**. Cached live stories appear in **Live Beta Feed** below mock sections. Live items link to external sources — no internal detail pages yet.
+The published desk stays unchanged. Cached live stories appear in **Live Beta Feed** below published sections. Live items link to external sources and do not become public internal stories unless promoted through the editorial workflow and published.
 
 Optional: keep mock-only main feed (recommended):
 
@@ -62,7 +80,10 @@ NEXT_PUBLIC_USE_MERGED_STORIES=true
 |-------|---------|
 | `GET /api/test-rss` | Live fetch proof (single NPR feed) |
 | `GET /api/live-preview` | Cached live stories (`source: "cache"`) |
-| `GET /api/live-preview?fresh=1` | On-demand multi-feed fetch (`source: "live fetch"`) |
+| `GET /api/live-preview?fresh=1` | Protected on-demand multi-feed fetch (`source: "live fetch"`) |
+| `GET /api/stories` | Published stories by default; admin filters with token |
+| `POST /api/stories` | Create draft story (admin token) |
+| `POST /api/ingest/rss` | Ingest RSS into durable feed inbox (admin/cron token) |
 
 ## Deploy to Vercel
 

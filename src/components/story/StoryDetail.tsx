@@ -90,8 +90,8 @@ export function StoryDetail({ story }: StoryDetailProps) {
       )}
 
       <p className="mt-10 border-t border-[var(--border-subtle)] pt-6 text-[13px] leading-relaxed text-[var(--muted-light)]">
-        Prototype briefing using mock data. Scores and labels are editorial
-        signals for demonstration — not automated truth claims.
+        Briefing labels are editorial signals, not verdicts. Draft and raw feed
+        items stay private until promoted and published.
       </p>
     </article>
   );

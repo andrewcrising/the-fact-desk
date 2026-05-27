@@ -1,0 +1,121 @@
+# The Fact Desk MVP backend
+
+The MVP backend turns the app from a mock desk into an editorial workflow:
+
+`raw RSS/feed item -> editorial inbox candidate -> draft story -> published story -> archived/corrected story`
+
+## Required environment variables
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+ADMIN_API_TOKEN=choose-a-long-random-admin-token
+CRON_SECRET=choose-a-long-random-cron-token
+```
+
+Notes:
+
+- `SUPABASE_SERVICE_ROLE_KEY` is server-only. Never expose it in browser code.
+- `ADMIN_API_TOKEN` protects editorial write/admin APIs.
+- `CRON_SECRET` protects scheduled ingest/revalidation APIs.
+- Without Supabase env vars, public pages fall back to `src/data/stories.ts` for local demo safety.
+
+## Database setup
+
+1. Create a Supabase project.
+2. Open the Supabase SQL editor.
+3. Run `supabase/schema.sql`.
+4. Add the env vars above locally and in Vercel.
+
+The schema creates:
+
+- `sources`
+- `feed_items`
+- `stories`
+- `story_sources`
+- `editorial_selections`
+- `subscribers`
+
+## Local workflow
+
+```bash
+npm install
+npm run dev
+```
+
+Open `/admin`, paste `ADMIN_API_TOKEN`, then:
+
+1. Go to `/admin/feed-inbox`.
+2. Click **Ingest RSS**.
+3. Promote a feed item into a draft story.
+4. Edit the draft at `/admin/stories`.
+5. Attach or adjust sources.
+6. Publish the story.
+7. Visit `/` and click the published briefing.
+
+## API overview
+
+Public:
+
+- `GET /api/stories`
+- `GET /api/stories/[slug]`
+- `POST /api/newsletter/signup`
+
+Admin protected:
+
+- `POST /api/stories`
+- `PATCH /api/stories/[id]`
+- `POST /api/stories/[id]/publish`
+- `POST /api/stories/[id]/archive`
+- `POST /api/stories/[id]/promote`
+- `GET /api/feed-items`
+- `PATCH /api/feed-items/[id]`
+- `POST /api/feed-items/[id]/promote`
+
+Admin or cron protected:
+
+- `POST /api/ingest/rss`
+- `GET /api/cron/revalidate-live`
+- `GET /api/live-preview?fresh=1`
+
+Use:
+
+```bash
+Authorization: Bearer <ADMIN_API_TOKEN or CRON_SECRET>
+```
+
+## RSS ingest behavior
+
+`POST /api/ingest/rss` fetches active feeds from `src/data/rssFeeds.ts`, normalizes items, writes `feed_items`, and dedupes by source, canonical URL/title, and publication date. It never publishes stories directly.
+
+The response includes:
+
+- feeds checked
+- items found
+- new items inserted
+- duplicates skipped
+- feed errors
+
+## Public rendering behavior
+
+Public homepage and story detail pages read published stories through `src/lib/story-repository.ts`.
+
+Fallback behavior:
+
+- If Supabase is missing or unavailable, the public UI uses `src/data/stories.ts`.
+- Raw `feed_items` and draft stories never appear publicly.
+- Live RSS beta remains a separate external-link preview unless explicitly shown by env flag.
+
+## Vercel deployment
+
+1. Add the Supabase/admin/cron env vars in Vercel.
+2. Configure a Vercel Cron job to call `POST /api/ingest/rss` with `Authorization: Bearer <CRON_SECRET>`.
+3. Keep `NEXT_PUBLIC_SHOW_LIVE_BETA=false` for the clean MVP unless you want the raw external-link beta preview.
+
+## Remaining post-MVP work
+
+- Replace browser-entered admin token with real auth.
+- Add story clustering across multiple feed items.
+- Add richer source credibility scoring and surface it from real data.
+- Connect sidebar live signals/corrections to published/corrected stories.
+- Add server-side rate limiting for newsletter signup and admin APIs.

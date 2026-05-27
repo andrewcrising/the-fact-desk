@@ -34,11 +34,13 @@ export interface FetchRssStoriesOptions {
   limit?: number;
 }
 
-interface RssItemRaw {
+export interface RssFeedItem {
   title: string;
   link?: string;
+  author?: string;
   description?: string;
   pubDate?: string;
+  rawPayload?: Record<string, unknown>;
 }
 
 const xmlParser = new XMLParser({
@@ -112,7 +114,7 @@ function resolveSignal(value?: string): Signal {
   return "Developing";
 }
 
-function parseRssItems(xml: string): RssItemRaw[] {
+export function parseRssItems(xml: string): RssFeedItem[] {
   try {
     const parsed = xmlParser.parse(xml);
     const channel = parsed?.rss?.channel ?? parsed?.feed;
@@ -123,7 +125,7 @@ function parseRssItems(xml: string): RssItemRaw[] {
 
     const items = Array.isArray(rawItems) ? rawItems : [rawItems];
 
-    const result: RssItemRaw[] = [];
+    const result: RssFeedItem[] = [];
 
     for (const item of items) {
       const record = item as Record<string, unknown>;
@@ -147,11 +149,20 @@ function parseRssItems(xml: string): RssItemRaw[] {
         asString(record.published) ??
         asString(record.updated);
 
+      const author =
+        asString(record.author) ??
+        asString(record["dc:creator"]) ??
+        (typeof record.author === "object" && record.author !== null
+          ? asString((record.author as { name?: string })["name"])
+          : undefined);
+
       result.push({
         title,
         link,
+        author,
         description: description ? stripHtml(description) : undefined,
         pubDate,
+        rawPayload: record,
       });
     }
 
@@ -167,7 +178,7 @@ function buildTags(sourceName: string): string[] {
 }
 
 function normalizeItem(
-  item: RssItemRaw,
+  item: RssFeedItem,
   index: number,
   options: FetchRssStoriesOptions,
 ): Story {
@@ -233,6 +244,35 @@ export async function fetchRssStories(
     return items.map((item, index) => normalizeItem(item, index, options));
   } catch {
     return [];
+  }
+}
+
+/**
+ * Fetch an RSS/Atom feed and return normalized raw inbox candidates.
+ * This is the durable ingest path; callers persist these as feed_items.
+ */
+export async function fetchRssFeedItems(
+  feedUrl: string,
+  limit = 12,
+): Promise<RssFeedItem[]> {
+  try {
+    const response = await fetch(feedUrl, {
+      headers: {
+        Accept: "application/rss+xml, application/xml, text/xml, application/atom+xml, */*",
+        "User-Agent": "TheFactDesk/0.1 (RSS editorial ingest)",
+      },
+      next: { revalidate: 300 },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Feed returned ${response.status}`);
+    }
+
+    const xml = await response.text();
+    return parseRssItems(xml).slice(0, limit);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown RSS error";
+    throw new Error(`Unable to fetch RSS feed ${feedUrl}: ${message}`);
   }
 }
 

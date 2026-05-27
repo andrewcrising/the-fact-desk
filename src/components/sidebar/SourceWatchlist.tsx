@@ -3,7 +3,10 @@ import { watchlistSources } from "@/data/mockSidebar";
 
 export function SourceWatchlist() {
   return (
-    <SidebarPanel title="Source Watchlist">
+    <SidebarPanel title="Source Watchlist (beta)">
+      <p className="mb-2 text-[11px] leading-relaxed text-[var(--muted-light)]">
+        Demo watchlist copy; source scoring metadata lives in the MVP schema.
+      </p>
       <ul className="divide-y divide-[var(--border-subtle)]">
         {watchlistSources.map((source) => (
           <li key={source.id} className="py-3 first:pt-0 last:pb-0">

@@ -11,7 +11,7 @@ export function TopNav() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1.5 text-[10px] font-medium uppercase tracking-widest text-[var(--muted-light)] sm:px-6 lg:px-8">
           <span>Evidence-first news intelligence</span>
           <span className="hidden font-mono normal-case tracking-normal sm:inline">
-            {liveBeta ? "Mock desk + live RSS beta" : "Prototype · mock data"}
+            {liveBeta ? "Published desk + live RSS beta" : "Published story desk"}
           </span>
         </div>
       </div>
@@ -62,12 +62,12 @@ export function TopNav() {
             </a>
           </nav>
 
-          <button
-            type="button"
+          <a
+            href="#brief-email"
             className="shrink-0 self-start border border-[var(--accent)] bg-[var(--accent)] px-4 py-2 text-xs font-semibold uppercase tracking-wide text-white hover:bg-[var(--accent-muted)] lg:self-center"
           >
             Daily Brief
-          </button>
+          </a>
         </div>
       </div>
     </header>

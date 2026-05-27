@@ -11,7 +11,7 @@ export function HealthDeskIntro() {
   return (
     <header className="border-b border-[var(--border-subtle)] pb-2">
       <p className="desk-kicker mb-0.5 text-[9px] text-[var(--accent-muted)]">
-        Evidence-aware health desk
+        Evidence-aware health desk beta
       </p>
       <h2
         id="health-desk-heading"
@@ -20,8 +20,8 @@ export function HealthDeskIntro() {
         Health guidance separated by evidence, goals, and safety.
       </h2>
       <p className="mt-1 max-w-2xl text-[12px] leading-snug text-[var(--muted)]">
-        Weight loss, muscle gain, longevity, and functional medicine updates —
-        organized by mainstream guidance, emerging evidence, and caution flags.
+        Published health stories appear here through the same editorial lifecycle;
+        topic lanes remain a beta preview.
       </p>
     </header>
   );

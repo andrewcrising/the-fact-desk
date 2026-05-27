@@ -1,3 +1,4 @@
+import { requireAdminOrCronRequest } from "@/lib/auth";
 import { getLiveFeed } from "@/lib/live-data";
 import { isLiveBetaEnabled } from "@/lib/story-repository";
 import { NextRequest, NextResponse } from "next/server";
@@ -10,6 +11,9 @@ export async function GET(request: NextRequest) {
 
   try {
     if (fresh) {
+      const unauthorized = requireAdminOrCronRequest(request);
+      if (unauthorized) return unauthorized;
+
       const { ingestEnabledFeeds } = await import("@/lib/ingest/ingest-feeds");
       const stories = await ingestEnabledFeeds();
       return NextResponse.json({
