@@ -24,6 +24,7 @@ The app now supports a Supabase/Postgres-backed editorial lifecycle:
 See [docs/MVP_BACKEND.md](./docs/MVP_BACKEND.md) for schema setup, required env vars, API routes, admin workflow, and Vercel notes.
 Use [docs/DEPLOYMENT_CHECKLIST.md](./docs/DEPLOYMENT_CHECKLIST.md) for the end-to-end local/Vercel checklist.
 See [docs/EDITORIAL_STANDARDS.md](./docs/EDITORIAL_STANDARDS.md) for evidence-ranking standards and human-review policy.
+See [docs/AI_DRAFT_ASSIST_PLAN.md](./docs/AI_DRAFT_ASSIST_PLAN.md) for future AI-assisted drafting guardrails.
 
 Required production env vars:
 

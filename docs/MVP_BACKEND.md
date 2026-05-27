@@ -78,6 +78,7 @@ Admin protected:
 - `POST /api/stories/[id]/publish`
 - `POST /api/stories/[id]/archive`
 - `POST /api/stories/[id]/promote`
+- `POST /api/stories/[id]/evidence-assist`
 - `GET /api/feed-items`
 - `PATCH /api/feed-items/[id]`
 - `POST /api/feed-items/[id]/promote`
@@ -105,6 +106,27 @@ The response includes:
 - new items inserted
 - duplicates skipped
 - feed errors
+
+## Evidence Assist
+
+`POST /api/stories/[id]/evidence-assist` calculates deterministic editorial
+assist metadata from attached `story_sources`, related `feed_items`, and
+`sources.source_type`.
+
+It returns:
+
+- source count and unique source count
+- primary/official source detection
+- source spread
+- suggested evidence level
+- suggested confidence
+- coverage status suggestion
+- under-covered indicator
+- internal evidence score
+- explanation and warnings
+
+The route is admin-protected and read-only. It does not update story fields and
+does not publish stories. Editors explicitly apply suggestions in the admin UI.
 
 ## Public rendering behavior
 

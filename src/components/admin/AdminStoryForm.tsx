@@ -3,6 +3,7 @@
 import { AdminTokenField } from "@/components/admin/AdminTokenField";
 import { useAdminToken } from "@/components/admin/useAdminToken";
 import { STORY_CATEGORIES } from "@/data/navigation";
+import type { EvidenceProfile } from "@/lib/evidence-scoring";
 import type { PersistedStory } from "@/types/editorial";
 import type { Confidence, EvidenceLevel, Signal } from "@/types/story";
 import Link from "next/link";
@@ -86,8 +87,10 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
   const { token, setToken } = useAdminToken();
   const [state, setState] = useState<StoryFormState>(emptyState);
   const [savedStory, setSavedStory] = useState<PersistedStory | null>(null);
+  const [evidenceAssist, setEvidenceAssist] = useState<EvidenceProfile | null>(null);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [assistLoading, setAssistLoading] = useState(false);
 
   function update<K extends keyof StoryFormState>(key: K, value: StoryFormState[K]) {
     setState((current) => ({ ...current, [key]: value }));
@@ -103,6 +106,37 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
       },
     });
   }, [token]);
+
+  const loadEvidenceAssist = useCallback(
+    async (id: string, options: { silent?: boolean } = {}) => {
+      setAssistLoading(true);
+      try {
+        const response = await adminFetch(`/api/stories/${id}/evidence-assist`, {
+          method: "POST",
+        });
+        const data = await response.json();
+        if (!response.ok || !data.ok) {
+          throw new Error(data.error ?? "Unable to calculate evidence assist");
+        }
+        const profile = data.profile as EvidenceProfile;
+        setEvidenceAssist(profile);
+        if (!options.silent) setMessage("Evidence assist recalculated.");
+        return profile;
+      } catch (error) {
+        if (!options.silent) {
+          setMessage(
+            error instanceof Error
+              ? error.message
+              : "Unable to calculate evidence assist",
+          );
+        }
+        return null;
+      } finally {
+        setAssistLoading(false);
+      }
+    },
+    [adminFetch],
+  );
 
   useEffect(() => {
     if (!storyId || !token) return;
@@ -132,6 +166,7 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
           isLead: story.isLead,
           sources: sourcesToText(story),
         });
+        await loadEvidenceAssist(story.id, { silent: true });
       } catch (error) {
         setMessage(error instanceof Error ? error.message : "Unable to load story");
       } finally {
@@ -140,7 +175,7 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
     }
 
     void loadStory();
-  }, [adminFetch, storyId, token]);
+  }, [adminFetch, loadEvidenceAssist, storyId, token]);
 
   function payload() {
     return {
@@ -188,6 +223,21 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
     if (!savedStory) return;
     setLoading(true);
     try {
+      const profile =
+        (await loadEvidenceAssist(savedStory.id, { silent: true })) ??
+        evidenceAssist;
+      if (
+        profile?.warnings.length &&
+        !window.confirm(
+          `Evidence Assist warnings:\n\n${profile.warnings.join(
+            "\n",
+          )}\n\nPublish anyway after human review?`,
+        )
+      ) {
+        setMessage("Publish cancelled. Review evidence posture before publishing.");
+        return;
+      }
+
       const response = await adminFetch(`/api/stories/${savedStory.id}/publish`, {
         method: "POST",
         body: JSON.stringify({
@@ -462,6 +512,139 @@ export function AdminStoryForm({ storyId }: AdminStoryFormProps) {
             as the story evidence/source list.
           </span>
         </label>
+
+        <section className="border border-[var(--border-subtle)] bg-[#fafbfc] p-3">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p className="desk-kicker mb-1">Evidence Assist</p>
+              <p className="max-w-2xl text-xs leading-relaxed text-[var(--muted)]">
+                Deterministic editorial assist based on saved source links. It is
+                not a truth score and never overwrites editor judgment unless you
+                apply a suggestion.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => savedStory && loadEvidenceAssist(savedStory.id)}
+              disabled={!token || !savedStory || assistLoading}
+              className="border border-[var(--border)] px-3 py-2 text-xs font-semibold uppercase tracking-wide disabled:opacity-50"
+            >
+              {assistLoading ? "Calculating..." : "Recalculate evidence assist"}
+            </button>
+          </div>
+
+          {evidenceAssist ? (
+            <div className="mt-3 space-y-3">
+              <div className="grid gap-2 text-xs sm:grid-cols-2 lg:grid-cols-4">
+                <div>
+                  <p className="desk-kicker text-[8px]">Sources</p>
+                  <p className="text-[var(--foreground)]">
+                    {evidenceAssist.source_count} links ·{" "}
+                    {evidenceAssist.unique_source_count} unique
+                  </p>
+                </div>
+                <div>
+                  <p className="desk-kicker text-[8px]">Source spread</p>
+                  <p className="text-[var(--foreground)]">
+                    {evidenceAssist.source_spread}
+                  </p>
+                </div>
+                <div>
+                  <p className="desk-kicker text-[8px]">Primary / official</p>
+                  <p className="text-[var(--foreground)]">
+                    {evidenceAssist.has_primary_source ? "Primary " : ""}
+                    {evidenceAssist.has_official_source ? "Official" : "Not detected"}
+                  </p>
+                </div>
+                <div>
+                  <p className="desk-kicker text-[8px]">Assist score</p>
+                  <p className="text-[var(--foreground)]">
+                    {evidenceAssist.evidence_score}/100 editorial assist
+                  </p>
+                </div>
+                <div>
+                  <p className="desk-kicker text-[8px]">Suggested evidence</p>
+                  <p className="text-[var(--foreground)]">
+                    {evidenceAssist.suggested_evidence_level}
+                  </p>
+                </div>
+                <div>
+                  <p className="desk-kicker text-[8px]">Suggested confidence</p>
+                  <p className="text-[var(--foreground)]">
+                    {evidenceAssist.suggested_confidence}
+                  </p>
+                </div>
+                <div>
+                  <p className="desk-kicker text-[8px]">Coverage status</p>
+                  <p className="text-[var(--foreground)]">
+                    {evidenceAssist.coverage_status_suggestion}
+                  </p>
+                </div>
+                <div>
+                  <p className="desk-kicker text-[8px]">Under-covered</p>
+                  <p className="text-[var(--foreground)]">
+                    {evidenceAssist.undercovered_indicator ? "Possible" : "No"}
+                  </p>
+                </div>
+              </div>
+
+              <p className="text-xs leading-relaxed text-[var(--muted)]">
+                {evidenceAssist.explanation}
+              </p>
+
+              {evidenceAssist.warnings.length > 0 && (
+                <div className="border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-950">
+                  <p className="font-semibold">Review before publishing</p>
+                  <ul className="mt-1 list-disc pl-4">
+                    {evidenceAssist.warnings.map((warning) => (
+                      <li key={warning}>{warning}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() =>
+                    update("evidenceLevel", evidenceAssist.suggested_evidence_level)
+                  }
+                  className="border border-[var(--border)] px-3 py-2 text-xs font-semibold uppercase tracking-wide"
+                >
+                  Apply suggested evidence level
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    update("confidence", evidenceAssist.suggested_confidence)
+                  }
+                  className="border border-[var(--border)] px-3 py-2 text-xs font-semibold uppercase tracking-wide"
+                >
+                  Apply suggested confidence
+                </button>
+                {evidenceAssist.uncertainty_note_suggestion && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      update(
+                        "uncertaintyNote",
+                        evidenceAssist.uncertainty_note_suggestion ?? "",
+                      )
+                    }
+                    className="border border-[var(--border)] px-3 py-2 text-xs font-semibold uppercase tracking-wide"
+                  >
+                    Apply uncertainty note suggestion
+                  </button>
+                )}
+              </div>
+            </div>
+          ) : (
+            <p className="mt-3 text-xs text-[var(--muted-light)]">
+              Save the story and source links, then recalculate to see source
+              spread, evidence suggestions, and publish warnings.
+            </p>
+          )}
+        </section>
 
         <div className="flex flex-wrap gap-2">
           <button

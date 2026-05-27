@@ -21,13 +21,20 @@ create table if not exists public.sources (
   feed_url text unique,
   source_type text not null default 'rss',
   constraint sources_source_type_check
-    check (source_type in ('rss', 'manual', 'api', 'wire', 'other')),
+    check (source_type in ('rss', 'news', 'official', 'government', 'academic', 'primary-document', 'regulator', 'court', 'company', 'expert-analysis', 'social', 'unknown', 'manual', 'api', 'wire', 'other')),
   credibility_score numeric,
   political_or_editorial_label text,
   active boolean not null default true,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+-- Safe source type expansion for existing MVP databases.
+alter table public.sources
+  drop constraint if exists sources_source_type_check;
+alter table public.sources
+  add constraint sources_source_type_check
+  check (source_type in ('rss', 'news', 'official', 'government', 'academic', 'primary-document', 'regulator', 'court', 'company', 'expert-analysis', 'social', 'unknown', 'manual', 'api', 'wire', 'other'));
 
 drop trigger if exists sources_set_updated_at on public.sources;
 create trigger sources_set_updated_at

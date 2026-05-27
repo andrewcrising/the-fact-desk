@@ -6,7 +6,23 @@ import type {
   StoryCategory,
 } from "@/types/story";
 
-export type SourceType = "rss" | "manual" | "api" | "wire" | "other";
+export type SourceType =
+  | "rss"
+  | "news"
+  | "official"
+  | "government"
+  | "academic"
+  | "primary-document"
+  | "regulator"
+  | "court"
+  | "company"
+  | "expert-analysis"
+  | "social"
+  | "unknown"
+  | "manual"
+  | "api"
+  | "wire"
+  | "other";
 
 export type FeedItemStatus = "new" | "reviewed" | "promoted" | "ignored" | "error";
 

@@ -81,6 +81,25 @@ Evidence level and confidence are related but not identical. Confidence describe
 how settled the core facts are; evidence level describes the support behind the
 briefing.
 
+## Evidence Assist
+
+Evidence Assist is a deterministic editorial helper. It reviews attached source
+links, source types, feed item links, and story posture to suggest:
+
+- source spread
+- evidence level
+- confidence posture
+- coverage status
+- under-covered indicator
+- publish warnings
+
+Evidence Assist does not determine truth, does not publish stories, and does not
+override human judgment. Editors may apply suggestions manually, but suggestions
+should be reviewed against the actual source material.
+
+The numeric evidence score is an internal assist score only. It should not be
+presented publicly as a truth score, bias-free rating, or certification.
+
 ## Signal criteria
 
 - **Top Signal**: high public relevance and sufficient evidence posture for lead
@@ -161,6 +180,7 @@ AI may assist with:
 - identifying source spread
 - suggesting confidence/evidence labels
 - detecting uncertainty
+- using Evidence Assist output as context for draft suggestions
 
 AI may not:
 

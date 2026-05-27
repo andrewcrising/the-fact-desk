@@ -7,6 +7,7 @@ import {
   PATCH as updateStoryRoute,
 } from "@/app/api/stories/[id]/route";
 import { POST as archiveStoryRoute } from "@/app/api/stories/[id]/archive/route";
+import { POST as evidenceAssistRoute } from "@/app/api/stories/[id]/evidence-assist/route";
 import { POST as publishStoryRoute } from "@/app/api/stories/[id]/publish/route";
 import { POST as promoteFeedItemRoute } from "@/app/api/feed-items/[id]/promote/route";
 import { GET as listFeedItemsRoute } from "@/app/api/feed-items/route";
@@ -24,6 +25,7 @@ import { resetSupabaseAdminForTests } from "@/lib/supabase";
 import { buildDedupeKey } from "@/lib/url";
 import type { NextRequest } from "next/server";
 import type { PersistedStory } from "@/types/editorial";
+import type { EvidenceProfile } from "@/lib/evidence-scoring";
 
 function integrationSkipReason(): string | false {
   if (process.env.RUN_INTEGRATION_TESTS !== "true") {
@@ -217,6 +219,20 @@ describe("Supabase editorial lifecycle integration", { skip }, () => {
     );
     const repeated = await json(repeatPromote);
     assert.equal((repeated.story as PersistedStory).id, story.id);
+
+    const assistResponse = await evidenceAssistRoute(
+      jsonRequest(
+        `https://example.com/api/stories/${story.id}/evidence-assist`,
+        {},
+        adminToken,
+      ),
+      context(story.id),
+    );
+    assert.equal(assistResponse.status, 200);
+    const assist = await json(assistResponse);
+    const profile = assist.profile as EvidenceProfile;
+    assert.equal(profile.source_count, 1);
+    assert.equal(profile.suggested_evidence_level, "Low");
 
     const updateResponse = await updateStoryRoute(
       jsonRequest(
