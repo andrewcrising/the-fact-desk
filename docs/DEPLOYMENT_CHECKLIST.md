@@ -111,13 +111,13 @@ Paste `ADMIN_API_TOKEN` into admin pages when prompted.
 
 ## 7. Vercel Cron
 
-`vercel.json` schedules:
+Preview deployment note: scheduled cron is currently disabled so Hobby/preview
+deployments can build successfully. The protected automation endpoint remains
+available for manual triggering:
 
-```json
-{
-  "path": "/api/automation/run-briefing-pipeline",
-  "schedule": "0 */1 * * *"
-}
+```bash
+POST /api/automation/run-briefing-pipeline
+GET /api/automation/run-briefing-pipeline?dry_run=true
 ```
 
 `/api/automation/run-briefing-pipeline` supports GET for Vercel Cron and POST
@@ -126,6 +126,22 @@ for manual/admin calls. Both require:
 ```bash
 Authorization: Bearer <CRON_SECRET or ADMIN_API_TOKEN>
 ```
+
+To re-enable scheduled automation later, add `vercel.json` with a plan-safe
+schedule. Hobby plans are limited to once daily, for example:
+
+```json
+{
+  "crons": [
+    {
+      "path": "/api/automation/run-briefing-pipeline",
+      "schedule": "0 1 * * *"
+    }
+  ]
+}
+```
+
+Use a more frequent schedule only on a plan that supports it.
 
 ## 8. Verification commands
 

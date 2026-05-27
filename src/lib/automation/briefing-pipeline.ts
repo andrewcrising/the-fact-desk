@@ -27,14 +27,13 @@ import {
 import { requireSupabaseAdmin } from "@/lib/supabase";
 import {
   createStory,
-  getStoryById,
   publishStory,
   replaceStorySources,
   updateStory,
 } from "@/lib/story-repository";
 import { slugWithSuffix } from "@/lib/slug";
 import type { AutomationMode, FeedItem, PersistedStory } from "@/types/editorial";
-import type { Confidence, EvidenceLevel, Signal, StoryCategory } from "@/types/story";
+import type { StoryCategory } from "@/types/story";
 
 export interface BriefingPipelineReport {
   mode: AutomationMode;
