@@ -1,6 +1,7 @@
 import { ConfidenceLabel } from "@/components/ui/ConfidenceLabel";
 import { DeskCard } from "@/components/ui/DeskCard";
 import { DeskLabel } from "@/components/ui/DeskLabel";
+import { EvidenceLabel } from "@/components/ui/EvidenceLabel";
 import { SignalLabel } from "@/components/ui/SignalLabel";
 import { formatSourceSpread, formatStoryTime } from "@/lib/stories";
 import type { Story } from "@/types/story";
@@ -18,6 +19,7 @@ export function LeadSignal({ story }: LeadSignalProps) {
           <div className="flex flex-wrap items-center gap-1.5">
             <DeskLabel className="!text-[var(--accent)]">Top Signal</DeskLabel>
             <ConfidenceLabel confidence={story.confidence} />
+            <EvidenceLabel evidenceLevel={story.evidenceLevel} />
             <SignalLabel signal={story.signal} />
           </div>
           <time
@@ -55,7 +57,8 @@ export function LeadSignal({ story }: LeadSignalProps) {
 
           <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
             <p className="text-[11px] text-[var(--muted-light)]">
-              {formatSourceSpread(story.sources)}
+              {formatSourceSpread(story.sources)} · {story.sources.length} source
+              {story.sources.length === 1 ? "" : "s"} reviewed
             </p>
             <Link
               href={`/story/${story.slug}`}

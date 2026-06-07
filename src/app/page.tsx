@@ -11,7 +11,7 @@ import {
 export const revalidate = 900;
 
 export default async function Home() {
-  const stories = getHomepageStories();
+  const stories = await getHomepageStories();
   const showLiveBeta = isLiveBetaEnabled();
   const liveFeed = showLiveBeta
     ? await getLivePreviewStories()

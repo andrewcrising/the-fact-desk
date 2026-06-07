@@ -1,4 +1,5 @@
 import { ConfidenceLabel } from "@/components/ui/ConfidenceLabel";
+import { EvidenceLabel } from "@/components/ui/EvidenceLabel";
 import { SignalLabel } from "@/components/ui/SignalLabel";
 import { formatSourceSpread, formatStoryTime } from "@/lib/stories";
 import type { Story } from "@/types/story";
@@ -20,6 +21,7 @@ export function StoryDetail({ story }: StoryDetailProps) {
 
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <ConfidenceLabel confidence={story.confidence} />
+        <EvidenceLabel evidenceLevel={story.evidenceLevel} />
         <SignalLabel signal={story.signal} />
         <span className="text-[11px] font-medium uppercase tracking-wide text-[var(--muted-light)]">
           {story.category}
@@ -74,6 +76,40 @@ export function StoryDetail({ story }: StoryDetailProps) {
             </p>
           </div>
         )}
+        <div className="border-l-2 border-[var(--border)] pl-4">
+          <h2 className="desk-kicker mb-2">Evidence / sourcing</h2>
+          <p className="text-[14px] leading-relaxed text-[var(--muted)]">
+            Evidence level: {story.evidenceLevel ?? "Moderate"}. Source spread:
+            {" "}
+            {formatSourceSpread(story.sources)}.
+          </p>
+          {story.sourceUrls && story.sourceUrls.length > 0 && (
+            <ul className="mt-2 space-y-1 text-[13px]">
+              {story.sourceUrls.map((url, index) => (
+                <li key={url}>
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[var(--accent)] hover:underline"
+                  >
+                    {story.sources[index] ?? `Source ${index + 1}`}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        {story.uncertaintyNote && (
+          <div>
+            <h2 className="desk-kicker mb-2 text-[var(--foreground)]">
+              What is still uncertain
+            </h2>
+            <p className="text-[15px] leading-relaxed text-[var(--muted)]">
+              {story.uncertaintyNote}
+            </p>
+          </div>
+        )}
       </section>
 
       {story.tags.length > 0 && (
@@ -90,8 +126,8 @@ export function StoryDetail({ story }: StoryDetailProps) {
       )}
 
       <p className="mt-10 border-t border-[var(--border-subtle)] pt-6 text-[13px] leading-relaxed text-[var(--muted-light)]">
-        Prototype briefing using mock data. Scores and labels are editorial
-        signals for demonstration — not automated truth claims.
+        Briefing labels are editorial signals, not verdicts. Draft and raw feed
+        items stay private until promoted and published.
       </p>
     </article>
   );

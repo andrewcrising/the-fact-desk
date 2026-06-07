@@ -22,6 +22,9 @@ export type StoryCategory =
   | "Energy"
   | "Culture";
 
+/** Evidence level = how directly the briefing is supported by sources. */
+export type EvidenceLevel = "Low" | "Moderate" | "Strong";
+
 export interface Story {
   id: string;
   slug: string;
@@ -31,6 +34,7 @@ export interface Story {
   whyItMatters: string;
   category: StoryCategory;
   confidence: Confidence;
+  evidenceLevel?: EvidenceLevel;
   signal: Signal;
   sources: string[];
   sourceUrls?: string[];
@@ -39,6 +43,8 @@ export interface Story {
   tags: string[];
   /** Neutral descriptor of how outlets are framing coverage — not partisan branding. */
   coverageAngle?: string;
+  /** What remains unknown, disputed, or not independently confirmed. */
+  uncertaintyNote?: string;
 }
 
 export interface LiveSignal {

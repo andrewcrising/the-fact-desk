@@ -1,5 +1,6 @@
 import { ConfidenceLabel } from "@/components/ui/ConfidenceLabel";
 import { DeskCard } from "@/components/ui/DeskCard";
+import { EvidenceLabel } from "@/components/ui/EvidenceLabel";
 import { SignalLabel } from "@/components/ui/SignalLabel";
 import { formatSourceSpread, formatStoryTime } from "@/lib/stories";
 import type { Story } from "@/types/story";
@@ -15,6 +16,7 @@ export function StoryCard({ story }: StoryCardProps) {
       <Link href={`/story/${story.slug}`} className="block px-4 py-4 sm:px-5 sm:py-5">
         <div className="mb-2 flex flex-wrap items-center gap-2">
           <ConfidenceLabel confidence={story.confidence} />
+          <EvidenceLabel evidenceLevel={story.evidenceLevel} />
           <SignalLabel signal={story.signal} />
           <span className="text-[10px] font-medium uppercase tracking-wide text-[var(--muted-light)]">
             {story.category}
@@ -30,7 +32,8 @@ export function StoryCard({ story }: StoryCardProps) {
         </p>
 
         <p className="mt-3 text-[12px] leading-relaxed text-[var(--muted-light)]">
-          {formatSourceSpread(story.sources)}
+          {formatSourceSpread(story.sources)} · {story.sources.length} source
+          {story.sources.length === 1 ? "" : "s"} reviewed
         </p>
 
         <div className="mt-3 flex items-center justify-between gap-2 border-t border-[var(--border-subtle)] pt-3">

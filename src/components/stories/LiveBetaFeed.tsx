@@ -84,7 +84,7 @@ export function LiveBetaFeed({
         <div>
           <DeskLabel id="live-beta-heading">Live Beta Feed</DeskLabel>
           <p className="mt-0.5 text-[11px] text-[var(--muted-light)]">
-            Live RSS beta · single-source · not fully analyzed
+            Raw RSS beta · not ranked or published until editorial review
           </p>
         </div>
         {fetchedAt && (
@@ -96,7 +96,8 @@ export function LiveBetaFeed({
 
       {stories.length === 0 ? (
         <p className="desk-card border-dashed px-4 py-3 text-[13px] text-[var(--muted)]">
-          Live beta feed unavailable. Mock briefing remains available.
+          Live beta feed unavailable. Published briefings remain separate from
+          raw RSS items.
         </p>
       ) : (
         <div className="space-y-3">

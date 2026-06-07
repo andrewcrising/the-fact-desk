@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export function HealthDeskPlaceholder() {
   return (
     <section
@@ -6,14 +8,15 @@ export function HealthDeskPlaceholder() {
       aria-label="Health Desk preview"
     >
       <div className="border-b border-[var(--border-subtle)] bg-[#fafbfc] px-3 py-2">
-        <p className="desk-kicker text-[9px]">Health Desk</p>
+        <p className="desk-kicker text-[9px]">Health Desk beta</p>
       </div>
       <div className="px-3 py-2.5">
         <p className="text-[11px] leading-snug text-[var(--muted)]">
-          Evidence-aware health guidance — preview on main desk.{" "}
-          <a href="/#health-desk" className="text-[var(--accent)] hover:underline">
+          Public health and research signals use the same story lifecycle. Not
+          medical advice; this preview remains secondary while the desk grows.{" "}
+          <Link href="/#health-desk" className="text-[var(--accent)] hover:underline">
             View section →
-          </a>
+          </Link>
         </p>
       </div>
     </section>
