@@ -38,13 +38,14 @@ ALLOW_MOCK_FALLBACK=false
 AI_DRAFT_ASSIST_ENABLED=false
 OPENAI_API_KEY=
 OPENAI_MODEL=gpt-4o-mini
-FACT_DESK_AUTOMATION_MODE=manual_review
+FACT_DESK_AUTOMATION_MODE=auto_draft
 FACT_DESK_HEALTH_AUTO_PUBLISH_ENABLED=false
 ```
 
 Production recommendation: leave `ALLOW_MOCK_FALLBACK` unset or `false`.
 Enable AI Draft Assist only for admin use after confirming editorial guardrails.
-Keep `FACT_DESK_AUTOMATION_MODE=manual_review` until automation dry runs are reviewed.
+Recommended first production automation mode is `auto_draft`; do not enable
+`guarded_auto_publish` until real dry runs are reviewed.
 
 ## 3. Seed demo data
 
@@ -142,6 +143,31 @@ schedule. Hobby plans are limited to once daily, for example:
 ```
 
 Use a more frequent schedule only on a plan that supports it.
+
+## 7a. GitHub Actions automation schedule
+
+For Vercel Hobby without Pro cron, use the GitHub Actions workflow:
+
+```bash
+.github/workflows/fact-desk-automation.yml
+```
+
+Set GitHub repository secrets:
+
+```bash
+FACT_DESK_SITE_URL=https://your-vercel-domain.vercel.app
+FACT_DESK_CRON_SECRET=<same value as Vercel CRON_SECRET>
+```
+
+The workflow runs every 2 hours and can also be run manually from GitHub:
+
+1. GitHub repo -> Actions.
+2. Select **Fact Desk Automation**.
+3. Click **Run workflow**.
+4. Confirm results in `/admin/automation`.
+
+Keep `FACT_DESK_AUTOMATION_MODE=auto_draft` for first production use so the
+pipeline creates/updates drafts without auto-publishing.
 
 ## 8. Verification commands
 
