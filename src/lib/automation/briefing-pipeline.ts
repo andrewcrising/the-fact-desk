@@ -19,6 +19,7 @@ import {
 import { generateEditorialDraftAssist } from "@/lib/ai/editorial-draft-assist";
 import { isAiDraftAssistConfigured } from "@/lib/ai/provider";
 import { getEvidenceAssistForStory } from "@/lib/evidence-assist-repository";
+import { readFactDeskFeedMetadata } from "@/lib/feed-metadata";
 import {
   countFeedItemsByStatus,
   ingestConfiguredRssFeeds,
@@ -85,6 +86,7 @@ function emptyReport(mode: AutomationMode, dryRun: boolean): BriefingPipelineRep
 }
 
 function feedItemToClusterable(item: FeedItem): ClusterableFeedItem {
+  const metadata = readFactDeskFeedMetadata(item.rawPayload);
   return {
     id: item.id,
     title: item.title,
@@ -92,6 +94,7 @@ function feedItemToClusterable(item: FeedItem): ClusterableFeedItem {
     sourceName: item.sourceName,
     publishedAt: item.publishedAt,
     summary: item.summary,
+    category: metadata.category,
   };
 }
 
