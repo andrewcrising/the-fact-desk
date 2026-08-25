@@ -80,6 +80,24 @@ export function storyTitleSimilarity(a: string, b: string): number {
   return similarity(titleTerms(a), titleTerms(b));
 }
 
+/**
+ * Conservative cross-run matcher. Exact normalized titles match; otherwise at
+ * least two meaningful terms must overlap and the Jaccard score must clear a
+ * higher threshold than same-run clustering. This favors duplicate drafts over
+ * incorrectly merging distinct stories.
+ */
+export function storyTitlesLikelySame(
+  a: string,
+  b: string,
+  threshold = 0.6,
+): boolean {
+  if (normalizeTitle(a) === normalizeTitle(b)) return true;
+  const aTerms = titleTerms(a);
+  const bTerms = titleTerms(b);
+  const sharedTerms = Array.from(aTerms).filter((term) => bTerms.has(term)).length;
+  return sharedTerms >= 2 && similarity(aTerms, bTerms) >= threshold;
+}
+
 function categoryFor(items: ClusterableFeedItem[]): StoryCategory | "Unknown" {
   const counts = new Map<string, number>();
   for (const item of items) {
