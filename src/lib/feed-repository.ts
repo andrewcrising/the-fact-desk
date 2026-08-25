@@ -1,4 +1,5 @@
 import { getEnabledFeeds } from "@/data/rssFeeds";
+import { readFactDeskFeedMetadata, withFactDeskFeedMetadata } from "@/lib/feed-metadata";
 import { fetchRssFeedItems } from "@/lib/ingest/rss";
 import { getOrCreateSource } from "@/lib/source-repository";
 import { requireSupabaseAdmin } from "@/lib/supabase";
@@ -162,7 +163,11 @@ export async function ingestConfiguredRssFeeds(): Promise<IngestSummary> {
           author: item.author ?? null,
           published_at: publishedAt,
           summary: item.description ?? null,
-          raw_payload: item.rawPayload ?? null,
+          raw_payload: withFactDeskFeedMetadata(item.rawPayload, {
+            feedId: feed.id,
+            category: feed.category,
+            signal: feed.signal,
+          }),
           status: "new",
           dedupe_key: dedupeKey,
         });
@@ -208,6 +213,7 @@ export async function promoteFeedItemToDraft(id: string): Promise<PersistedStory
     throw new Error("Feed item has already been promoted.");
   }
 
+  const metadata = readFactDeskFeedMetadata(item.rawPayload);
   const story = await createStory({
     title: item.title,
     slug: slugWithSuffix(item.title),
@@ -217,8 +223,8 @@ export async function promoteFeedItemToDraft(id: string): Promise<PersistedStory
     coverageAngle: "Created from an RSS inbox item; verify and expand before publishing.",
     uncertaintyNote:
       "This draft is based on a raw feed item and needs human source review before publication.",
-    category: "World",
-    signal: "Developing",
+    category: metadata.category ?? "World",
+    signal: metadata.signal ?? "Developing",
     confidence: "Single-source",
     evidenceLevel: "Low",
     status: "draft",
