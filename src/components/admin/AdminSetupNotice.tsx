@@ -14,7 +14,8 @@ export function AdminSetupNotice() {
         {!supabaseConfigured && (
           <li>
             Supabase persistence is not configured. Set
-            NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.
+            NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SECRET_KEY (or the legacy
+            SUPABASE_SERVICE_ROLE_KEY).
           </li>
         )}
         {!adminTokenConfigured && (
