@@ -9,6 +9,7 @@ import {
   createAutomationRun,
   createStoryAutomationEvent,
 } from "@/lib/automation/automation-repository";
+import { selectContinuingDraft } from "@/lib/automation/draft-continuity";
 import { evaluateGuardedPublish } from "@/lib/automation/publish-policy";
 import { mergeStorySources } from "@/lib/automation/story-source-merge";
 import {
@@ -30,6 +31,7 @@ import { requireSupabaseAdmin } from "@/lib/supabase";
 import {
   createStory,
   getStoryById,
+  listStories,
   publishStory,
   replaceStorySources,
   updateStory,
@@ -162,7 +164,14 @@ async function findExistingStoryForCluster(cluster: StoryCluster): Promise<strin
     .maybeSingle();
 
   if (error) throw error;
-  return (data?.story_id as string | undefined) ?? null;
+  if (data?.story_id) return data.story_id as string;
+
+  // New feed items have never been attached before, so direct feed-item lookup
+  // cannot provide continuity across normal automation runs. Conservatively
+  // compare only existing drafts in the same configured category. Published
+  // stories are intentionally excluded from automatic rewriting.
+  const drafts = await listStories({ status: "draft", limit: 100 });
+  return selectContinuingDraft(cluster, drafts)?.id ?? null;
 }
 
 async function createOrUpdateDraftFromCluster(
