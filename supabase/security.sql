@@ -40,8 +40,9 @@ grant select, insert, update, delete on table
   public.story_automation_events
 to service_role;
 
--- set_updated_at is used only by database triggers. Keep direct execution out
--- of browser roles and make service-role execution explicit for clarity.
+-- Keep the trigger helper's name resolution deterministic and prevent direct
+-- browser-role execution.
+alter function public.set_updated_at() set search_path = '';
 revoke execute on function public.set_updated_at() from public, anon, authenticated;
 grant execute on function public.set_updated_at() to service_role;
 
