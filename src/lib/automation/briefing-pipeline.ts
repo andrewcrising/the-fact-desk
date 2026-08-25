@@ -10,6 +10,7 @@ import {
   createStoryAutomationEvent,
 } from "@/lib/automation/automation-repository";
 import { evaluateGuardedPublish } from "@/lib/automation/publish-policy";
+import { mergeStorySources } from "@/lib/automation/story-source-merge";
 import {
   clusterFeedItems,
   type ClusterableFeedItem,
@@ -27,6 +28,7 @@ import {
 import { requireSupabaseAdmin } from "@/lib/supabase";
 import {
   createStory,
+  getStoryById,
   publishStory,
   replaceStorySources,
   updateStory,
@@ -170,7 +172,14 @@ async function createOrUpdateDraftFromCluster(
   const draftFields = initialDraftFields(cluster, feedItems);
 
   if (existingStoryId) {
-    const story = await replaceStorySources(existingStoryId, attachments);
+    const existingStory = await getStoryById(existingStoryId);
+    if (!existingStory) {
+      throw new Error(`Existing story ${existingStoryId} could not be loaded.`);
+    }
+    const story = await replaceStorySources(
+      existingStoryId,
+      mergeStorySources(existingStory.storySources, attachments),
+    );
     return { story, created: false, updated: true };
   }
 
