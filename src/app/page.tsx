@@ -2,6 +2,7 @@ import { Dashboard } from "@/components/layout/Dashboard";
 import { Hero } from "@/components/layout/Hero";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { TopNav } from "@/components/layout/TopNav";
+import { rankHomepageStories } from "@/lib/homepage-ranking";
 import {
   getHomepageStories,
   getLivePreviewStories,
@@ -11,7 +12,7 @@ import {
 export const revalidate = 900;
 
 export default async function Home() {
-  const stories = await getHomepageStories();
+  const stories = rankHomepageStories(await getHomepageStories());
   const showLiveBeta = isLiveBetaEnabled();
   const liveFeed = showLiveBeta
     ? await getLivePreviewStories()
