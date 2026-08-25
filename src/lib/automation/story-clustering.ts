@@ -75,6 +75,11 @@ function similarity(a: Set<string>, b: Set<string>): number {
   return union === 0 ? 0 : intersection / union;
 }
 
+/** Deterministic lexical similarity used both within a run and for draft continuity. */
+export function storyTitleSimilarity(a: string, b: string): number {
+  return similarity(titleTerms(a), titleTerms(b));
+}
+
 function categoryFor(items: ClusterableFeedItem[]): StoryCategory | "Unknown" {
   const counts = new Map<string, number>();
   for (const item of items) {
