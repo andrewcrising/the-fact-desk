@@ -10,6 +10,28 @@ async function main() {
     return;
   }
 
+  const envStatus = {
+    NEXT_PUBLIC_SUPABASE_URL: Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL),
+    SUPABASE_SECRET_KEY: Boolean(process.env.SUPABASE_SECRET_KEY),
+    SUPABASE_SERVICE_ROLE_KEY: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
+    ADMIN_API_TOKEN: Boolean(process.env.ADMIN_API_TOKEN),
+    CRON_SECRET: Boolean(process.env.CRON_SECRET),
+    FACT_DESK_AUTOMATION_MODE: process.env.FACT_DESK_AUTOMATION_MODE ?? null,
+  };
+
+  console.log("[fact-desk-smoke] env", JSON.stringify(envStatus));
+
+  const hasSupabaseUrl = envStatus.NEXT_PUBLIC_SUPABASE_URL;
+  const hasServerKey =
+    envStatus.SUPABASE_SECRET_KEY || envStatus.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!hasSupabaseUrl || !hasServerKey) {
+    console.log(
+      "[fact-desk-smoke] skipped pipeline because Supabase Preview credentials are missing",
+    );
+    return;
+  }
+
   console.log("[fact-desk-smoke] starting recovery preview pipeline in auto_draft mode");
 
   const report = await runBriefingPipeline({
