@@ -1,30 +1,14 @@
 /**
- * RSS ingestion — normalizes feeds into `Story`.
- *
- * Uses fast-xml-parser for reliable NPR/BBC/CISA-style RSS (namespaces, CDATA,
- * varying item shapes). Regex parsing was too fragile across feeds.
- *
- * Later: cron job writes to Supabase/Blob; this module stays the normalizer.
+ * RSS/Atom ingestion and normalization.
  */
 import type { Signal, Story, StoryCategory } from "@/types/story";
 import { XMLParser } from "fast-xml-parser";
 
 const STORY_CATEGORIES: StoryCategory[] = [
-  "Politics",
-  "Markets",
-  "Technology",
-  "World",
-  "Health",
-  "Courts",
-  "Energy",
-  "Culture",
+  "Politics", "Markets", "Technology", "World", "Health", "Courts", "Energy", "Culture",
 ];
-
 const SIGNALS: Signal[] = [
-  "Top Signal",
-  "Under-covered",
-  "Cross-angle",
-  "Developing",
+  "Top Signal", "Under-covered", "Cross-angle", "Developing",
 ];
 
 export interface FetchRssStoriesOptions {
@@ -32,6 +16,8 @@ export interface FetchRssStoriesOptions {
   sourceName?: string;
   signal?: Signal | string;
   limit?: number;
+  timeoutMs?: number;
+  strict?: boolean;
 }
 
 interface RssItemRaw {
@@ -72,6 +58,28 @@ function asString(value: unknown): string | undefined {
   return undefined;
 }
 
+function resolveLink(value: unknown): string | undefined {
+  const direct = asString(value);
+  if (direct) return direct;
+
+  if (Array.isArray(value)) {
+    const preferred =
+      value.find(
+        (entry) =>
+          typeof entry === "object" &&
+          entry !== null &&
+          (entry as { "@_rel"?: string })["@_rel"] === "alternate",
+      ) ?? value[0];
+    return resolveLink(preferred);
+  }
+
+  if (typeof value === "object" && value !== null) {
+    return asString((value as { "@_href"?: unknown })["@_href"]);
+  }
+
+  return undefined;
+}
+
 function slugify(title: string): string {
   const base = title
     .toLowerCase()
@@ -95,34 +103,33 @@ function stableSlug(title: string, link?: string, index = 0): string {
 function parsePubDate(value?: string): string {
   if (!value) return new Date().toISOString();
   const parsed = Date.parse(value);
-  return Number.isNaN(parsed) ? new Date().toISOString() : new Date(parsed).toISOString();
+  return Number.isNaN(parsed)
+    ? new Date().toISOString()
+    : new Date(parsed).toISOString();
 }
 
 function resolveCategory(value?: string): StoryCategory {
-  if (value && STORY_CATEGORIES.includes(value as StoryCategory)) {
-    return value as StoryCategory;
-  }
-  return "World";
+  return value && STORY_CATEGORIES.includes(value as StoryCategory)
+    ? (value as StoryCategory)
+    : "World";
 }
 
 function resolveSignal(value?: string): Signal {
-  if (value && SIGNALS.includes(value as Signal)) {
-    return value as Signal;
-  }
-  return "Developing";
+  return value && SIGNALS.includes(value as Signal)
+    ? (value as Signal)
+    : "Developing";
 }
 
 function parseRssItems(xml: string): RssItemRaw[] {
   try {
     const parsed = xmlParser.parse(xml);
-    const channel = parsed?.rss?.channel ?? parsed?.feed;
+    const channel = parsed?.rss?.channel ?? parsed?.feed ?? parsed?.["rdf:RDF"];
     if (!channel) return [];
 
     const rawItems = channel.item ?? channel.entry;
     if (!rawItems) return [];
 
     const items = Array.isArray(rawItems) ? rawItems : [rawItems];
-
     const result: RssItemRaw[] = [];
 
     for (const item of items) {
@@ -131,21 +138,19 @@ function parseRssItems(xml: string): RssItemRaw[] {
       if (!title) continue;
 
       const link =
-        asString(record.link) ??
-        asString(record.guid) ??
-        (typeof record.link === "object" && record.link !== null
-          ? asString((record.link as { "@_href"?: string })["@_href"])
-          : undefined);
-
+        resolveLink(record.link) ??
+        resolveLink(record.guid) ??
+        resolveLink(record.id);
       const description =
         asString(record.description) ??
         asString(record.summary) ??
+        asString(record.content) ??
         asString(record["content:encoded"]);
-
       const pubDate =
         asString(record.pubDate) ??
         asString(record.published) ??
-        asString(record.updated);
+        asString(record.updated) ??
+        asString(record["dc:date"]);
 
       result.push({
         title,
@@ -177,11 +182,9 @@ function normalizeItem(
     description.length > 220
       ? `${description.slice(0, 217)}…`
       : description || item.title;
-
   const whatHappened = description
     ? `${item.title}. ${description}`
     : item.title;
-
   const publishedAt = parsePubDate(item.pubDate);
   const slug = stableSlug(item.title, item.link, index);
 
@@ -204,10 +207,6 @@ function normalizeItem(
   };
 }
 
-/**
- * Fetch an RSS feed and normalize entries into `Story` objects.
- * Returns [] on failure (does not throw to callers).
- */
 export async function fetchRssStories(
   feedUrl: string,
   options: FetchRssStoriesOptions = {},
@@ -217,27 +216,30 @@ export async function fetchRssStories(
   try {
     const response = await fetch(feedUrl, {
       headers: {
-        Accept: "application/rss+xml, application/xml, text/xml, application/atom+xml, */*",
-        "User-Agent": "TheFactDesk/0.1 (RSS ingestion beta)",
+        Accept:
+          "application/rss+xml, application/xml, text/xml, application/atom+xml, */*",
+        "User-Agent":
+          "TheFactDesk/0.2 (personal RSS proof; contact via linked source)",
       },
+      signal: AbortSignal.timeout(options.timeoutMs ?? 8000),
       next: { revalidate: 300 },
     });
 
     if (!response.ok) {
-      return [];
+      throw new Error(`Feed returned ${response.status}`);
     }
 
     const xml = await response.text();
     const items = parseRssItems(xml).slice(0, limit);
-
     return items.map((item, index) => normalizeItem(item, index, options));
-  } catch {
+  } catch (error) {
+    if (options.strict) throw error;
     return [];
   }
 }
 
-/** Used by /api/test-rss proof route. */
-export const DEFAULT_TEST_RSS_FEED = "https://feeds.npr.org/1001/rss.xml";
+export const DEFAULT_TEST_RSS_FEED =
+  "https://feeds.npr.org/1001/rss.xml";
 
 export const DEFAULT_TEST_RSS_OPTIONS: FetchRssStoriesOptions = {
   sourceName: "NPR",

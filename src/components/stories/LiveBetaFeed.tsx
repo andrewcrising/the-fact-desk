@@ -13,53 +13,65 @@ interface LiveBetaFeedProps {
 }
 
 function LiveBetaCard({ story }: { story: Story }) {
-  const externalUrl = story.sourceUrls?.[0];
-
-  const content = (
-    <>
-      <div className="mb-2 flex flex-wrap items-center gap-2">
-        <ConfidenceLabel confidence={story.confidence} />
-        <SignalLabel signal={story.signal} />
-        <span className="text-[10px] text-[var(--muted-light)]">
-          {formatSourceSpread(story.sources)}
-        </span>
-      </div>
-      <h3 className="font-serif text-base font-semibold leading-snug text-[var(--foreground)] sm:text-lg">
-        {story.title}
-      </h3>
-      <p className="mt-1.5 line-clamp-2 text-[13px] leading-relaxed text-[var(--muted)]">
-        {story.summary}
-      </p>
-      <div className="mt-2 flex flex-wrap items-center justify-between gap-2 border-t border-[var(--border-subtle)] pt-2">
-        <time
-          dateTime={story.updatedAt}
-          className="font-mono text-[10px] text-[var(--muted-light)]"
-        >
-          {formatStoryTime(story.updatedAt)}
-        </time>
-        {externalUrl && (
-          <span className="text-[12px] font-medium text-[var(--accent)]">
-            Read at source →
-          </span>
-        )}
-      </div>
-    </>
-  );
+  const sourceUrls = story.sourceUrls ?? [];
+  const linksAreAligned = sourceUrls.length === story.sources.length;
 
   return (
     <DeskCard className="transition-colors hover:border-[var(--border)]">
-      {externalUrl ? (
-        <a
-          href={externalUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block px-4 py-3.5 sm:px-5"
-        >
-          {content}
-        </a>
-      ) : (
-        <div className="px-4 py-3.5 sm:px-5">{content}</div>
-      )}
+      <article className="px-4 py-3.5 sm:px-5">
+        <div className="mb-2 flex flex-wrap items-center gap-2">
+          <ConfidenceLabel confidence={story.confidence} />
+          <SignalLabel signal={story.signal} />
+          <span className="text-[10px] text-[var(--muted-light)]">
+            {formatSourceSpread(story.sources)}
+          </span>
+        </div>
+        <h3 className="font-serif text-base font-semibold leading-snug text-[var(--foreground)] sm:text-lg">
+          {story.title}
+        </h3>
+        <p className="mt-1.5 line-clamp-2 text-[13px] leading-relaxed text-[var(--muted)]">
+          {story.summary}
+        </p>
+        <div className="mt-2 flex flex-wrap items-center justify-between gap-2 border-t border-[var(--border-subtle)] pt-2">
+          <time
+            dateTime={story.updatedAt}
+            className="font-mono text-[10px] text-[var(--muted-light)]"
+          >
+            {formatStoryTime(story.updatedAt)}
+          </time>
+          <div
+            className="flex flex-wrap items-center justify-end gap-x-2 gap-y-1 text-[11px]"
+            aria-label="Story sources"
+          >
+            {story.sources.slice(0, 5).map((sourceName, index) => {
+              const url = linksAreAligned ? sourceUrls[index] : undefined;
+              return url ? (
+                <a
+                  key={`${sourceName}-${url}`}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-[var(--accent)] hover:underline"
+                >
+                  {sourceName} ↗
+                </a>
+              ) : (
+                <span
+                  key={`${sourceName}-${index}`}
+                  className="text-[var(--muted-light)]"
+                >
+                  {sourceName}
+                </span>
+              );
+            })}
+            {story.sources.length > 5 && (
+              <span className="text-[var(--muted-light)]">
+                +{story.sources.length - 5} more
+              </span>
+            )}
+          </div>
+        </div>
+      </article>
     </DeskCard>
   );
 }
@@ -69,6 +81,9 @@ export function LiveBetaFeed({
   source = "cache",
   fetchedAt,
 }: LiveBetaFeedProps) {
+  const activePublisherCount = new Set(
+    stories.flatMap((story) => story.sources),
+  ).size;
   const statusLine =
     source === "live"
       ? "Live sources connected · auto-refreshes about every 15 minutes"
@@ -84,7 +99,8 @@ export function LiveBetaFeed({
         <div>
           <DeskLabel id="live-beta-heading">Live News Feed</DeskLabel>
           <p className="mt-0.5 text-[11px] text-[var(--muted-light)]">
-            Current external headlines · single-source · not yet evidence-ranked
+            {activePublisherCount} active publishers · related coverage clustered
+            · not yet editorially reviewed
           </p>
         </div>
         {fetchedAt && (
@@ -96,7 +112,7 @@ export function LiveBetaFeed({
 
       {stories.length === 0 ? (
         <p className="desk-card border-dashed px-4 py-3 text-[13px] text-[var(--muted)]">
-          Live beta feed unavailable. Mock briefing remains available.
+          Live feed unavailable. The editorial preview remains available.
         </p>
       ) : (
         <div className="space-y-3">
