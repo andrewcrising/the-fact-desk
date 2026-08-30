@@ -15,7 +15,7 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -35,5 +35,11 @@ jobs:
       - name: Run lint
         run: npm run lint
 
-      - name: Build application
+      - name: Build application with Next.js
         run: npm run build
+
+      - name: Build application for Cloudflare Workers
+        run: npm run build:vinext
+
+      - name: Validate Cloudflare Worker bundle
+        run: npx wrangler deploy --dry-run --config dist/server/wrangler.json
