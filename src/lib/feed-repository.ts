@@ -3,7 +3,7 @@ import { readFactDeskFeedMetadata, withFactDeskFeedMetadata } from "@/lib/feed-m
 import { fetchRssFeedItems } from "@/lib/ingest/rss";
 import { getOrCreateSource } from "@/lib/source-repository";
 import { requireSupabaseAdmin } from "@/lib/supabase";
-import { buildDedupeKey, canonicalizeUrl, urlOrigin } from "@/lib/url";
+import { buildDedupeKey, canonicalizeUrl } from "@/lib/url";
 import { slugWithSuffix } from "@/lib/slug";
 import type {
   FeedItem,
@@ -133,9 +133,11 @@ export async function ingestConfiguredRssFeeds(): Promise<IngestSummary> {
     try {
       const source = await getOrCreateSource({
         name: feed.sourceName,
-        homepageUrl: urlOrigin(feed.feedUrl),
+        homepageUrl: feed.homepageUrl,
         feedUrl: feed.feedUrl,
-        sourceType: "rss",
+        sourceType: feed.sourceType,
+        credibilityScore: feed.credibilityScore,
+        politicalOrEditorialLabel: feed.editorialLabel,
         active: feed.enabled,
       });
 
