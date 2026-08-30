@@ -21,6 +21,9 @@ export interface RssFeedConfig {
  * primary-source feeds are identified explicitly so evidence ranking can treat
  * them differently from secondary reporting without pretending a single
  * numeric credibility score is objective.
+ *
+ * Disabled entries remain in the catalog so the feed-health job can retest
+ * blocked, stale, or candidate feeds without sending them into live ingest.
  */
 export const RSS_FEEDS: RssFeedConfig[] = [
   {
@@ -101,17 +104,6 @@ export const RSS_FEEDS: RssFeedConfig[] = [
     enabled: true,
   },
   {
-    id: "cdc-newsroom",
-    sourceName: "CDC",
-    homepageUrl: "https://www.cdc.gov/media/",
-    feedUrl: "https://www.cdc.gov/media/rss.xml",
-    category: "Health",
-    signal: "Developing",
-    sourceType: "government",
-    editorialLabel: "official-primary",
-    enabled: true,
-  },
-  {
     id: "fda-press-releases",
     sourceName: "FDA",
     homepageUrl: "https://www.fda.gov/news-events/fda-newsroom",
@@ -121,6 +113,72 @@ export const RSS_FEEDS: RssFeedConfig[] = [
     sourceType: "regulator",
     editorialLabel: "official-primary",
     enabled: true,
+  },
+  {
+    id: "white-house-briefings",
+    sourceName: "White House",
+    homepageUrl: "https://www.whitehouse.gov/briefings-statements/",
+    feedUrl: "https://www.whitehouse.gov/briefings-statements/feed/",
+    category: "Politics",
+    signal: "Developing",
+    sourceType: "government",
+    editorialLabel: "official-primary",
+    enabled: false,
+  },
+  {
+    id: "doj-news",
+    sourceName: "U.S. Department of Justice",
+    homepageUrl: "https://www.justice.gov/news/press-releases",
+    feedUrl: "https://www.justice.gov/news/rss",
+    category: "Courts",
+    signal: "Developing",
+    sourceType: "government",
+    editorialLabel: "official-primary",
+    enabled: false,
+  },
+  {
+    id: "fox-politics",
+    sourceName: "Fox News Politics",
+    homepageUrl: "https://www.foxnews.com/politics",
+    feedUrl: "https://moxie.foxnews.com/google-publisher/politics.xml",
+    category: "Politics",
+    signal: "Developing",
+    sourceType: "news",
+    editorialLabel: "politics-news",
+    enabled: false,
+  },
+  {
+    id: "politico-politics",
+    sourceName: "POLITICO Politics",
+    homepageUrl: "https://www.politico.com/",
+    feedUrl: "https://rss.politico.com/politics-news.xml",
+    category: "Politics",
+    signal: "Developing",
+    sourceType: "news",
+    editorialLabel: "politics-news",
+    enabled: false,
+  },
+  {
+    id: "the-hill-news",
+    sourceName: "The Hill",
+    homepageUrl: "https://thehill.com/news/",
+    feedUrl: "https://thehill.com/news/feed/",
+    category: "Politics",
+    signal: "Developing",
+    sourceType: "news",
+    editorialLabel: "politics-news",
+    enabled: false,
+  },
+  {
+    id: "cdc-newsroom",
+    sourceName: "CDC",
+    homepageUrl: "https://www.cdc.gov/media/",
+    feedUrl: "https://www.cdc.gov/media/rss.xml",
+    category: "Health",
+    signal: "Developing",
+    sourceType: "government",
+    editorialLabel: "official-primary",
+    enabled: false,
   },
   {
     id: "who-news",
