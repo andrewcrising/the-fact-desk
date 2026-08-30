@@ -4,10 +4,11 @@ import { DeskLabel } from "@/components/ui/DeskLabel";
 import { SignalLabel } from "@/components/ui/SignalLabel";
 import type { LiveDataSource } from "@/lib/live-data";
 import { formatSourceSpread, formatStoryTime } from "@/lib/stories";
-import type { Story } from "@/types/story";
+import type { Story, StoryCategory } from "@/types/story";
 
 interface LiveBetaFeedProps {
   stories: Story[];
+  activeCategory?: StoryCategory | null;
   source?: LiveDataSource;
   fetchedAt?: string | null;
 }
@@ -66,6 +67,7 @@ function LiveBetaCard({ story }: { story: Story }) {
 
 export function LiveBetaFeed({
   stories,
+  activeCategory = null,
   source = "cache",
   fetchedAt,
 }: LiveBetaFeedProps) {
@@ -73,6 +75,7 @@ export function LiveBetaFeed({
     source === "live"
       ? "Live RSS · refreshes about every 15 minutes"
       : "Cached RSS fallback · run ingest locally or wait for cron";
+  const heading = activeCategory ? `${activeCategory} Live Feed` : "Live Beta Feed";
 
   return (
     <section
@@ -82,7 +85,7 @@ export function LiveBetaFeed({
     >
       <div className="mb-2 flex flex-wrap items-end justify-between gap-2">
         <div>
-          <DeskLabel id="live-beta-heading">Live Beta Feed</DeskLabel>
+          <DeskLabel id="live-beta-heading">{heading}</DeskLabel>
           <p className="mt-0.5 text-[11px] text-[var(--muted-light)]">
             Raw RSS beta · not ranked or published until editorial review
           </p>
@@ -96,8 +99,9 @@ export function LiveBetaFeed({
 
       {stories.length === 0 ? (
         <p className="desk-card border-dashed px-4 py-3 text-[13px] text-[var(--muted)]">
-          Live beta feed unavailable. Published briefings remain separate from
-          raw RSS items.
+          {activeCategory
+            ? `No live ${activeCategory.toLowerCase()} items are available right now.`
+            : "Live beta feed unavailable. Published briefings remain separate from raw RSS items."}
         </p>
       ) : (
         <div className="space-y-3">
