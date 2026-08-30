@@ -5,8 +5,10 @@ import { rankHomepageStories, type HomepageRankableStory } from "./homepage-rank
 function story(
   overrides: Partial<HomepageRankableStory> & Pick<HomepageRankableStory, "id">,
 ): HomepageRankableStory {
+  const { id, ...rest } = overrides;
+
   return {
-    id: overrides.id,
+    id,
     isLead: false,
     homepageRank: null,
     evidenceLevel: "Moderate",
@@ -15,7 +17,7 @@ function story(
     storySources: [{}, {}],
     publishedAt: "2026-08-25T12:00:00.000Z",
     updatedAt: "2026-08-25T12:00:00.000Z",
-    ...overrides,
+    ...rest,
   };
 }
 
