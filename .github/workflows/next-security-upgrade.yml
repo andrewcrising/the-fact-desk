@@ -1,0 +1,64 @@
+name: Next.js Security Upgrade
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - chatgpt/fact-desk-recovery
+    paths:
+      - ".github/workflows/next-security-upgrade.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  upgrade-and-validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out recovery branch
+        uses: actions/checkout@v4
+        with:
+          ref: chatgpt/fact-desk-recovery
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Upgrade Next.js security release
+        run: npm install --save-exact next@16.3.3 eslint-config-next@16.3.3
+
+      - name: Run unit tests
+        run: npm test
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Build with Next.js
+        run: npm run build
+
+      - name: Build for Cloudflare Workers
+        run: npm run build:vinext
+
+      - name: Validate Cloudflare Worker bundle
+        run: npx wrangler deploy --dry-run --config dist/server/wrangler.json
+
+      - name: Require clean production dependency audit
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Commit validated security upgrade
+        run: |
+          if git diff --quiet -- package.json package-lock.json; then
+            echo "No dependency changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json
+          git commit -m "Upgrade Next.js to 16.3.3 security release"
+          git push origin HEAD:chatgpt/fact-desk-recovery
