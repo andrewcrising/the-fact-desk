@@ -1,3 +1,4 @@
+import { getEnabledFeeds } from "@/data/rssFeeds";
 import { getDeskStats } from "@/lib/stories";
 import type { Story } from "@/types/story";
 
@@ -13,7 +14,11 @@ const STAT_ITEMS = [
 ] as const;
 
 export function DeskTicker({ stories }: DeskTickerProps) {
-  const stats = getDeskStats(stories);
+  const storyStats = getDeskStats(stories);
+  const stats = {
+    ...storyStats,
+    sourcesTracked: getEnabledFeeds().length,
+  };
 
   return (
     <div
