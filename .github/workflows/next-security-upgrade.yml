@@ -11,6 +11,8 @@ on:
 permissions:
   contents: write
 
+# One-shot gated upgrade: dependency changes are committed only after every
+# application, Cloudflare, and production-security check succeeds.
 jobs:
   upgrade-and-validate:
     runs-on: ubuntu-latest
