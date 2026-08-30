@@ -10,10 +10,12 @@ import {
 } from "./stories";
 
 function story(overrides: Partial<Story> & Pick<Story, "id">): Story {
+  const { id, ...rest } = overrides;
+
   return {
-    id: overrides.id,
-    slug: overrides.id,
-    title: overrides.id,
+    id,
+    slug: id,
+    title: id,
     summary: "Summary",
     whatHappened: "What happened",
     whyItMatters: "Why it matters",
@@ -25,7 +27,7 @@ function story(overrides: Partial<Story> & Pick<Story, "id">): Story {
     publishedAt: "2026-08-30T12:00:00.000Z",
     updatedAt: "2026-08-30T12:00:00.000Z",
     tags: [],
-    ...overrides,
+    ...rest,
   };
 }
 
