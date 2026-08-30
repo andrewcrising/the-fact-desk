@@ -123,7 +123,7 @@ export const RSS_FEEDS: RssFeedConfig[] = [
     signal: "Developing",
     sourceType: "government",
     editorialLabel: "official-primary",
-    enabled: false,
+    enabled: true,
   },
   {
     id: "doj-news",
@@ -134,7 +134,7 @@ export const RSS_FEEDS: RssFeedConfig[] = [
     signal: "Developing",
     sourceType: "government",
     editorialLabel: "official-primary",
-    enabled: false,
+    enabled: true,
   },
   {
     id: "fox-politics",
@@ -145,7 +145,7 @@ export const RSS_FEEDS: RssFeedConfig[] = [
     signal: "Developing",
     sourceType: "news",
     editorialLabel: "politics-news",
-    enabled: false,
+    enabled: true,
   },
   {
     id: "politico-politics",
@@ -156,7 +156,7 @@ export const RSS_FEEDS: RssFeedConfig[] = [
     signal: "Developing",
     sourceType: "news",
     editorialLabel: "politics-news",
-    enabled: false,
+    enabled: true,
   },
   {
     id: "the-hill-news",
@@ -167,7 +167,7 @@ export const RSS_FEEDS: RssFeedConfig[] = [
     signal: "Developing",
     sourceType: "news",
     editorialLabel: "politics-news",
-    enabled: false,
+    enabled: true,
   },
   {
     id: "cdc-newsroom",
