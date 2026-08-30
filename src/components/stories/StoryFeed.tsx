@@ -77,6 +77,11 @@ export function StoryFeed({
     [allStories, activeCategory],
   );
 
+  const filteredLivePreviewStories = useMemo(
+    () => filterByCategory(livePreviewStories, activeCategory),
+    [livePreviewStories, activeCategory],
+  );
+
   const topSignal = useMemo(() => getTopSignalStory(filtered), [filtered]);
 
   const otherTopSignals = useMemo(
@@ -118,7 +123,8 @@ export function StoryFeed({
     <div className="space-y-3">
       {showLiveBeta && (
         <LiveBetaFeed
-          stories={livePreviewStories}
+          stories={filteredLivePreviewStories}
+          activeCategory={activeCategory}
           source={liveFeedSource}
           fetchedAt={liveFeedFetchedAt}
         />
@@ -217,7 +223,6 @@ export function StoryFeed({
           </p>
         )}
       </section>
-
     </div>
   );
 }
