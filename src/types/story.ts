@@ -22,6 +22,27 @@ export type StoryCategory =
   | "Energy"
   | "Culture";
 
+export interface TimelineEvent {
+  date: string;
+  event: string;
+}
+
+export interface KeyFigure {
+  name: string;
+  role: string;
+}
+
+export interface DataPoint {
+  label: string;
+  value: string;
+}
+
+export interface PrimaryDocument {
+  title: string;
+  url?: string;
+  type: "report" | "filing" | "statement" | "study" | "advisory" | "ruling" | "data" | "other";
+}
+
 export interface Story {
   id: string;
   slug: string;
@@ -39,6 +60,18 @@ export interface Story {
   tags: string[];
   /** Neutral descriptor of how outlets are framing coverage — not partisan branding. */
   coverageAngle?: string;
+  /** Simulated popularity metric — higher = more searched/viewed. */
+  trendingScore?: number;
+  /** Bullet-point verifiable facts, free of editorial framing. */
+  keyFacts?: string[];
+  /** Chronological record of events. */
+  timeline?: TimelineEvent[];
+  /** People, agencies, or organizations central to this story. */
+  keyFigures?: KeyFigure[];
+  /** Quantitative data points cited in primary sources. */
+  dataPoints?: DataPoint[];
+  /** Links to original documents, filings, studies, or data sets. */
+  primaryDocuments?: PrimaryDocument[];
 }
 
 export interface LiveSignal {

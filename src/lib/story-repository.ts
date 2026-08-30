@@ -11,6 +11,7 @@
 import { stories as mockStories } from "@/data/stories";
 import { readLiveStoriesCache } from "@/lib/live-stories-cache";
 import { readRssCache } from "@/lib/rss-cache";
+import { sortByTrending } from "@/lib/stories";
 import type { Signal, Story, StoryCategory } from "@/types/story";
 
 export function isRssCacheEnabled(): boolean {
@@ -30,7 +31,7 @@ export function isMergedStoriesEnabled(): boolean {
 }
 
 export function getAllStories(): Story[] {
-  return [...mockStories];
+  return sortByTrending([...mockStories]);
 }
 
 /** Cached live RSS from data/live-stories.json (server-only). */

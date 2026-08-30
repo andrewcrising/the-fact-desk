@@ -19,6 +19,14 @@ export function LeadSignal({ story }: LeadSignalProps) {
             <DeskLabel className="!text-[var(--accent)]">Top Signal</DeskLabel>
             <ConfidenceLabel confidence={story.confidence} />
             <SignalLabel signal={story.signal} />
+            {story.trendingScore != null && (
+              <span className="flex items-center gap-1 rounded-sm bg-slate-50 px-2 py-0.5 text-[10px] font-semibold tabular-nums text-slate-600 ring-1 ring-inset ring-slate-200">
+                <svg width="10" height="10" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="text-slate-400">
+                  <path d="M8 2v12M8 2l4 4M8 2L4 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Trending {story.trendingScore}
+              </span>
+            )}
           </div>
           <time
             dateTime={story.updatedAt}
@@ -38,6 +46,30 @@ export function LeadSignal({ story }: LeadSignalProps) {
             </p>
           </Link>
 
+          {story.keyFacts && story.keyFacts.length > 0 && (
+            <div className="mt-3 border-t border-[var(--border-subtle)] pt-3">
+              <p className="desk-kicker mb-1.5 text-[9px]">Key facts</p>
+              <ul className="space-y-1 border-l-2 border-[var(--accent)]/20 pl-3">
+                {story.keyFacts.slice(0, 4).map((fact) => (
+                  <li key={fact} className="text-[12px] leading-snug text-[var(--foreground)]">
+                    {fact}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {story.dataPoints && story.dataPoints.length > 0 && (
+            <div className="mt-3 flex flex-wrap gap-3 border-t border-[var(--border-subtle)] pt-3">
+              {story.dataPoints.slice(0, 4).map((dp) => (
+                <div key={dp.label} className="min-w-[100px]">
+                  <p className="text-[9px] font-semibold uppercase tracking-wide text-[var(--muted-light)]">{dp.label}</p>
+                  <p className="font-mono text-sm font-semibold text-[var(--foreground)]">{dp.value}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
           <div className="mt-3 grid gap-2 border-t border-[var(--border-subtle)] pt-3 sm:grid-cols-2">
             <div>
               <p className="desk-kicker mb-1 text-[9px]">What happened</p>
@@ -46,7 +78,7 @@ export function LeadSignal({ story }: LeadSignalProps) {
               </p>
             </div>
             <div>
-              <p className="desk-kicker mb-1 text-[9px]">Why it matters</p>
+              <p className="desk-kicker mb-1 text-[9px]">Impact</p>
               <p className="line-clamp-3 text-[13px] leading-snug text-[var(--muted)]">
                 {story.whyItMatters}
               </p>

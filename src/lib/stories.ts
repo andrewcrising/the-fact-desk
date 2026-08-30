@@ -13,8 +13,16 @@ export function formatSourceSpread(sources: string[]): string {
   return sources.join(" · ");
 }
 
+export function sortByTrending(stories: Story[]): Story[] {
+  return [...stories].sort(
+    (a, b) => (b.trendingScore ?? 0) - (a.trendingScore ?? 0),
+  );
+}
+
 export function getTopSignalStory(stories: Story[]): Story | undefined {
-  return stories.find((s) => s.signal === "Top Signal");
+  const topSignals = stories.filter((s) => s.signal === "Top Signal");
+  if (topSignals.length === 0) return undefined;
+  return sortByTrending(topSignals)[0];
 }
 
 export function filterByCategory(
@@ -26,15 +34,17 @@ export function filterByCategory(
 }
 
 export function storiesBySignal(stories: Story[], signal: Signal): Story[] {
-  return stories.filter((s) => s.signal === signal);
+  return sortByTrending(stories.filter((s) => s.signal === signal));
 }
 
 export function storiesLowConfidence(stories: Story[]): Story[] {
-  return stories.filter(
-    (s) =>
-      s.confidence === "Developing" ||
-      s.confidence === "Single-source" ||
-      s.signal === "Developing",
+  return sortByTrending(
+    stories.filter(
+      (s) =>
+        s.confidence === "Developing" ||
+        s.confidence === "Single-source" ||
+        s.signal === "Developing",
+    ),
   );
 }
 
