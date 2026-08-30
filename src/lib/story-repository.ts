@@ -17,8 +17,12 @@ export function isRssCacheEnabled(): boolean {
   return process.env.NEXT_PUBLIC_USE_RSS_CACHE === "true";
 }
 
+/**
+ * Personal proof mode shows the live feed by default.
+ * Set NEXT_PUBLIC_SHOW_LIVE_BETA=false to disable it explicitly.
+ */
 export function isLiveBetaEnabled(): boolean {
-  return process.env.NEXT_PUBLIC_SHOW_LIVE_BETA === "true";
+  return process.env.NEXT_PUBLIC_SHOW_LIVE_BETA !== "false";
 }
 
 export function isMergedStoriesEnabled(): boolean {
