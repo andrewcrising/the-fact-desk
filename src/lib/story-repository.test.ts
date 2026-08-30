@@ -6,6 +6,14 @@ import {
   isMockFallbackAllowed,
 } from "@/lib/story-repository";
 
+function setNodeEnv(value: string | undefined) {
+  if (value === undefined) {
+    Reflect.deleteProperty(process.env, "NODE_ENV");
+    return;
+  }
+  Object.assign(process.env, { NODE_ENV: value });
+}
+
 describe("story repository fallback", () => {
   it("returns published mock stories when Supabase is not configured", async () => {
     const stories = await getHomepageStories();
@@ -25,19 +33,19 @@ describe("story repository fallback", () => {
     const previousFallback = process.env.ALLOW_MOCK_FALLBACK;
     const previousNodeEnv = process.env.NODE_ENV;
     process.env.ALLOW_MOCK_FALLBACK = "";
-    process.env.NODE_ENV = "test";
+    setNodeEnv("test");
 
     assert.equal(isMockFallbackAllowed(), true);
 
     process.env.ALLOW_MOCK_FALLBACK = previousFallback;
-    process.env.NODE_ENV = previousNodeEnv;
+    setNodeEnv(previousNodeEnv);
   });
 
   it("requires explicit mock fallback in production", () => {
     const previousFallback = process.env.ALLOW_MOCK_FALLBACK;
     const previousNodeEnv = process.env.NODE_ENV;
     process.env.ALLOW_MOCK_FALLBACK = "";
-    process.env.NODE_ENV = "production";
+    setNodeEnv("production");
 
     assert.equal(isMockFallbackAllowed(), false);
 
@@ -45,6 +53,6 @@ describe("story repository fallback", () => {
     assert.equal(isMockFallbackAllowed(), true);
 
     process.env.ALLOW_MOCK_FALLBACK = previousFallback;
-    process.env.NODE_ENV = previousNodeEnv;
+    setNodeEnv(previousNodeEnv);
   });
 });
