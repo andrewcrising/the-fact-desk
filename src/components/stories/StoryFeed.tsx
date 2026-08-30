@@ -69,6 +69,11 @@ export function StoryFeed({
     [allStories, activeCategory],
   );
 
+  const filteredLivePreviewStories = useMemo(
+    () => filterByCategory(livePreviewStories, activeCategory),
+    [livePreviewStories, activeCategory],
+  );
+
   const topSignal = useMemo(() => getTopSignalStory(filtered), [filtered]);
 
   const otherTopSignals = useMemo(
@@ -137,7 +142,7 @@ export function StoryFeed({
         <StorySection
           id="under-covered"
           title="Under-covered"
-            description="Public-interest signals with limited mainstream pickup."
+          description="Public-interest signals with limited mainstream pickup."
           stories={underCovered}
         />
 
@@ -194,7 +199,8 @@ export function StoryFeed({
 
       {showLiveBeta && (
         <LiveBetaFeed
-          stories={livePreviewStories}
+          stories={filteredLivePreviewStories}
+          activeCategory={activeCategory}
           source={liveFeedSource}
           fetchedAt={liveFeedFetchedAt}
         />
