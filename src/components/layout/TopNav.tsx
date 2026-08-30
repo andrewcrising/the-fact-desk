@@ -62,12 +62,12 @@ export function TopNav() {
             </a>
           </nav>
 
-          <button
-            type="button"
+          <Link
+            href="/#brief-email"
             className="shrink-0 self-start border border-[var(--accent)] bg-[var(--accent)] px-4 py-2 text-xs font-semibold uppercase tracking-wide text-white hover:bg-[var(--accent-muted)] lg:self-center"
           >
             Daily Brief
-          </button>
+          </Link>
         </div>
       </div>
     </header>
