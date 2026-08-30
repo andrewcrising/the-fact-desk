@@ -3,7 +3,11 @@ import { DeskCard } from "@/components/ui/DeskCard";
 import { DeskLabel } from "@/components/ui/DeskLabel";
 import { SignalLabel } from "@/components/ui/SignalLabel";
 import type { LiveDataSource } from "@/lib/live-data";
-import { formatSourceSpread, formatStoryTime } from "@/lib/stories";
+import {
+  formatSourceSpread,
+  formatStoryTime,
+  partitionLiveStoriesByEvidence,
+} from "@/lib/stories";
 import type { Story, StoryCategory } from "@/types/story";
 
 interface LiveBetaFeedProps {
@@ -77,6 +81,41 @@ function LiveBetaCard({ story }: { story: Story }) {
   );
 }
 
+function EvidenceLane({
+  id,
+  title,
+  description,
+  stories,
+}: {
+  id: string;
+  title: string;
+  description: string;
+  stories: Story[];
+}) {
+  if (stories.length === 0) return null;
+
+  return (
+    <section aria-labelledby={`${id}-heading`} className="space-y-2">
+      <div>
+        <h3
+          id={`${id}-heading`}
+          className="text-[12px] font-semibold uppercase tracking-wide text-[var(--foreground)]"
+        >
+          {title}
+        </h3>
+        <p className="mt-0.5 text-[11px] leading-snug text-[var(--muted-light)]">
+          {description}
+        </p>
+      </div>
+      <div className="space-y-3">
+        {stories.map((story) => (
+          <LiveBetaCard key={story.id} story={story} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export function LiveBetaFeed({
   stories,
   activeCategory = null,
@@ -90,7 +129,10 @@ export function LiveBetaFeed({
     source === "live"
       ? "Live sources connected · auto-refreshes about every 15 minutes"
       : "Cached source fallback · automatic refresh will retry";
-  const heading = activeCategory ? `${activeCategory} News` : "Live News Feed";
+  const heading = activeCategory
+    ? `${activeCategory} Evidence Feed`
+    : "Evidence-ranked Live Feed";
+  const buckets = partitionLiveStoriesByEvidence(stories);
 
   return (
     <section
@@ -98,12 +140,12 @@ export function LiveBetaFeed({
       aria-labelledby="live-beta-heading"
       className="border-t border-[var(--border)] pt-4"
     >
-      <div className="mb-2 flex flex-wrap items-end justify-between gap-2">
+      <div className="mb-3 flex flex-wrap items-end justify-between gap-2">
         <div>
           <DeskLabel id="live-beta-heading">{heading}</DeskLabel>
-          <p className="mt-0.5 text-[11px] text-[var(--muted-light)]">
-            {activePublisherCount} active publishers · related coverage clustered
-            · not yet editorially reviewed
+          <p className="mt-0.5 max-w-2xl text-[11px] leading-snug text-[var(--muted-light)]">
+            {activePublisherCount} active publishers · multi-source coverage leads;
+            single-newsroom items stay incoming until better supported
           </p>
         </div>
         {fetchedAt && (
@@ -120,10 +162,25 @@ export function LiveBetaFeed({
             : "Live feed unavailable. The editorial preview remains available."}
         </p>
       ) : (
-        <div className="space-y-3">
-          {stories.map((story) => (
-            <LiveBetaCard key={story.id} story={story} />
-          ))}
+        <div className="space-y-5">
+          <EvidenceLane
+            id="multi-source-live"
+            title={`Multi-source coverage · ${buckets.multiSource.length}`}
+            description="Reported by at least two distinct publishers or source domains. Better supported, but not automatically confirmed."
+            stories={buckets.multiSource}
+          />
+          <EvidenceLane
+            id="primary-live"
+            title={`Primary-source updates · ${buckets.primaryOnly.length}`}
+            description="Direct government, court, regulator, academic, or other primary material. Strong for what the issuer said; broader claims may still need independent confirmation."
+            stories={buckets.primaryOnly}
+          />
+          <EvidenceLane
+            id="incoming-live"
+            title={`Incoming signals · ${buckets.incoming.length}`}
+            description="Single-newsroom coverage. Visible for awareness, but intentionally below better-supported reporting until corroborated."
+            stories={buckets.incoming}
+          />
         </div>
       )}
     </section>
