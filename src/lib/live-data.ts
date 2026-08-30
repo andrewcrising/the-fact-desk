@@ -19,7 +19,11 @@ export interface LiveFeedResult {
 const REVALIDATE_SECONDS = 900;
 
 const fetchLiveRss = unstable_cache(
-  async () => ingestEnabledFeeds(),
+  async (): Promise<LiveFeedResult> => ({
+    stories: await ingestEnabledFeeds(),
+    source: "live",
+    fetchedAt: new Date().toISOString(),
+  }),
   ["live-rss-feed"],
   { revalidate: REVALIDATE_SECONDS, tags: ["live-rss"] },
 );
@@ -27,13 +31,9 @@ const fetchLiveRss = unstable_cache(
 /** Live RSS for homepage/API. Never throws. */
 export async function getLiveFeed(): Promise<LiveFeedResult> {
   try {
-    const stories = await fetchLiveRss();
-    if (stories.length > 0) {
-      return {
-        stories,
-        source: "live",
-        fetchedAt: new Date().toISOString(),
-      };
+    const liveFeed = await fetchLiveRss();
+    if (liveFeed.stories.length > 0) {
+      return liveFeed;
     }
   } catch {
     // fall through to file cache

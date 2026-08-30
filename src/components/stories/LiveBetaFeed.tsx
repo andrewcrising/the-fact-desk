@@ -71,8 +71,8 @@ export function LiveBetaFeed({
 }: LiveBetaFeedProps) {
   const statusLine =
     source === "live"
-      ? "Live RSS · refreshes about every 15 minutes"
-      : "Cached RSS fallback · run ingest locally or wait for cron";
+      ? "Live sources connected · auto-refreshes about every 15 minutes"
+      : "Cached source fallback · automatic refresh will retry";
 
   return (
     <section
@@ -82,14 +82,14 @@ export function LiveBetaFeed({
     >
       <div className="mb-2 flex flex-wrap items-end justify-between gap-2">
         <div>
-          <DeskLabel id="live-beta-heading">Live Beta Feed</DeskLabel>
+          <DeskLabel id="live-beta-heading">Live News Feed</DeskLabel>
           <p className="mt-0.5 text-[11px] text-[var(--muted-light)]">
-            Live RSS beta · single-source · not fully analyzed
+            Current external headlines · single-source · not yet evidence-ranked
           </p>
         </div>
         {fetchedAt && (
           <p className="font-mono text-[10px] text-[var(--muted-light)]">
-            {statusLine} · {formatStoryTime(fetchedAt)}
+            {statusLine} · last source check {formatStoryTime(fetchedAt)}
           </p>
         )}
       </div>

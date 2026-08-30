@@ -15,7 +15,7 @@ import {
 import type { LiveDataSource } from "@/lib/live-data";
 import type { Story, StoryCategory } from "@/types/story";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { CategoryFilter } from "./CategoryFilter";
 import { DeskTicker } from "./DeskTicker";
 import { LeadSignal } from "./LeadSignal";
@@ -39,6 +39,14 @@ export function StoryFeed({
 }: StoryFeedProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  useEffect(() => {
+    const refreshTimer = window.setInterval(
+      () => router.refresh(),
+      15 * 60 * 1000,
+    );
+    return () => window.clearInterval(refreshTimer);
+  }, [router]);
 
   const allStories = homepageStories;
 
@@ -108,6 +116,24 @@ export function StoryFeed({
 
   return (
     <div className="space-y-3">
+      {showLiveBeta && (
+        <LiveBetaFeed
+          stories={livePreviewStories}
+          source={liveFeedSource}
+          fetchedAt={liveFeedFetchedAt}
+        />
+      )}
+
+      <div className="desk-card border-dashed px-4 py-3">
+        <p className="desk-kicker text-[9px] text-[var(--accent-muted)]">
+          Editorial interface preview
+        </p>
+        <p className="mt-1 text-[12px] leading-snug text-[var(--muted)]">
+          The sections below use demonstration stories. The live, updating proof
+          is the feed above.
+        </p>
+      </div>
+
       {topSignal && (
         <section aria-labelledby="top-signal-heading">
           <h2 id="top-signal-heading" className="sr-only">
@@ -192,13 +218,6 @@ export function StoryFeed({
         )}
       </section>
 
-      {showLiveBeta && (
-        <LiveBetaFeed
-          stories={livePreviewStories}
-          source={liveFeedSource}
-          fetchedAt={liveFeedFetchedAt}
-        />
-      )}
     </div>
   );
 }

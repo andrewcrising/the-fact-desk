@@ -1,4 +1,4 @@
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -17,6 +17,7 @@ export async function GET(request: Request) {
   }
 
   revalidateTag("live-rss", { expire: 0 });
+  revalidatePath("/");
 
   return NextResponse.json({
     ok: true,
