@@ -1,49 +1,94 @@
 /**
- * Multi-feed RSS ingestion. One bad feed must not break the batch.
- * Later: invoked from Vercel Cron, writes to persistent storage.
+ * Parallel, failure-isolated RSS ingestion for the live personal proof.
  */
 import { getEnabledFeeds } from "@/data/rssFeeds";
+import { clusterAndBalanceStories } from "@/lib/ingest/cluster-stories";
 import { fetchRssStories } from "@/lib/ingest/rss";
 import type { Story } from "@/types/story";
 
-const PER_FEED_LIMIT = 5;
+const PER_FEED_LIMIT = 3;
+const FETCH_CONCURRENCY = 24;
+const FEED_TIMEOUT_MS = 5500;
 
-function dedupeKey(story: Story): string {
-  const link = story.sourceUrls?.[0];
-  if (link) return link.toLowerCase();
-  return story.title.toLowerCase().trim();
+export interface FeedIngestDiagnostics {
+  stories: Story[];
+  feedsChecked: number;
+  feedsWithStories: number;
+  activeSourceCount: number;
+  activeSources: string[];
+  failedFeedIds: string[];
+  emptyFeedIds: string[];
 }
 
-/**
- * Fetch all enabled feeds, normalize, dedupe, sort newest first.
- */
-export async function ingestEnabledFeeds(): Promise<Story[]> {
+interface FeedResult {
+  id: string;
+  sourceName: string;
+  stories: Story[];
+  status: "ok" | "empty" | "failed";
+}
+
+async function fetchFeed(
+  feed: ReturnType<typeof getEnabledFeeds>[number],
+): Promise<FeedResult> {
+  try {
+    const stories = await fetchRssStories(feed.feedUrl, {
+      sourceName: feed.sourceName,
+      category: feed.category,
+      signal: feed.signal,
+      limit: PER_FEED_LIMIT,
+      timeoutMs: FEED_TIMEOUT_MS,
+      strict: true,
+    });
+    return {
+      id: feed.id,
+      sourceName: feed.sourceName,
+      stories,
+      status: stories.length > 0 ? "ok" : "empty",
+    };
+  } catch {
+    return {
+      id: feed.id,
+      sourceName: feed.sourceName,
+      stories: [],
+      status: "failed",
+    };
+  }
+}
+
+export async function ingestEnabledFeedsWithDiagnostics(): Promise<FeedIngestDiagnostics> {
   const feeds = getEnabledFeeds();
-  const combined: Story[] = [];
-  const seen = new Set<string>();
+  const results: FeedResult[] = [];
 
-  for (const feed of feeds) {
-    try {
-      const items = await fetchRssStories(feed.feedUrl, {
-        sourceName: feed.sourceName,
-        category: feed.category,
-        signal: feed.signal,
-        limit: PER_FEED_LIMIT,
-      });
-
-      for (const item of items) {
-        const key = dedupeKey(item);
-        if (seen.has(key)) continue;
-        seen.add(key);
-        combined.push(item);
-      }
-    } catch {
-      // Skip failed feed
-    }
+  for (let index = 0; index < feeds.length; index += FETCH_CONCURRENCY) {
+    const batch = feeds.slice(index, index + FETCH_CONCURRENCY);
+    results.push(...(await Promise.all(batch.map(fetchFeed))));
   }
 
-  return combined.sort(
-    (a, b) =>
-      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
-  );
+  const rawStories = results.flatMap((result) => result.stories);
+  const stories = clusterAndBalanceStories(rawStories);
+  const activeSources = Array.from(
+    new Set(
+      results
+        .filter((result) => result.status === "ok")
+        .map((result) => result.sourceName),
+    ),
+  ).sort();
+
+  return {
+    stories,
+    feedsChecked: feeds.length,
+    feedsWithStories: results.filter((result) => result.status === "ok").length,
+    activeSourceCount: activeSources.length,
+    activeSources,
+    failedFeedIds: results
+      .filter((result) => result.status === "failed")
+      .map((result) => result.id),
+    emptyFeedIds: results
+      .filter((result) => result.status === "empty")
+      .map((result) => result.id),
+  };
+}
+
+export async function ingestEnabledFeeds(): Promise<Story[]> {
+  return (await ingestEnabledFeedsWithDiagnostics()).stories;
 }
