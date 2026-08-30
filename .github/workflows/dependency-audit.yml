@@ -2,6 +2,8 @@ name: Fact Desk Dependency Audit
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "41 11 * * *"
   push:
     branches:
       - chatgpt/fact-desk-recovery
@@ -30,10 +32,9 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Audit production dependencies
-        continue-on-error: true
+      - name: Require production dependencies free of high-severity advisories
         run: npm audit --omit=dev --audit-level=high
 
-      - name: Audit complete dependency tree
+      - name: Report complete dependency tree advisories
         continue-on-error: true
         run: npm audit --audit-level=high
