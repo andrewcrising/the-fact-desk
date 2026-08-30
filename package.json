@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "tsx scripts/preview-smoke.ts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

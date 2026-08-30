@@ -110,6 +110,10 @@ Paste `ADMIN_API_TOKEN` into admin pages when prompted.
 4. Run `npm run seed` locally against the same Supabase project, or seed through your deployment workflow.
 5. Confirm `/admin` warns if any required env var is missing.
 
+Deployments must remain side-effect-free: do not run RSS ingest, create drafts,
+or write smoke-test records from `prebuild`/`build`. Trigger the protected
+automation endpoint explicitly after the Preview reports READY.
+
 ## 7. Vercel Cron
 
 Preview deployment note: scheduled cron is currently disabled so Hobby/preview
