@@ -33,5 +33,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Check configured feeds
-        run: npm run check:feeds
+      - name: Check enabled and candidate feeds
+        run: npm run check:feeds:all
