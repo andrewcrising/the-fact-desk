@@ -33,14 +33,24 @@ function automatedScore(story: HomepageRankableStory): number {
   );
 }
 
+function automaticSupportTier(story: HomepageRankableStory): number {
+  if (story.storySources.length >= 2 && story.confidence !== "Single-source") {
+    return 2;
+  }
+  if (story.storySources.length >= 2) return 1;
+  return 0;
+}
+
 /**
  * Public desk ordering rule:
  * 1. explicit editorial lead override
  * 2. explicit editorial homepage rank
- * 3. deterministic evidence-first automated score
+ * 3. automatic evidence-support tier (multi-source before single-source)
+ * 4. deterministic evidence-first automated score
  *
- * Human overrides therefore remain authoritative without requiring routine
- * manual ordering for every story.
+ * Human overrides remain authoritative, but unpinned automation cannot place a
+ * normal single-source item above better-supported multi-source reporting just
+ * because it is newer or has a stronger editorial-priority label.
  */
 export function rankHomepageStories<T extends HomepageRankableStory>(stories: T[]): T[] {
   return [...stories].sort((a, b) => {
@@ -52,6 +62,9 @@ export function rankHomepageStories<T extends HomepageRankableStory>(stories: T[
       return (a.homepageRank ?? 0) - (b.homepageRank ?? 0);
     }
     if (aPinned !== bPinned) return aPinned ? -1 : 1;
+
+    const supportDelta = automaticSupportTier(b) - automaticSupportTier(a);
+    if (supportDelta !== 0) return supportDelta;
 
     const scoreDelta = automatedScore(b) - automatedScore(a);
     if (scoreDelta !== 0) return scoreDelta;
