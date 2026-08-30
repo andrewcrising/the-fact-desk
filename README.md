@@ -2,133 +2,105 @@
 
 **News signals ranked by evidence, not outrage.**
 
-Calm evidence-ranked news briefing (Next.js, TypeScript, Tailwind).
+Calm, evidence-ranked news briefing built with Next.js, TypeScript, Tailwind, Supabase, and a Cloudflare Workers deployment target.
 
 ## Commands
 
 ```bash
-npm install
-npm run dev          # local server → http://localhost:3000
-npm run build        # production build (Vercel uses this)
-npm run test         # focused MVP backend utility tests
-npm run seed         # seed Supabase demo sources/stories/inbox items
-npm run ingest:rss   # fetch RSS → data/live-stories.json
+npm ci
+npm run dev            # original Next.js local server → http://localhost:3000
+npm run dev:vinext     # Cloudflare/vinext local server → http://localhost:3001
+npm run build          # original Next.js production build
+npm run build:vinext   # Cloudflare Workers production build
+npm run test           # backend/editorial utility tests
+npm run lint
+npm run ingest:rss     # fetch RSS → local cache
 ```
 
-## MVP backend
+## Editorial backend
 
-The app now supports a Supabase/Postgres-backed editorial lifecycle:
+The app supports a Supabase/Postgres-backed editorial lifecycle:
 
 `raw RSS/feed item → editorial inbox candidate → draft story → published story → archived/corrected story`
 
-See [docs/MVP_BACKEND.md](./docs/MVP_BACKEND.md) for schema setup, required env vars, API routes, admin workflow, and Vercel notes.
-Use [docs/DEPLOYMENT_CHECKLIST.md](./docs/DEPLOYMENT_CHECKLIST.md) for the end-to-end local/Vercel checklist.
-See [docs/EDITORIAL_STANDARDS.md](./docs/EDITORIAL_STANDARDS.md) for evidence-ranking standards and human-review policy.
-See [docs/AI_DRAFT_ASSIST_PLAN.md](./docs/AI_DRAFT_ASSIST_PLAN.md) for future AI-assisted drafting guardrails.
-See [docs/AUTOMATION_PIPELINE.md](./docs/AUTOMATION_PIPELINE.md) for self-updating pipeline modes and safety thresholds.
-See [docs/PREFERENCE_MODEL.md](./docs/PREFERENCE_MODEL.md) for future topic/source-balance preference design.
+The recovered backend includes deterministic clustering, source/evidence preservation across repeated automation runs, Evidence Assist, guarded automation modes, admin lifecycle tools, and evidence-first homepage ordering.
 
-Required production env vars:
+See:
+
+- [DEPLOY.md](./DEPLOY.md) — canonical Cloudflare Workers deployment and validation path
+- [docs/MVP_BACKEND.md](./docs/MVP_BACKEND.md) — schema, API routes, and backend workflow
+- [docs/EDITORIAL_STANDARDS.md](./docs/EDITORIAL_STANDARDS.md) — evidence-ranking standards
+- [docs/AI_DRAFT_ASSIST_PLAN.md](./docs/AI_DRAFT_ASSIST_PLAN.md) — optional AI drafting guardrails
+- [docs/AUTOMATION_PIPELINE.md](./docs/AUTOMATION_PIPELINE.md) — automation modes and safety thresholds
+- [docs/PREFERENCE_MODEL.md](./docs/PREFERENCE_MODEL.md) — future topic/source-balance preferences
+
+## Required deployed environment
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=
-SUPABASE_SERVICE_ROLE_KEY=
+SUPABASE_SECRET_KEY=
 ADMIN_API_TOKEN=
 CRON_SECRET=
-# optional development-only fallback
 ALLOW_MOCK_FALLBACK=false
-# optional admin-only AI Draft Assist
 AI_DRAFT_ASSIST_ENABLED=false
-OPENAI_API_KEY=
-FACT_DESK_AUTOMATION_MODE=manual_review
+FACT_DESK_AUTOMATION_MODE=auto_draft
 FACT_DESK_HEALTH_AUTO_PUBLISH_ENABLED=false
-```
-
-## Mock demo (default)
-
-No env vars required, or copy `.env.example` to `.env.local`:
-
-```bash
 NEXT_PUBLIC_SHOW_LIVE_BETA=false
-NEXT_PUBLIC_USE_MERGED_STORIES=false
-NEXT_PUBLIC_USE_RSS_CACHE=false
 ```
 
-Homepage and `/story/[slug]` pages use published stories from Supabase when configured. Mock data from `src/data/stories.ts` is a development fallback only unless `ALLOW_MOCK_FALLBACK=true`.
+`SUPABASE_SERVICE_ROLE_KEY` remains supported only as a legacy fallback. Never expose either server key to browser code or commit it to GitHub.
 
-## Live Beta Feed (local / preview)
+## Safe pilot mode
 
-1. Ingest RSS into the local cache:
+The pilot should run in `auto_draft` mode. That mode can ingest, normalize, cluster, create/update drafts, attach story sources, and run Evidence Assist, but it cannot auto-publish stories. `guarded_auto_publish` remains experimental and should stay disabled until live source grounding has been validated.
 
-```bash
-npm run ingest:rss
-```
-
-2. Enable the Live Beta section:
-
-```bash
-# .env.local
-NEXT_PUBLIC_SHOW_LIVE_BETA=true
-```
-
-3. Restart `npm run dev`.
-
-The published desk stays unchanged. Cached live stories appear in **Live Beta Feed** below published sections. Live items link to external sources and do not become public internal stories unless promoted through the editorial workflow and published.
-
-Optional: keep mock-only main feed (recommended):
-
-```bash
-NEXT_PUBLIC_USE_MERGED_STORIES=false
-```
-
-To merge live stories into the main homepage feed (dev only):
-
-```bash
-NEXT_PUBLIC_USE_MERGED_STORIES=true
-```
+Mock content remains a development fallback only. Deployed environments should keep `ALLOW_MOCK_FALLBACK=false`.
 
 ## API routes
 
 | Route | Purpose |
 |-------|---------|
-| `GET /api/test-rss` | Live fetch proof (single NPR feed) |
-| `GET /api/live-preview` | Cached live stories (`source: "cache"`) |
-| `GET /api/live-preview?fresh=1` | Protected on-demand multi-feed fetch (`source: "live fetch"`) |
+| `GET /api/test-rss` | Live single-feed fetch proof |
+| `GET /api/live-preview` | Cached live-story preview |
+| `GET /api/live-preview?fresh=1` | Protected on-demand multi-feed fetch |
 | `GET /api/stories` | Published stories by default; admin filters with token |
-| `POST /api/stories` | Create draft story (admin token) |
-| `POST /api/ingest/rss` | Ingest RSS into durable feed inbox (admin/cron token) |
+| `POST /api/stories` | Create a draft story (admin token) |
+| `POST /api/ingest/rss` | Ingest RSS into the durable feed inbox (admin/cron token) |
 
-## Deploy to Vercel
+## Cloudflare deployment
 
-**Quick guide:** see [DEPLOY.md](./DEPLOY.md) for step-by-step GitHub + Vercel instructions.
+The repository keeps two build paths intentionally:
 
-Summary:
+- `npm run build` verifies the original Next.js application remains healthy.
+- `npm run build:vinext` creates the Cloudflare Workers build.
 
-### Mock-only public demo
+GitHub CI runs tests, lint, both builds, and a Wrangler deployment dry-run. Cloudflare should not be promoted to `main` until a recovery-branch preview has completed the real RSS → Supabase → draft lifecycle without auto-publishing.
 
-1. Import repo → Next.js defaults.
-2. Env: leave all flags unset or `false`.
-3. Deploy.
+See [DEPLOY.md](./DEPLOY.md) for the exact one-time Git connection, environment variables, and production gate.
 
-### Beta with Live Beta Feed
+## Live Beta Feed (development only)
 
-1. Run `npm run ingest:rss` locally and **commit** `data/live-stories.json`, **or** run ingest in CI before build.
-2. Set `NEXT_PUBLIC_SHOW_LIVE_BETA=true` on Vercel.
-3. Redeploy.
+The direct RSS Live Beta section can still be enabled locally with:
 
-**Important:** Vercel serverless filesystem is **not persistent**. Do not rely on writing `data/live-stories.json` at runtime in production. For production RSS, use **Vercel Cron** → ingest job → **Supabase/Postgres**, **KV**, or **Blob** → `story-repository.ts` reads persisted stories.
+```bash
+NEXT_PUBLIC_SHOW_LIVE_BETA=true
+```
 
-## Future: Health Desk (not built)
-
-A dedicated Health Desk will separate mainstream medical guidance, lifestyle medicine, functional/integrative medicine, supplement evidence, and goal-based health options. Evidence sources: NIH ODS, NCCIH, ACLM, ACSM, major clinical guidelines.
+The durable production desk should instead read persisted Supabase stories. Live feed items do not become public internal stories unless they pass through the editorial workflow and are deliberately published.
 
 ## Project structure
 
-```
-src/data/stories.ts         # Mock stories (demo default)
-src/data/rssFeeds.ts        # Feed configuration
-src/lib/story-repository.ts # Data access boundary
-src/lib/ingest/rss.ts       # RSS normalizer
+```text
+src/data/stories.ts         # development mock stories
+src/data/rssFeeds.ts        # feed configuration
+src/lib/story-repository.ts # story data-access boundary
+src/lib/ingest/rss.ts       # RSS normalization
 src/lib/ingest/ingest-feeds.ts
-data/live-stories.json      # Local live cache (npm run ingest:rss)
+data/live-stories.json      # local live cache only
+vite.config.ts              # vinext + Cloudflare Vite integration
+wrangler.jsonc              # Cloudflare Worker configuration
 ```
+
+## Deployment policy
+
+Cloudflare Workers is the preferred low-cost hosting path. The existing Vercel project may stay connected as a temporary fallback until Cloudflare passes the end-to-end preview and production smoke tests; no Vercel paid plan is required for the migration itself.
