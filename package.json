@@ -9,6 +9,8 @@
     "lint": "eslint",
     "test": "tsx --test \"src/**/*.test.ts\"",
     "test:integration": "RUN_INTEGRATION_TESTS=true tsx --test \"src/**/*.integration.test.ts\"",
+    "check:feeds": "tsx scripts/check-rss-feeds.ts",
+    "check:feeds:strict": "tsx scripts/check-rss-feeds.ts --strict",
     "ingest:rss": "tsx scripts/ingest-rss.ts",
     "seed": "tsx scripts/seed.ts",
     "dev:vinext": "vinext dev --port 3001",
