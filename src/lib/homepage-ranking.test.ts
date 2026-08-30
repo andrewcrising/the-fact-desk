@@ -80,3 +80,27 @@ test("unpinned stories use evidence-first automated ordering", () => {
 
   assert.equal(rankHomepageStories([weak, strong])[0]?.id, "strong");
 });
+
+test("single-source Top Signal cannot outrank supported unpinned coverage", () => {
+  const singleTopSignal = story({
+    id: "single-top",
+    evidenceLevel: "Low",
+    confidence: "Single-source",
+    signal: "Top Signal",
+    storySources: [{}],
+    updatedAt: new Date().toISOString(),
+  });
+  const supported = story({
+    id: "supported",
+    evidenceLevel: "Moderate",
+    confidence: "Developing",
+    signal: "Developing",
+    storySources: [{}, {}],
+    updatedAt: "2026-08-20T12:00:00.000Z",
+  });
+
+  assert.equal(
+    rankHomepageStories([singleTopSignal, supported])[0]?.id,
+    "supported",
+  );
+});
