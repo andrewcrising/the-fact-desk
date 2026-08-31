@@ -3,7 +3,7 @@ import type { Story, StoryCategory } from "@/types/story";
 
 const STOP_WORDS = new Set([
   "about", "after", "again", "against", "amid", "and", "are", "but", "for",
-  "from", "has", "have", "into", "new", "not", "over", "says", "say", "that",
+  "from", "has", "have", "into", "more", "new", "not", "over", "people", "says", "say", "that",
   "the", "their", "this", "with", "will", "your",
 ]);
 
@@ -21,11 +21,22 @@ function normalizeTitle(title: string): string {
     .trim();
 }
 
+function canonicalTerm(term: string): string {
+  if (term.length > 4 && term.endsWith("ies")) {
+    return `${term.slice(0, -3)}y`;
+  }
+  if (term.length > 4 && term.endsWith("s") && !term.endsWith("ss")) {
+    return term.slice(0, -1);
+  }
+  return term;
+}
+
 function titleTerms(title: string): Set<string> {
   return new Set(
     normalizeTitle(title)
       .split(" ")
-      .filter((term) => term.length > 3 && !STOP_WORDS.has(term)),
+      .filter((term) => term.length > 3 && !STOP_WORDS.has(term))
+      .map(canonicalTerm),
   );
 }
 
