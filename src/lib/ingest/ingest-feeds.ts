@@ -16,6 +16,8 @@ export interface FeedIngestDiagnostics {
   feedsWithStories: number;
   activeSourceCount: number;
   activeSources: string[];
+  rawStoryCount: number;
+  multiSourceStoryCount: number;
   failedFeedIds: string[];
   emptyFeedIds: string[];
 }
@@ -80,6 +82,8 @@ export async function ingestEnabledFeedsWithDiagnostics(): Promise<FeedIngestDia
     feedsWithStories: results.filter((result) => result.status === "ok").length,
     activeSourceCount: activeSources.length,
     activeSources,
+    rawStoryCount: rawStories.length,
+    multiSourceStoryCount: stories.filter((story) => story.sources.length >= 2).length,
     failedFeedIds: results
       .filter((result) => result.status === "failed")
       .map((result) => result.id),

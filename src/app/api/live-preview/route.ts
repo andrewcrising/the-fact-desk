@@ -21,6 +21,8 @@ export async function GET(request: NextRequest) {
         feedsWithStories: result.feedsWithStories,
         activeSourceCount: result.activeSourceCount,
         activeSources: result.activeSources,
+        rawStoryCount: result.rawStoryCount,
+        multiSourceStoryCount: result.multiSourceStoryCount,
         failedFeedIds: result.failedFeedIds,
         emptyFeedIds: result.emptyFeedIds,
         stories: result.stories,
