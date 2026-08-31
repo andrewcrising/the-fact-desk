@@ -9,6 +9,10 @@ interface StoryDetailProps {
 }
 
 export function StoryDetail({ story }: StoryDetailProps) {
+  const sourceUrls = story.sourceUrls ?? [];
+  const linksAreAligned = sourceUrls.length === story.sources.length;
+  const isLiveStory = story.tags.includes("live-rss");
+
   return (
     <article className="mx-auto max-w-3xl">
       <Link
@@ -17,6 +21,10 @@ export function StoryDetail({ story }: StoryDetailProps) {
       >
         ← Back to desk
       </Link>
+
+      <p className="desk-kicker mb-3 text-[var(--accent-muted)]">
+        Fact Desk synopsis
+      </p>
 
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <ConfidenceLabel confidence={story.confidence} />
@@ -36,7 +44,7 @@ export function StoryDetail({ story }: StoryDetailProps) {
 
       <dl className="mt-6 grid gap-4 border-y border-[var(--border-subtle)] py-5 text-sm sm:grid-cols-2">
         <div>
-          <dt className="desk-kicker mb-1">Sources</dt>
+          <dt className="desk-kicker mb-1">Source coverage</dt>
           <dd className="text-[var(--foreground)]">
             {formatSourceSpread(story.sources)}
           </dd>
@@ -76,6 +84,33 @@ export function StoryDetail({ story }: StoryDetailProps) {
         )}
       </section>
 
+      <section className="mt-8 border-t border-[var(--border-subtle)] pt-6">
+        <h2 className="desk-kicker mb-3 text-[var(--foreground)]">
+          Read the underlying sources
+        </h2>
+        <ul className="space-y-2 text-sm">
+          {story.sources.map((sourceName, index) => {
+            const url = linksAreAligned ? sourceUrls[index] : undefined;
+            return (
+              <li key={`${sourceName}-${index}`}>
+                {url ? (
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-[var(--accent)] hover:underline"
+                  >
+                    {sourceName} ↗
+                  </a>
+                ) : (
+                  <span className="text-[var(--muted)]">{sourceName}</span>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+
       {story.tags.length > 0 && (
         <div className="mt-8 flex flex-wrap gap-2">
           {story.tags.map((tag) => (
@@ -90,8 +125,9 @@ export function StoryDetail({ story }: StoryDetailProps) {
       )}
 
       <p className="mt-10 border-t border-[var(--border-subtle)] pt-6 text-[13px] leading-relaxed text-[var(--muted-light)]">
-        Prototype briefing using mock data. Scores and labels are editorial
-        signals for demonstration — not automated truth claims.
+        {isLiveStory
+          ? "Live synopsis assembled from the linked source coverage. Multi-source means multiple publishers are covering the development; it does not by itself prove every claim is independently confirmed."
+          : "Prototype briefing using editorial preview data. Scores and labels are editorial signals for demonstration — not automated truth claims."}
       </p>
     </article>
   );
