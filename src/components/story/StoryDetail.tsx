@@ -26,9 +26,17 @@ export function StoryDetail({ story }: StoryDetailProps) {
         ← Back to desk
       </Link>
 
-      <p className="desk-kicker mb-3 text-[var(--accent-muted)]">
-        Fact Desk synopsis · live
-      </p>
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+        <p className="desk-kicker text-[var(--accent-muted)]">
+          Fact Desk synopsis · live
+        </p>
+        <Link
+          href="/independence"
+          className="inline-flex min-h-7 items-center text-[10px] font-medium text-[var(--muted-light)] hover:text-[var(--accent)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 sm:text-[11px]"
+        >
+          Reader-supported · Independence &amp; funding →
+        </Link>
+      </div>
 
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <span className="text-[10px] font-semibold uppercase tracking-wide text-[var(--accent)]">
