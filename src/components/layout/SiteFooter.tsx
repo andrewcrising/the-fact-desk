@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 interface SiteFooterProps {
   showLiveBeta?: boolean;
 }
@@ -15,7 +17,15 @@ export function SiteFooter({ showLiveBeta = true }: SiteFooterProps) {
           <p className="font-medium text-[var(--muted)]">
             © {new Date().getFullYear()} The Fact Desk
           </p>
-          <p>Priority is not certainty. Evidence labels show support separately.</p>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <p>Priority is not certainty. Evidence labels show support separately.</p>
+            <Link
+              href="/independence"
+              className="font-semibold text-[var(--accent)] hover:underline"
+            >
+              Independence &amp; funding
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
