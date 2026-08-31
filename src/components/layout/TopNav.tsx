@@ -1,17 +1,14 @@
 import { NAV_LINKS } from "@/data/navigation";
-import { isLiveBetaEnabled } from "@/lib/story-repository";
 import Link from "next/link";
 
 export function TopNav() {
-  const liveBeta = isLiveBetaEnabled();
-
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-white">
       <div className="border-b border-[var(--border-subtle)] bg-[#fafbfc]">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1.5 text-[10px] font-medium uppercase tracking-widest text-[var(--muted-light)] sm:px-6 lg:px-8">
           <span>Evidence-first news intelligence</span>
           <span className="hidden font-mono normal-case tracking-normal sm:inline">
-            {liveBeta ? "Mock desk + live RSS beta" : "Prototype · mock data"}
+            Live priority desk · continuous source updates
           </span>
         </div>
       </div>
@@ -56,18 +53,11 @@ export function TopNav() {
             ))}
             <a
               href="/#health-desk"
-              className="shrink-0 px-2.5 py-1.5 text-[12px] font-medium text-[var(--muted-light)] hover:text-[var(--foreground)] sm:text-[13px]"
+              className="shrink-0 px-2.5 py-1.5 text-[12px] font-medium text-[var(--muted)] hover:text-[var(--foreground)] sm:text-[13px]"
             >
               Health Desk
             </a>
           </nav>
-
-          <Link
-            href="/#brief-email"
-            className="shrink-0 self-start border border-[var(--accent)] bg-[var(--accent)] px-4 py-2 text-xs font-semibold uppercase tracking-wide text-white hover:bg-[var(--accent-muted)] lg:self-center"
-          >
-            Daily Brief
-          </Link>
         </div>
       </div>
     </header>
