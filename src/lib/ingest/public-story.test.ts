@@ -11,6 +11,7 @@ import {
   sanitizeStoryForPublic,
 } from "@/lib/ingest/public-story";
 import type { Story } from "@/types/story";
+import { fetchRssStories } from "@/lib/ingest/rss";
 
 function baseStory(overrides: Partial<Story> = {}): Story {
   return {
@@ -63,6 +64,41 @@ test("headline inference corrects coarse science and health feed categories", ()
     inferStoryCategory("Supreme Court agrees to hear privacy case", "World"),
     "Courts",
   );
+  assert.equal(
+    inferStoryCategory("Defense lawyers withdraw from murder case", "World"),
+    "Courts",
+  );
+  assert.equal(
+    inferStoryCategory("Football star retires after World Cup", "World"),
+    "Culture",
+  );
+});
+
+test("RSS normalization preserves a natural synopsis boundary", async () => {
+  const originalFetch = globalThis.fetch;
+  const firstSentence = `${"Rescue teams continued searching the canyon through difficult conditions ".repeat(3).trim()}.`;
+  globalThis.fetch = async () =>
+    new Response(
+      `<?xml version="1.0"?><rss version="2.0"><channel><item>
+        <title>Search continues after canyon flooding</title>
+        <link>https://example.com/flood</link>
+        <description>${firstSentence} This second sentence contains additional background that should not be cut in the middle of a word when the public synopsis reaches its maximum length.</description>
+        <pubDate>Mon, 31 Aug 2026 12:00:00 GMT</pubDate>
+      </item></channel></rss>`,
+      { status: 200, headers: { "content-type": "application/rss+xml" } },
+    );
+
+  try {
+    const [story] = await fetchRssStories("https://example.com/feed.xml", {
+      sourceName: "Example News",
+      category: "World",
+      strict: true,
+    });
+    assert.ok(story.summary.length <= MAX_PUBLIC_SUMMARY_CHARS);
+    assert.equal(story.summary, `${firstSentence}…`);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
 });
 
 test("court significance cannot be hijacked by unrelated words in feed context", () => {
