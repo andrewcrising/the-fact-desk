@@ -5,10 +5,11 @@
  * Live cache: data/live-stories.json (npm run ingest:rss)
  * Legacy cache: data/rss-cache.json (NEXT_PUBLIC_USE_RSS_CACHE)
  *
- * Production later: Vercel Cron → Supabase/Postgres/KV/Blob → read here.
+ * Production later: scheduled ingest → Supabase/Postgres/KV/Blob → read here.
  * Do not rely on serverless filesystem for production ingestion.
  */
 import { stories as mockStories } from "@/data/stories";
+import { sanitizeStoryForPublic } from "@/lib/ingest/public-story";
 import { readLiveStoriesCache } from "@/lib/live-stories-cache";
 import { readRssCache } from "@/lib/rss-cache";
 import type { Signal, Story, StoryCategory } from "@/types/story";
@@ -38,7 +39,7 @@ export function getCachedLiveStories(): Story[] {
   if (typeof window !== "undefined") {
     return [];
   }
-  return readLiveStoriesCache().stories;
+  return readLiveStoriesCache().stories.map(sanitizeStoryForPublic);
 }
 
 /** Legacy dev cache from data/rss-cache.json. */
@@ -46,7 +47,7 @@ export function getCachedRssStories(): Story[] {
   if (typeof window !== "undefined" || !isRssCacheEnabled()) {
     return [];
   }
-  return readRssCache().stories;
+  return readRssCache().stories.map(sanitizeStoryForPublic);
 }
 
 /** Mock + cached live stories, deduped by slug (mock wins). */
@@ -57,7 +58,7 @@ export function getMergedStories(): Story[] {
   return [...mock, ...live];
 }
 
-/** Live Beta section — live RSS fetch with cache + file fallback. */
+/** Live Beta section — current source-cached RSS with file fallback. */
 export async function getLivePreviewStories() {
   if (!isLiveBetaEnabled()) {
     return { stories: [], source: "cache" as const, fetchedAt: null };
@@ -117,5 +118,7 @@ export async function getIngestedStoriesPreview() {
     fetchRssStories,
   } = await import("@/lib/ingest/rss");
 
-  return fetchRssStories(DEFAULT_TEST_RSS_FEED, DEFAULT_TEST_RSS_OPTIONS);
+  return (await fetchRssStories(DEFAULT_TEST_RSS_FEED, DEFAULT_TEST_RSS_OPTIONS)).map(
+    sanitizeStoryForPublic,
+  );
 }
