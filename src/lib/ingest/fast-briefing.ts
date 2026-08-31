@@ -22,21 +22,6 @@ function combinedText(title: string, summary: string): string {
 }
 
 /**
- * Keep figurative uses of "war" from being classified as armed conflict.
- * The source headline stays untouched; this normalization is used only to
- * choose the independently written significance template.
- */
-function conflictClassificationText(text: string): string {
-  return text
-    .replace(/\b(?:trade|culture|price|pricing|bidding|political) war\b/gi, "dispute")
-    .replace(
-      /\bwar on (?:crime|drugs|poverty|inflation|woke|wokeness|cash|cars|coal|oil|gas|technology|tech)\b/gi,
-      "campaign",
-    )
-    .replace(/\bwar of words\b/gi, "public dispute");
-}
-
-/**
  * Produces an immediate, conservative "why it matters" from source-provided
  * feed text. This is intentionally template-based so urgent stories receive a
  * useful briefing immediately without waiting on a slower model call.
@@ -47,9 +32,8 @@ export function buildFastWhyItMatters(
   category: StoryCategory,
 ): string {
   const text = combinedText(title, summary);
-  const conflictText = conflictClassificationText(text);
 
-  if (CONFLICT_PATTERN.test(conflictText)) {
+  if (CONFLICT_PATTERN.test(text)) {
     return "This may change the near-term security picture, raise the risk of further retaliation, and affect civilians, regional operations, shipping, or energy markets. Early details can change quickly as official statements and additional reporting arrive.";
   }
 

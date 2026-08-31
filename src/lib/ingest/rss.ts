@@ -2,7 +2,6 @@
  * RSS/Atom ingestion and normalization.
  */
 import { buildFastWhyItMatters } from "@/lib/ingest/fast-briefing";
-import { buildSingleSourceHouseBriefing } from "@/lib/ingest/editorial-firewall";
 import { viewpointTag, type ViewpointBand } from "@/lib/viewpoints";
 import type { Signal, Story, StoryCategory } from "@/types/story";
 import { XMLParser } from "fast-xml-parser";
@@ -22,7 +21,6 @@ export interface FetchRssStoriesOptions {
   timeoutMs?: number;
   strict?: boolean;
   viewpoint?: ViewpointBand;
-  allowSyndicatedSummary?: boolean;
 }
 
 interface RssItemRaw {
@@ -247,15 +245,13 @@ function normalizeItem(
   const sourceName = options.sourceName ?? "RSS";
   const category = resolveCategory(options.category);
   const description = item.description ?? "";
-  const whyItMatters = buildFastWhyItMatters(item.title, description, category);
-  const houseBriefing = buildSingleSourceHouseBriefing({
-    sourceName,
-    category,
-    whyItMatters,
-  });
-  const licensedSummary = options.allowSyndicatedSummary
-    ? description.slice(0, 220)
-    : undefined;
+  const summary =
+    description.length > 220
+      ? `${description.slice(0, 217)}…`
+      : description || item.title;
+  const whatHappened = description
+    ? `${item.title}. ${description}`
+    : item.title;
   const publishedAt = parsePubDate(item.pubDate);
   const slug = stableSlug(item.title, item.link, index);
 
@@ -263,11 +259,9 @@ function normalizeItem(
     id: `live-${slug}`,
     slug,
     title: item.title,
-    summary: licensedSummary || houseBriefing.summary,
-    whatHappened: licensedSummary
-      ? `${sourceName} supplied this licensed feed summary: “${licensedSummary}”`
-      : houseBriefing.whatHappened,
-    whyItMatters,
+    summary,
+    whatHappened,
+    whyItMatters: buildFastWhyItMatters(item.title, summary, category),
     category,
     confidence: "Single-source",
     signal: resolveSignal(options.signal),
@@ -276,11 +270,8 @@ function normalizeItem(
     publishedAt,
     updatedAt: publishedAt,
     tags: buildTags(sourceName, options.viewpoint),
-    headlineSource: sourceName,
-    briefingBasis: "source-headline",
-    coverageAngle: licensedSummary
-      ? `Syndicated summary displayed under the source's reviewed reuse licence; analysis and significance are written by The Fact Desk.`
-      : houseBriefing.coverageAngle,
+    coverageAngle:
+      "Fast briefing generated from source-provided feed text; details should update as corroborating coverage arrives.",
   };
 }
 

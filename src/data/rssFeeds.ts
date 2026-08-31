@@ -7,15 +7,6 @@ export interface RssFeedConfig {
   category: StoryCategory;
   signal: Signal;
   enabled: boolean;
-  /**
-   * Omit unless a reviewed licence expressly permits public reuse of the feed
-   * description. The ingestion layer otherwise treats descriptions as
-   * analysis-only and never publishes them.
-   */
-  syndicationLicense?: {
-    licenseUrl: string;
-    summaryReuse: true;
-  };
 }
 
 /**

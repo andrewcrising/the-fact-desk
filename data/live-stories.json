@@ -1,14 +1,83 @@
 {
-  "generatedAt": "2026-08-31T12:47:04.123Z",
-  "feedCount": 68,
+  "generatedAt": "2026-05-24T11:36:25.525Z",
+  "feedCount": 4,
   "stories": [
     {
-      "id": "live-u-s-venezuela-strike-oil-deal-and-the-staggering-hidden-toll-of-u-s-heat-aHR0cHM6",
-      "slug": "u-s-venezuela-strike-oil-deal-and-the-staggering-hidden-toll-of-u-s-heat-aHR0cHM6",
-      "title": "U.S., Venezuela strike oil deal. And, the staggering hidden toll of U.S. heat deaths",
-      "summary": "NPR is reporting this international development. This can affect prices, supply chains, energy costs, trade flows, and financial markets.",
-      "whatHappened": "NPR is the current reporting basis for the headline above. The Fact Desk is keeping the claim attributed to that publisher until another independent report or a primary record supports it.",
-      "whyItMatters": "This can affect prices, supply chains, energy costs, trade flows, and financial markets. The practical impact depends on the scope, duration, and whether governments or companies respond with additional measures.",
+      "id": "live-large-scale-russian-attack-on-ukraine-leaves-four-dead-and-dozens-injure-aHR0cHM6",
+      "slug": "large-scale-russian-attack-on-ukraine-leaves-four-dead-and-dozens-injure-aHR0cHM6",
+      "title": "Large-scale Russian attack on Ukraine leaves four dead and dozens injured",
+      "summary": "The Oreshnik missile, which reportedly travels over 10 times the speed of sound, was used, Russia has confirmed.",
+      "whatHappened": "Large-scale Russian attack on Ukraine leaves four dead and dozens injured. The Oreshnik missile, which reportedly travels over 10 times the speed of sound, was used, Russia has confirmed.",
+      "whyItMatters": "This story is newly ingested and has not yet been fully analyzed.",
+      "category": "World",
+      "confidence": "Single-source",
+      "signal": "Developing",
+      "sources": [
+        "BBC World"
+      ],
+      "sourceUrls": [
+        "https://www.bbc.com/news/articles/clyp6831yp5o?at_medium=RSS&at_campaign=rss"
+      ],
+      "publishedAt": "2026-05-24T10:52:46.000Z",
+      "updatedAt": "2026-05-24T10:52:46.000Z",
+      "tags": [
+        "live-rss",
+        "bbc-world"
+      ]
+    },
+    {
+      "id": "live-bbc-at-the-site-of-china-s-worst-mining-disaster-in-more-than-a-decade-aHR0cHM6",
+      "slug": "bbc-at-the-site-of-china-s-worst-mining-disaster-in-more-than-a-decade-aHR0cHM6",
+      "title": "BBC at the site of China's worst mining disaster in more than a decade",
+      "summary": "At least 82 people have been killed after a gas explosion at the Liushenyu mine in China.",
+      "whatHappened": "BBC at the site of China's worst mining disaster in more than a decade. At least 82 people have been killed after a gas explosion at the Liushenyu mine in China.",
+      "whyItMatters": "This story is newly ingested and has not yet been fully analyzed.",
+      "category": "World",
+      "confidence": "Single-source",
+      "signal": "Developing",
+      "sources": [
+        "BBC World"
+      ],
+      "sourceUrls": [
+        "https://www.bbc.com/news/videos/c809m33yjz7o?at_medium=RSS&at_campaign=rss"
+      ],
+      "publishedAt": "2026-05-24T10:34:52.000Z",
+      "updatedAt": "2026-05-24T10:34:52.000Z",
+      "tags": [
+        "live-rss",
+        "bbc-world"
+      ]
+    },
+    {
+      "id": "live-girl-raped-by-boys-spared-jail-tells-bbc-judge-s-decision-was-like-rock--aHR0cHM6",
+      "slug": "girl-raped-by-boys-spared-jail-tells-bbc-judge-s-decision-was-like-rock--aHR0cHM6",
+      "title": "Girl raped by boys spared jail tells BBC judge's decision was like 'rock in my face'",
+      "summary": "Speaking to the BBC’s Laura Kuenssberg, the girl, who is now 16, said: \"What was the point in putting me through that?\"",
+      "whatHappened": "Girl raped by boys spared jail tells BBC judge's decision was like 'rock in my face'. Speaking to the BBC’s Laura Kuenssberg, the girl, who is now 16, said: \"What was the point in putting me through that?\"",
+      "whyItMatters": "This story is newly ingested and has not yet been fully analyzed.",
+      "category": "World",
+      "confidence": "Single-source",
+      "signal": "Developing",
+      "sources": [
+        "BBC News"
+      ],
+      "sourceUrls": [
+        "https://www.bbc.com/news/articles/cjrp98285yvo?at_medium=RSS&at_campaign=rss"
+      ],
+      "publishedAt": "2026-05-24T10:27:31.000Z",
+      "updatedAt": "2026-05-24T10:27:31.000Z",
+      "tags": [
+        "live-rss",
+        "bbc-news"
+      ]
+    },
+    {
+      "id": "live-nurse-convicted-in-patient-s-death-is-now-a-national-speaker-on-hospital-aHR0cHM6",
+      "slug": "nurse-convicted-in-patient-s-death-is-now-a-national-speaker-on-hospital-aHR0cHM6",
+      "title": "Nurse convicted in patient's death is now a national speaker on hospital safety",
+      "summary": "RaDonda Vaught was convicted of negligent homicide after dispensing the wrong drug to a patient. She now gives speeches about hospital safety in an era of automation and artificial intelligence.",
+      "whatHappened": "Nurse convicted in patient's death is now a national speaker on hospital safety. RaDonda Vaught was convicted of negligent homicide after dispensing the wrong drug to a patient. She now gives speeches about hospital safety in an era of automation and artificial intelligence.",
+      "whyItMatters": "This story is newly ingested and has not yet been fully analyzed.",
       "category": "World",
       "confidence": "Single-source",
       "signal": "Developing",
@@ -16,80 +85,22 @@
         "NPR"
       ],
       "sourceUrls": [
-        "https://www.npr.org/2026/08/31/g-s1-141187/up-first-newsletter-venezuela-oil-iran-war-house-government-funding-grand-canyon-flash-flooding"
+        "https://www.npr.org/2026/05/24/nx-s1-5822519/radonda-vaught-nurse-convicted-vanderbilt-medical-error"
       ],
-      "publishedAt": "2026-08-31T11:20:15.000Z",
-      "updatedAt": "2026-08-31T11:20:15.000Z",
+      "publishedAt": "2026-05-24T10:00:00.000Z",
+      "updatedAt": "2026-05-24T10:00:00.000Z",
       "tags": [
         "live-rss",
-        "npr",
-        "viewpoint:left-of-center"
-      ],
-      "headlineSource": "NPR",
-      "briefingBasis": "source-headline",
-      "coverageAngle": "Source-reported headline with an independently written Fact Desk briefing. The publisher's RSS description is not republished."
+        "npr"
+      ]
     },
     {
-      "id": "live-federal-reserve-board-issues-enforcement-action-with-former-employee-of--aHR0cHM6",
-      "slug": "federal-reserve-board-issues-enforcement-action-with-former-employee-of--aHR0cHM6",
-      "title": "Federal Reserve Board issues enforcement action with former employee of Banco Popular de Puerto Rico",
-      "summary": "Federal Reserve is reporting this markets development. Changes in inflation expectations or central-bank policy can quickly affect borrowing costs, currencies, bonds, equities, housing, and household finances.",
-      "whatHappened": "Federal Reserve is the current reporting basis for the headline above. The Fact Desk is keeping the claim attributed to that publisher until another independent report or a primary record supports it.",
-      "whyItMatters": "Changes in inflation expectations or central-bank policy can quickly affect borrowing costs, currencies, bonds, equities, housing, and household finances. The market impact depends on what policymakers actually signal or do next.",
-      "category": "Markets",
-      "confidence": "Single-source",
-      "signal": "Developing",
-      "sources": [
-        "Federal Reserve"
-      ],
-      "sourceUrls": [
-        "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260827a.htm"
-      ],
-      "publishedAt": "2026-08-27T15:00:00.000Z",
-      "updatedAt": "2026-08-27T15:00:00.000Z",
-      "tags": [
-        "live-rss",
-        "federal-reserve",
-        "viewpoint:primary-source"
-      ],
-      "headlineSource": "Federal Reserve",
-      "briefingBasis": "source-headline",
-      "coverageAngle": "Source-reported headline with an independently written Fact Desk briefing. The publisher's RSS description is not republished."
-    },
-    {
-      "id": "live-federal-reserve-board-announces-approval-of-application-by-national-west-aHR0cHM6",
-      "slug": "federal-reserve-board-announces-approval-of-application-by-national-west-aHR0cHM6",
-      "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
-      "summary": "Federal Reserve is reporting this markets development. Changes in inflation expectations or central-bank policy can quickly affect borrowing costs, currencies, bonds, equities, housing, and household finances.",
-      "whatHappened": "Federal Reserve is the current reporting basis for the headline above. The Fact Desk is keeping the claim attributed to that publisher until another independent report or a primary record supports it.",
-      "whyItMatters": "Changes in inflation expectations or central-bank policy can quickly affect borrowing costs, currencies, bonds, equities, housing, and household finances. The market impact depends on what policymakers actually signal or do next.",
-      "category": "Markets",
-      "confidence": "Single-source",
-      "signal": "Developing",
-      "sources": [
-        "Federal Reserve"
-      ],
-      "sourceUrls": [
-        "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm"
-      ],
-      "publishedAt": "2026-08-20T20:00:00.000Z",
-      "updatedAt": "2026-08-20T20:00:00.000Z",
-      "tags": [
-        "live-rss",
-        "federal-reserve",
-        "viewpoint:primary-source"
-      ],
-      "headlineSource": "Federal Reserve",
-      "briefingBasis": "source-headline",
-      "coverageAngle": "Source-reported headline with an independently written Fact Desk briefing. The publisher's RSS description is not republished."
-    },
-    {
-      "id": "live-nepal-s-hesitance-to-accept-foreign-help-for-flood-relief-under-scrutiny-aHR0cHM6",
-      "slug": "nepal-s-hesitance-to-accept-foreign-help-for-flood-relief-under-scrutiny-aHR0cHM6",
-      "title": "Nepal's hesitance to accept foreign help for flood relief under scrutiny",
-      "summary": "NPR is reporting this international development. The immediate stakes are rescue, safety, and the scale of damage or displacement.",
-      "whatHappened": "NPR is the current reporting basis for the headline above. The Fact Desk is keeping the claim attributed to that publisher until another independent report or a primary record supports it.",
-      "whyItMatters": "The immediate stakes are rescue, safety, and the scale of damage or displacement. Missing-person, casualty, evacuation, and infrastructure figures often change quickly during the first hours of a disaster.",
+      "id": "live-russia-uses-hypersonic-oreshnik-missile-in-mass-attack-on-kyiv-aHR0cHM6",
+      "slug": "russia-uses-hypersonic-oreshnik-missile-in-mass-attack-on-kyiv-aHR0cHM6",
+      "title": "Russia uses hypersonic Oreshnik missile in mass attack on Kyiv",
+      "summary": "Ukrainian President Volodymyr Zelenskyy said Sunday Russia used the powerful hypersonic Oreshnik ballistic missile during a mass drone and missile attack on Kyiv on Sunday that killed at least two people.",
+      "whatHappened": "Russia uses hypersonic Oreshnik missile in mass attack on Kyiv. Ukrainian President Volodymyr Zelenskyy said Sunday Russia used the powerful hypersonic Oreshnik ballistic missile during a mass drone and missile attack on Kyiv on Sunday that killed at least two people.",
+      "whyItMatters": "This story is newly ingested and has not yet been fully analyzed.",
       "category": "World",
       "confidence": "Single-source",
       "signal": "Developing",
@@ -97,134 +108,45 @@
         "NPR"
       ],
       "sourceUrls": [
-        "https://www.npr.org/2026/08/31/nx-s1-5949971/nepals-hesitance-help-flood"
+        "https://www.npr.org/2026/05/24/nx-s1-5833050/russia-uses-hypersonic-oreshnik-missile-in-mass-attack-on-kyiv"
       ],
-      "publishedAt": "2026-08-31T11:50:17.000Z",
-      "updatedAt": "2026-08-31T11:50:17.000Z",
+      "publishedAt": "2026-05-24T09:12:28.000Z",
+      "updatedAt": "2026-05-24T09:12:28.000Z",
       "tags": [
         "live-rss",
-        "npr",
-        "viewpoint:left-of-center"
-      ],
-      "headlineSource": "NPR",
-      "briefingBasis": "source-headline",
-      "coverageAngle": "Source-reported headline with an independently written Fact Desk briefing. The publisher's RSS description is not republished."
+        "npr"
+      ]
     },
     {
-      "id": "live-how-a-comic-book-store-got-swept-into-the-tariff-storm-aHR0cHM6",
-      "slug": "how-a-comic-book-store-got-swept-into-the-tariff-storm-aHR0cHM6",
-      "title": "How a comic book store got swept into the tariff storm",
-      "summary": "NPR is reporting this markets development. This can affect prices, supply chains, energy costs, trade flows, and financial markets.",
-      "whatHappened": "NPR is the current reporting basis for the headline above. The Fact Desk is keeping the claim attributed to that publisher until another independent report or a primary record supports it.",
-      "whyItMatters": "This can affect prices, supply chains, energy costs, trade flows, and financial markets. The practical impact depends on the scope, duration, and whether governments or companies respond with additional measures.",
-      "category": "Markets",
+      "id": "live-blast-targeting-train-kills-at-least-20-in-pakistan-aHR0cHM6",
+      "slug": "blast-targeting-train-kills-at-least-20-in-pakistan-aHR0cHM6",
+      "title": "Blast targeting train kills at least 20 in Pakistan",
+      "summary": "Officials say the train had been transporting military personnel home for Eid when it was attacked by armed separatists.",
+      "whatHappened": "Blast targeting train kills at least 20 in Pakistan. Officials say the train had been transporting military personnel home for Eid when it was attacked by armed separatists.",
+      "whyItMatters": "This story is newly ingested and has not yet been fully analyzed.",
+      "category": "World",
       "confidence": "Single-source",
       "signal": "Developing",
       "sources": [
-        "NPR"
+        "BBC World"
       ],
       "sourceUrls": [
-        "https://www.npr.org/2026/08/30/nx-s1-5939521/tariff-refunds-canada-trade-war"
+        "https://www.bbc.com/news/articles/cm2pkd58xldo?at_medium=RSS&at_campaign=rss"
       ],
-      "publishedAt": "2026-08-30T10:00:00.000Z",
-      "updatedAt": "2026-08-30T10:00:00.000Z",
+      "publishedAt": "2026-05-24T09:08:31.000Z",
+      "updatedAt": "2026-05-24T09:08:31.000Z",
       "tags": [
         "live-rss",
-        "npr",
-        "viewpoint:left-of-center"
-      ],
-      "headlineSource": "NPR",
-      "briefingBasis": "source-headline",
-      "coverageAngle": "Source-reported headline with an independently written Fact Desk briefing. The publisher's RSS description is not republished."
+        "bbc-world"
+      ]
     },
     {
-      "id": "live-fed-s-kevin-warsh-warns-inflation-is-too-high-sparking-bets-rate-hikes-a-aHR0cHM6",
-      "slug": "fed-s-kevin-warsh-warns-inflation-is-too-high-sparking-bets-rate-hikes-a-aHR0cHM6",
-      "title": "Fed's Kevin Warsh warns inflation is too high, sparking bets rate hikes are coming",
-      "summary": "NPR is reporting this markets development. Changes in inflation expectations or central-bank policy can quickly affect borrowing costs, currencies, bonds, equities, housing, and household finances.",
-      "whatHappened": "NPR is the current reporting basis for the headline above. The Fact Desk is keeping the claim attributed to that publisher until another independent report or a primary record supports it.",
-      "whyItMatters": "Changes in inflation expectations or central-bank policy can quickly affect borrowing costs, currencies, bonds, equities, housing, and household finances. The market impact depends on what policymakers actually signal or do next.",
-      "category": "Markets",
-      "confidence": "Single-source",
-      "signal": "Developing",
-      "sources": [
-        "NPR"
-      ],
-      "sourceUrls": [
-        "https://www.npr.org/2026/08/28/nx-s1-5947903/federal-reserve-inflation-jackson-hole-interest-rates"
-      ],
-      "publishedAt": "2026-08-28T16:05:40.000Z",
-      "updatedAt": "2026-08-28T16:05:40.000Z",
-      "tags": [
-        "live-rss",
-        "npr",
-        "viewpoint:left-of-center"
-      ],
-      "headlineSource": "NPR",
-      "briefingBasis": "source-headline",
-      "coverageAngle": "Source-reported headline with an independently written Fact Desk briefing. The publisher's RSS description is not republished."
-    },
-    {
-      "id": "live-trump-says-u-s-struck-deal-to-take-control-of-65-billion-barrels-venezue-aHR0cHM6",
-      "slug": "trump-says-u-s-struck-deal-to-take-control-of-65-billion-barrels-venezue-aHR0cHM6",
-      "title": "Trump says U.S. struck deal to take control of 65 billion barrels Venezuelan oil",
-      "summary": "NPR is reporting this politics development. This can affect prices, supply chains, energy costs, trade flows, and financial markets.",
-      "whatHappened": "NPR is the current reporting basis for the headline above. The Fact Desk is keeping the claim attributed to that publisher until another independent report or a primary record supports it.",
-      "whyItMatters": "This can affect prices, supply chains, energy costs, trade flows, and financial markets. The practical impact depends on the scope, duration, and whether governments or companies respond with additional measures.",
-      "category": "Politics",
-      "confidence": "Single-source",
-      "signal": "Developing",
-      "sources": [
-        "NPR"
-      ],
-      "sourceUrls": [
-        "https://www.npr.org/2026/08/31/nx-s1-5949305/trump-says-u-s-struck-deal-to-take-control-of-65-billion-barrels-venezuelan-oil"
-      ],
-      "publishedAt": "2026-08-31T10:49:12.000Z",
-      "updatedAt": "2026-08-31T10:49:12.000Z",
-      "tags": [
-        "live-rss",
-        "npr",
-        "viewpoint:left-of-center"
-      ],
-      "headlineSource": "NPR",
-      "briefingBasis": "source-headline",
-      "coverageAngle": "Source-reported headline with an independently written Fact Desk briefing. The publisher's RSS description is not republished."
-    },
-    {
-      "id": "live-scholar-discusses-trump-s-claims-of-a-new-venezuelan-oil-agreement-aHR0cHM6",
-      "slug": "scholar-discusses-trump-s-claims-of-a-new-venezuelan-oil-agreement-aHR0cHM6",
-      "title": "Scholar discusses Trump's claims of a new Venezuelan oil agreement",
-      "summary": "NPR is reporting this politics development. This can affect prices, supply chains, energy costs, trade flows, and financial markets.",
-      "whatHappened": "NPR is the current reporting basis for the headline above. The Fact Desk is keeping the claim attributed to that publisher until another independent report or a primary record supports it.",
-      "whyItMatters": "This can affect prices, supply chains, energy costs, trade flows, and financial markets. The practical impact depends on the scope, duration, and whether governments or companies respond with additional measures.",
-      "category": "Politics",
-      "confidence": "Single-source",
-      "signal": "Developing",
-      "sources": [
-        "NPR"
-      ],
-      "sourceUrls": [
-        "https://www.npr.org/2026/08/31/nx-s1-5949309/scholar-discusses-trumps-claims-of-a-new-venezuelan-oil-agreement"
-      ],
-      "publishedAt": "2026-08-31T10:49:08.000Z",
-      "updatedAt": "2026-08-31T10:49:08.000Z",
-      "tags": [
-        "live-rss",
-        "npr",
-        "viewpoint:left-of-center"
-      ],
-      "headlineSource": "NPR",
-      "briefingBasis": "source-headline",
-      "coverageAngle": "Source-reported headline with an independently written Fact Desk briefing. The publisher's RSS description is not republished."
-    },
-    {
-      "id": "live-russia-s-jet-powered-drones-bring-empty-kyiv-supermarket-shelves-and-rat-aHR0cHM6",
-      "slug": "russia-s-jet-powered-drones-bring-empty-kyiv-supermarket-shelves-and-rat-aHR0cHM6",
-      "title": "Russia's jet-powered drones bring empty Kyiv supermarket shelves and rattle Ukrainians",
-      "summary": "NPR is reporting this international development. This may affect public policy, security, economic conditions, or people directly involved.",
-      "whatHappened": "NPR is the current reporting basis for the headline above. The Fact Desk is keeping the claim attributed to that publisher until another independent report or a primary record supports it.",
-      "whyItMatters": "This may affect public policy, security, economic conditions, or people directly involved. The significance depends on what changes next and whether additional sources confirm the early account.",
+      "id": "live-homeland-security-has-spawned-political-insecurity-since-dhs-was-born-aHR0cHM6",
+      "slug": "homeland-security-has-spawned-political-insecurity-since-dhs-was-born-aHR0cHM6",
+      "title": "'Homeland Security' has spawned political insecurity since DHS was born",
+      "summary": "DHS was originally conceived in the interest of unity and harmony — and the phrase \"homeland security\" was originally meant to be reassuring.",
+      "whatHappened": "'Homeland Security' has spawned political insecurity since DHS was born. DHS was originally conceived in the interest of unity and harmony — and the phrase \"homeland security\" was originally meant to be reassuring.",
+      "whyItMatters": "This story is newly ingested and has not yet been fully analyzed.",
       "category": "World",
       "confidence": "Single-source",
       "signal": "Developing",
@@ -232,126 +154,267 @@
         "NPR"
       ],
       "sourceUrls": [
-        "https://www.npr.org/2026/08/31/g-s1-141181/russia-ukraine-war"
+        "https://www.npr.org/2026/05/24/nx-s1-5821574/homeland-security-dhs-history"
       ],
-      "publishedAt": "2026-08-31T10:24:25.000Z",
-      "updatedAt": "2026-08-31T10:24:25.000Z",
+      "publishedAt": "2026-05-24T09:00:00.000Z",
+      "updatedAt": "2026-05-24T09:00:00.000Z",
       "tags": [
         "live-rss",
-        "npr",
-        "viewpoint:left-of-center"
-      ],
-      "headlineSource": "NPR",
-      "briefingBasis": "source-headline",
-      "coverageAngle": "Source-reported headline with an independently written Fact Desk briefing. The publisher's RSS description is not republished."
+        "npr"
+      ]
     },
     {
-      "id": "live-apod-2026-august-31-launch-of-the-roman-space-telescope-aHR0cHM6",
-      "slug": "apod-2026-august-31-launch-of-the-roman-space-telescope-aHR0cHM6",
-      "title": "APOD: 2026 August 31 – Launch of the Roman Space Telescope",
-      "summary": "NASA is reporting this energy development. This may affect energy supply, infrastructure, costs, or long-term capacity.",
-      "whatHappened": "NASA is the current reporting basis for the headline above. The Fact Desk is keeping the claim attributed to that publisher until another independent report or a primary record supports it.",
-      "whyItMatters": "This may affect energy supply, infrastructure, costs, or long-term capacity. The significance depends on scale, timing, and whether the change alters real-world production or reliability.",
-      "category": "Energy",
-      "confidence": "Single-source",
-      "signal": "Under-covered",
-      "sources": [
-        "NASA"
-      ],
-      "sourceUrls": [
-        "https://science.nasa.gov/image-article/apod-2026-august-31-launch-of-the-roman-space-telescope/"
-      ],
-      "publishedAt": "2026-08-31T04:05:00.000Z",
-      "updatedAt": "2026-08-31T04:05:00.000Z",
-      "tags": [
-        "live-rss",
-        "nasa",
-        "viewpoint:primary-source"
-      ],
-      "headlineSource": "NASA",
-      "briefingBasis": "source-headline",
-      "coverageAngle": "Source-reported headline with an independently written Fact Desk briefing. The publisher's RSS description is not republished."
-    },
-    {
-      "id": "live-ribbon-cutting-event-for-nasa-deep-space-network-s-deep-space-station-23-aHR0cHM6",
-      "slug": "ribbon-cutting-event-for-nasa-deep-space-network-s-deep-space-station-23-aHR0cHM6",
-      "title": "Ribbon-Cutting Event for NASA Deep Space Network’s Deep Space Station 23",
-      "summary": "NASA is reporting this energy development. This may affect energy supply, infrastructure, costs, or long-term capacity.",
-      "whatHappened": "NASA is the current reporting basis for the headline above. The Fact Desk is keeping the claim attributed to that publisher until another independent report or a primary record supports it.",
-      "whyItMatters": "This may affect energy supply, infrastructure, costs, or long-term capacity. The significance depends on scale, timing, and whether the change alters real-world production or reliability.",
-      "category": "Energy",
-      "confidence": "Single-source",
-      "signal": "Under-covered",
-      "sources": [
-        "NASA"
-      ],
-      "sourceUrls": [
-        "https://science.nasa.gov/photojournal/ribbon-cutting-event-for-nasa-deep-space-networks-deep-space-station-23/"
-      ],
-      "publishedAt": "2026-08-30T14:53:08.000Z",
-      "updatedAt": "2026-08-30T14:57:59.000Z",
-      "tags": [
-        "live-rss",
-        "nasa",
-        "viewpoint:primary-source"
-      ],
-      "headlineSource": "NASA",
-      "briefingBasis": "source-headline",
-      "coverageAngle": "Source-reported headline with an independently written Fact Desk briefing. The publisher's RSS description is not republished."
-    },
-    {
-      "id": "live-the-u-s-venezuela-oil-deal-won-t-lower-your-gas-prices-here-s-what-you-n-aHR0cHM6",
-      "slug": "the-u-s-venezuela-oil-deal-won-t-lower-your-gas-prices-here-s-what-you-n-aHR0cHM6",
-      "title": "The U.S. Venezuela oil deal won't lower your gas prices. Here's what you need to know",
-      "summary": "NPR is reporting this politics development. This can affect prices, supply chains, energy costs, trade flows, and financial markets.",
-      "whatHappened": "NPR is the current reporting basis for the headline above. The Fact Desk is keeping the claim attributed to that publisher until another independent report or a primary record supports it.",
-      "whyItMatters": "This can affect prices, supply chains, energy costs, trade flows, and financial markets. The practical impact depends on the scope, duration, and whether governments or companies respond with additional measures.",
-      "category": "Politics",
+      "id": "live-torn-by-war-israelis-and-palestinians-tie-their-fortunes-together-aHR0cHM6",
+      "slug": "torn-by-war-israelis-and-palestinians-tie-their-fortunes-together-aHR0cHM6",
+      "title": "Torn by war, Israelis and Palestinians tie their fortunes together",
+      "summary": "At a time when hopes are dim for resolving the Israeli-Palestinian conflict, some Arab and Jewish entrepreneurs are partnering across the divide, hoping to prove what's possible.",
+      "whatHappened": "Torn by war, Israelis and Palestinians tie their fortunes together. At a time when hopes are dim for resolving the Israeli-Palestinian conflict, some Arab and Jewish entrepreneurs are partnering across the divide, hoping to prove what's possible.",
+      "whyItMatters": "This story is newly ingested and has not yet been fully analyzed.",
+      "category": "World",
       "confidence": "Single-source",
       "signal": "Developing",
       "sources": [
         "NPR"
       ],
       "sourceUrls": [
-        "https://www.npr.org/2026/08/31/nx-s1-5949407/us-venezuelan-oil-deal"
+        "https://www.npr.org/2026/05/24/nx-s1-5806030/palestinian-israeli-startups-50-50-northeastern"
       ],
-      "publishedAt": "2026-08-31T09:00:00.000Z",
-      "updatedAt": "2026-08-31T09:00:00.000Z",
+      "publishedAt": "2026-05-24T09:00:00.000Z",
+      "updatedAt": "2026-05-24T09:00:00.000Z",
       "tags": [
         "live-rss",
-        "npr",
-        "viewpoint:left-of-center"
-      ],
-      "headlineSource": "NPR",
-      "briefingBasis": "source-headline",
-      "coverageAngle": "Source-reported headline with an independently written Fact Desk briefing. The publisher's RSS description is not republished."
+        "npr"
+      ]
     },
     {
-      "id": "live-minutes-of-the-board-s-discount-rate-meetings-on-july-20-and-july-29-202-aHR0cHM6",
-      "slug": "minutes-of-the-board-s-discount-rate-meetings-on-july-20-and-july-29-202-aHR0cHM6",
-      "title": "Minutes of the Board's discount rate meetings on July 20 and July 29, 2026",
-      "summary": "Federal Reserve is reporting this markets development. This may affect prices, investment expectations, company decisions, or household finances.",
-      "whatHappened": "Federal Reserve is the current reporting basis for the headline above. The Fact Desk is keeping the claim attributed to that publisher until another independent report or a primary record supports it.",
-      "whyItMatters": "This may affect prices, investment expectations, company decisions, or household finances. The size of the impact depends on whether the development changes policy, demand, supply, or risk expectations.",
-      "category": "Markets",
+      "id": "live-the-enhanced-games-are-sunday-here-s-what-to-know-about-the-controversia-aHR0cHM6",
+      "slug": "the-enhanced-games-are-sunday-here-s-what-to-know-about-the-controversia-aHR0cHM6",
+      "title": "The Enhanced Games are Sunday. Here's what to know about the controversial event",
+      "summary": "Dozens of athletes — including former Olympians — will participate in the Las Vegas event while using performance-enhancing drugs.",
+      "whatHappened": "The Enhanced Games are Sunday. Here's what to know about the controversial event. Dozens of athletes — including former Olympians — will participate in the Las Vegas event while using performance-enhancing drugs.",
+      "whyItMatters": "This story is newly ingested and has not yet been fully analyzed.",
+      "category": "World",
       "confidence": "Single-source",
       "signal": "Developing",
       "sources": [
-        "Federal Reserve"
+        "NPR"
       ],
       "sourceUrls": [
-        "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260825a.htm"
+        "https://www.npr.org/2026/05/24/nx-s1-5831252/enhanced-games-steroids-olympics-trump"
       ],
-      "publishedAt": "2026-08-25T18:00:00.000Z",
-      "updatedAt": "2026-08-25T18:00:00.000Z",
+      "publishedAt": "2026-05-24T09:00:00.000Z",
+      "updatedAt": "2026-05-24T09:00:00.000Z",
       "tags": [
         "live-rss",
-        "federal-reserve",
-        "viewpoint:primary-source"
+        "npr"
+      ]
+    },
+    {
+      "id": "live-man-killed-in-shark-attack-off-australia-s-north-east-coast-aHR0cHM6",
+      "slug": "man-killed-in-shark-attack-off-australia-s-north-east-coast-aHR0cHM6",
+      "title": "Man killed in shark attack off Australia's north-east coast",
+      "summary": "The 39-year-old was fatally injured while swimming out at a shoal off the Cassowary Coast in Queensland.",
+      "whatHappened": "Man killed in shark attack off Australia's north-east coast. The 39-year-old was fatally injured while swimming out at a shoal off the Cassowary Coast in Queensland.",
+      "whyItMatters": "This story is newly ingested and has not yet been fully analyzed.",
+      "category": "World",
+      "confidence": "Single-source",
+      "signal": "Developing",
+      "sources": [
+        "BBC World"
       ],
-      "headlineSource": "Federal Reserve",
-      "briefingBasis": "source-headline",
-      "coverageAngle": "Source-reported headline with an independently written Fact Desk briefing. The publisher's RSS description is not republished."
+      "sourceUrls": [
+        "https://www.bbc.com/news/articles/cn9pq5l2d14o?at_medium=RSS&at_campaign=rss"
+      ],
+      "publishedAt": "2026-05-24T07:12:37.000Z",
+      "updatedAt": "2026-05-24T07:12:37.000Z",
+      "tags": [
+        "live-rss",
+        "bbc-world"
+      ]
+    },
+    {
+      "id": "live-suspect-killed-after-opening-fire-on-secret-service-near-white-house-aHR0cHM6",
+      "slug": "suspect-killed-after-opening-fire-on-secret-service-near-white-house-aHR0cHM6",
+      "title": "Suspect killed after opening fire on Secret Service near White House",
+      "summary": "Officials say a suspect approached a checkpoint near the building and opened fire, and that a bystander was wounded.",
+      "whatHappened": "Suspect killed after opening fire on Secret Service near White House. Officials say a suspect approached a checkpoint near the building and opened fire, and that a bystander was wounded.",
+      "whyItMatters": "This story is newly ingested and has not yet been fully analyzed.",
+      "category": "World",
+      "confidence": "Single-source",
+      "signal": "Developing",
+      "sources": [
+        "BBC World"
+      ],
+      "sourceUrls": [
+        "https://www.bbc.com/news/articles/cjwp82ye4y3o?at_medium=RSS&at_campaign=rss"
+      ],
+      "publishedAt": "2026-05-24T06:15:32.000Z",
+      "updatedAt": "2026-05-24T06:15:32.000Z",
+      "tags": [
+        "live-rss",
+        "bbc-world"
+      ]
+    },
+    {
+      "id": "live-why-the-stakes-are-so-high-in-spurs-and-west-ham-s-relegation-shootout-aHR0cHM6",
+      "slug": "why-the-stakes-are-so-high-in-spurs-and-west-ham-s-relegation-shootout-aHR0cHM6",
+      "title": "Why the stakes are so high in Spurs and West Ham's relegation shootout",
+      "summary": "Why the stakes could not be higher in Tottenham and West Ham's relegation shootout.",
+      "whatHappened": "Why the stakes are so high in Spurs and West Ham's relegation shootout. Why the stakes could not be higher in Tottenham and West Ham's relegation shootout.",
+      "whyItMatters": "This story is newly ingested and has not yet been fully analyzed.",
+      "category": "World",
+      "confidence": "Single-source",
+      "signal": "Developing",
+      "sources": [
+        "BBC News"
+      ],
+      "sourceUrls": [
+        "https://www.bbc.com/sport/football/articles/cpqpyprner9o?at_medium=RSS&at_campaign=rss"
+      ],
+      "publishedAt": "2026-05-24T05:15:37.000Z",
+      "updatedAt": "2026-05-24T05:15:37.000Z",
+      "tags": [
+        "live-rss",
+        "bbc-news"
+      ]
+    },
+    {
+      "id": "live-midnight-sun-derland-zara-larsson-electrifies-the-crowd-at-big-weekend-aHR0cHM6",
+      "slug": "midnight-sun-derland-zara-larsson-electrifies-the-crowd-at-big-weekend-aHR0cHM6",
+      "title": "Midnight Sun-derland: Zara Larsson electrifies the crowd at Big Weekend",
+      "summary": "The Swedish pop star treated the crowds to back-to-back, high-energy pop bangers on day two of the festival.",
+      "whatHappened": "Midnight Sun-derland: Zara Larsson electrifies the crowd at Big Weekend. The Swedish pop star treated the crowds to back-to-back, high-energy pop bangers on day two of the festival.",
+      "whyItMatters": "This story is newly ingested and has not yet been fully analyzed.",
+      "category": "World",
+      "confidence": "Single-source",
+      "signal": "Developing",
+      "sources": [
+        "BBC News"
+      ],
+      "sourceUrls": [
+        "https://www.bbc.com/news/articles/c4g07gdzneno?at_medium=RSS&at_campaign=rss"
+      ],
+      "publishedAt": "2026-05-23T22:34:14.000Z",
+      "updatedAt": "2026-05-23T22:34:14.000Z",
+      "tags": [
+        "live-rss",
+        "bbc-news"
+      ]
+    },
+    {
+      "id": "live-cisa-adds-one-known-exploited-vulnerability-to-catalog-aHR0cHM6",
+      "slug": "cisa-adds-one-known-exploited-vulnerability-to-catalog-aHR0cHM6",
+      "title": "CISA Adds One Known Exploited Vulnerability to Catalog",
+      "summary": "CISA has added one new vulnerability to its Known Exploited Vulnerabilities (KEV) Catalog , based on evidence of active exploitation. CVE-2026-9082 Drupal Core SQL Injection Vulnerability This type of vulnerability is…",
+      "whatHappened": "CISA Adds One Known Exploited Vulnerability to Catalog. CISA has added one new vulnerability to its Known Exploited Vulnerabilities (KEV) Catalog , based on evidence of active exploitation. CVE-2026-9082 Drupal Core SQL Injection Vulnerability This type of vulnerability is a frequent attack vector for malicious cyber actors and poses significant risks to the federal enterprise. Binding Operational Directive (BOD) 22-01: Reducing the Significant Risk of Known Exploited Vulnerabilities established the KEV Catalog as a living list of known Common Vulnerabilities and Exposures (CVEs) that carry significant risk to the federal enterprise. BOD 22-01 requires Federal Civilian Executive Branch (FCEB) agencies to remediate identified vulnerabilities by the due date to protect FCEB networks against active threats. See the BOD 22-01 Fact Sheet for more information. Although BOD 22-01 only applies to FCEB agencies, CISA strongly urges all organizations to reduce their exposure to cyberattacks by prioritizing timely remediation of KEV Catalog vulnerabilities as part of their vulnerability management practice. CISA will continue to add vulnerabilities to the catalog that meet the specified criteria .",
+      "whyItMatters": "This story is newly ingested and has not yet been fully analyzed.",
+      "category": "Technology",
+      "confidence": "Single-source",
+      "signal": "Developing",
+      "sources": [
+        "CISA"
+      ],
+      "sourceUrls": [
+        "https://www.cisa.gov/news-events/alerts/2026/05/22/cisa-adds-one-known-exploited-vulnerability-catalog"
+      ],
+      "publishedAt": "2026-05-22T12:00:00.000Z",
+      "updatedAt": "2026-05-22T12:00:00.000Z",
+      "tags": [
+        "live-rss",
+        "cisa"
+      ]
+    },
+    {
+      "id": "live-abb-b-r-automation-studio-aHR0cHM6",
+      "slug": "abb-b-r-automation-studio-aHR0cHM6",
+      "title": "ABB B&R Automation Studio",
+      "summary": "View CSAF Summary ABB became aware of vulnerability in the product versions listed as affected in the advisory. An update is available that replaces an outdated third-party component. Although no successful exploitati…",
+      "whatHappened": "ABB B&R Automation Studio. View CSAF Summary ABB became aware of vulnerability in the product versions listed as affected in the advisory. An update is available that replaces an outdated third-party component. Although no successful exploitation was observed during testing of the affected B&R products, the identified vulnerabilities could present potential attack vectors that might enable unauthorized access, data exposure, or remote code execution. The following versions of ABB B&R Automation Studio are affected: B&R Automation Studio <6.5, 6.5 (CVE-2025-6965, CVE-2025-3277, CVE-2023-7104, CVE-2022-35737, CVE-2020-15358, CVE-2020-13632, CVE-2020-13631, CVE-2020-13630, CVE-2020-13435, CVE-2020-13434, CVE-2020-11656, CVE-2020-11655, CVE-2019-19646, CVE-2019-19645, CVE-2019-8457, CVE-2018-20506, CVE-2018-20505, CVE-2018-20346, CVE-2018-8740, CVE-2017-10989, CVE-2016-6153, CVE-2015-6607, CVE-2015-5895, CVE-2015-3717, CVE-2015-3416) CVSS Vendor Equipment Vulnerabilities v3 9.8 ABB ABB B&R Automation Studio Numeric Truncation Error, Heap-based Buffer Overflow, Improper Restriction of Operations within the Bounds of a Memory Buffer, Out-of-bounds Write, NULL Pointer Dereference, Incorrect User Management, Use After Free, Integer Overflow or Wraparound, Improper Check for Unusual or Exceptional Conditions, Uncontrolled Recursion, Out-of-bounds Read, Improper Input Validation, Exposure of Sensitive Information to an Unauthorized Actor, Buffer Copy without Checking Size of Input (&#039;Classic Buffer Overflow&#039;) Background Critical Infrastructure Sectors: Energy Countries/Areas Deployed: Worldwide Company Headquarters Location: Switzerland Vulnerabilities Expand All + CVE-2025-6965 There exists a vulnerability in SQLite versions before 3.50.2 where the number of aggregate terms could exceed the number of columns available. This could lead to a memory corruption issue. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-197 Numeric Truncation Error Metrics CVSS Version Base Score Base Severity Vector String 3.1 9.8 CRITICAL CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:P/RL:O/RC:C CVE-2025-3277 An integer overflow vulnerability exists in SQLite&#039;s concat_ws() function that can lead to a massive heap buffer overflow. When triggered, the integer overflow results in a truncated size value being used for buffer allocation, while the original untruncated size is used for writing the resulting string, causing a heap buffer overflow of approximately 4GB. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-122 Heap-based Buffer Overflow Metrics CVSS Version Base Score Base Severity Vector String 3.1 9.8 CRITICAL CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:P/RL:O/RC:C CVE-2023-7104 A vulnerability was found in SQLite SQLite3 up to 3.43.0 and classified as critical. This issue affects the function sessionReadRecord of the file ext/session/sqlite3session.c of the component make alltest Handler. The manipulation leads to heap-based buffer overflow. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-122 Heap-based Buffer Overflow Metrics CVSS Version Base Score Base Severity Vector String 3.1 7.3 HIGH CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L/E:P/RL:O/RC:C CVE-2022-35737 SQLite 1.0.12 through 3.39.x before 3.39.2 sometimes allows an array-bounds overflow if billions of bytes are used in a string argument to a C API. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-119 Improper Restriction of Operations within the Bounds of a Memory Buffer Metrics CVSS Version Base Score Base Severity Vector String 3.1 7.5 HIGH CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P/RL:O/RC:C CVE-2020-15358 In SQLite before 3.32.3, select.c mishandles query-flattener optimization, leading to a multiSelectOrderBy heap overflow because of misuse of transitive properties for constant propagation. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-787 Out-of-bounds Write Metrics CVSS Version Base Score Base Severity Vector String 3.1 5.5 MEDIUM CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H/E:P/RL:O/RC:C CVE-2020-13632 There exists a vulnerability in SQLite versions before 3.50.2 where the number of aggregate terms could exceed the number of columns available. This could lead to a memory corruption issue. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-476 NULL Pointer Dereference Metrics CVSS Version Base Score Base Severity Vector String 3.0 5.5 MEDIUM CVSS:3.0/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H/E:P/RL:O/RC:C CVE-2020-13631 SQLite before 3.32.0 allows a virtual table to be renamed to the name of one of its shadow tables, related to alter.c and build.c. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-286 Incorrect User Management Metrics CVSS Version Base Score Base Severity Vector String 3.1 5.5 MEDIUM CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N/E:P/RL:O/RC:C CVE-2020-13630 ext/fts3/fts3.c in SQLite before 3.32.0 has a use-after-free in fts3EvalNextRow, related to the snippet feature. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-416 Use After Free Metrics CVSS Version Base Score Base Severity Vector String 3.0 7 HIGH CVSS:3.0/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H/E:P/RL:O/RC:C CVE-2020-13435 SQLite through 3.32.0 has a segmentation fault in sqlite3ExprCodeTarget in expr.c. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-476 NULL Pointer Dereference Metrics CVSS Version Base Score Base Severity Vector String 3.1 7.5 HIGH CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P/RL:O/RC:C CVE-2020-13434 SQLite through 3.32.0 has an integer overflow in sqlite3_str_vappendf in printf.c. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-190 Integer Overflow or Wraparound Metrics CVSS Version Base Score Base Severity Vector String 3.0 5.5 MEDIUM CVSS:3.0/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H/E:P/RL:O/RC:C CVE-2020-11656 In SQLite through 3.31.1, the ALTER TABLE implementation has a use-after-free, as demonstrated by an ORDER BY clause that belongs to a compound SELECT statement. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-416 Use After Free Metrics CVSS Version Base Score Base Severity Vector String 3.1 7.5 HIGH CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P/RL:O/RC:C CVE-2020-11655 SQLite through 3.31.1 allows attackers to cause a denial of service (segmentation fault) via a malformed window-function query because the AggInfo object&#039;s initialization is mishandled. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-754 Improper Check for Unusual or Exceptional Conditions Metrics CVSS Version Base Score Base Severity Vector String 3.1 7.5 HIGH CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P/RL:O/RC:C CVE-2019-19646 pragma.c in SQLite through 3.30.1 mishandles NOT NULL in an integrity_check PRAGMA command in certain cases of generated columns. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-754 Improper Check for Unusual or Exceptional Conditions Metrics CVSS Version Base Score Base Severity Vector String 3.1 9.8 CRITICAL CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:P/RL:O/RC:C CVE-2019-19645 alter.c in SQLite through 3.30.1 allows attackers to trigger infinite recursion via certain types of self-referential views in conjunction with ALTER TABLE statements. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-674 Uncontrolled Recursion Metrics CVSS Version Base Score Base Severity Vector String 3.1 5.5 MEDIUM CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H/E:P/RL:O/RC:C CVE-2019-8457 SQLite3 from 3.6.0 to and including 3.27.2 is vulnerable to heap out-of-bound read in the rtreenode() function when handling invalid rtree tables. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-125 Out-of-bounds Read Metrics CVSS Version Base Score Base Severity Vector String 3.1 9.8 CRITICAL CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:P/RL:O/RC:C CVE-2018-20506 SQLite before 3.25.3, when the FTS3 extension is enabled, encounters an integer overflow (and resultant buffer overflow) for FTS3 queries in a \"merge\" operation that occurs after crafted changes to FTS3 shadow tables, allow-ing remote attackers to execute arbitrary code by leveraging the ability to run arbitrary SQL statements (such as in certain WebSQL use cases). This is a different vulnerability than CVE-2018-20346. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-190 Integer Overflow or Wraparound Metrics CVSS Version Base Score Base Severity Vector String 3.0 8.1 HIGH CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H/E:P/RL:O/RC:C CVE-2018-20505 SQLite 3.25.2, when queries are run on a table with a malformed PRIMARY KEY, allows remote attackers to cause a denial of service (application crash) by leveraging the ability to run arbitrary SQL statements (such as in certain WebSQL use cases). View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-20 Improper Input Validation Metrics CVSS Version Base Score Base Severity Vector String 3.0 7.5 HIGH CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P/RL:O/RC:C CVE-2018-20346 SQLite before 3.25.3, when the FTS3 extension is enabled, encounters an integer overflow (and resultant buffer overflow) for FTS3 queries that occur after crafted changes to FTS3 shadow tables, allowing remote attackers to execute arbitrary code by leveraging the ability to run arbitrary SQL statements (such as in certain WebSQL use cases), aka Magellan. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-190 Integer Overflow or Wraparound Metrics CVSS Version Base Score Base Severity Vector String 3.0 8.1 HIGH CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H/E:P/RL:O/RC:C CVE-2018-8740 In SQLite through 3.22.0, databases whose schema is corrupted using a CREATE TABLE AS statement could cause a NULL pointer dereference, related to build.c and prepare.c. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-476 NULL Pointer Dereference Metrics CVSS Version Base Score Base Severity Vector String 3.0 7.5 HIGH CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P/RL:O/RC:C CVE-2017-10989 The getNodeSize function in ext/rtree/rtree.c in SQLite through 3.19.3, as used in GDAL and other products, mis-handles undersized RTree blobs in a crafted database, leading to a heap-based buffer over-read or possibly un-specified other impact. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-125 Out-of-bounds Read Metrics CVSS Version Base Score Base Severity Vector String 3.0 9.8 CRITICAL CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:P/RL:O/RC:C CVE-2016-6153 There exists a vulnerability in SQLite versions before 3.50.2 where the number of aggregate terms could exceed the number of columns available. This could lead to a memory corruption issue. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-20 Improper Input Validation Metrics CVSS Version Base Score Base Severity Vector String 3.0 5.9 MEDIUM CVSS:3.0/AV:L/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L/E:P/RL:O/RC:C CVE-2015-6607 SQLite before 3.8.9, as used in Android before 5.1.1 LMY48T, allows attackers to gain privileges via a crafted application, aka internal bug 20099586. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-286 Incorrect User Management Metrics CVSS Version Base Score Base Severity Vector String 3.0 3.7 LOW CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N/E:P/RL:O/RC:C CVE-2015-5895 Multiple unspecified vulnerabilities in SQLite before 3.8.10.2, as used in Apple iOS before 9, have unknown im-pact and attack vectors. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-200 Exposure of Sensitive Information to an Unauthorized Actor Metrics CVSS Version Base Score Base Severity Vector String 3.1 9.8 CRITICAL CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:P/RL:O/RC:C CVE-2015-3717 Multiple buffer overflows in the printf functionality in SQLite, as used in Apple iOS before 8.4 and OS X before 10.10.4, allow remote attackers to execute arbitrary code or cause a denial of service (application crash) via un-specified vectors. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-120 Buffer Copy without Checking Size of Input (&#039;Classic Buffer Overflow&#039;) Metrics CVSS Version Base Score Base Severity Vector String 3.0 7.5 HIGH CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P/RL:O/RC:C CVE-2015-3416 The sqlite3VXPrintf function in printf.c in SQLite before 3.8.9 does not properly handle precision and width values during floating-point conversions, which allows context-dependent attackers to cause a denial of service (integer overflow and stack-based buffer overflow) or possibly have unspecified other impact via large integers in a crafted printf function call in a SELECT statement. View CVE Details Affected Products ABB B&R Automation Studio Vendor: ABB Product Version: ABB B&R Automation Studio <6.5 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product versions: B&R Automation Studio 6.5 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Refer to section “General security recommendations” for advice on how to keep your system secure. Relevant CWE: CWE-190 Integer Overflow or Wraparound Metrics CVSS Version Base Score Base Severity Vector String 3.0 7.8 HIGH CVSS:3.0/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H/E:P/RL:O/RC:C Acknowledgments ABB PSIRT reported these vulnerabilities to CISA. Notice The information in this document is subject to change without notice, and should not be construed as a commitment by B&R. B&R provides no warranty, express or implied, including warranties of merchantability and fitness for a particular purpose, for the information contained in this document, and assumes no responsibility for any errors that may appear in this document. In no event shall B&R or any of its suppliers be liable for direct, indirect, special, incidental or consequential damages of any nature or kind arising from the use of this document, or from the use of any hardware or software described in this document, even if B&R or its suppliers have been advised of the possibility of such damages. This document and parts hereof must not be reproduced or copied without written permission from B&R, and the contents hereof must not be imparted to a third party nor used for any unauthorized purpose. All rights to registrations and trademarks reside with their respective owners. Legal Notice and Terms of Use This product is provided subject to this Notification (https://www.cisa.gov/notification) and this Privacy & Use policy (https://www.cisa.gov/privacy-policy). Recommended Practices CISA recommends users take defensive measures to minimize the exploitation risk of this vulnerability. Minimize network exposure for all control system devices and/or systems, and ensure they are not accessible from the internet. Locate control system networks and remote devices behind firewalls and isolate them from business networks. When remote access is required, use more secure methods, such as Virtual Private Networks (VPNs), recognizing VPNs may have vulnerabilities and should be updated to the most recent version available. Also recognize VPN is only as secure as its connected devices. CISA reminds organizations to perform proper impact analysis and risk assessment prior to deploying defensive measures. CISA also provides a section for control systems security recommended practices on the ICS webpage on cisa.gov. Several CISA products detailing cyber defense best practices are available for reading and download, including Improving Industrial Control Systems Cybersecurity with Defense-in-Depth Strategies. CISA encourages organizations to implement recommended cybersecurity strategies for proactive defense of ICS assets. Additional mitigation guidance and recommended practices are publicly available on the ICS webpage at cisa.gov in the technical information paper, ICS-TIP-12-146-01B--Targeted Cyber Intrusion Detection and Mitigation Strategies. Organizations observing suspected malicious activity should follow established internal procedures and report findings to CISA for tracking and correlation against other incidents. Advisory Conversion Disclaimer This ICSA is a verbatim republication of ABB PSIRT SA25P007 from a direct conversion of the vendor&#039;s Common Security Advisory Framework (CSAF) advisory. This is republished to CISA&#039;s website as a means of increasing visibility and is provided \"as-is\" for informational purposes only. CISA is not responsible for the editorial or technical accuracy of republished advisories and provides no warranties of any kind regarding any information contained within this advisory. Further, CISA does not endorse any commercial product or service. Please contact ABB PSIRT directly for any questions regarding this advisory. Revision History Initial Release Date: 2026-02-18 Date Revision Summary 2026-02-18 1 Initial version. 2026-05-21 2 Initial CISA Republication of ABB PSIRT SA25P007 advisory Legal Notice and Terms of Use",
+      "whyItMatters": "This story is newly ingested and has not yet been fully analyzed.",
+      "category": "Technology",
+      "confidence": "Single-source",
+      "signal": "Developing",
+      "sources": [
+        "CISA"
+      ],
+      "sourceUrls": [
+        "https://www.cisa.gov/news-events/ics-advisories/icsa-26-141-03"
+      ],
+      "publishedAt": "2026-05-21T12:00:00.000Z",
+      "updatedAt": "2026-05-21T12:00:00.000Z",
+      "tags": [
+        "live-rss",
+        "cisa"
+      ]
+    },
+    {
+      "id": "live-abb-terra-ac-wallbox-aHR0cHM6",
+      "slug": "abb-terra-ac-wallbox-aHR0cHM6",
+      "title": "ABB Terra AC Wallbox",
+      "summary": "View CSAF Summary ABB is aware of vulnerabilities in the product versions listed as affected in the advisory. An attacker who successfully exploited this vulnerability could cause the pollution of heap memory which po…",
+      "whatHappened": "ABB Terra AC Wallbox. View CSAF Summary ABB is aware of vulnerabilities in the product versions listed as affected in the advisory. An attacker who successfully exploited this vulnerability could cause the pollution of heap memory which potentially takes remote control of the product and performs a write operation to the flash memory to alter the firmware behavior. The following versions of ABB Terra AC Wallbox are affected: Terra AC wallbox (JP) <=1.8.33, 1.8.36 (CVE-2025-10504, CVE-2025-12142, CVE-2025-12143) CVSS Vendor Equipment Vulnerabilities v3 6.1 ABB ABB Terra AC Wallbox Heap-based Buffer Overflow, Buffer Copy without Checking Size of Input (&#039;Classic Buffer Overflow&#039;), Stack-based Buffer Overflow Background Critical Infrastructure Sectors: Energy Countries/Areas Deployed: Worldwide Company Headquarters Location: Switzerland Vulnerabilities Expand All + CVE-2025-10504 There is potential risk to pollute the memory when developing apps which has used to communicate with charger according to self-defined protocol if developers don’t strictly follow the field length which has not been validated in firmware. View CVE Details Affected Products ABB Terra AC Wallbox Vendor: ABB Product Version: ABB Terra AC wallbox (JP) <=1.8.33 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product version; apply the following update depending on product variant: Terra AC wallbox (JP) 1.8.36 ABB recommends that customers apply the update at earliest convenience. Mitigation To attack with this kind of message, hackers must hijack Bluetooth first and then can send messages. Because the communication messages between BLE and charger have been encrypted. In theory, there is no way to attack the charger. Relevant CWE: CWE-122 Heap-based Buffer Overflow Metrics CVSS Version Base Score Base Severity Vector String 3.1 6.1 MEDIUM CVSS:3.1/AV:A/AC:L/PR:H/UI:N/S:U/C:N/I:H/A:H/E:P/RL:O/RC:C CVE-2025-12142 There is potential risk of polluting the BSS memory when developing apps which are used to communicate with charger via Bluetooth according to self-defined protocol if developers configure an unexpected length of bin files. View CVE Details Affected Products ABB Terra AC Wallbox Vendor: ABB Product Version: ABB Terra AC wallbox (JP) <=1.8.33 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product version; apply the following update depending on product variant: Terra AC wallbox (JP) 1.8.36 ABB recommends that customers apply the update at earliest convenience. Mitigation To attack with this kind of message, hackers must hijack Bluetooth first and then can send messages. Because the communication messages between BLE and charger have been encrypted. In theory, there is no way to attack the charger. Relevant CWE: CWE-120 Buffer Copy without Checking Size of Input (&#039;Classic Buffer Overflow&#039;) Metrics CVSS Version Base Score Base Severity Vector String 3.1 6.1 MEDIUM CVSS:3.1/AV:A/AC:L/PR:H/UI:N/S:U/C:N/I:H/A:H/E:P/RL:O/RC:C CVE-2025-12143 There is potential risk of polluting the stack memory when developing a customized OCPP key of “Ran-domDelay“ in backend and configuring an unexpected number in the field. View CVE Details Affected Products ABB Terra AC Wallbox Vendor: ABB Product Version: ABB Terra AC wallbox (JP) <=1.8.33 Product Status: fixed, known_affected Remediations Vendor fix The problem is corrected in the following product version; apply the following update depending on product variant: Terra AC wallbox (JP) 1.8.36 ABB recommends that customers apply the update at earliest convenience. Mitigation To attack with this kind of message, hackers must hijack Bluetooth first and then can send messages. Because the communication messages between BLE and charger have been encrypted. In theory, there is no way to attack the charger. Relevant CWE: CWE-121 Stack-based Buffer Overflow Metrics CVSS Version Base Score Base Severity Vector String 3.1 6.1 MEDIUM CVSS:3.1/AV:A/AC:L/PR:H/UI:N/S:U/C:N/I:H/A:H/E:P/RL:O/RC:C Acknowledgments ABB PSIRT reported these vulnerabilities to CISA. Notice The information in this document is subject to change without notice, and should not be construed as a commitment by ABB. ABB provides no warranty, express or implied, including warranties of merchantability and fitness for a particular purpose, for the information contained in this document, and assumes no responsibility for any errors that may appear in this document. In no event shall ABB or any of its suppliers be liable for direct, indirect, special, incidental or consequential damages of any nature or kind arising from the use of this document, or from the use of any hardware or software described in this document, even if ABB or its suppliers have been advised of the possibility of such damages. This document and parts hereof must not be reproduced or copied without written permission from ABB, and the contents hereof must not be imparted to a third party nor used for any unauthorized purpose. All rights to registrations and trademarks reside with their respective owners. Legal Notice and Terms of Use This product is provided subject to this Notification (https://www.cisa.gov/notification) and this Privacy & Use policy (https://www.cisa.gov/privacy-policy). Recommended Practices CISA recommends users take defensive measures to minimize the exploitation risk of this vulnerability. Minimize network exposure for all control system devices and/or systems, and ensure they are not accessible from the internet. Locate control system networks and remote devices behind firewalls and isolate them from business networks. When remote access is required, use more secure methods, such as Virtual Private Networks (VPNs), recognizing VPNs may have vulnerabilities and should be updated to the most recent version available. Also recognize VPN is only as secure as its connected devices. CISA reminds organizations to perform proper impact analysis and risk assessment prior to deploying defensive measures. CISA also provides a section for control systems security recommended practices on the ICS webpage on cisa.gov. Several CISA products detailing cyber defense best practices are available for reading and download, including Improving Industrial Control Systems Cybersecurity with Defense-in-Depth Strategies. CISA encourages organizations to implement recommended cybersecurity strategies for proactive defense of ICS assets. Additional mitigation guidance and recommended practices are publicly available on the ICS webpage at cisa.gov in the technical information paper, ICS-TIP-12-146-01B--Targeted Cyber Intrusion Detection and Mitigation Strategies. Organizations observing suspected malicious activity should follow established internal procedures and report findings to CISA for tracking and correlation against other incidents. Advisory Conversion Disclaimer This ICSA is a verbatim republication of ABB PSIRT 9AKK108471A8107 from a direct conversion of the vendor&#039;s Common Security Advisory Framework (CSAF) advisory. This is republished to CISA&#039;s website as a means of increasing visibility and is provided \"as-is\" for informational purposes only. CISA is not responsible for the editorial or technical accuracy of republished advisories and provides no warranties of any kind regarding any information contained within this advisory. Further, CISA does not endorse any commercial product or service. Please contact ABB PSIRT directly for any questions regarding this advisory. Revision History Initial Release Date: 2025-09-16 Date Revision Summary 2025-09-16 1 Initial version. 2025-09-28 2 DocumentID update 2025-09-28 3 Minor corrections 2025-10-09 4 CVSS update 2025-10-27 5 CVE update 2025-11-28 6 CVE update 2025-11-28 7 Fixed Version update 2026-05-21 8 Initial CISA Republication of ABB PSIRT 9AKK108471A8107 advisory Legal Notice and Terms of Use",
+      "whyItMatters": "This story is newly ingested and has not yet been fully analyzed.",
+      "category": "Technology",
+      "confidence": "Single-source",
+      "signal": "Developing",
+      "sources": [
+        "CISA"
+      ],
+      "sourceUrls": [
+        "https://www.cisa.gov/news-events/ics-advisories/icsa-26-141-05"
+      ],
+      "publishedAt": "2026-05-21T12:00:00.000Z",
+      "updatedAt": "2026-05-21T12:00:00.000Z",
+      "tags": [
+        "live-rss",
+        "cisa"
+      ]
+    },
+    {
+      "id": "live-abb-b-r-pcs-aHR0cHM6",
+      "slug": "abb-b-r-pcs-aHR0cHM6",
+      "title": "ABB B&R PCs",
+      "summary": "View CSAF Summary ABB became aware of vulnerability in the product versions listed as affected in the advisory. An update is now available that addresses and remediates the vulnerability. A network attacker could expl…",
+      "whatHappened": "ABB B&R PCs. View CSAF Summary ABB became aware of vulnerability in the product versions listed as affected in the advisory. An update is now available that addresses and remediates the vulnerability. A network attacker could exploit the vulnerabilities to execute remote code, initiate DoS attacks, conduct DNS cache poisoning, or extract sensitive information. The following versions of ABB B&R PCs are affected: APC4100 <1.09, 1.09 (CVE-2023-45229, CVE-2023-45230, CVE-2023-45231, CVE-2023-45232, CVE-2023-45233, CVE-2023-45234, CVE-2023-45235, CVE-2023-45236, CVE-2023-45237) APC910 <=1.25 (CVE-2023-45229, CVE-2023-45230, CVE-2023-45231, CVE-2023-45232, CVE-2023-45233, CVE-2023-45234, CVE-2023-45235, CVE-2023-45236, CVE-2023-45237) C80 <1.14, 1.14 (CVE-2023-45229, CVE-2023-45230, CVE-2023-45231, CVE-2023-45232, CVE-2023-45233, CVE-2023-45234, CVE-2023-45235, CVE-2023-45236, CVE-2023-45237) MPC3100 <1.24, 1.24 (CVE-2023-45229, CVE-2023-45230, CVE-2023-45231, CVE-2023-45232, CVE-2023-45233, CVE-2023-45234, CVE-2023-45235, CVE-2023-45236, CVE-2023-45237) PPC1200 <1.14, 1.14 (CVE-2023-45229, CVE-2023-45230, CVE-2023-45231, CVE-2023-45232, CVE-2023-45233, CVE-2023-45234, CVE-2023-45235, CVE-2023-45236, CVE-2023-45237) PPC900 <2.16, 2.16 (CVE-2023-45229, CVE-2023-45230, CVE-2023-45231, CVE-2023-45232, CVE-2023-45233, CVE-2023-45234, CVE-2023-45235, CVE-2023-45236, CVE-2023-45237) APC2200 <1.35, 1.35 (CVE-2023-45229, CVE-2023-45230, CVE-2023-45231, CVE-2023-45232, CVE-2023-45233, CVE-2023-45234, CVE-2023-45235, CVE-2023-45236, CVE-2023-45237) PPC2200 <1.35, 1.35 (CVE-2023-45229, CVE-2023-45230, CVE-2023-45231, CVE-2023-45232, CVE-2023-45233, CVE-2023-45234, CVE-2023-45235, CVE-2023-45236, CVE-2023-45237) APC3100 <1.45, 1.45 (CVE-2023-45229, CVE-2023-45230, CVE-2023-45231, CVE-2023-45232, CVE-2023-45233, CVE-2023-45234, CVE-2023-45235, CVE-2023-45236, CVE-2023-45237) PPC3100 <1.45, 1.45 (CVE-2023-45229, CVE-2023-45230, CVE-2023-45231, CVE-2023-45232, CVE-2023-45233, CVE-2023-45234, CVE-2023-45235, CVE-2023-45236, CVE-2023-45237) CVSS Vendor Equipment Vulnerabilities v3 8.3 ABB ABB B&R PCs Out-of-bounds Read, Improper Restriction of Operations within the Bounds of a Memory Buffer, Loop with Unreachable Exit Condition (&#039;Infinite Loop&#039;), Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG) Background Critical Infrastructure Sectors: Energy Countries/Areas Deployed: Worldwide Company Headquarters Location: Switzerland Vulnerabilities Expand All + CVE-2023-45229 EDK2&#039;s Network Package is susceptible to an out-of-bounds read vulnerability when processing the IA_NA or IA_TA option in a DHCPv6 Advertise message. This vulnerability can be exploited by an attacker to gain unauthorized access and potentially lead to a loss of Confidentiality. View CVE Details Affected Products ABB B&R PCs Vendor: ABB Product Version: ABB APC4100 <1.09, ABB APC910 <=1.25, ABB C80 <1.14, ABB MPC3100 <1.24, ABB PPC1200 <1.14, ABB PPC900 <2.16, ABB APC2200 <1.35, ABB PPC2200 <1.35, ABB APC3100 <1.45, ABB PPC3100 <1.45 Product Status: fixed, known_affected Remediations Vendor fix The problems are corrected in the following product versions: - APC4100 1.09 - APC910 No patch will be released (Please refer to the mitigation measures specified in this advisory). - C80 1.14 - MPC3100 1.24 - PPC1200 1.14 - PPC900 2.16 - APC2200 1.35 - PPC2200 1.35 - APC3100 1.45 - PPC3100 1.45 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Deactivate the vulnerable component - The vulnerabilities exist in the Preboot eXecution Environment (PXE) of the UEFI firmware. If this functionality is not needed, it is recommended to disable it in the UEFI settings, thus making the vulnerabilities not exploitable. Limit accessibility - If PXE functionality is required, users should tightly restrict network traffic to legitimate users and block illegitimate PXE traffic, specifically related to IPv6. For instance, by blocking IPv6 network traffic on the control network firewall. https://help.br-automation.com/#/en/6/cyber-security/defense-in-depth-for-br-products/reference_architecture.html Refer to section “General security recommendations” for further advise on how to keep your system secure. Relevant CWE: CWE-125 Out-of-bounds Read Metrics CVSS Version Base Score Base Severity Vector String 3.1 6.5 MEDIUM CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N/E:P/RL:O/RC:C CVE-2023-45230 EDK2&#039;s Network Package is susceptible to a buffer overflow vulnerability via a long server ID option in DHCPv6 client. This vulnerability can be exploited by an attacker to gain unauthorized access and potentially lead to a loss of Confidentiality, Integrity and/or Availability. View CVE Details Affected Products ABB B&R PCs Vendor: ABB Product Version: ABB APC4100 <1.09, ABB APC910 <=1.25, ABB C80 <1.14, ABB MPC3100 <1.24, ABB PPC1200 <1.14, ABB PPC900 <2.16, ABB APC2200 <1.35, ABB PPC2200 <1.35, ABB APC3100 <1.45, ABB PPC3100 <1.45 Product Status: fixed, known_affected Remediations Vendor fix The problems are corrected in the following product versions: - APC4100 1.09 - APC910 No patch will be released (Please refer to the mitigation measures specified in this advisory). - C80 1.14 - MPC3100 1.24 - PPC1200 1.14 - PPC900 2.16 - APC2200 1.35 - PPC2200 1.35 - APC3100 1.45 - PPC3100 1.45 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Deactivate the vulnerable component - The vulnerabilities exist in the Preboot eXecution Environment (PXE) of the UEFI firmware. If this functionality is not needed, it is recommended to disable it in the UEFI settings, thus making the vulnerabilities not exploitable. Limit accessibility - If PXE functionality is required, users should tightly restrict network traffic to legitimate users and block illegitimate PXE traffic, specifically related to IPv6. For instance, by blocking IPv6 network traffic on the control network firewall. https://help.br-automation.com/#/en/6/cyber-security/defense-in-depth-for-br-products/reference_architecture.html Refer to section “General security recommendations” for further advise on how to keep your system secure. Relevant CWE: CWE-119 Improper Restriction of Operations within the Bounds of a Memory Buffer Metrics CVSS Version Base Score Base Severity Vector String 3.1 8.3 HIGH CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:H/E:P/RL:O/RC:C CVE-2023-45231 EDK2&#039;s Network Package is susceptible to an out-of-bounds read vulnerability when processing Neighbor Discovery Redirect message. This vulnerability can be exploited by an attacker to gain unauthorized access and potentially lead to a loss of Confidentiality. View CVE Details Affected Products ABB B&R PCs Vendor: ABB Product Version: ABB APC4100 <1.09, ABB APC910 <=1.25, ABB C80 <1.14, ABB MPC3100 <1.24, ABB PPC1200 <1.14, ABB PPC900 <2.16, ABB APC2200 <1.35, ABB PPC2200 <1.35, ABB APC3100 <1.45, ABB PPC3100 <1.45 Product Status: fixed, known_affected Remediations Vendor fix The problems are corrected in the following product versions: - APC4100 1.09 - APC910 No patch will be released (Please refer to the mitigation measures specified in this advisory). - C80 1.14 - MPC3100 1.24 - PPC1200 1.14 - PPC900 2.16 - APC2200 1.35 - PPC2200 1.35 - APC3100 1.45 - PPC3100 1.45 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Deactivate the vulnerable component - The vulnerabilities exist in the Preboot eXecution Environment (PXE) of the UEFI firmware. If this functionality is not needed, it is recommended to disable it in the UEFI settings, thus making the vulnerabilities not exploitable. Limit accessibility - If PXE functionality is required, users should tightly restrict network traffic to legitimate users and block illegitimate PXE traffic, specifically related to IPv6. For instance, by blocking IPv6 network traffic on the control network firewall. https://help.br-automation.com/#/en/6/cyber-security/defense-in-depth-for-br-products/reference_architecture.html Refer to section “General security recommendations” for further advise on how to keep your system secure. Relevant CWE: CWE-125 Out-of-bounds Read Metrics CVSS Version Base Score Base Severity Vector String 3.1 6.5 MEDIUM CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N/E:P/RL:O/RC:C CVE-2023-45232 EDK2&#039;s Network Package is susceptible to an infinite loop vulnerability when parsing unknown options in the Destination Options header of IPv6. This vulnerability can be exploited by an attacker to gain unauthorized access and potentially lead to a loss of Availability. View CVE Details Affected Products ABB B&R PCs Vendor: ABB Product Version: ABB APC4100 <1.09, ABB APC910 <=1.25, ABB C80 <1.14, ABB MPC3100 <1.24, ABB PPC1200 <1.14, ABB PPC900 <2.16, ABB APC2200 <1.35, ABB PPC2200 <1.35, ABB APC3100 <1.45, ABB PPC3100 <1.45 Product Status: fixed, known_affected Remediations Vendor fix The problems are corrected in the following product versions: - APC4100 1.09 - APC910 No patch will be released (Please refer to the mitigation measures specified in this advisory). - C80 1.14 - MPC3100 1.24 - PPC1200 1.14 - PPC900 2.16 - APC2200 1.35 - PPC2200 1.35 - APC3100 1.45 - PPC3100 1.45 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Deactivate the vulnerable component - The vulnerabilities exist in the Preboot eXecution Environment (PXE) of the UEFI firmware. If this functionality is not needed, it is recommended to disable it in the UEFI settings, thus making the vulnerabilities not exploitable. Limit accessibility - If PXE functionality is required, users should tightly restrict network traffic to legitimate users and block illegitimate PXE traffic, specifically related to IPv6. For instance, by blocking IPv6 network traffic on the control network firewall. https://help.br-automation.com/#/en/6/cyber-security/defense-in-depth-for-br-products/reference_architecture.html Refer to section “General security recommendations” for further advise on how to keep your system secure. Relevant CWE: CWE-835 Loop with Unreachable Exit Condition (&#039;Infinite Loop&#039;) Metrics CVSS Version Base Score Base Severity Vector String 3.1 7.5 HIGH CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P/RL:O/RC:C CVE-2023-45233 EDK2&#039;s Network Package is susceptible to an infinite loop vulnerability when parsing a PadN option in the Destination Options header of IPv6. This vulnerability can be exploited by an attacker to gain unauthorized access and potentially lead to a loss of Availability. View CVE Details Affected Products ABB B&R PCs Vendor: ABB Product Version: ABB APC4100 <1.09, ABB APC910 <=1.25, ABB C80 <1.14, ABB MPC3100 <1.24, ABB PPC1200 <1.14, ABB PPC900 <2.16, ABB APC2200 <1.35, ABB PPC2200 <1.35, ABB APC3100 <1.45, ABB PPC3100 <1.45 Product Status: fixed, known_affected Remediations Vendor fix The problems are corrected in the following product versions: - APC4100 1.09 - APC910 No patch will be released (Please refer to the mitigation measures specified in this advisory). - C80 1.14 - MPC3100 1.24 - PPC1200 1.14 - PPC900 2.16 - APC2200 1.35 - PPC2200 1.35 - APC3100 1.45 - PPC3100 1.45 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Deactivate the vulnerable component - The vulnerabilities exist in the Preboot eXecution Environment (PXE) of the UEFI firmware. If this functionality is not needed, it is recommended to disable it in the UEFI settings, thus making the vulnerabilities not exploitable. Limit accessibility - If PXE functionality is required, users should tightly restrict network traffic to legitimate users and block illegitimate PXE traffic, specifically related to IPv6. For instance, by blocking IPv6 network traffic on the control network firewall. https://help.br-automation.com/#/en/6/cyber-security/defense-in-depth-for-br-products/reference_architecture.html Refer to section “General security recommendations” for further advise on how to keep your system secure. Relevant CWE: CWE-835 Loop with Unreachable Exit Condition (&#039;Infinite Loop&#039;) Metrics CVSS Version Base Score Base Severity Vector String 3.1 7.5 HIGH CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P/RL:O/RC:C CVE-2023-45234 EDK2&#039;s Network Package is susceptible to a buffer overflow vulnerability when processing DNS Servers option from a DHCPv6 Advertise message. This vulnerability can be exploited by an attacker to gain unauthorized access and potentially lead to a loss of Confidentiality, Integrity and/or Availability. View CVE Details Affected Products ABB B&R PCs Vendor: ABB Product Version: ABB APC4100 <1.09, ABB APC910 <=1.25, ABB C80 <1.14, ABB MPC3100 <1.24, ABB PPC1200 <1.14, ABB PPC900 <2.16, ABB APC2200 <1.35, ABB PPC2200 <1.35, ABB APC3100 <1.45, ABB PPC3100 <1.45 Product Status: fixed, known_affected Remediations Vendor fix The problems are corrected in the following product versions: - APC4100 1.09 - APC910 No patch will be released (Please refer to the mitigation measures specified in this advisory). - C80 1.14 - MPC3100 1.24 - PPC1200 1.14 - PPC900 2.16 - APC2200 1.35 - PPC2200 1.35 - APC3100 1.45 - PPC3100 1.45 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Deactivate the vulnerable component - The vulnerabilities exist in the Preboot eXecution Environment (PXE) of the UEFI firmware. If this functionality is not needed, it is recommended to disable it in the UEFI settings, thus making the vulnerabilities not exploitable. Limit accessibility - If PXE functionality is required, users should tightly restrict network traffic to legitimate users and block illegitimate PXE traffic, specifically related to IPv6. For instance, by blocking IPv6 network traffic on the control network firewall. https://help.br-automation.com/#/en/6/cyber-security/defense-in-depth-for-br-products/reference_architecture.html Refer to section “General security recommendations” for further advise on how to keep your system secure. Relevant CWE: CWE-119 Improper Restriction of Operations within the Bounds of a Memory Buffer Metrics CVSS Version Base Score Base Severity Vector String 3.1 8.3 HIGH CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:H/E:P/RL:O/RC:C CVE-2023-45235 EDK2&#039;s Network Package is susceptible to a buffer overflow vulnerability when handling Server ID option from a DHCPv6 proxy Advertise message. This vulnerability can be exploited by an attacker to gain unauthorized access and potentially lead to a loss of Confidentiality, Integrity and/or Availability. View CVE Details Affected Products ABB B&R PCs Vendor: ABB Product Version: ABB APC4100 <1.09, ABB APC910 <=1.25, ABB C80 <1.14, ABB MPC3100 <1.24, ABB PPC1200 <1.14, ABB PPC900 <2.16, ABB APC2200 <1.35, ABB PPC2200 <1.35, ABB APC3100 <1.45, ABB PPC3100 <1.45 Product Status: fixed, known_affected Remediations Vendor fix The problems are corrected in the following product versions: - APC4100 1.09 - APC910 No patch will be released (Please refer to the mitigation measures specified in this advisory). - C80 1.14 - MPC3100 1.24 - PPC1200 1.14 - PPC900 2.16 - APC2200 1.35 - PPC2200 1.35 - APC3100 1.45 - PPC3100 1.45 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Deactivate the vulnerable component - The vulnerabilities exist in the Preboot eXecution Environment (PXE) of the UEFI firmware. If this functionality is not needed, it is recommended to disable it in the UEFI settings, thus making the vulnerabilities not exploitable. Limit accessibility - If PXE functionality is required, users should tightly restrict network traffic to legitimate users and block illegitimate PXE traffic, specifically related to IPv6. For instance, by blocking IPv6 network traffic on the control network firewall. https://help.br-automation.com/#/en/6/cyber-security/defense-in-depth-for-br-products/reference_architecture.html Refer to section “General security recommendations” for further advise on how to keep your system secure. Relevant CWE: CWE-119 Improper Restriction of Operations within the Bounds of a Memory Buffer Metrics CVSS Version Base Score Base Severity Vector String 3.1 8.3 HIGH CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:H/E:P/RL:O/RC:C CVE-2023-45236 EDK2&#039;s Network Package is susceptible to a predictable TCP Initial Sequence Number. This vulnerability can be exploited by an attacker to gain unauthorized access and potentially lead to a loss of Confidentiality. View CVE Details Affected Products ABB B&R PCs Vendor: ABB Product Version: ABB APC4100 <1.09, ABB APC910 <=1.25, ABB C80 <1.14, ABB MPC3100 <1.24, ABB PPC1200 <1.14, ABB PPC900 <2.16, ABB APC2200 <1.35, ABB PPC2200 <1.35, ABB APC3100 <1.45, ABB PPC3100 <1.45 Product Status: fixed, known_affected Remediations Vendor fix The problems are corrected in the following product versions: - APC4100 1.09 - APC910 No patch will be released (Please refer to the mitigation measures specified in this advisory). - C80 1.14 - MPC3100 1.24 - PPC1200 1.14 - PPC900 2.16 - APC2200 1.35 - PPC2200 1.35 - APC3100 1.45 - PPC3100 1.45 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Deactivate the vulnerable component - The vulnerabilities exist in the Preboot eXecution Environment (PXE) of the UEFI firmware. If this functionality is not needed, it is recommended to disable it in the UEFI settings, thus making the vulnerabilities not exploitable. Limit accessibility - If PXE functionality is required, users should tightly restrict network traffic to legitimate users and block illegitimate PXE traffic, specifically related to IPv6. For instance, by blocking IPv6 network traffic on the control network firewall. https://help.br-automation.com/#/en/6/cyber-security/defense-in-depth-for-br-products/reference_architecture.html Refer to section “General security recommendations” for further advise on how to keep your system secure. Relevant CWE: CWE-338 Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG) Metrics CVSS Version Base Score Base Severity Vector String 3.1 5.8 MEDIUM CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:N/A:N/E:P/RL:O/RC:C CVE-2023-45237 EDK2&#039;s Network Package is susceptible to a predictable TCP Initial Sequence Number. This vulnerability can be exploited by an attacker to gain unauthorized access and potentially lead to a loss of Confidentiality. View CVE Details Affected Products ABB B&R PCs Vendor: ABB Product Version: ABB APC4100 <1.09, ABB APC910 <=1.25, ABB C80 <1.14, ABB MPC3100 <1.24, ABB PPC1200 <1.14, ABB PPC900 <2.16, ABB APC2200 <1.35, ABB PPC2200 <1.35, ABB APC3100 <1.45, ABB PPC3100 <1.45 Product Status: fixed, known_affected Remediations Vendor fix The problems are corrected in the following product versions: - APC4100 1.09 - APC910 No patch will be released (Please refer to the mitigation measures specified in this advisory). - C80 1.14 - MPC3100 1.24 - PPC1200 1.14 - PPC900 2.16 - APC2200 1.35 - PPC2200 1.35 - APC3100 1.45 - PPC3100 1.45 B&R recommends that customers apply the update at earliest convenience. The process to install updates is described in the user manual. The step to identify the installed product version is described in the user manual. Mitigation Deactivate the vulnerable component - The vulnerabilities exist in the Preboot eXecution Environment (PXE) of the UEFI firmware. If this functionality is not needed, it is recommended to disable it in the UEFI settings, thus making the vulnerabilities not exploitable. Limit accessibility - If PXE functionality is required, users should tightly restrict network traffic to legitimate users and block illegitimate PXE traffic, specifically related to IPv6. For instance, by blocking IPv6 network traffic on the control network firewall. https://help.br-automation.com/#/en/6/cyber-security/defense-in-depth-for-br-products/reference_architecture.html Refer to section “General security recommendations” for further advise on how to keep your system secure. Relevant CWE: CWE-338 Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG) Metrics CVSS Version Base Score Base Severity Vector String 3.1 5.3 MEDIUM CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N/E:P/RL:O/RC:C Acknowledgments ABB PSIRT reported these vulnerabilities to CISA. Notice The information in this document is subject to change without notice, and should not be construed as a commitment by B&R. B&R provides no warranty, express or implied, including warranties of merchantability and fitness for a particular purpose, for the information contained in this document, and assumes no responsibility for any errors that may appear in this document. In no event shall B&R or any of its suppliers be liable for direct, indirect, special, incidental or consequential damages of any nature or kind arising from the use of this document, or from the use of any hardware or software described in this document, even if B&R or its suppliers have been advised of the possibility of such damages. This document and parts hereof must not be reproduced or copied without written permission from B&R, and the contents hereof must not be imparted to a third party nor used for any unauthorized purpose. All rights to registrations and trademarks reside with their respective owners. Frequently Asked Questions What is the scope of the vulnerabilities? - A network attacker who successfully exploited these vulnerabilities to execute remote code, initiate DoS attacks, conduct DNS cache poisoning, or extract sensitive information. In worst case, these vulnerabilities can be exploited by an attacker to gain unauthorized access and potentially lead to a loss of Confidentiality, Integrity and/or Availability. What causes the vulnerabilities? - The vulnerabilities are caused by usage of vulnerable UEFI firmware in some B&R xPCs. What is a B&R xPC? - A B&R xPC is an industrial PC (IPC) designed for use in industrial environments and is built to handle more demanding conditions than a standard PC. They often feature robust construction, resistance to dust and moisture, extended temperature ranges, and other specifications suited for industrial applications. What might an attacker use the vulnerabilities to do? - A network attacker who successfully exploited the vulnerabilities could execute remote code, initiate DoS attacks, conduct DNS cache poisoning, or extract sensitive information. How could an attacker exploit the vulnerabilities? - An attacker could try to exploit the vulnerabilities by creating a specially crafted message and sending the message to an affected system node. This would require that the attacker has access to the system network, by connecting to the network either directly or through a wrongly configured or penetrated firewall, or that he installs malicious software on a system node or otherwise infects the network with malicious software. Recommended practices help mitigate such attacks, see section Mitigating Factors above. Could the vulnerabilities be exploited remotely? - Yes, an attacker who has network access to an affected system node could exploit this vulnerability. Recommended practices include that process control systems are physically protected, have no direct connections to the Internet, and are separated from other networks by means of a firewall system that has a minimal number of ports exposed. What does the update do? - The update removes the vulnerabilities in the TCP/IP stack used by the UEFI firmware. When this security advisory was issued, had these vulnerabilities been publicly disclosed? - Yes, these vulnerabilities have been publicly disclosed. When this security advisory was issued, had B&R received any reports that this vulnerability was being exploited on B&R products? - No, B&R had not received any information indicating that this vulnerability had been exploited on B&R products when this security advisory was originally issued. Legal Notice and Terms of Use This product is provided subject to this Notification (https://www.cisa.gov/notification) and this Privacy & Use policy (https://www.cisa.gov/privacy-policy). Recommended Practices CISA recommends users take defensive measures to minimize the exploitation risk of this vulnerability. Minimize network exposure for all control system devices and/or systems, and ensure they are not accessible from the internet. Locate control system networks and remote devices behind firewalls and isolate them from business networks. When remote access is required, use more secure methods, such as Virtual Private Networks (VPNs), recognizing VPNs may have vulnerabilities and should be updated to the most recent version available. Also recognize VPN is only as secure as its connected devices. CISA reminds organizations to perform proper impact analysis and risk assessment prior to deploying defensive measures. CISA also provides a section for control systems security recommended practices on the ICS webpage on cisa.gov. Several CISA products detailing cyber defense best practices are available for reading and download, including Improving Industrial Control Systems Cybersecurity with Defense-in-Depth Strategies. CISA encourages organizations to implement recommended cybersecurity strategies for proactive defense of ICS assets. Additional mitigation guidance and recommended practices are publicly available on the ICS webpage at cisa.gov in the technical information paper, ICS-TIP-12-146-01B--Targeted Cyber Intrusion Detection and Mitigation Strategies. Organizations observing suspected malicious activity should follow established internal procedures and report findings to CISA for tracking and correlation against other incidents. Advisory Conversion Disclaimer This ICSA is a verbatim republication of ABB PSIRT SA24P003 from a direct conversion of the vendor&#039;s Common Security Advisory Framework (CSAF) advisory. This is republished to CISA&#039;s website as a means of increasing visibility and is provided \"as-is\" for informational purposes only. CISA is not responsible for the editorial or technical accuracy of republished advisories and provides no warranties of any kind regarding any information contained within this advisory. Further, CISA does not endorse any commercial product or service. Please contact ABB PSIRT directly for any questions regarding this advisory. Revision History Initial Release Date: 2026-01-29 Date Revision Summary 2026-01-29 1 Initial version. 2026-05-21 2 Initial CISA Republication of ABB PSIRT SA24P003 advisory Legal Notice and Terms of Use",
+      "whyItMatters": "This story is newly ingested and has not yet been fully analyzed.",
+      "category": "Technology",
+      "confidence": "Single-source",
+      "signal": "Developing",
+      "sources": [
+        "CISA"
+      ],
+      "sourceUrls": [
+        "https://www.cisa.gov/news-events/ics-advisories/icsa-26-141-02"
+      ],
+      "publishedAt": "2026-05-21T12:00:00.000Z",
+      "updatedAt": "2026-05-21T12:00:00.000Z",
+      "tags": [
+        "live-rss",
+        "cisa"
+      ]
+    },
+    {
+      "id": "live-cisa-adds-two-known-exploited-vulnerabilities-to-catalog-aHR0cHM6",
+      "slug": "cisa-adds-two-known-exploited-vulnerabilities-to-catalog-aHR0cHM6",
+      "title": "CISA Adds Two Known Exploited Vulnerabilities to Catalog",
+      "summary": "CISA has added two new vulnerabilities to its Known Exploited Vulnerabilities (KEV) Catalog , based on evidence of active exploitation. CVE-2025-34291 Langflow Origin Validation Error Vulnerability CVE-2026-34926 Tren…",
+      "whatHappened": "CISA Adds Two Known Exploited Vulnerabilities to Catalog. CISA has added two new vulnerabilities to its Known Exploited Vulnerabilities (KEV) Catalog , based on evidence of active exploitation. CVE-2025-34291 Langflow Origin Validation Error Vulnerability CVE-2026-34926 Trend Micro Apex One (On-Premise) Directory Traversal Vulnerability These types of vulnerabilities are frequent attack vectors for malicious cyber actors and pose significant risks to the federal enterprise. Binding Operational Directive (BOD) 22-01: Reducing the Significant Risk of Known Exploited Vulnerabilities established the KEV Catalog as a living list of known Common Vulnerabilities and Exposures (CVEs) that carry significant risk to the federal enterprise. BOD 22-01 requires Federal Civilian Executive Branch (FCEB) agencies to remediate identified vulnerabilities by the due date to protect FCEB networks against active threats. See the BOD 22-01 Fact Sheet for more information. Although BOD 22-01 only applies to FCEB agencies, CISA strongly urges all organizations to reduce their exposure to cyberattacks by prioritizing timely remediation of KEV Catalog vulnerabilities as part of their vulnerability management practice. CISA will continue to add vulnerabilities to the catalog that meet the specified criteria .",
+      "whyItMatters": "This story is newly ingested and has not yet been fully analyzed.",
+      "category": "Technology",
+      "confidence": "Single-source",
+      "signal": "Developing",
+      "sources": [
+        "CISA"
+      ],
+      "sourceUrls": [
+        "https://www.cisa.gov/news-events/alerts/2026/05/21/cisa-adds-two-known-exploited-vulnerabilities-catalog"
+      ],
+      "publishedAt": "2026-05-21T12:00:00.000Z",
+      "updatedAt": "2026-05-21T12:00:00.000Z",
+      "tags": [
+        "live-rss",
+        "cisa"
+      ]
     }
   ]
 }
