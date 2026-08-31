@@ -117,7 +117,7 @@ function mergeCluster(cluster: Story[]): Story {
     summary: bestSummary.summary,
     whatHappened: bestSummary.whatHappened,
     whyItMatters: multiSource
-      ? "Multiple publishers are reporting overlapping versions of this development. Compare the linked coverage for wording, emphasis, and unresolved differences."
+      ? `${bestSummary.whyItMatters} Coverage now spans ${sources.length} publishers; that adds context but does not by itself independently confirm every claim.`
       : representative.whyItMatters,
     category: categoryFor(cluster),
     confidence: multiSource ? "Developing" : "Single-source",
