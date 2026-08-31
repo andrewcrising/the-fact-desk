@@ -1,3 +1,4 @@
+import { storyPriorityScore } from "@/lib/stories";
 import type { Story, StoryCategory } from "@/types/story";
 
 const STOP_WORDS = new Set([
@@ -123,6 +124,8 @@ function mergeCluster(cluster: Story[]): Story {
 
 function balanceStories(stories: Story[]): Story[] {
   const sorted = [...stories].sort((a, b) => {
+    const priorityDelta = storyPriorityScore(b) - storyPriorityScore(a);
+    if (priorityDelta !== 0) return priorityDelta;
     const coverageDelta = Math.min(b.sources.length, 4) - Math.min(a.sources.length, 4);
     if (coverageDelta !== 0) return coverageDelta;
     return Date.parse(b.updatedAt) - Date.parse(a.updatedAt);
