@@ -1,6 +1,7 @@
 /**
  * RSS/Atom ingestion and normalization.
  */
+import { buildFastWhyItMatters } from "@/lib/ingest/fast-briefing";
 import type { Signal, Story, StoryCategory } from "@/types/story";
 import { XMLParser } from "fast-xml-parser";
 
@@ -177,6 +178,7 @@ function normalizeItem(
   options: FetchRssStoriesOptions,
 ): Story {
   const sourceName = options.sourceName ?? "RSS";
+  const category = resolveCategory(options.category);
   const description = item.description ?? "";
   const summary =
     description.length > 220
@@ -194,9 +196,8 @@ function normalizeItem(
     title: item.title,
     summary,
     whatHappened,
-    whyItMatters:
-      "This story is newly ingested and has not yet been fully analyzed.",
-    category: resolveCategory(options.category),
+    whyItMatters: buildFastWhyItMatters(item.title, summary, category),
+    category,
     confidence: "Single-source",
     signal: resolveSignal(options.signal),
     sources: [sourceName],
@@ -204,6 +205,8 @@ function normalizeItem(
     publishedAt,
     updatedAt: publishedAt,
     tags: buildTags(sourceName),
+    coverageAngle:
+      "Fast briefing generated from source-provided feed text; details should update as corroborating coverage arrives.",
   };
 }
 
