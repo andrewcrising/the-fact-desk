@@ -9,6 +9,7 @@ import {
   partitionLiveStoriesByEvidence,
 } from "@/lib/stories";
 import type { Story, StoryCategory } from "@/types/story";
+import Link from "next/link";
 
 interface LiveBetaFeedProps {
   stories: Story[];
@@ -22,28 +23,41 @@ function LiveBetaCard({ story }: { story: Story }) {
   const linksAreAligned = sourceUrls.length === story.sources.length;
 
   return (
-    <DeskCard className="transition-colors hover:border-[var(--border)]">
-      <article className="px-4 py-3.5 sm:px-5">
-        <div className="mb-2 flex flex-wrap items-center gap-2">
+    <DeskCard className="relative transition-colors hover:border-[var(--border)]">
+      <article className="relative px-4 py-3.5 sm:px-5">
+        <Link
+          href={`/story/${story.slug}`}
+          className="absolute inset-0 z-0 rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2"
+          aria-label={`Open Fact Desk synopsis: ${story.title}`}
+        >
+          <span className="sr-only">Open Fact Desk synopsis</span>
+        </Link>
+
+        <div className="pointer-events-none relative z-[1] mb-2 flex flex-wrap items-center gap-2">
           <ConfidenceLabel confidence={story.confidence} />
           <SignalLabel signal={story.signal} />
           <span className="text-[10px] text-[var(--muted-light)]">
             {formatSourceSpread(story.sources)}
           </span>
         </div>
-        <h3 className="font-serif text-base font-semibold leading-snug text-[var(--foreground)] sm:text-lg">
+        <h3 className="pointer-events-none relative z-[1] font-serif text-base font-semibold leading-snug text-[var(--foreground)] sm:text-lg">
           {story.title}
         </h3>
-        <p className="mt-1.5 line-clamp-2 text-[13px] leading-relaxed text-[var(--muted)]">
+        <p className="pointer-events-none relative z-[1] mt-1.5 line-clamp-2 text-[13px] leading-relaxed text-[var(--muted)]">
           {story.summary}
         </p>
-        <div className="mt-2 flex flex-wrap items-center justify-between gap-2 border-t border-[var(--border-subtle)] pt-2">
-          <time
-            dateTime={story.updatedAt}
-            className="font-mono text-[10px] text-[var(--muted-light)]"
-          >
-            {formatStoryTime(story.updatedAt)}
-          </time>
+        <div className="relative z-10 mt-2 flex flex-wrap items-center justify-between gap-2 border-t border-[var(--border-subtle)] pt-2">
+          <div className="pointer-events-none flex items-center gap-2">
+            <time
+              dateTime={story.updatedAt}
+              className="font-mono text-[10px] text-[var(--muted-light)]"
+            >
+              {formatStoryTime(story.updatedAt)}
+            </time>
+            <span className="text-[10px] font-semibold text-[var(--accent)]">
+              Fact Desk synopsis →
+            </span>
+          </div>
           <div
             className="flex flex-wrap items-center justify-end gap-x-2 gap-y-1 text-[11px]"
             aria-label="Story sources"
@@ -56,7 +70,7 @@ function LiveBetaCard({ story }: { story: Story }) {
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-medium text-[var(--accent)] hover:underline"
+                  className="relative z-20 font-medium text-[var(--accent)] hover:underline"
                 >
                   {sourceName} ↗
                 </a>
