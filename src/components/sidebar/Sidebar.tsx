@@ -10,8 +10,8 @@ interface SidebarProps {
 export function Sidebar({ stories }: SidebarProps) {
   return (
     <>
-      <HealthDeskPlaceholder stories={stories} />
       <LiveSignals stories={stories} />
+      <HealthDeskPlaceholder stories={stories} />
       <SourceWatchlist stories={stories} />
     </>
   );

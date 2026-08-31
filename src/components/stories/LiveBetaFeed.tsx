@@ -1,3 +1,5 @@
+"use client";
+
 import { ConfidenceLabel } from "@/components/ui/ConfidenceLabel";
 import { DeskCard } from "@/components/ui/DeskCard";
 import { DeskLabel } from "@/components/ui/DeskLabel";
@@ -13,6 +15,9 @@ import {
 } from "@/lib/stories";
 import type { Story, StoryCategory } from "@/types/story";
 import Link from "next/link";
+import { useState } from "react";
+
+const MONITOR_PAGE_SIZE = 12;
 
 interface LiveBetaFeedProps {
   stories: Story[];
@@ -31,13 +36,19 @@ function priorityClass(priority: StoryPriority): string {
   return "bg-slate-50 text-slate-700 ring-slate-200/80";
 }
 
+function priorityBorderClass(priority: StoryPriority): string {
+  if (priority === "Urgent") return "border-l-red-500";
+  if (priority === "Major") return "border-l-amber-400";
+  return "border-l-slate-300";
+}
+
 function LiveBetaCard({ story }: { story: Story }) {
   const sourceUrls = story.sourceUrls ?? [];
   const linksAreAligned = sourceUrls.length === story.sources.length;
   const priority = getStoryPriority(story);
 
   return (
-    <DeskCard className="relative transition-colors hover:border-[var(--border)]">
+    <DeskCard className={`relative border-l-2 ${priorityBorderClass(priority)} transition-colors hover:border-[var(--border)]`}>
       <article className="relative px-4 py-3.5 sm:px-5">
         <Link
           href={`/story/${story.slug}`}
@@ -170,6 +181,15 @@ export function LiveBetaFeed({
   const bothSidesRepresented =
     viewpointCounts["left-of-center"] > 0 &&
     viewpointCounts["right-of-center"] > 0;
+  const [visibleMonitorCount, setVisibleMonitorCount] = useState(
+    MONITOR_PAGE_SIZE,
+  );
+
+  const visibleMonitorStories = buckets.monitor.slice(0, visibleMonitorCount);
+  const remainingMonitorCount = Math.max(
+    0,
+    buckets.monitor.length - visibleMonitorStories.length,
+  );
 
   return (
     <section
@@ -181,10 +201,10 @@ export function LiveBetaFeed({
         <div>
           <DeskLabel id="live-beta-heading">{heading}</DeskLabel>
           <p className="mt-0.5 max-w-2xl text-[11px] leading-snug text-[var(--muted-light)]">
-            {activePublisherCount} active publishers · urgency ranks public impact and recency while evidence labels show how well-supported each story is
+            {activePublisherCount} active publishers · ranked by impact, recency, and evidence depth
           </p>
           {bothSidesRepresented && (
-            <p className="mt-0.5 max-w-2xl text-[10px] leading-snug text-[var(--muted-light)]">
+            <p className="mt-0.5 hidden max-w-2xl text-[10px] leading-snug text-[var(--muted-light)] sm:block">
               Viewpoint guardrail active · left-of-center, center/mixed, right-of-center, and primary reporting are tracked separately from evidence confidence
             </p>
           )}
@@ -220,8 +240,19 @@ export function LiveBetaFeed({
             id="monitor-live"
             title={`Monitor · ${buckets.monitor.length}`}
             description="Lower-urgency or thinly supported items kept active for awareness and promoted automatically if importance or corroboration increases."
-            stories={buckets.monitor}
+            stories={visibleMonitorStories}
           />
+          {remainingMonitorCount > 0 && (
+            <button
+              type="button"
+              onClick={() =>
+                setVisibleMonitorCount((count) => count + MONITOR_PAGE_SIZE)
+              }
+              className="desk-card min-h-11 w-full px-4 py-2.5 text-center text-[12px] font-semibold text-[var(--accent)] hover:border-[var(--accent-muted)] hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2"
+            >
+              Show more Monitor stories · {remainingMonitorCount} remaining
+            </button>
+          )}
         </div>
       )}
     </section>

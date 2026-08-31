@@ -19,6 +19,7 @@ import { CategoryFilter } from "./CategoryFilter";
 import { DeskTicker } from "./DeskTicker";
 import { LeadSignal } from "./LeadSignal";
 import { LiveBetaFeed } from "./LiveBetaFeed";
+import { MobilePriorityRail } from "./MobilePriorityRail";
 import { StorySection } from "./StorySection";
 
 interface StoryFeedProps {
@@ -110,6 +111,8 @@ export function StoryFeed({
 
   return (
     <div className="space-y-3">
+      <MobilePriorityRail stories={filtered} />
+
       {topPriority && (
         <section aria-labelledby="top-priority-heading">
           <h2 id="top-priority-heading" className="sr-only">
@@ -129,6 +132,7 @@ export function StoryFeed({
 
       {remainingStories.length > 0 && (
         <LiveBetaFeed
+          key={activeCategory ?? "all"}
           stories={remainingStories}
           activeCategory={activeCategory}
           source={liveFeedSource}
