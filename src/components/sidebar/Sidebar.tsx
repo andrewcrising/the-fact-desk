@@ -1,17 +1,18 @@
-import { CorrectionLog } from "./CorrectionLog";
-import { DailyBriefSignup } from "./DailyBriefSignup";
+import type { Story } from "@/types/story";
 import { HealthDeskPlaceholder } from "./HealthDeskPlaceholder";
 import { LiveSignals } from "./LiveSignals";
 import { SourceWatchlist } from "./SourceWatchlist";
 
-export function Sidebar() {
+interface SidebarProps {
+  stories: Story[];
+}
+
+export function Sidebar({ stories }: SidebarProps) {
   return (
     <>
-      <HealthDeskPlaceholder />
-      <LiveSignals />
-      <SourceWatchlist />
-      <CorrectionLog />
-      <DailyBriefSignup />
+      <HealthDeskPlaceholder stories={stories} />
+      <LiveSignals stories={stories} />
+      <SourceWatchlist stories={stories} />
     </>
   );
 }
