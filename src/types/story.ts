@@ -37,6 +37,10 @@ export interface Story {
   publishedAt: string;
   updatedAt: string;
   tags: string[];
+  /** Publisher whose headline is displayed as attributed discovery metadata. */
+  headlineSource?: string;
+  /** How the public synopsis was produced; used for reader-facing provenance. */
+  briefingBasis?: "source-headline" | "multi-source-headlines" | "editorial";
   /** Neutral descriptor of how outlets are framing coverage — not partisan branding. */
   coverageAngle?: string;
 }

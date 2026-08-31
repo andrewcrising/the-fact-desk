@@ -53,6 +53,12 @@ export function StoryDetail({ story }: StoryDetailProps) {
         {story.title}
       </h1>
 
+      {story.headlineSource && (
+        <p className="mt-2 text-[11px] text-[var(--muted-light)]">
+          Source headline via {story.headlineSource} · Fact Desk analysis below
+        </p>
+      )}
+
       <p className="mt-4 text-lg leading-relaxed text-[var(--muted)]">
         {story.summary}
       </p>
@@ -140,7 +146,7 @@ export function StoryDetail({ story }: StoryDetailProps) {
       )}
 
       <p className="mt-10 border-t border-[var(--border-subtle)] pt-6 text-[13px] leading-relaxed text-[var(--muted-light)]">
-        Fast synopsis assembled from current source coverage and refreshed with the live desk. Priority measures urgency, not certainty; confidence and source coverage remain separate evidence signals.
+        Fact Desk briefings preserve source attribution while separating reported claims from corroborated facts. Publisher RSS descriptions are not republished unless a reviewed syndication licence expressly permits it. Priority measures urgency, not certainty; confidence and source coverage remain separate evidence signals.
       </p>
     </article>
   );

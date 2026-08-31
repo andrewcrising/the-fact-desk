@@ -3,6 +3,7 @@
  * Later: replace file writes with Supabase upsert or blob storage from cron.
  */
 import type { Story } from "@/types/story";
+import { sanitizeLiveStoryForDisplay } from "@/lib/ingest/editorial-firewall";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { dirname, join } from "path";
 
@@ -39,7 +40,7 @@ export function readRssCache(): RssCacheFile {
     return {
       cachedAt: parsed.cachedAt ?? null,
       feedUrl: parsed.feedUrl ?? null,
-      stories: parsed.stories,
+      stories: parsed.stories.map(sanitizeLiveStoryForDisplay),
     };
   } catch {
     return { ...EMPTY_CACHE };
