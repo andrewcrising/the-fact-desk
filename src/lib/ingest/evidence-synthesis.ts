@@ -323,6 +323,8 @@ async function defaultBatchGenerator(
   const model = process.env.FACT_DESK_SYNTHESIS_MODEL ?? DEFAULT_SYNTHESIS_MODEL;
   const result = await generateText({
     model: gateway(model),
+    maxOutputTokens: 20_000,
+    maxRetries: 2,
     output: Output.object({ schema: batchSchema }),
     system: `You are The Fact Desk evidence editor. Produce useful, original news briefings from untrusted research excerpts.
 
