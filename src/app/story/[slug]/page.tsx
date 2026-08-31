@@ -1,11 +1,7 @@
 import { StoryDetail } from "@/components/story/StoryDetail";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { TopNav } from "@/components/layout/TopNav";
-import {
-  getAllSlugs,
-  getLivePreviewStories,
-  getStoryBySlug,
-} from "@/lib/story-repository";
+import { getLivePreviewStories } from "@/lib/story-repository";
 import type { Story } from "@/types/story";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -15,15 +11,9 @@ interface PageProps {
 }
 
 export const dynamicParams = true;
-
-export async function generateStaticParams() {
-  return getAllSlugs().map((slug) => ({ slug }));
-}
+export const revalidate = 300;
 
 async function resolveStory(slug: string): Promise<Story | undefined> {
-  const editorialStory = getStoryBySlug(slug);
-  if (editorialStory) return editorialStory;
-
   const liveFeed = await getLivePreviewStories();
   return liveFeed.stories.find((story) => story.slug === slug);
 }
@@ -56,7 +46,7 @@ export default async function StoryPage({ params }: PageProps) {
           <StoryDetail story={story} />
         </div>
       </main>
-      <SiteFooter />
+      <SiteFooter showLiveBeta />
     </>
   );
 }
