@@ -234,9 +234,12 @@ export function clusterAndBalanceStories(stories: Story[]): Story[] {
 
   const clusters: Story[][] = [];
   for (const story of recent) {
-    const match = clusters.find((cluster) =>
-      cluster.some((existing) => titlesLikelyMatch(story, existing)),
-    );
+    // Match the cluster seed rather than any member. Single-linkage matching can
+    // let a bridge headline chain two otherwise unrelated events together.
+    const match = clusters.find((cluster) => {
+      const seed = cluster[0];
+      return seed ? titlesLikelyMatch(story, seed) : false;
+    });
     if (match) match.push(story);
     else clusters.push([story]);
   }
