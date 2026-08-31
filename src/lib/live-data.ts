@@ -1,6 +1,6 @@
 /**
  * Production live RSS layer — fetch with Next.js cache, file fallback.
- * Vercel Cron revalidates via /api/cron/revalidate-live (tag: live-rss).
+ * Revalidates frequently enough for high-priority breaking stories to remain useful.
  * Later: persist ingest results in Supabase/KV/Blob instead of unstable_cache only.
  */
 import { ingestEnabledFeeds } from "@/lib/ingest/ingest-feeds";
@@ -16,7 +16,7 @@ export interface LiveFeedResult {
   fetchedAt: string | null;
 }
 
-const REVALIDATE_SECONDS = 900;
+const REVALIDATE_SECONDS = 300;
 
 const fetchLiveRss = unstable_cache(
   async (): Promise<LiveFeedResult> => ({
@@ -24,7 +24,7 @@ const fetchLiveRss = unstable_cache(
     source: "live",
     fetchedAt: new Date().toISOString(),
   }),
-  ["live-rss-feed-v2"],
+  ["live-rss-feed-v3-priority"],
   { revalidate: REVALIDATE_SECONDS, tags: ["live-rss"] },
 );
 
