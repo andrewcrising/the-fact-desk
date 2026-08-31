@@ -11,7 +11,7 @@ interface PageProps {
 }
 
 export const dynamicParams = true;
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
 
 async function resolveStory(slug: string): Promise<Story | undefined> {
   const liveFeed = await getLivePreviewStories();

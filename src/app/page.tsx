@@ -7,7 +7,11 @@ import {
   isLiveBetaEnabled,
 } from "@/lib/story-repository";
 
-export const revalidate = 300;
+/**
+ * Render the shell per request so the homepage cannot accumulate an additional
+ * ISR layer on top of the five-minute source fetch caches.
+ */
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const showLiveBeta = isLiveBetaEnabled();
