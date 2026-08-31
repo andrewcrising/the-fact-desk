@@ -11,7 +11,7 @@ const TRADE_ENERGY_PATTERN =
 const HEALTH_PATTERN =
   /\b(outbreak|pandemic|recall|fda approv(?:e|es|ed|al)|drug approval|emergency use authorization|eua|cancer|vaccine|clinical trial|treatment|therapy)\b/i;
 const COURT_PATTERN =
-  /\b(supreme court|appeals court|court ruling|court|judge|ruling|injunction|indictment|conviction|petition)\b/i;
+  /\b(supreme court|appeals court|court ruling|court|judge|defen[sc]e lawyers?|criminal case|murder case|ruling|injunction|indictment|conviction|petition)\b/i;
 const CYBER_PATTERN =
   /\b(cyberattack|data breach|zero-day|vulnerabilit(?:y|ies)|cve-|ransomware|exploit)\b/i;
 const ELECTION_PATTERN =
@@ -28,7 +28,7 @@ const ENERGY_CATEGORY_PATTERN =
 const POLITICS_CATEGORY_PATTERN =
   /\b(congress|senate|house of representatives|white house|president|governor|election|campaign|administration|democrat|republican)\b/i;
 const CULTURE_CATEGORY_PATTERN =
-  /\b(film|movie|music|television|celebrity|sports?|golf|nfl|nba|mlb|nhl|soccer|arts?|culture)\b/i;
+  /\b(film|movie|music|television|celebrity|sports?|golf|football|baseball|basketball|hockey|tennis|olympics?|athlete|championship|world cup|nfl|nba|mlb|nhl|soccer|arts?|culture)\b/i;
 
 function combinedText(title: string, summary: string): string {
   return `${title} ${summary}`;

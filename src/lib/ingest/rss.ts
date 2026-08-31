@@ -2,6 +2,10 @@
  * RSS/Atom ingestion and normalization.
  */
 import { buildFastWhyItMatters } from "@/lib/ingest/fast-briefing";
+import {
+  boundPublicText,
+  MAX_PUBLIC_SUMMARY_CHARS,
+} from "@/lib/ingest/public-story";
 import { viewpointTag, type ViewpointBand } from "@/lib/viewpoints";
 import type { Signal, Story, StoryCategory } from "@/types/story";
 import { XMLParser } from "fast-xml-parser";
@@ -245,10 +249,10 @@ function normalizeItem(
   const sourceName = options.sourceName ?? "RSS";
   const category = resolveCategory(options.category);
   const description = item.description ?? "";
-  const summary =
-    description.length > 220
-      ? `${description.slice(0, 217)}…`
-      : description || item.title;
+  const summary = boundPublicText(
+    description || item.title,
+    MAX_PUBLIC_SUMMARY_CHARS,
+  );
   const whatHappened = description
     ? `${item.title}. ${description}`
     : item.title;
