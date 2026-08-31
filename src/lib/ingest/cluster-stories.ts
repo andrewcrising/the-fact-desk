@@ -1,5 +1,4 @@
 import { storyPriorityScore } from "@/lib/stories";
-import { buildMultiSourceHouseBriefing } from "@/lib/ingest/editorial-firewall";
 import {
   storyHasViewpoint,
   type ViewpointBand,
@@ -128,17 +127,17 @@ function mergeCluster(cluster: Story[]): Story {
   const sources = Array.from(sourceLinks.keys());
   const linkedUrls = sources.map((source) => sourceLinks.get(source));
   const linksAreComplete = linkedUrls.every((url): url is string => Boolean(url));
+  const bestSummary = ordered.reduce((best, story) =>
+    story.summary.length > best.summary.length ? story : best,
+  );
   const multiSource = sources.length >= 2;
-  const houseBriefing = multiSource
-    ? buildMultiSourceHouseBriefing({ representative, sources })
-    : undefined;
 
   return {
     ...representative,
-    summary: houseBriefing?.summary ?? representative.summary,
-    whatHappened: houseBriefing?.whatHappened ?? representative.whatHappened,
+    summary: bestSummary.summary,
+    whatHappened: bestSummary.whatHappened,
     whyItMatters: multiSource
-      ? `${representative.whyItMatters} Coverage now spans ${sources.length} publishers; that adds context but does not by itself independently confirm every claim.`
+      ? `${bestSummary.whyItMatters} Coverage now spans ${sources.length} publishers; that adds context but does not by itself independently confirm every claim.`
       : representative.whyItMatters,
     category: categoryFor(cluster),
     confidence: multiSource ? "Developing" : "Single-source",
@@ -148,11 +147,9 @@ function mergeCluster(cluster: Story[]): Story {
     publishedAt: oldestIso(ordered.map((story) => story.publishedAt)),
     updatedAt: newestIso(ordered.map((story) => story.updatedAt)),
     tags: Array.from(new Set(ordered.flatMap((story) => story.tags))),
-    headlineSource: representative.headlineSource ?? representative.sources[0],
-    briefingBasis: multiSource
-      ? "multi-source-headlines"
-      : representative.briefingBasis,
-    coverageAngle: houseBriefing?.coverageAngle ?? representative.coverageAngle,
+    coverageAngle: multiSource
+      ? `Related reporting clustered across ${sources.length} publishers; source claims still require editorial review.`
+      : representative.coverageAngle,
   };
 }
 

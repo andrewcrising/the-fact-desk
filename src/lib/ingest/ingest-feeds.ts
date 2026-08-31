@@ -48,10 +48,6 @@ async function fetchFeed(
       timeoutMs: FEED_TIMEOUT_MS,
       strict: true,
       viewpoint: getSourceViewpoint(feed.sourceName),
-      allowSyndicatedSummary: Boolean(
-        feed.syndicationLicense?.summaryReuse &&
-          feed.syndicationLicense.licenseUrl,
-      ),
     });
     return {
       id: feed.id,

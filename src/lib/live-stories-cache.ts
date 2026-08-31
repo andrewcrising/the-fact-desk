@@ -3,7 +3,6 @@
  * Production: replace with Supabase, Vercel Blob, or KV — not serverless FS.
  */
 import type { Story } from "@/types/story";
-import { sanitizeLiveStoryForDisplay } from "@/lib/ingest/editorial-firewall";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { dirname, join } from "path";
 
@@ -39,7 +38,7 @@ export function readLiveStoriesCache(): LiveStoriesCacheFile {
     return {
       generatedAt: parsed.generatedAt ?? null,
       feedCount: parsed.feedCount ?? 0,
-      stories: parsed.stories.map(sanitizeLiveStoryForDisplay),
+      stories: parsed.stories,
     };
   } catch {
     return { ...EMPTY };
