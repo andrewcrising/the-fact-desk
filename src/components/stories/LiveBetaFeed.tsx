@@ -73,7 +73,7 @@ function LiveBetaCard({ story }: { story: Story }) {
         <h3 className="pointer-events-none relative z-[1] font-serif text-base font-semibold leading-snug text-[var(--foreground)] sm:text-lg">
           {story.title}
         </h3>
-        <p className="pointer-events-none relative z-[1] mt-1.5 line-clamp-2 text-[13px] leading-relaxed text-[var(--muted)]">
+        <p className="pointer-events-none relative z-[1] mt-1.5 line-clamp-4 text-[13px] leading-relaxed text-[var(--muted)] sm:line-clamp-3">
           {story.summary}
         </p>
         <div className="relative z-10 mt-2 flex flex-wrap items-center justify-between gap-2 border-t border-[var(--border-subtle)] pt-2">
