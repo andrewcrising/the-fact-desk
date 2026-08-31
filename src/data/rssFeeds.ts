@@ -299,8 +299,8 @@ export const RSS_FEEDS: RssFeedConfig[] = [
   },
   {
     "id": "usa-today",
-    "sourceName": "USA Today",
-    "feedUrl": "https://rssfeeds.usatoday.com/usatoday-NewsTopStories",
+    "sourceName": "CBC News",
+    "feedUrl": "https://www.cbc.ca/webfeed/rss/rss-topstories",
     "category": "World",
     "signal": "Developing",
     "enabled": true
@@ -428,7 +428,7 @@ export const RSS_FEEDS: RssFeedConfig[] = [
   {
     "id": "nih-news",
     "sourceName": "U.S. NIH",
-    "feedUrl": "https://www.nih.gov/news-events/news-releases/rss.xml",
+    "feedUrl": "https://www.nih.gov/news-releases/feed.xml",
     "category": "Health",
     "signal": "Under-covered",
     "enabled": true
@@ -468,7 +468,7 @@ export const RSS_FEEDS: RssFeedConfig[] = [
   {
     "id": "nature",
     "sourceName": "Nature",
-    "feedUrl": "https://www.nature.com/nature.rss",
+    "feedUrl": "https://www.nature.com/nature/articles?format=rss&type=news",
     "category": "Health",
     "signal": "Under-covered",
     "enabled": true
@@ -484,7 +484,7 @@ export const RSS_FEEDS: RssFeedConfig[] = [
   {
     "id": "doj-news",
     "sourceName": "U.S. Department of Justice",
-    "feedUrl": "https://www.justice.gov/feeds/opa/justice-news.xml",
+    "feedUrl": "https://www.justice.gov/news/rss?m=1&type=press_release",
     "category": "Courts",
     "signal": "Under-covered",
     "enabled": true
@@ -500,15 +500,15 @@ export const RSS_FEEDS: RssFeedConfig[] = [
   {
     "id": "eia-energy",
     "sourceName": "U.S. Energy Information Administration",
-    "feedUrl": "https://www.eia.gov/rss/todayinenergy.xml",
+    "feedUrl": "https://www.eia.gov/rss/press_rss.xml",
     "category": "Energy",
     "signal": "Under-covered",
     "enabled": true
   },
   {
-    "id": "iea-news",
-    "sourceName": "International Energy Agency",
-    "feedUrl": "https://www.iea.org/rss/news.xml",
+    "id": "iaea-news",
+    "sourceName": "International Atomic Energy Agency",
+    "feedUrl": "https://www.iaea.org/feeds/news",
     "category": "Energy",
     "signal": "Under-covered",
     "enabled": true

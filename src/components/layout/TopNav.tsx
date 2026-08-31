@@ -51,12 +51,12 @@ export function TopNav() {
                 {link.label}
               </Link>
             ))}
-            <a
+            <Link
               href="/#health-desk"
               className="shrink-0 px-2.5 py-1.5 text-[12px] font-medium text-[var(--muted)] hover:text-[var(--foreground)] sm:text-[13px]"
             >
               Health Desk
-            </a>
+            </Link>
           </nav>
         </div>
       </div>

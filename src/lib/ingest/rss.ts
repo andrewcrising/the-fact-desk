@@ -103,6 +103,20 @@ function stableSlug(title: string, link?: string, index = 0): string {
 
 function parsePubDate(value?: string): string {
   if (!value) return new Date().toISOString();
+
+  const agencyDate = value.match(
+    /^(?:[A-Za-z]{3},\s*)?(\d{1,2})\/(\d{1,2})\/(\d{4})\s*-\s*(\d{1,2}):(\d{2})(?:\s*([AP]M))?/i,
+  );
+  if (agencyDate) {
+    const [, month, day, year, hourValue, minute, period] = agencyDate;
+    let hour = Number(hourValue);
+    if (period?.toUpperCase() === "PM" && hour < 12) hour += 12;
+    if (period?.toUpperCase() === "AM" && hour === 12) hour = 0;
+    return new Date(
+      Date.UTC(Number(year), Number(month) - 1, Number(day), hour, Number(minute)),
+    ).toISOString();
+  }
+
   const parsed = Date.parse(value);
   return Number.isNaN(parsed)
     ? new Date().toISOString()

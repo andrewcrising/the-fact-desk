@@ -45,6 +45,18 @@ function publishedMs(story: Story): number {
   return Number.isNaN(parsed) ? 0 : parsed;
 }
 
+function termsMatch(a: string, b: string): boolean {
+  if (a === b) return true;
+  if (Math.min(a.length, b.length) < 5) return false;
+  return a.startsWith(b) || b.startsWith(a);
+}
+
+function sharedTermCount(aTerms: Set<string>, bTerms: Set<string>): number {
+  return Array.from(aTerms).filter((aTerm) =>
+    Array.from(bTerms).some((bTerm) => termsMatch(aTerm, bTerm)),
+  ).length;
+}
+
 function titlesLikelyMatch(a: Story, b: Story): boolean {
   const aUrl = a.sourceUrls?.[0]?.toLowerCase();
   const bUrl = b.sourceUrls?.[0]?.toLowerCase();
@@ -60,13 +72,17 @@ function titlesLikelyMatch(a: Story, b: Story): boolean {
 
   const aTerms = titleTerms(a.title);
   const bTerms = titleTerms(b.title);
-  const shared = Array.from(aTerms).filter((term) => bTerms.has(term)).length;
-  const union = new Set([...aTerms, ...bTerms]).size;
+  const shared = sharedTermCount(aTerms, bTerms);
+  const union = Math.max(1, aTerms.size + bTerms.size - shared);
   const smaller = Math.min(aTerms.size, bTerms.size);
-  const jaccard = union === 0 ? 0 : shared / union;
+  const jaccard = shared / union;
   const overlap = smaller === 0 ? 0 : shared / smaller;
 
-  return (shared >= 4 && overlap >= 0.65) || (shared >= 3 && jaccard >= 0.6);
+  return (
+    (shared >= 4 && overlap >= 0.38) ||
+    (shared >= 3 && overlap >= 0.5) ||
+    (shared >= 2 && jaccard >= 0.5)
+  );
 }
 
 function categoryFor(cluster: Story[]): StoryCategory {
@@ -134,38 +150,53 @@ function mergeCluster(cluster: Story[]): Story {
 }
 
 function balanceStories(stories: Story[]): Story[] {
-  const sorted = [...stories].sort((a, b) => {
+  const compareStories = (a: Story, b: Story): number => {
     const priorityDelta = storyPriorityScore(b) - storyPriorityScore(a);
     if (priorityDelta !== 0) return priorityDelta;
     const coverageDelta = Math.min(b.sources.length, 4) - Math.min(a.sources.length, 4);
     if (coverageDelta !== 0) return coverageDelta;
     return Date.parse(b.updatedAt) - Date.parse(a.updatedAt);
-  });
-
+  };
+  const sorted = [...stories].sort(compareStories);
   const selected: Story[] = [];
+  const selectedIds = new Set<string>();
   const categoryCounts = new Map<StoryCategory, number>();
   const singleSourceCounts = new Map<string, number>();
   const categoryCap = 12;
   const singleSourceCap = 8;
+  const categoryFloor = 2;
 
-  for (const story of sorted) {
-    if ((categoryCounts.get(story.category) ?? 0) >= categoryCap) continue;
+  const trySelect = (story: Story): boolean => {
+    if (selected.length >= MAX_OUTPUT_STORIES || selectedIds.has(story.id)) return false;
+    if ((categoryCounts.get(story.category) ?? 0) >= categoryCap) return false;
 
     if (story.sources.length === 1) {
       const source = story.sources[0] ?? "Unknown";
-      if ((singleSourceCounts.get(source) ?? 0) >= singleSourceCap) continue;
+      if ((singleSourceCounts.get(source) ?? 0) >= singleSourceCap) return false;
       singleSourceCounts.set(source, (singleSourceCounts.get(source) ?? 0) + 1);
     }
 
     selected.push(story);
-    categoryCounts.set(
-      story.category,
-      (categoryCounts.get(story.category) ?? 0) + 1,
-    );
-    if (selected.length >= MAX_OUTPUT_STORIES) break;
+    selectedIds.add(story.id);
+    categoryCounts.set(story.category, (categoryCounts.get(story.category) ?? 0) + 1);
+    return true;
+  };
+
+  const availableCategories = Array.from(new Set(sorted.map((story) => story.category)));
+  for (const category of availableCategories) {
+    for (const story of sorted) {
+      if (story.category !== category) continue;
+      if ((categoryCounts.get(category) ?? 0) >= categoryFloor) break;
+      trySelect(story);
+    }
   }
 
-  return selected;
+  for (const story of sorted) {
+    if (selected.length >= MAX_OUTPUT_STORIES) break;
+    trySelect(story);
+  }
+
+  return selected.sort(compareStories);
 }
 
 /**
@@ -180,10 +211,9 @@ export function clusterAndBalanceStories(stories: Story[]): Story[] {
 
   const clusters: Story[][] = [];
   for (const story of recent) {
-    const match = clusters.find((cluster) => {
-      const representative = cluster[0];
-      return representative ? titlesLikelyMatch(story, representative) : false;
-    });
+    const match = clusters.find((cluster) =>
+      cluster.some((existing) => titlesLikelyMatch(story, existing)),
+    );
     if (match) match.push(story);
     else clusters.push([story]);
   }
