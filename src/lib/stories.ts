@@ -97,9 +97,14 @@ function liveEvidenceScore(story: Story): number {
   );
 }
 
-const URGENT_IMPACT_PATTERN =
-  /\b(nuclear|war|invasion|airstrike|air strike|missile|rocket attack|military attack|mass shooting|assassination|coup|earthquake|hurricane|tornado|flash flood|wildfire|explosion|evacuat(?:e|ed|ion)|missing|killed|dead|deaths?|ceasefire|supreme court|election results?)\b/i;
-
+const ACTIVE_CONFLICT_PATTERN =
+  /\b(airstrik(?:e|es)|military strike|military attack|missile(?:s)?|rocket launch(?:er|ers)|rocket attack|invasion|ceasefire|coup|assassination|retaliat(?:e|es|ed|ion)|nuclear attack)\b/i;
+const CONFLICT_ACTOR_PATTERN =
+  /\b(military|forces?|army|navy|air force|troops?|iran|israel|russia|ukraine|china|taiwan|north korea|south korea|united states|u\.s\.|us)\b/i;
+const DISASTER_PATTERN =
+  /\b(flash flood(?:s)?|earthquake(?:s)?|hurricane(?:s)?|tornado(?:es)?|wildfire(?:s)?|tsunami(?:s)?|landslide(?:s)?|ferry capsiz(?:e|es|ed)|mass shooting|mass casualty|evacuat(?:e|es|ed|ion)|people missing|missing after|killed after|fatalit(?:y|ies))\b/i;
+const ELECTION_RESULT_PATTERN =
+  /\b(election results?|wins? election|elected president|elected prime minister|declared winner)\b/i;
 const MAJOR_IMPACT_PATTERN =
   /\b(strike|sanctions?|interest rates?|rate hike|rate cut|inflation|jobs report|unemployment|fda approves?|recall|outbreak|pandemic|cyberattack|data breach|zero-day|merger|acquisition|bank failure|default|shutdown|indictment|conviction|ruling|tariffs?)\b/i;
 
@@ -118,7 +123,18 @@ function recencyScore(story: Story): number {
 
 function impactScore(story: Story): number {
   const text = `${story.title} ${story.summary} ${story.whatHappened}`;
-  if (URGENT_IMPACT_PATTERN.test(text)) return 40;
+
+  // Culture coverage should not jump to the urgent lane simply because a
+  // celebrity obituary or retrospective contains words such as death/killed.
+  if (story.category === "Culture") {
+    return 0;
+  }
+
+  if (ACTIVE_CONFLICT_PATTERN.test(text) && CONFLICT_ACTOR_PATTERN.test(text)) {
+    return 60;
+  }
+  if (DISASTER_PATTERN.test(text)) return 40;
+  if (ELECTION_RESULT_PATTERN.test(text)) return 38;
   if (MAJOR_IMPACT_PATTERN.test(text)) return 22;
   return 0;
 }
