@@ -25,6 +25,8 @@ export async function GET(request: NextRequest) {
         multiSourceStoryCount: result.multiSourceStoryCount,
         failedFeedIds: result.failedFeedIds,
         emptyFeedIds: result.emptyFeedIds,
+        activeSourceViewpointCounts: result.activeSourceViewpointCounts,
+        storyViewpointCounts: result.storyViewpointCounts,
         stories: result.stories,
       });
     }

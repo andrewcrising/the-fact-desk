@@ -1,4 +1,8 @@
 import { storyPriorityScore } from "@/lib/stories";
+import {
+  storyHasViewpoint,
+  type ViewpointBand,
+} from "@/lib/viewpoints";
 import type { Story, StoryCategory } from "@/types/story";
 
 const STOP_WORDS = new Set([
@@ -165,6 +169,12 @@ function balanceStories(stories: Story[]): Story[] {
   const categoryCap = 12;
   const singleSourceCap = 8;
   const categoryFloor = 2;
+  const viewpointFloors: Array<[ViewpointBand, number]> = [
+    ["right-of-center", 8],
+    ["left-of-center", 8],
+    ["center-mixed", 8],
+    ["primary-source", 4],
+  ];
 
   const trySelect = (story: Story): boolean => {
     if (selected.length >= MAX_OUTPUT_STORIES || selectedIds.has(story.id)) return false;
@@ -181,6 +191,19 @@ function balanceStories(stories: Story[]): Story[] {
     categoryCounts.set(story.category, (categoryCounts.get(story.category) ?? 0) + 1);
     return true;
   };
+
+  // Representation is a selection guardrail, never an evidence or priority boost.
+  // Each band still contributes its highest-ranked available stories first.
+  for (const [band, floor] of viewpointFloors) {
+    let selectedForBand = selected.filter((story) =>
+      storyHasViewpoint(story, band),
+    ).length;
+    for (const story of sorted) {
+      if (selectedForBand >= floor) break;
+      if (!storyHasViewpoint(story, band)) continue;
+      if (trySelect(story)) selectedForBand += 1;
+    }
+  }
 
   const availableCategories = Array.from(new Set(sorted.map((story) => story.category)));
   for (const category of availableCategories) {

@@ -3,6 +3,7 @@ import { DeskCard } from "@/components/ui/DeskCard";
 import { DeskLabel } from "@/components/ui/DeskLabel";
 import { SignalLabel } from "@/components/ui/SignalLabel";
 import type { LiveDataSource } from "@/lib/live-data";
+import { countStoriesByViewpoint } from "@/lib/viewpoints";
 import {
   formatSourceSpread,
   formatStoryTime,
@@ -165,6 +166,10 @@ export function LiveBetaFeed({
     ? `${activeCategory} Priority Desk`
     : "Live Priority Desk";
   const buckets = partitionStoriesByPriority(stories);
+  const viewpointCounts = countStoriesByViewpoint(stories);
+  const bothSidesRepresented =
+    viewpointCounts["left-of-center"] > 0 &&
+    viewpointCounts["right-of-center"] > 0;
 
   return (
     <section
@@ -178,6 +183,11 @@ export function LiveBetaFeed({
           <p className="mt-0.5 max-w-2xl text-[11px] leading-snug text-[var(--muted-light)]">
             {activePublisherCount} active publishers · urgency ranks public impact and recency while evidence labels show how well-supported each story is
           </p>
+          {bothSidesRepresented && (
+            <p className="mt-0.5 max-w-2xl text-[10px] leading-snug text-[var(--muted-light)]">
+              Viewpoint guardrail active · left-of-center, center/mixed, right-of-center, and primary reporting are tracked separately from evidence confidence
+            </p>
+          )}
         </div>
         {fetchedAt && (
           <p className="font-mono text-[10px] text-[var(--muted-light)]">

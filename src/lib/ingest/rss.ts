@@ -2,6 +2,7 @@
  * RSS/Atom ingestion and normalization.
  */
 import { buildFastWhyItMatters } from "@/lib/ingest/fast-briefing";
+import { viewpointTag, type ViewpointBand } from "@/lib/viewpoints";
 import type { Signal, Story, StoryCategory } from "@/types/story";
 import { XMLParser } from "fast-xml-parser";
 
@@ -19,6 +20,7 @@ export interface FetchRssStoriesOptions {
   limit?: number;
   timeoutMs?: number;
   strict?: boolean;
+  viewpoint?: ViewpointBand;
 }
 
 interface RssItemRaw {
@@ -181,9 +183,13 @@ function parseRssItems(xml: string): RssItemRaw[] {
   }
 }
 
-function buildTags(sourceName: string): string[] {
+function buildTags(sourceName: string, viewpoint?: ViewpointBand): string[] {
   const slug = sourceName.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-  return ["live-rss", slug || "rss"];
+  return [
+    "live-rss",
+    slug || "rss",
+    ...(viewpoint ? [viewpointTag(viewpoint)] : []),
+  ];
 }
 
 function normalizeItem(
@@ -218,7 +224,7 @@ function normalizeItem(
     sourceUrls: item.link ? [item.link] : undefined,
     publishedAt,
     updatedAt: publishedAt,
-    tags: buildTags(sourceName),
+    tags: buildTags(sourceName, options.viewpoint),
     coverageAngle:
       "Fast briefing generated from source-provided feed text; details should update as corroborating coverage arrives.",
   };

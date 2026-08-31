@@ -4,6 +4,11 @@
 import { getEnabledFeeds } from "@/data/rssFeeds";
 import { clusterAndBalanceStories } from "@/lib/ingest/cluster-stories";
 import { fetchRssStories } from "@/lib/ingest/rss";
+import {
+  countStoriesByViewpoint,
+  getSourceViewpoint,
+  type ViewpointBand,
+} from "@/lib/viewpoints";
 import type { Story } from "@/types/story";
 
 const PER_FEED_LIMIT = 3;
@@ -20,6 +25,8 @@ export interface FeedIngestDiagnostics {
   multiSourceStoryCount: number;
   failedFeedIds: string[];
   emptyFeedIds: string[];
+  activeSourceViewpointCounts: Record<ViewpointBand, number>;
+  storyViewpointCounts: Record<ViewpointBand, number>;
 }
 
 interface FeedResult {
@@ -40,6 +47,7 @@ async function fetchFeed(
       limit: PER_FEED_LIMIT,
       timeoutMs: FEED_TIMEOUT_MS,
       strict: true,
+      viewpoint: getSourceViewpoint(feed.sourceName),
     });
     return {
       id: feed.id,
@@ -75,6 +83,18 @@ export async function ingestEnabledFeedsWithDiagnostics(): Promise<FeedIngestDia
         .map((result) => result.sourceName),
     ),
   ).sort();
+  const activeSourceViewpointCounts = activeSources.reduce(
+    (counts, source) => {
+      counts[getSourceViewpoint(source)] += 1;
+      return counts;
+    },
+    {
+      "left-of-center": 0,
+      "center-mixed": 0,
+      "right-of-center": 0,
+      "primary-source": 0,
+    } satisfies Record<ViewpointBand, number>,
+  );
 
   return {
     stories,
@@ -90,6 +110,8 @@ export async function ingestEnabledFeedsWithDiagnostics(): Promise<FeedIngestDia
     emptyFeedIds: results
       .filter((result) => result.status === "empty")
       .map((result) => result.id),
+    activeSourceViewpointCounts,
+    storyViewpointCounts: countStoriesByViewpoint(stories),
   };
 }
 
