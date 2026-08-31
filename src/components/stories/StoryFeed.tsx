@@ -1,6 +1,7 @@
 "use client";
 
 import { STORY_CATEGORIES } from "@/data/navigation";
+import { ReaderSupportCard } from "@/components/support/ReaderSupportCard";
 import {
   HealthDeskIntro,
   HealthDeskTicker,
@@ -154,6 +155,8 @@ export function StoryFeed({
           </button>
         </div>
       )}
+
+      <ReaderSupportCard className="lg:hidden" />
 
       <section
         id="health-desk"

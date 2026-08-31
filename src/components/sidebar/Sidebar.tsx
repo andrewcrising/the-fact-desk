@@ -1,4 +1,5 @@
 import type { Story } from "@/types/story";
+import { ReaderSupportCard } from "@/components/support/ReaderSupportCard";
 import { HealthDeskPlaceholder } from "./HealthDeskPlaceholder";
 import { LiveSignals } from "./LiveSignals";
 import { SourceWatchlist } from "./SourceWatchlist";
@@ -13,6 +14,7 @@ export function Sidebar({ stories }: SidebarProps) {
       <LiveSignals stories={stories} />
       <HealthDeskPlaceholder stories={stories} />
       <SourceWatchlist stories={stories} />
+      <ReaderSupportCard />
     </>
   );
 }
