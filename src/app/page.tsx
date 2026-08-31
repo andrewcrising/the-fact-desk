@@ -3,15 +3,13 @@ import { Hero } from "@/components/layout/Hero";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { TopNav } from "@/components/layout/TopNav";
 import {
-  getHomepageStories,
   getLivePreviewStories,
   isLiveBetaEnabled,
 } from "@/lib/story-repository";
 
-export const revalidate = 900;
+export const revalidate = 300;
 
 export default async function Home() {
-  const stories = getHomepageStories();
   const showLiveBeta = isLiveBetaEnabled();
   const liveFeed = showLiveBeta
     ? await getLivePreviewStories()
@@ -22,13 +20,13 @@ export default async function Home() {
       <TopNav />
       <Hero />
       <Dashboard
-        stories={stories}
+        stories={[]}
         livePreviewStories={liveFeed.stories}
         liveFeedSource={liveFeed.source}
         liveFeedFetchedAt={liveFeed.fetchedAt}
         showLiveBeta={showLiveBeta}
       />
-      <SiteFooter showLiveBeta={showLiveBeta} />
+      <SiteFooter showLiveBeta={showLiveBeta && liveFeed.stories.length > 0} />
     </>
   );
 }

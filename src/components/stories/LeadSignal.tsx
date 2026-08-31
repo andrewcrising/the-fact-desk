@@ -2,7 +2,11 @@ import { ConfidenceLabel } from "@/components/ui/ConfidenceLabel";
 import { DeskCard } from "@/components/ui/DeskCard";
 import { DeskLabel } from "@/components/ui/DeskLabel";
 import { SignalLabel } from "@/components/ui/SignalLabel";
-import { formatSourceSpread, formatStoryTime } from "@/lib/stories";
+import {
+  formatSourceSpread,
+  formatStoryTime,
+  getStoryPriority,
+} from "@/lib/stories";
 import type { Story } from "@/types/story";
 import Link from "next/link";
 
@@ -11,12 +15,14 @@ interface LeadSignalProps {
 }
 
 export function LeadSignal({ story }: LeadSignalProps) {
+  const priority = getStoryPriority(story);
+
   return (
     <DeskCard variant="featured" id="top-signal" className="scroll-mt-20 overflow-hidden">
       <div className="border-b-2 border-[var(--lead-accent)]">
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border-subtle)] bg-white px-3 py-2 sm:px-4">
           <div className="flex flex-wrap items-center gap-1.5">
-            <DeskLabel className="!text-[var(--accent)]">Top Signal</DeskLabel>
+            <DeskLabel className="!text-[var(--accent)]">Top Priority · {priority}</DeskLabel>
             <ConfidenceLabel confidence={story.confidence} />
             <SignalLabel signal={story.signal} />
           </div>

@@ -1,6 +1,10 @@
 import { ConfidenceLabel } from "@/components/ui/ConfidenceLabel";
 import { SignalLabel } from "@/components/ui/SignalLabel";
-import { formatSourceSpread, formatStoryTime } from "@/lib/stories";
+import {
+  formatSourceSpread,
+  formatStoryTime,
+  getStoryPriority,
+} from "@/lib/stories";
 import type { Story } from "@/types/story";
 import Link from "next/link";
 
@@ -11,7 +15,7 @@ interface StoryDetailProps {
 export function StoryDetail({ story }: StoryDetailProps) {
   const sourceUrls = story.sourceUrls ?? [];
   const linksAreAligned = sourceUrls.length === story.sources.length;
-  const isLiveStory = story.tags.includes("live-rss");
+  const priority = getStoryPriority(story);
 
   return (
     <article className="mx-auto max-w-3xl">
@@ -23,10 +27,13 @@ export function StoryDetail({ story }: StoryDetailProps) {
       </Link>
 
       <p className="desk-kicker mb-3 text-[var(--accent-muted)]">
-        Fact Desk synopsis
+        Fact Desk synopsis · live
       </p>
 
       <div className="mb-4 flex flex-wrap items-center gap-2">
+        <span className="text-[10px] font-semibold uppercase tracking-wide text-[var(--accent)]">
+          {priority} priority
+        </span>
         <ConfidenceLabel confidence={story.confidence} />
         <SignalLabel signal={story.signal} />
         <span className="text-[11px] font-medium uppercase tracking-wide text-[var(--muted-light)]">
@@ -125,9 +132,7 @@ export function StoryDetail({ story }: StoryDetailProps) {
       )}
 
       <p className="mt-10 border-t border-[var(--border-subtle)] pt-6 text-[13px] leading-relaxed text-[var(--muted-light)]">
-        {isLiveStory
-          ? "Live synopsis assembled from the linked source coverage. Multi-source means multiple publishers are covering the development; it does not by itself prove every claim is independently confirmed."
-          : "Prototype briefing using editorial preview data. Scores and labels are editorial signals for demonstration — not automated truth claims."}
+        Fast synopsis assembled from current source coverage and refreshed with the live desk. Priority measures urgency, not certainty; confidence and source coverage remain separate evidence signals.
       </p>
     </article>
   );

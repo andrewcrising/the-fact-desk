@@ -43,7 +43,7 @@ export function Dashboard({
           </Suspense>
         </main>
         <aside className="space-y-3 lg:sticky lg:top-[5.5rem] lg:max-h-[calc(100vh-6.5rem)] lg:self-start lg:overflow-y-auto lg:pb-4">
-          <Sidebar />
+          <Sidebar stories={showLiveBeta ? livePreviewStories : []} />
         </aside>
       </div>
     </div>

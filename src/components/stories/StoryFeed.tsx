@@ -8,9 +8,8 @@ import {
 import {
   categoryCounts,
   filterByCategory,
-  getTopSignalStory,
-  storiesBySignal,
-  storiesLowConfidence,
+  getHighestPriorityStory,
+  rankStoriesByPriority,
 } from "@/lib/stories";
 import type { LiveDataSource } from "@/lib/live-data";
 import type { Story, StoryCategory } from "@/types/story";
@@ -31,7 +30,6 @@ interface StoryFeedProps {
 }
 
 export function StoryFeed({
-  stories: homepageStories,
   livePreviewStories = [],
   showLiveBeta = false,
   liveFeedSource = "cache",
@@ -43,12 +41,15 @@ export function StoryFeed({
   useEffect(() => {
     const refreshTimer = window.setInterval(
       () => router.refresh(),
-      15 * 60 * 1000,
+      5 * 60 * 1000,
     );
     return () => window.clearInterval(refreshTimer);
   }, [router]);
 
-  const allStories = homepageStories;
+  const allStories = useMemo(
+    () => rankStoriesByPriority(showLiveBeta ? livePreviewStories : []),
+    [livePreviewStories, showLiveBeta],
+  );
 
   const activeCategory = useMemo(() => {
     const raw = searchParams.get("category");
@@ -73,135 +74,82 @@ export function StoryFeed({
   );
 
   const filtered = useMemo(
-    () => filterByCategory(allStories, activeCategory),
+    () => rankStoriesByPriority(filterByCategory(allStories, activeCategory)),
     [allStories, activeCategory],
   );
 
-  const filteredLivePreviewStories = useMemo(
-    () => filterByCategory(livePreviewStories, activeCategory),
-    [livePreviewStories, activeCategory],
-  );
-
-  const topSignal = useMemo(() => getTopSignalStory(filtered), [filtered]);
-
-  const otherTopSignals = useMemo(
-    () =>
-      storiesBySignal(filtered, "Top Signal").filter(
-        (s) => s.id !== topSignal?.id,
-      ),
-    [filtered, topSignal],
-  );
-
-  const underCovered = useMemo(
-    () => storiesBySignal(filtered, "Under-covered"),
+  const topPriority = useMemo(
+    () => getHighestPriorityStory(filtered),
     [filtered],
   );
 
-  const crossAngle = useMemo(
-    () => storiesBySignal(filtered, "Cross-angle"),
-    [filtered],
+  const remainingStories = useMemo(
+    () => filtered.filter((story) => story.id !== topPriority?.id),
+    [filtered, topPriority],
   );
-
-  const developing = useMemo(() => {
-    const low = storiesLowConfidence(filtered);
-    const seen = new Set<string>();
-    return low.filter((s) => {
-      if (seen.has(s.id)) return false;
-      seen.add(s.id);
-      return true;
-    });
-  }, [filtered]);
 
   const healthStories = useMemo(
-    () => allStories.filter((s) => s.category === "Health"),
+    () => rankStoriesByPriority(allStories.filter((s) => s.category === "Health")),
     [allStories],
   );
 
   const counts = useMemo(() => categoryCounts(allStories), [allStories]);
 
+  if (!showLiveBeta || allStories.length === 0) {
+    return (
+      <div className="desk-card border-dashed px-6 py-8 text-center">
+        <p className="desk-kicker text-[9px] text-[var(--accent-muted)]">
+          Live desk temporarily unavailable
+        </p>
+        <p className="mt-2 text-sm text-[var(--muted)]">
+          The Fact Desk does not substitute demonstration stories when live data is unavailable. Automatic source refresh will retry.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-3">
-      {showLiveBeta && (
+      {topPriority && (
+        <section aria-labelledby="top-priority-heading">
+          <h2 id="top-priority-heading" className="sr-only">
+            Top priority
+          </h2>
+          <LeadSignal story={topPriority} />
+        </section>
+      )}
+
+      <DeskTicker stories={allStories} />
+
+      <CategoryFilter
+        active={activeCategory}
+        onChange={setCategory}
+        counts={counts}
+      />
+
+      {remainingStories.length > 0 && (
         <LiveBetaFeed
-          stories={filteredLivePreviewStories}
+          stories={remainingStories}
           activeCategory={activeCategory}
           source={liveFeedSource}
           fetchedAt={liveFeedFetchedAt}
         />
       )}
 
-      <div className="desk-card border-dashed px-4 py-3">
-        <p className="desk-kicker text-[9px] text-[var(--accent-muted)]">
-          Editorial interface preview
-        </p>
-        <p className="mt-1 text-[12px] leading-snug text-[var(--muted)]">
-          The sections below use demonstration stories. The live, updating proof
-          is the feed above.
-        </p>
-      </div>
-
-      {topSignal && (
-        <section aria-labelledby="top-signal-heading">
-          <h2 id="top-signal-heading" className="sr-only">
-            Top Signal
-          </h2>
-          <LeadSignal story={topSignal} />
-        </section>
+      {filtered.length === 0 && (
+        <div className="desk-card border-dashed px-6 py-8 text-center">
+          <p className="text-sm text-[var(--muted)]">
+            No live stories are currently available in this category.
+          </p>
+          <button
+            type="button"
+            onClick={() => setCategory(null)}
+            className="mt-3 text-sm font-medium text-[var(--accent)] hover:underline"
+          >
+            View all desks
+          </button>
+        </div>
       )}
-
-      <DeskTicker stories={allStories} />
-
-      <div className="space-y-3">
-        <CategoryFilter
-          active={activeCategory}
-          onChange={setCategory}
-          counts={counts}
-        />
-
-        {otherTopSignals.length > 0 && (
-          <StorySection
-            id="more-top-signals"
-            title="More top signals"
-            stories={otherTopSignals}
-          />
-        )}
-
-        <StorySection
-          id="under-covered"
-          title="Under-covered"
-          description="Important stories with limited mainstream pickup."
-          stories={underCovered}
-        />
-
-        <StorySection
-          id="cross-angle"
-          title="Cross-angle view"
-          description="Multiple credible sources with differing emphasis."
-          stories={crossAngle}
-        />
-
-        <StorySection
-          id="developing"
-          title="Developing / low confidence"
-          description="Still forming, disputed, or thinly sourced — read with care."
-          stories={developing}
-        />
-
-        {filtered.length === 0 && (
-          <div className="desk-card border-dashed px-6 py-8 text-center">
-            <p className="text-sm text-[var(--muted)]">
-              No stories in this category.
-            </p>
-            <button
-              type="button"
-              onClick={() => setCategory(null)}
-              className="mt-3 text-sm font-medium text-[var(--accent)] hover:underline"
-            >
-              View all desks
-            </button>
-          </div>
-        )}
-      </div>
 
       <section
         id="health-desk"
@@ -213,13 +161,13 @@ export function StoryFeed({
         {healthStories.length > 0 ? (
           <StorySection
             id="health-desk-stories"
-            title="Health desk preview"
-            description="Early health signals from the main desk — full Health Desk coming soon."
-            stories={healthStories}
+            title="Live health updates"
+            description="Current health reporting from the same live source network, ranked by Fact Desk priority."
+            stories={healthStories.slice(0, 8)}
           />
         ) : (
           <p className="text-[12px] text-[var(--muted-light)]">
-            Health desk stories will appear here as coverage is added.
+            No live health stories are available right now.
           </p>
         )}
       </section>
