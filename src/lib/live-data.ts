@@ -24,7 +24,7 @@ const fetchLiveRss = unstable_cache(
     source: "live",
     fetchedAt: new Date().toISOString(),
   }),
-  ["live-rss-feed-v3-priority"],
+  ["live-rss-feed-v4-priority-tuned"],
   { revalidate: REVALIDATE_SECONDS, tags: ["live-rss"] },
 );
 
