@@ -48,6 +48,9 @@ viewpoint representation, and corroboration remain separate signals.
   attribution-only source discovery rather than publishing uncertain prose.
 - Generation model, time, source fingerprint, source count, claim count, and
   provider generation identifier (when available) are retained for audit.
+- A validated briefing is cached against the fingerprint of its complete
+  evidence set. Unchanged evidence reuses the same reviewed output; new or
+  changed evidence receives a new synthesis and audit record.
 
 ## Operations
 

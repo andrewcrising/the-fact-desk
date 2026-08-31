@@ -25,7 +25,7 @@ export function StoryCard({ story }: StoryCardProps) {
           {story.title}
         </h3>
 
-        <p className="mt-2 line-clamp-2 text-[14px] leading-relaxed text-[var(--muted)]">
+        <p className="mt-2 line-clamp-4 text-[14px] leading-relaxed text-[var(--muted)] sm:line-clamp-3">
           {story.summary}
         </p>
 

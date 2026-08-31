@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 
 import { getStoryResearchExcerpt } from "@/lib/ingest/rss";
 import type { Story } from "@/types/story";
+import { getCache } from "@vercel/functions";
 import { generateText, gateway, Output } from "ai";
 import { z } from "zod";
 
@@ -53,6 +54,16 @@ export type BatchGenerator = (
     sources: ResearchSource[];
   }>,
 ) => Promise<BatchGenerationResult>;
+
+interface StoredBriefing {
+  briefing: GeneratedBriefing;
+  generatedAt: string;
+  generationId?: string;
+  model: string;
+  sourceFingerprint: string;
+}
+
+const SYNTHESIS_CACHE_TTL_SECONDS = 7 * 24 * 60 * 60;
 
 const GENERIC_FILLER = [
   "this development",
@@ -208,6 +219,104 @@ function buildCandidates(
     .filter((candidate): candidate is SynthesisCandidate => Boolean(candidate));
 }
 
+async function loadStoredBriefings(
+  candidates: SynthesisCandidate[],
+): Promise<Map<string, StoredBriefing>> {
+  const stored = new Map<string, StoredBriefing>();
+  if (!process.env.VERCEL) return stored;
+
+  try {
+    const cache = getCache({ namespace: "fact-desk-synthesis-v1" });
+    await Promise.all(
+      candidates.map(async (candidate) => {
+        const fingerprint = sourceFingerprint(candidate);
+        const value = (await cache.get(fingerprint)) as
+          | StoredBriefing
+          | undefined;
+        if (
+          value?.sourceFingerprint === fingerprint &&
+          passesPublicationGate(candidate, value.briefing)
+        ) {
+          stored.set(candidate.id, value);
+        }
+      }),
+    );
+  } catch (error) {
+    console.warn("[evidence-synthesis] cache read failed", {
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+
+  return stored;
+}
+
+async function storeBriefings(
+  candidates: SynthesisCandidate[],
+  briefings: Map<string, StoredBriefing>,
+): Promise<void> {
+  if (!process.env.VERCEL || briefings.size === 0) return;
+
+  try {
+    const cache = getCache({ namespace: "fact-desk-synthesis-v1" });
+    await Promise.all(
+      candidates.map(async (candidate) => {
+        const value = briefings.get(candidate.id);
+        if (!value) return;
+        await cache.set(value.sourceFingerprint, value, {
+          name: "fact-desk-story-briefing",
+          tags: ["fact-desk-synthesis"],
+          ttl: SYNTHESIS_CACHE_TTL_SECONDS,
+        });
+      }),
+    );
+  } catch (error) {
+    console.warn("[evidence-synthesis] cache write failed", {
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+}
+
+function applyBriefings(
+  stories: Story[],
+  candidates: SynthesisCandidate[],
+  briefings: Map<string, StoredBriefing>,
+): Story[] {
+  const candidatesById = new Map(
+    candidates.map((candidate) => [candidate.id, candidate]),
+  );
+
+  return stories.map((story) => {
+    const candidate = candidatesById.get(story.id);
+    const stored = briefings.get(story.id);
+    if (
+      !candidate ||
+      !stored ||
+      !passesPublicationGate(candidate, stored.briefing)
+    ) {
+      return story;
+    }
+
+    return {
+      ...story,
+      summary: stored.briefing.summary.trim(),
+      whatHappened: stored.briefing.whatHappened.trim(),
+      whyItMatters: stored.briefing.whyItMatters.trim(),
+      briefingBasis: "evidence-synthesis",
+      coverageAngle:
+        `Original Fact Desk synthesis from ${candidate.sources.length} attributed research source${candidate.sources.length === 1 ? "" : "s"}; source prose is not republished.`,
+      synthesis: {
+        status: "verified",
+        model: stored.model,
+        generatedAt: stored.generatedAt,
+        generationId: stored.generationId,
+        sourceFingerprint: stored.sourceFingerprint,
+        sourceCount: candidate.sources.length,
+        claimCount: stored.briefing.claims.length,
+      },
+    };
+  });
+}
+
 async function defaultBatchGenerator(
   candidates: Parameters<BatchGenerator>[0],
 ): Promise<BatchGenerationResult> {
@@ -251,22 +360,29 @@ export async function synthesizeEvidenceBriefings(
   generator: BatchGenerator = defaultBatchGenerator,
 ): Promise<Story[]> {
   if (process.env.FACT_DESK_SYNTHESIS_ENABLED === "false") return stories;
+
+  const candidates = buildCandidates(stories, membersBySlug);
+  if (candidates.length === 0) return stories;
+
+  const stored = await loadStoredBriefings(candidates);
+  const missing = candidates.filter((candidate) => !stored.has(candidate.id));
+  if (missing.length === 0) {
+    return applyBriefings(stories, candidates, stored);
+  }
+
   if (
     generator === defaultBatchGenerator &&
     !process.env.AI_GATEWAY_API_KEY &&
     !process.env.VERCEL &&
     !process.env.VERCEL_ENV
   ) {
-    return stories;
+    return applyBriefings(stories, candidates, stored);
   }
-
-  const candidates = buildCandidates(stories, membersBySlug);
-  if (candidates.length === 0) return stories;
 
   try {
     const generatedAt = new Date().toISOString();
     const result = await generator(
-      candidates.map((candidate) => ({
+      missing.map((candidate) => ({
         id: candidate.id,
         category: candidate.story.category,
         sources: candidate.sources,
@@ -274,36 +390,26 @@ export async function synthesizeEvidenceBriefings(
     );
     const byId = new Map(result.stories.map((story) => [story.id, story]));
 
-    return stories.map((story) => {
-      const candidate = candidates.find((item) => item.id === story.id);
-      const briefing = byId.get(story.id);
-      if (!candidate || !briefing || !passesPublicationGate(candidate, briefing)) {
-        return story;
-      }
+    const fresh = new Map<string, StoredBriefing>();
+    for (const candidate of missing) {
+      const briefing = byId.get(candidate.id);
+      if (!briefing || !passesPublicationGate(candidate, briefing)) continue;
+      fresh.set(candidate.id, {
+        briefing,
+        generatedAt,
+        generationId: result.generationId,
+        model: result.model,
+        sourceFingerprint: sourceFingerprint(candidate),
+      });
+    }
 
-      return {
-        ...story,
-        summary: briefing.summary.trim(),
-        whatHappened: briefing.whatHappened.trim(),
-        whyItMatters: briefing.whyItMatters.trim(),
-        briefingBasis: "evidence-synthesis",
-        coverageAngle:
-          `Original Fact Desk synthesis from ${candidate.sources.length} attributed research source${candidate.sources.length === 1 ? "" : "s"}; source prose is not republished.`,
-        synthesis: {
-          status: "verified",
-          model: result.model,
-          generatedAt,
-          generationId: result.generationId,
-          sourceFingerprint: sourceFingerprint(candidate),
-          sourceCount: candidate.sources.length,
-          claimCount: briefing.claims.length,
-        },
-      };
-    });
+    await storeBriefings(missing, fresh);
+    for (const [id, value] of fresh) stored.set(id, value);
+    return applyBriefings(stories, candidates, stored);
   } catch (error) {
     console.error("[evidence-synthesis] generation failed", {
       error: error instanceof Error ? error.message : String(error),
     });
-    return stories;
+    return applyBriefings(stories, candidates, stored);
   }
 }
