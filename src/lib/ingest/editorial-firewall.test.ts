@@ -7,6 +7,7 @@ import {
   sanitizeLiveStoryForDisplay,
 } from "@/lib/ingest/editorial-firewall";
 import { fetchRssStories } from "@/lib/ingest/rss";
+import { buildFastWhyItMatters } from "@/lib/ingest/fast-briefing";
 import type { Story } from "@/types/story";
 
 const distinctivePublisherLede =
@@ -112,4 +113,25 @@ test("RSS ingestion uses a description for significance without publishing its p
   } finally {
     globalThis.fetch = originalFetch;
   }
+});
+
+test("figurative trade-war language is not described as armed conflict", () => {
+  const briefing = buildFastWhyItMatters(
+    "How the trade war is being felt on both sides of the border",
+    "Tariffs are affecting manufacturers and household costs.",
+    "Markets",
+  );
+
+  assert.match(briefing, /prices, supply chains, energy costs, trade flows/);
+  assert.doesNotMatch(briefing, /near-term security picture|further retaliation/);
+});
+
+test("literal military conflict still receives conflict context", () => {
+  const briefing = buildFastWhyItMatters(
+    "Countries trade missile attacks as fighting escalates",
+    "Officials warn that more strikes may follow.",
+    "World",
+  );
+
+  assert.match(briefing, /near-term security picture|further retaliation/);
 });
