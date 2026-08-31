@@ -1,5 +1,13 @@
 import type { Confidence, Signal, Story, StoryCategory } from "@/types/story";
 
+export type StoryPriority = "Urgent" | "Major" | "Monitor";
+
+export interface StoryPriorityBuckets {
+  urgent: Story[];
+  major: Story[];
+  monitor: Story[];
+}
+
 export function formatStoryTime(iso: string): string {
   return new Date(iso).toLocaleString("en-US", {
     month: "short",
@@ -89,6 +97,105 @@ function liveEvidenceScore(story: Story): number {
   );
 }
 
+const URGENT_IMPACT_PATTERN =
+  /\b(nuclear|war|invasion|airstrike|air strike|missile|rocket attack|military attack|mass shooting|assassination|coup|earthquake|hurricane|tornado|flash flood|wildfire|explosion|evacuat(?:e|ed|ion)|missing|killed|dead|deaths?|ceasefire|supreme court|election results?)\b/i;
+
+const MAJOR_IMPACT_PATTERN =
+  /\b(strike|sanctions?|interest rates?|rate hike|rate cut|inflation|jobs report|unemployment|fda approves?|recall|outbreak|pandemic|cyberattack|data breach|zero-day|merger|acquisition|bank failure|default|shutdown|indictment|conviction|ruling|tariffs?)\b/i;
+
+function recencyScore(story: Story): number {
+  const timestamp = Date.parse(story.updatedAt || story.publishedAt);
+  if (Number.isNaN(timestamp)) return 0;
+  const ageMinutes = Math.max(0, (Date.now() - timestamp) / 60_000);
+  if (ageMinutes <= 30) return 30;
+  if (ageMinutes <= 90) return 24;
+  if (ageMinutes <= 180) return 18;
+  if (ageMinutes <= 360) return 12;
+  if (ageMinutes <= 720) return 8;
+  if (ageMinutes <= 1_440) return 4;
+  return 0;
+}
+
+function impactScore(story: Story): number {
+  const text = `${story.title} ${story.summary} ${story.whatHappened}`;
+  if (URGENT_IMPACT_PATTERN.test(text)) return 40;
+  if (MAJOR_IMPACT_PATTERN.test(text)) return 22;
+  return 0;
+}
+
+function categoryImpactScore(category: StoryCategory): number {
+  if (category === "World" || category === "Politics" || category === "Markets") {
+    return 6;
+  }
+  if (category === "Health" || category === "Courts" || category === "Energy") {
+    return 4;
+  }
+  if (category === "Technology") return 2;
+  return 0;
+}
+
+/**
+ * Editorial urgency score, not a truth score. It deliberately balances public
+ * impact and recency with evidence depth so a major breaking event can surface
+ * immediately while still carrying its confidence/source warnings.
+ */
+export function storyPriorityScore(story: Story): number {
+  const evidence = Math.min(uniqueSourceCount(story), 4) * 7;
+  const confidence =
+    story.confidence === "Confirmed"
+      ? 8
+      : story.confidence === "Developing"
+        ? 4
+        : story.confidence === "Disputed"
+          ? 1
+          : 0;
+
+  return (
+    impactScore(story) +
+    recencyScore(story) +
+    evidence +
+    confidence +
+    categoryImpactScore(story.category) +
+    (isPrimaryBackedStory(story) ? 10 : 0) +
+    (story.signal === "Cross-angle" ? 4 : 0) +
+    (story.signal === "Under-covered" ? 2 : 0)
+  );
+}
+
+export function getStoryPriority(story: Story): StoryPriority {
+  const score = storyPriorityScore(story);
+  if (score >= 70) return "Urgent";
+  if (score >= 45) return "Major";
+  return "Monitor";
+}
+
+export function rankStoriesByPriority(stories: Story[]): Story[] {
+  return [...stories].sort((a, b) => {
+    const priorityDelta = storyPriorityScore(b) - storyPriorityScore(a);
+    if (priorityDelta !== 0) return priorityDelta;
+    return Date.parse(b.updatedAt) - Date.parse(a.updatedAt);
+  });
+}
+
+export function partitionStoriesByPriority(stories: Story[]): StoryPriorityBuckets {
+  const urgent: Story[] = [];
+  const major: Story[] = [];
+  const monitor: Story[] = [];
+
+  for (const story of rankStoriesByPriority(stories)) {
+    const priority = getStoryPriority(story);
+    if (priority === "Urgent") urgent.push(story);
+    else if (priority === "Major") major.push(story);
+    else monitor.push(story);
+  }
+
+  return { urgent, major, monitor };
+}
+
+export function getHighestPriorityStory(stories: Story[]): Story | undefined {
+  return rankStoriesByPriority(stories)[0];
+}
+
 function rankLiveEvidence(stories: Story[]): Story[] {
   return [...stories].sort((a, b) => {
     const scoreDelta = liveEvidenceScore(b) - liveEvidenceScore(a);
@@ -168,7 +275,7 @@ export function getDeskStats(stories: Story[]) {
     }
   }
   return {
-    topSignals: storiesBySignal(stories, "Top Signal").length,
+    topSignals: partitionStoriesByPriority(stories).urgent.length,
     underCovered: storiesBySignal(stories, "Under-covered").length,
     developing: developingIds.size,
     sourcesTracked: sources.size,
