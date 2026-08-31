@@ -6,7 +6,9 @@ import type { LiveDataSource } from "@/lib/live-data";
 import {
   formatSourceSpread,
   formatStoryTime,
-  partitionLiveStoriesByEvidence,
+  getStoryPriority,
+  partitionStoriesByPriority,
+  type StoryPriority,
 } from "@/lib/stories";
 import type { Story, StoryCategory } from "@/types/story";
 import Link from "next/link";
@@ -18,9 +20,20 @@ interface LiveBetaFeedProps {
   fetchedAt?: string | null;
 }
 
+function priorityClass(priority: StoryPriority): string {
+  if (priority === "Urgent") {
+    return "bg-red-50 text-red-900 ring-red-200/80";
+  }
+  if (priority === "Major") {
+    return "bg-amber-50 text-amber-900 ring-amber-200/80";
+  }
+  return "bg-slate-50 text-slate-700 ring-slate-200/80";
+}
+
 function LiveBetaCard({ story }: { story: Story }) {
   const sourceUrls = story.sourceUrls ?? [];
   const linksAreAligned = sourceUrls.length === story.sources.length;
+  const priority = getStoryPriority(story);
 
   return (
     <DeskCard className="relative transition-colors hover:border-[var(--border)]">
@@ -34,6 +47,11 @@ function LiveBetaCard({ story }: { story: Story }) {
         </Link>
 
         <div className="pointer-events-none relative z-[1] mb-2 flex flex-wrap items-center gap-2">
+          <span
+            className={`inline-flex items-center rounded-sm px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ring-1 ring-inset ${priorityClass(priority)}`}
+          >
+            {priority}
+          </span>
           <ConfidenceLabel confidence={story.confidence} />
           <SignalLabel signal={story.signal} />
           <span className="text-[10px] text-[var(--muted-light)]">
@@ -95,7 +113,7 @@ function LiveBetaCard({ story }: { story: Story }) {
   );
 }
 
-function EvidenceLane({
+function PriorityLane({
   id,
   title,
   description,
@@ -141,12 +159,12 @@ export function LiveBetaFeed({
   ).size;
   const statusLine =
     source === "live"
-      ? "Live sources connected · auto-refreshes about every 15 minutes"
+      ? "Live sources connected · refreshes about every 5 minutes"
       : "Cached source fallback · automatic refresh will retry";
   const heading = activeCategory
-    ? `${activeCategory} Evidence Feed`
-    : "Evidence-ranked Live Feed";
-  const buckets = partitionLiveStoriesByEvidence(stories);
+    ? `${activeCategory} Priority Desk`
+    : "Live Priority Desk";
+  const buckets = partitionStoriesByPriority(stories);
 
   return (
     <section
@@ -158,8 +176,7 @@ export function LiveBetaFeed({
         <div>
           <DeskLabel id="live-beta-heading">{heading}</DeskLabel>
           <p className="mt-0.5 max-w-2xl text-[11px] leading-snug text-[var(--muted-light)]">
-            {activePublisherCount} active publishers · multi-source coverage leads;
-            single-newsroom items stay incoming until better supported
+            {activePublisherCount} active publishers · urgency ranks public impact and recency while evidence labels show how well-supported each story is
           </p>
         </div>
         {fetchedAt && (
@@ -173,27 +190,27 @@ export function LiveBetaFeed({
         <p className="desk-card border-dashed px-4 py-3 text-[13px] text-[var(--muted)]">
           {activeCategory
             ? `No live ${activeCategory.toLowerCase()} items are available right now.`
-            : "Live feed unavailable. The editorial preview remains available."}
+            : "Live feed unavailable. Automatic refresh will retry."}
         </p>
       ) : (
         <div className="space-y-5">
-          <EvidenceLane
-            id="multi-source-live"
-            title={`Multi-source coverage · ${buckets.multiSource.length}`}
-            description="Reported by at least two distinct publishers or source domains. Better supported, but not automatically confirmed."
-            stories={buckets.multiSource}
+          <PriorityLane
+            id="urgent-live"
+            title={`Urgent · ${buckets.urgent.length}`}
+            description="Highest public-impact and time-sensitive developments. These surface immediately, even when still single-source, with confidence warnings preserved."
+            stories={buckets.urgent}
           />
-          <EvidenceLane
-            id="primary-live"
-            title={`Primary-source updates · ${buckets.primaryOnly.length}`}
-            description="Direct government, court, regulator, academic, or other primary material. Strong for what the issuer said; broader claims may still need independent confirmation."
-            stories={buckets.primaryOnly}
+          <PriorityLane
+            id="major-live"
+            title={`Major · ${buckets.major.length}`}
+            description="Important developments with meaningful impact, recency, or growing evidence support."
+            stories={buckets.major}
           />
-          <EvidenceLane
-            id="incoming-live"
-            title={`Incoming signals · ${buckets.incoming.length}`}
-            description="Single-newsroom coverage. Visible for awareness, but intentionally below better-supported reporting until corroborated."
-            stories={buckets.incoming}
+          <PriorityLane
+            id="monitor-live"
+            title={`Monitor · ${buckets.monitor.length}`}
+            description="Lower-urgency or thinly supported items kept active for awareness and promoted automatically if importance or corroboration increases."
+            stories={buckets.monitor}
           />
         </div>
       )}
