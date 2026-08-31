@@ -37,16 +37,61 @@ const xmlParser = new XMLParser({
   parseTagValue: false,
 });
 
-function stripHtml(input: string): string {
-  return input
-    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/gi, "$1")
-    .replace(/<[^>]+>/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&nbsp;/g, " ")
+const NAMED_HTML_ENTITIES: Record<string, string> = {
+  amp: "&",
+  apos: "'",
+  bull: "•",
+  hellip: "…",
+  ldquo: "“",
+  lsquo: "‘",
+  mdash: "—",
+  middot: "·",
+  nbsp: " ",
+  ndash: "–",
+  quot: '"',
+  rdquo: "”",
+  rsquo: "’",
+  lt: "<",
+  gt: ">",
+};
+
+function decodeEntity(entity: string): string {
+  if (entity.startsWith("#")) {
+    const hexadecimal = entity[1]?.toLowerCase() === "x";
+    const digits = hexadecimal ? entity.slice(2) : entity.slice(1);
+    const codePoint = Number.parseInt(digits, hexadecimal ? 16 : 10);
+    if (
+      !Number.isInteger(codePoint) ||
+      codePoint <= 0 ||
+      codePoint > 0x10ffff ||
+      (codePoint >= 0xd800 && codePoint <= 0xdfff)
+    ) {
+      return `&${entity};`;
+    }
+    return String.fromCodePoint(codePoint);
+  }
+
+  return NAMED_HTML_ENTITIES[entity.toLowerCase()] ?? `&${entity};`;
+}
+
+/** Convert feed-supplied HTML/entity text into safe, readable plain text. */
+export function cleanFeedText(input: string): string {
+  let output = input.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/gi, "$1");
+
+  // Multiple passes handle feeds that encode text twice, such as
+  // `Warsh&amp;#x2019;s`, while stripping any markup revealed by decoding.
+  for (let pass = 0; pass < 3; pass += 1) {
+    const previous = output;
+    const decoded = output.replace(
+      /&(#(?:x[0-9a-f]+|\d+)|[a-z][a-z0-9]+);/gi,
+      (_, entity: string) => decodeEntity(entity),
+    );
+    output = decoded.replace(/<[^>]+>/g, " ");
+    if (output === previous) break;
+  }
+
+  return output
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -151,7 +196,7 @@ function parseRssItems(xml: string): RssItemRaw[] {
 
     for (const item of items) {
       const record = item as Record<string, unknown>;
-      const title = stripHtml(asString(record.title) ?? "");
+      const title = cleanFeedText(asString(record.title) ?? "");
       if (!title) continue;
 
       const link =
@@ -172,7 +217,7 @@ function parseRssItems(xml: string): RssItemRaw[] {
       result.push({
         title,
         link,
-        description: description ? stripHtml(description) : undefined,
+        description: description ? cleanFeedText(description) : undefined,
         pubDate,
       });
     }
