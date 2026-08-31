@@ -230,6 +230,18 @@ function balanceStories(stories: Story[]): Story[] {
  * It favors duplicate stories over incorrectly combining distinct events.
  */
 export function clusterAndBalanceStories(stories: Story[]): Story[] {
+  return clusterAndBalanceStoriesWithMembers(stories).stories;
+}
+
+export interface ClusteredStoriesWithMembers {
+  stories: Story[];
+  membersBySlug: Map<string, Story[]>;
+}
+
+/** Keeps private cluster membership available to the synthesis layer. */
+export function clusterAndBalanceStoriesWithMembers(
+  stories: Story[],
+): ClusteredStoriesWithMembers {
   const cutoff = Date.now() - MAX_AGE_MS;
   const recent = stories
     .filter((story) => publishedMs(story) === 0 || publishedMs(story) >= cutoff)
@@ -244,5 +256,21 @@ export function clusterAndBalanceStories(stories: Story[]): Story[] {
     else clusters.push([story]);
   }
 
-  return balanceStories(clusters.map(mergeCluster));
+  const membersByMergedSlug = new Map<string, Story[]>();
+  const merged = clusters.map((cluster) => {
+    const story = mergeCluster(cluster);
+    membersByMergedSlug.set(story.slug, cluster);
+    return story;
+  });
+  const balanced = balanceStories(merged);
+
+  return {
+    stories: balanced,
+    membersBySlug: new Map(
+      balanced.map((story) => [
+        story.slug,
+        membersByMergedSlug.get(story.slug) ?? [story],
+      ]),
+    ),
+  };
 }

@@ -55,7 +55,16 @@ export function StoryDetail({ story }: StoryDetailProps) {
 
       {story.headlineSource && (
         <p className="mt-2 text-[11px] text-[var(--muted-light)]">
-          Source headline via {story.headlineSource} · Fact Desk analysis below
+          Source headline via {story.headlineSource} · Fact Desk briefing below
+        </p>
+      )}
+
+      {story.synthesis && (
+        <p className="mt-2 text-[11px] leading-relaxed text-[var(--muted-light)]">
+          Original evidence synthesis · {story.synthesis.sourceCount} attributed
+          {story.synthesis.sourceCount === 1 ? " source" : " sources"} ·{" "}
+          {story.synthesis.claimCount} supported
+          {story.synthesis.claimCount === 1 ? " claim" : " claims"}
         </p>
       )}
 
@@ -146,7 +155,12 @@ export function StoryDetail({ story }: StoryDetailProps) {
       )}
 
       <p className="mt-10 border-t border-[var(--border-subtle)] pt-6 text-[13px] leading-relaxed text-[var(--muted-light)]">
-        Fact Desk briefings preserve source attribution while separating reported claims from corroborated facts. Publisher RSS descriptions are not republished unless a reviewed syndication licence expressly permits it. Priority measures urgency, not certainty; confidence and source coverage remain separate evidence signals.
+        Fact Desk briefings are original summaries built from attributed source
+        evidence. Reported claims remain attributed, and overlapping coverage
+        is not treated as automatic confirmation. Publisher RSS descriptions
+        are used only as private research input and are not republished unless
+        a reviewed syndication licence expressly permits it. Priority measures
+        urgency, not certainty.
       </p>
     </article>
   );

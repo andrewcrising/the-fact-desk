@@ -32,6 +32,13 @@ interface RssItemRaw {
   pubDate?: string;
 }
 
+const researchExcerptByStory = new WeakMap<Story, string>();
+
+/** Server-only research input. It is never attached to serialized story data. */
+export function getStoryResearchExcerpt(story: Story): string | undefined {
+  return researchExcerptByStory.get(story);
+}
+
 const xmlParser = new XMLParser({
   ignoreAttributes: false,
   attributeNamePrefix: "@_",
@@ -259,7 +266,7 @@ function normalizeItem(
   const publishedAt = parsePubDate(item.pubDate);
   const slug = stableSlug(item.title, item.link, index);
 
-  return {
+  const story: Story = {
     id: `live-${slug}`,
     slug,
     title: item.title,
@@ -282,6 +289,12 @@ function normalizeItem(
       ? `Syndicated summary displayed under the source's reviewed reuse licence; analysis and significance are written by The Fact Desk.`
       : houseBriefing.coverageAngle,
   };
+
+  if (description) {
+    researchExcerptByStory.set(story, description.slice(0, 1200));
+  }
+
+  return story;
 }
 
 export async function fetchRssStories(

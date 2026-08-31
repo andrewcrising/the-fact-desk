@@ -2,7 +2,8 @@
  * Parallel, failure-isolated RSS ingestion for the live personal proof.
  */
 import { getEnabledFeeds } from "@/data/rssFeeds";
-import { clusterAndBalanceStories } from "@/lib/ingest/cluster-stories";
+import { clusterAndBalanceStoriesWithMembers } from "@/lib/ingest/cluster-stories";
+import { synthesizeEvidenceBriefings } from "@/lib/ingest/evidence-synthesis";
 import { fetchRssStories } from "@/lib/ingest/rss";
 import {
   countStoriesByViewpoint,
@@ -79,7 +80,11 @@ export async function ingestEnabledFeedsWithDiagnostics(): Promise<FeedIngestDia
   }
 
   const rawStories = results.flatMap((result) => result.stories);
-  const stories = clusterAndBalanceStories(rawStories);
+  const clustered = clusterAndBalanceStoriesWithMembers(rawStories);
+  const stories = await synthesizeEvidenceBriefings(
+    clustered.stories,
+    clustered.membersBySlug,
+  );
   const activeSources = Array.from(
     new Set(
       results

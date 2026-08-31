@@ -40,7 +40,21 @@ export interface Story {
   /** Publisher whose headline is displayed as attributed discovery metadata. */
   headlineSource?: string;
   /** How the public synopsis was produced; used for reader-facing provenance. */
-  briefingBasis?: "source-headline" | "multi-source-headlines" | "editorial";
+  briefingBasis?:
+    | "source-headline"
+    | "multi-source-headlines"
+    | "evidence-synthesis"
+    | "editorial";
+  /** Audit metadata for an independently generated, source-checked briefing. */
+  synthesis?: {
+    status: "verified";
+    model: string;
+    generatedAt: string;
+    generationId?: string;
+    sourceFingerprint: string;
+    sourceCount: number;
+    claimCount: number;
+  };
   /** Neutral descriptor of how outlets are framing coverage — not partisan branding. */
   coverageAngle?: string;
 }
