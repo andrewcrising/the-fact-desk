@@ -194,6 +194,54 @@ export const RSS_FEEDS: RssFeedConfig[] = [
     "enabled": true
   },
   {
+    "id": "fox-latest",
+    "sourceName": "Fox News",
+    "feedUrl": "https://moxie.foxnews.com/google-publisher/latest.xml",
+    "category": "World",
+    "signal": "Developing",
+    "enabled": true
+  },
+  {
+    "id": "fox-politics",
+    "sourceName": "Fox News",
+    "feedUrl": "https://moxie.foxnews.com/google-publisher/politics.xml",
+    "category": "Politics",
+    "signal": "Developing",
+    "enabled": true
+  },
+  {
+    "id": "fox-world",
+    "sourceName": "Fox News",
+    "feedUrl": "https://moxie.foxnews.com/google-publisher/world.xml",
+    "category": "World",
+    "signal": "Developing",
+    "enabled": true
+  },
+  {
+    "id": "examiner-news",
+    "sourceName": "Washington Examiner",
+    "feedUrl": "https://www.washingtonexaminer.com/section/news/feed",
+    "category": "World",
+    "signal": "Developing",
+    "enabled": true
+  },
+  {
+    "id": "examiner-politics",
+    "sourceName": "Washington Examiner",
+    "feedUrl": "https://www.washingtonexaminer.com/section/politics/feed",
+    "category": "Politics",
+    "signal": "Developing",
+    "enabled": true
+  },
+  {
+    "id": "dispatch-latest",
+    "sourceName": "The Dispatch",
+    "feedUrl": "https://thedispatch.com/feed/",
+    "category": "Politics",
+    "signal": "Developing",
+    "enabled": true
+  },
+  {
     "id": "al-jazeera",
     "sourceName": "Al Jazeera",
     "feedUrl": "https://www.aljazeera.com/xml/rss/all.xml",
