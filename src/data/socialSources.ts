@@ -8,7 +8,7 @@ export interface XNewsSourceConfig {
   categoryHint?: StoryCategory;
 }
 
-/** Dormant compatibility adapter; not enabled by the initial rollout. */
+/** Dormant compatibility adapter; intentionally not enabled. */
 export interface BlueskyAuthorSourceConfig {
   id: string;
   provider: "bluesky-author";
@@ -31,6 +31,15 @@ export type SocialSourceConfig =
   | BlueskyAuthorSourceConfig
   | MastodonTagSourceConfig;
 
+const DEFAULT_X_NEWS_QUERIES = [
+  "breaking news",
+  "politics",
+  "markets",
+  "technology",
+  "health",
+  "world",
+];
+
 function envList(name: string, max = 12): string[] {
   return (process.env[name] ?? "")
     .split(",")
@@ -40,23 +49,23 @@ function envList(name: string, max = 12): string[] {
 }
 
 /**
- * Social discovery is deliberately opt-in. X is the primary provider.
- * No X request is attempted unless both the social feature flag and a server-
- * side bearer token are present. Mastodon remains an optional secondary lane.
- * The Bluesky adapter is intentionally not enabled here.
- *
- * Example:
- * FACT_DESK_SOCIAL_SIGNALS=1
- * FACT_DESK_X_BEARER_TOKEN=<server-only secret>
- * FACT_DESK_X_NEWS_QUERIES=breaking news,politics,markets,technology,health
- * FACT_DESK_MASTODON_TAGS=earthquake
+ * Social discovery is server-side and X-first. A bearer token is sufficient to
+ * activate X using safe default news queries; FACT_DESK_SOCIAL_SIGNALS=1 can
+ * additionally enable explicitly configured Mastodon tags. Bluesky remains
+ * dormant. No paid X request occurs without a bearer token.
  */
 export function getEnabledSocialSources(): SocialSourceConfig[] {
-  if (process.env.FACT_DESK_SOCIAL_SIGNALS !== "1") return [];
-
+  const featureEnabled = process.env.FACT_DESK_SOCIAL_SIGNALS === "1";
   const xEnabled = Boolean(process.env.FACT_DESK_X_BEARER_TOKEN?.trim());
+  if (!featureEnabled && !xEnabled) return [];
+
+  const configuredXQueries = envList("FACT_DESK_X_NEWS_QUERIES", 8);
+  const xQueries = configuredXQueries.length > 0
+    ? configuredXQueries
+    : DEFAULT_X_NEWS_QUERIES;
+
   const xNews = xEnabled
-    ? envList("FACT_DESK_X_NEWS_QUERIES", 8).map(
+    ? xQueries.map(
         (query): XNewsSourceConfig => ({
           id: `x-news-${query.toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 48)}`,
           provider: "x-news",
@@ -66,15 +75,17 @@ export function getEnabledSocialSources(): SocialSourceConfig[] {
       )
     : [];
 
-  const mastodon = envList("FACT_DESK_MASTODON_TAGS", 8).map(
-    (tag): MastodonTagSourceConfig => ({
-      id: `mastodon-tag-${tag.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
-      provider: "mastodon-tag",
-      host: "mastodon.social",
-      tag: tag.replace(/^#/, ""),
-      directSource: false,
-    }),
-  );
+  const mastodon = featureEnabled
+    ? envList("FACT_DESK_MASTODON_TAGS", 8).map(
+        (tag): MastodonTagSourceConfig => ({
+          id: `mastodon-tag-${tag.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
+          provider: "mastodon-tag",
+          host: "mastodon.social",
+          tag: tag.replace(/^#/, ""),
+          directSource: false,
+        }),
+      )
+    : [];
 
   return [...xNews, ...mastodon].slice(0, 16);
 }
