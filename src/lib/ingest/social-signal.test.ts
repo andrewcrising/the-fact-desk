@@ -47,7 +47,7 @@ function publisherStory(id: string, source: string): Story {
     confidence: "Single-source",
     signal: "Developing",
     sources: [source],
-    sourceUrls: [`https://example.com/${id}`],
+    sourceUrls: [`https://${id}.example/story`],
     sourceKinds: ["publisher"],
     publishedAt: timestamp,
     updatedAt: timestamp,
