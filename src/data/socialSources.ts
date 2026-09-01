@@ -8,6 +8,15 @@ export interface XNewsSourceConfig {
   categoryHint?: StoryCategory;
 }
 
+/** Dormant compatibility adapter; not enabled by the initial rollout. */
+export interface BlueskyAuthorSourceConfig {
+  id: string;
+  provider: "bluesky-author";
+  actor: string;
+  directSource: boolean;
+  categoryHint?: StoryCategory;
+}
+
 export interface MastodonTagSourceConfig {
   id: string;
   provider: "mastodon-tag";
@@ -17,7 +26,10 @@ export interface MastodonTagSourceConfig {
   categoryHint?: StoryCategory;
 }
 
-export type SocialSourceConfig = XNewsSourceConfig | MastodonTagSourceConfig;
+export type SocialSourceConfig =
+  | XNewsSourceConfig
+  | BlueskyAuthorSourceConfig
+  | MastodonTagSourceConfig;
 
 function envList(name: string, max = 12): string[] {
   return (process.env[name] ?? "")
@@ -31,6 +43,7 @@ function envList(name: string, max = 12): string[] {
  * Social discovery is deliberately opt-in. X is the primary provider.
  * No X request is attempted unless both the social feature flag and a server-
  * side bearer token are present. Mastodon remains an optional secondary lane.
+ * The Bluesky adapter is intentionally not enabled here.
  *
  * Example:
  * FACT_DESK_SOCIAL_SIGNALS=1
