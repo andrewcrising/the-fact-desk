@@ -18,9 +18,9 @@ const ELECTION_PATTERN =
   /\b(election results?|wins? election|elected president|elected prime minister|declared winner)\b/i;
 
 const HEALTH_CATEGORY_PATTERN =
-  /\b(cancer|drug|medication|fda|nih|cdc|health|medical|medicine|hospital|patient|clinical|vaccine|virus|disease|therapy|treatment|diagnosis)\b/i;
+  /\b(cancer|drug|medication|fda|nih|cdc|health|medical|medicine|hospital|patient|clinical|vaccine|virus|disease|outbreak|therapy|treatment|diagnosis)\b/i;
 const TECHNOLOGY_CATEGORY_PATTERN =
-  /\b(ai|artificial intelligence|technology|tech|cyber|software|semiconductor|chip|nasa|space|telescope|satellite|computer|internet|robot|quantum)\b/i;
+  /(?:\ba\.?i\.?\b|\b(?:artificial intelligence|technology|tech|cyber|software|semiconductor|chip|nasa|space|telescope|satellite|computer|internet|robot|quantum)\b)/i;
 const MARKETS_CATEGORY_PATTERN =
   /\b(federal reserve|fed chair|inflation|interest rates?|rate hike|rate cut|stocks?|bonds?|markets?|earnings|economy|economic|tariffs?)\b/i;
 const ENERGY_CATEGORY_PATTERN =
@@ -28,7 +28,7 @@ const ENERGY_CATEGORY_PATTERN =
 const POLITICS_CATEGORY_PATTERN =
   /\b(congress|senate|house of representatives|white house|president|governor|election|campaign|administration|democrat|republican)\b/i;
 const CULTURE_CATEGORY_PATTERN =
-  /\b(film|movie|music|television|celebrity|sports?|golf|football|baseball|basketball|hockey|tennis|olympics?|athlete|championship|world cup|nfl|nba|mlb|nhl|soccer|arts?|culture)\b/i;
+  /\b(film|movie|music|television|celebrity|sports?|golf|football|baseball|basketball|hockey|tennis|olympics?|athlete|head coach|championship|world cup|nfl|nba|mlb|nhl|soccer|arts?|culture)\b/i;
 
 function combinedText(title: string, summary: string): string {
   return `${title} ${summary}`;
