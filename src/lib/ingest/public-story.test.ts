@@ -74,6 +74,21 @@ test("headline inference corrects coarse science and health feed categories", ()
   );
 });
 
+test("headline inference covers live punctuation and topic signals", () => {
+  assert.equal(
+    inferStoryCategory("Study A.I. Consciousness? The Bots Would Like a Word With You.", "Energy"),
+    "Technology",
+  );
+  assert.equal(
+    inferStoryCategory("Trump admin shelves Cyclospora research despite record-breaking outbreak", "Technology"),
+    "Health",
+  );
+  assert.equal(
+    inferStoryCategory("Texas Tech head coach blasts USC over poor attendance at LA Coliseum", "Technology"),
+    "Culture",
+  );
+});
+
 test("RSS normalization preserves a natural synopsis boundary", async () => {
   const originalFetch = globalThis.fetch;
   const firstSentence = `${"Rescue teams continued searching the canyon through difficult conditions ".repeat(3).trim()}.`;
