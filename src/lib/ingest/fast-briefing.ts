@@ -35,12 +35,13 @@ function combinedText(title: string, summary: string): string {
 }
 
 /**
- * Keep figurative uses of "war" from being classified as armed conflict.
- * The source headline stays untouched; this normalization is used only to
- * choose the independently written significance template.
+ * Keep figurative uses of "war" and "invasion" from being classified as armed
+ * conflict. The source headline stays untouched; this normalization is used
+ * only to choose the independently written significance template.
  */
 function conflictClassificationText(text: string): string {
   return text
+    .replace(/\binvasion of privacy\b/gi, "privacy intrusion")
     .replace(/\b(?:trade|culture|price|pricing|bidding|political) war\b/gi, "dispute")
     .replace(
       /\bwar on (?:cancer|crime|drugs|poverty|inflation|woke|wokeness|cash|cars|coal|oil|gas|technology|tech)\b/gi,
