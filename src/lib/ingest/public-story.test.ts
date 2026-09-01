@@ -139,6 +139,17 @@ test("figurative trade-war language is not described as armed conflict", () => {
   assert.doesNotMatch(briefing, /near-term security picture|further retaliation/);
 });
 
+test("invasion of privacy is not described as armed conflict", () => {
+  const briefing = buildFastWhyItMatters(
+    "Candidate calls license-plate cameras an 'invasion of privacy'",
+    "The proposal concerns state policy for automated vehicle tracking cameras.",
+    "World",
+  );
+
+  assert.doesNotMatch(briefing, /near-term security picture|further retaliation|civilians/);
+  assert.match(briefing, /public policy|security|economic conditions|people directly involved/);
+});
+
 test("literal missile conflict still receives conflict context", () => {
   const briefing = buildFastWhyItMatters(
     "Countries trade missile attacks as fighting escalates",
