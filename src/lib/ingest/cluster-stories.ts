@@ -1,14 +1,14 @@
-import { storyPriorityScore } from "@/lib/stories";
+import { sourceKindAt, storyPriorityScore } from "@/lib/stories";
 import {
   storyHasViewpoint,
   type ViewpointBand,
 } from "@/lib/viewpoints";
-import type { Story, StoryCategory } from "@/types/story";
+import type { EvidenceSourceKind, Story, StoryCategory } from "@/types/story";
 
 const STOP_WORDS = new Set([
   "about", "after", "again", "against", "amid", "and", "are", "but", "for",
   "from", "has", "have", "into", "more", "new", "not", "over", "people", "says", "say", "that",
-  "the", "their", "this", "with", "will", "your",
+  "the", "their", "this", "with", "will", "your", "social", "signal",
 ]);
 
 const CLUSTER_WINDOW_MS = 72 * 60 * 60 * 1000;
@@ -26,12 +26,8 @@ function normalizeTitle(title: string): string {
 }
 
 function canonicalTerm(term: string): string {
-  if (term.length > 4 && term.endsWith("ies")) {
-    return `${term.slice(0, -3)}y`;
-  }
-  if (term.length > 4 && term.endsWith("s") && !term.endsWith("ss")) {
-    return term.slice(0, -1);
-  }
+  if (term.length > 4 && term.endsWith("ies")) return `${term.slice(0, -3)}y`;
+  if (term.length > 4 && term.endsWith("s") && !term.endsWith("ss")) return term.slice(0, -1);
   return term;
 }
 
@@ -69,10 +65,7 @@ function titlesLikelyMatch(a: Story, b: Story): boolean {
   const normalizedA = normalizeTitle(a.title);
   const normalizedB = normalizeTitle(b.title);
   if (normalizedA === normalizedB) return true;
-
-  if (Math.abs(publishedMs(a) - publishedMs(b)) > CLUSTER_WINDOW_MS) {
-    return false;
-  }
+  if (Math.abs(publishedMs(a) - publishedMs(b)) > CLUSTER_WINDOW_MS) return false;
 
   const aTerms = titleTerms(a.title);
   const bTerms = titleTerms(b.title);
@@ -81,7 +74,6 @@ function titlesLikelyMatch(a: Story, b: Story): boolean {
   const smaller = Math.min(aTerms.size, bTerms.size);
   const jaccard = shared / union;
   const overlap = smaller === 0 ? 0 : shared / smaller;
-
   return (
     (shared >= 4 && overlap >= 0.38) ||
     (shared >= 3 && overlap >= 0.5) ||
@@ -91,14 +83,8 @@ function titlesLikelyMatch(a: Story, b: Story): boolean {
 
 function categoryFor(cluster: Story[]): StoryCategory {
   const counts = new Map<StoryCategory, number>();
-  for (const story of cluster) {
-    counts.set(story.category, (counts.get(story.category) ?? 0) + 1);
-  }
-  return (
-    Array.from(counts.entries()).sort((a, b) => b[1] - a[1])[0]?.[0] ??
-    cluster[0]?.category ??
-    "World"
-  );
+  for (const story of cluster) counts.set(story.category, (counts.get(story.category) ?? 0) + 1);
+  return Array.from(counts.entries()).sort((a, b) => b[1] - a[1])[0]?.[0] ?? cluster[0]?.category ?? "World";
 }
 
 function newestIso(values: string[]): string {
@@ -115,41 +101,50 @@ function mergeCluster(cluster: Story[]): Story {
     titleTerms(story.title).size > titleTerms(best.title).size ? story : best,
   );
 
-  const sourceLinks = new Map<string, string | undefined>();
+  const sourceMap = new Map<string, { url?: string; kind: EvidenceSourceKind }>();
   for (const story of ordered) {
     story.sources.forEach((source, index) => {
-      if (!sourceLinks.has(source)) {
-        sourceLinks.set(source, story.sourceUrls?.[index]);
+      if (!sourceMap.has(source)) {
+        sourceMap.set(source, {
+          url: story.sourceUrls?.[index],
+          kind: sourceKindAt(story, index),
+        });
       }
     });
   }
 
-  const sources = Array.from(sourceLinks.keys());
-  const linkedUrls = sources.map((source) => sourceLinks.get(source));
+  const sources = Array.from(sourceMap.keys());
+  const linkedUrls = sources.map((source) => sourceMap.get(source)?.url);
+  const sourceKinds = sources.map((source) => sourceMap.get(source)?.kind ?? "publisher");
   const linksAreComplete = linkedUrls.every((url): url is string => Boolean(url));
   const bestSummary = ordered.reduce((best, story) =>
     story.summary.length > best.summary.length ? story : best,
   );
-  const multiSource = sources.length >= 2;
+  const independentEvidenceCount = sourceKinds.filter((kind) => kind === "publisher" || kind === "primary").length;
+  const socialCount = sourceKinds.filter((kind) => kind === "social").length;
+  const multiSource = independentEvidenceCount >= 2;
 
   return {
     ...representative,
     summary: bestSummary.summary,
     whatHappened: bestSummary.whatHappened,
     whyItMatters: multiSource
-      ? `${bestSummary.whyItMatters} Coverage now spans ${sources.length} publishers; that adds context but does not by itself independently confirm every claim.`
-      : representative.whyItMatters,
+      ? `${bestSummary.whyItMatters} Coverage includes ${independentEvidenceCount} independent publisher/primary sources${socialCount ? ` plus ${socialCount} social signal${socialCount === 1 ? "" : "s"}` : ""}; repeated reporting still does not establish every source-specific claim.`
+      : bestSummary.whyItMatters,
     category: categoryFor(cluster),
     confidence: multiSource ? "Developing" : "Single-source",
     signal: multiSource ? "Cross-angle" : representative.signal,
     sources,
     sourceUrls: linksAreComplete ? linkedUrls : representative.sourceUrls,
+    sourceKinds,
     publishedAt: oldestIso(ordered.map((story) => story.publishedAt)),
     updatedAt: newestIso(ordered.map((story) => story.updatedAt)),
     tags: Array.from(new Set(ordered.flatMap((story) => story.tags))),
     coverageAngle: multiSource
-      ? `Related reporting clustered across ${sources.length} publishers; source claims still require editorial review.`
-      : representative.coverageAngle,
+      ? `Related coverage clustered across ${independentEvidenceCount} independent publisher/primary sources${socialCount ? ` and ${socialCount} social signal${socialCount === 1 ? "" : "s"}` : ""}. Social activity is discovery context, not independent confirmation.`
+      : socialCount > 0
+        ? `Social/open-web activity is present, but fewer than two independent publisher/primary sources support this cluster. Treat it as a developing signal, not confirmed reporting.`
+        : representative.coverageAngle,
   };
 }
 
@@ -179,25 +174,19 @@ function balanceStories(stories: Story[]): Story[] {
   const trySelect = (story: Story): boolean => {
     if (selected.length >= MAX_OUTPUT_STORIES || selectedIds.has(story.id)) return false;
     if ((categoryCounts.get(story.category) ?? 0) >= categoryCap) return false;
-
     if (story.sources.length === 1) {
       const source = story.sources[0] ?? "Unknown";
       if ((singleSourceCounts.get(source) ?? 0) >= singleSourceCap) return false;
       singleSourceCounts.set(source, (singleSourceCounts.get(source) ?? 0) + 1);
     }
-
     selected.push(story);
     selectedIds.add(story.id);
     categoryCounts.set(story.category, (categoryCounts.get(story.category) ?? 0) + 1);
     return true;
   };
 
-  // Representation is a selection guardrail, never an evidence or priority boost.
-  // Each band still contributes its highest-ranked available stories first.
   for (const [band, floor] of viewpointFloors) {
-    let selectedForBand = selected.filter((story) =>
-      storyHasViewpoint(story, band),
-    ).length;
+    let selectedForBand = selected.filter((story) => storyHasViewpoint(story, band)).length;
     for (const story of sorted) {
       if (selectedForBand >= floor) break;
       if (!storyHasViewpoint(story, band)) continue;
@@ -213,29 +202,21 @@ function balanceStories(stories: Story[]): Story[] {
       trySelect(story);
     }
   }
-
   for (const story of sorted) {
     if (selected.length >= MAX_OUTPUT_STORIES) break;
     trySelect(story);
   }
-
   return selected.sort(compareStories);
 }
 
-/**
- * Conservative deterministic clustering for the personal live proof.
- * It favors duplicate stories over incorrectly combining distinct events.
- */
+/** Conservative deterministic clustering; favors duplicate stories over false merges. */
 export function clusterAndBalanceStories(stories: Story[]): Story[] {
   const cutoff = Date.now() - MAX_AGE_MS;
   const recent = stories
     .filter((story) => publishedMs(story) === 0 || publishedMs(story) >= cutoff)
     .sort((a, b) => publishedMs(b) - publishedMs(a));
-
   const clusters: Story[][] = [];
   for (const story of recent) {
-    // Match the cluster seed rather than any member. Single-linkage matching can
-    // let a bridge headline chain two otherwise unrelated events together.
     const match = clusters.find((cluster) => {
       const seed = cluster[0];
       return seed ? titlesLikelyMatch(story, seed) : false;
@@ -243,6 +224,5 @@ export function clusterAndBalanceStories(stories: Story[]): Story[] {
     if (match) match.push(story);
     else clusters.push([story]);
   }
-
   return balanceStories(clusters.map(mergeCluster));
 }
