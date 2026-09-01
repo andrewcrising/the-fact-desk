@@ -1,10 +1,10 @@
 import type { StoryCategory } from "@/types/story";
 
-export interface BlueskyAuthorSourceConfig {
+export interface XNewsSourceConfig {
   id: string;
-  provider: "bluesky-author";
-  actor: string;
-  directSource: boolean;
+  provider: "x-news";
+  query: string;
+  directSource: false;
   categoryHint?: StoryCategory;
 }
 
@@ -17,42 +17,43 @@ export interface MastodonTagSourceConfig {
   categoryHint?: StoryCategory;
 }
 
-export type SocialSourceConfig =
-  | BlueskyAuthorSourceConfig
-  | MastodonTagSourceConfig;
+export type SocialSourceConfig = XNewsSourceConfig | MastodonTagSourceConfig;
 
-function envList(name: string): string[] {
+function envList(name: string, max = 12): string[] {
   return (process.env[name] ?? "")
     .split(",")
     .map((value) => value.trim())
     .filter(Boolean)
-    .slice(0, 24);
+    .slice(0, max);
 }
 
 /**
- * Social ingestion is deliberately opt-in. No paid API or credential is
- * required for the initial Bluesky/Mastodon adapters, but production should
- * not start consuming social data until the source list is intentionally
- * curated and reviewed.
+ * Social discovery is deliberately opt-in. X is the primary provider.
+ * No X request is attempted unless both the social feature flag and a server-
+ * side bearer token are present. Mastodon remains an optional secondary lane.
  *
  * Example:
  * FACT_DESK_SOCIAL_SIGNALS=1
- * FACT_DESK_BLUESKY_ACTORS=nasa.gov,example.com
- * FACT_DESK_MASTODON_TAGS=breakingnews,earthquake
+ * FACT_DESK_X_BEARER_TOKEN=<server-only secret>
+ * FACT_DESK_X_NEWS_QUERIES=breaking news,politics,markets,technology,health
+ * FACT_DESK_MASTODON_TAGS=earthquake
  */
 export function getEnabledSocialSources(): SocialSourceConfig[] {
   if (process.env.FACT_DESK_SOCIAL_SIGNALS !== "1") return [];
 
-  const bluesky = envList("FACT_DESK_BLUESKY_ACTORS").map(
-    (actor): BlueskyAuthorSourceConfig => ({
-      id: `bluesky-${actor.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
-      provider: "bluesky-author",
-      actor,
-      directSource: false,
-    }),
-  );
+  const xEnabled = Boolean(process.env.FACT_DESK_X_BEARER_TOKEN?.trim());
+  const xNews = xEnabled
+    ? envList("FACT_DESK_X_NEWS_QUERIES", 8).map(
+        (query): XNewsSourceConfig => ({
+          id: `x-news-${query.toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 48)}`,
+          provider: "x-news",
+          query,
+          directSource: false,
+        }),
+      )
+    : [];
 
-  const mastodon = envList("FACT_DESK_MASTODON_TAGS").map(
+  const mastodon = envList("FACT_DESK_MASTODON_TAGS", 8).map(
     (tag): MastodonTagSourceConfig => ({
       id: `mastodon-tag-${tag.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
       provider: "mastodon-tag",
@@ -62,5 +63,5 @@ export function getEnabledSocialSources(): SocialSourceConfig[] {
     }),
   );
 
-  return [...bluesky, ...mastodon].slice(0, 32);
+  return [...xNews, ...mastodon].slice(0, 16);
 }
