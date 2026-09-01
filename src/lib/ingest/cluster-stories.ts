@@ -1,3 +1,4 @@
+import { buildIndependentClusterHeadline } from "@/lib/ingest/cluster-headline";
 import { storyPriorityScore } from "@/lib/stories";
 import {
   storyHasViewpoint,
@@ -131,15 +132,19 @@ function mergeCluster(cluster: Story[]): Story {
     story.summary.length > best.summary.length ? story : best,
   );
   const multiSource = sources.length >= 2;
+  const category = categoryFor(cluster);
 
   return {
     ...representative,
+    title: multiSource
+      ? buildIndependentClusterHeadline(ordered, category)
+      : representative.title,
     summary: bestSummary.summary,
     whatHappened: bestSummary.whatHappened,
     whyItMatters: multiSource
       ? `${bestSummary.whyItMatters} Coverage now spans ${sources.length} publishers; that adds context but does not by itself independently confirm every claim.`
       : representative.whyItMatters,
-    category: categoryFor(cluster),
+    category,
     confidence: multiSource ? "Developing" : "Single-source",
     signal: multiSource ? "Cross-angle" : representative.signal,
     sources,
@@ -148,7 +153,7 @@ function mergeCluster(cluster: Story[]): Story {
     updatedAt: newestIso(ordered.map((story) => story.updatedAt)),
     tags: Array.from(new Set(ordered.flatMap((story) => story.tags))),
     coverageAngle: multiSource
-      ? `Related reporting clustered across ${sources.length} publishers; source claims still require editorial review.`
+      ? `Related reporting clustered across ${sources.length} publishers; the Fact Desk headline is independently synthesized from shared headline terms rather than inherited from one publisher.`
       : representative.coverageAngle,
   };
 }

@@ -8,6 +8,7 @@ import {
 import {
   MAX_PUBLIC_SUMMARY_CHARS,
   MAX_PUBLIC_WHAT_HAPPENED_CHARS,
+  sanitizePublicTimestamp,
   sanitizeStoryForPublic,
 } from "@/lib/ingest/public-story";
 import type { Story } from "@/types/story";
@@ -49,6 +50,36 @@ test("public serialization keeps a useful synopsis but drops article-length body
   assert.doesNotMatch(sanitized.summary, new RegExp(distinctiveTail));
   assert.doesNotMatch(sanitized.whatHappened, new RegExp(distinctiveTail));
   assert.match(sanitized.whatHappened, /Example News reports this development/);
+});
+
+test("future and invalid public timestamps fail closed to current time", () => {
+  const nowMs = Date.parse("2026-09-01T11:30:00.000Z");
+  const future = sanitizePublicTimestamp("2026-09-01T18:30:00.000Z", nowMs);
+  const invalid = sanitizePublicTimestamp("not-a-date", nowMs);
+  const valid = sanitizePublicTimestamp("2026-09-01T11:28:00.000Z", nowMs);
+
+  assert.deepEqual(future, {
+    iso: "2026-09-01T11:30:00.000Z",
+    corrected: true,
+  });
+  assert.deepEqual(invalid, {
+    iso: "2026-09-01T11:30:00.000Z",
+    corrected: true,
+  });
+  assert.deepEqual(valid, {
+    iso: "2026-09-01T11:28:00.000Z",
+    corrected: false,
+  });
+
+  const sanitized = sanitizeStoryForPublic(
+    baseStory({
+      publishedAt: "2099-01-01T00:00:00.000Z",
+      updatedAt: "2099-01-01T00:00:00.000Z",
+    }),
+  );
+  assert.ok(Date.parse(sanitized.publishedAt) <= Date.now() + 1_000);
+  assert.ok(Date.parse(sanitized.updatedAt) <= Date.now() + 1_000);
+  assert.ok(sanitized.tags.includes("timestamp-corrected"));
 });
 
 test("headline inference corrects coarse science and health feed categories", () => {

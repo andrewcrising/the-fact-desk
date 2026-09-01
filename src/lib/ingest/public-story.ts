@@ -6,6 +6,7 @@ import type { Story } from "@/types/story";
 
 export const MAX_PUBLIC_SUMMARY_CHARS = 280;
 export const MAX_PUBLIC_WHAT_HAPPENED_CHARS = 480;
+export const MAX_FUTURE_TIMESTAMP_SKEW_MS = 5 * 60 * 1000;
 
 /**
  * Bound third-party feed text before it can enter a browser/API payload.
@@ -31,6 +32,17 @@ export function boundPublicText(text: string, maxChars: number): string {
         : room;
 
   return `${candidate.slice(0, preferredBoundary).trimEnd()}…`;
+}
+
+export function sanitizePublicTimestamp(
+  value: string,
+  nowMs = Date.now(),
+): { iso: string; corrected: boolean } {
+  const parsed = Date.parse(value);
+  if (Number.isNaN(parsed) || parsed > nowMs + MAX_FUTURE_TIMESTAMP_SKEW_MS) {
+    return { iso: new Date(nowMs).toISOString(), corrected: true };
+  }
+  return { iso: new Date(parsed).toISOString(), corrected: false };
 }
 
 function sourceList(story: Story): string {
@@ -64,6 +76,10 @@ export function sanitizeStoryForPublic(story: Story): Story {
   const whatHappened = multiSource
     ? `${sources} carry related coverage of this development. Short feed context: ${summary}`
     : `${sources} reports this development. Short feed context: ${summary}`;
+  const nowMs = Date.now();
+  const published = sanitizePublicTimestamp(story.publishedAt, nowMs);
+  const updated = sanitizePublicTimestamp(story.updatedAt, nowMs);
+  const timestampCorrected = published.corrected || updated.corrected;
 
   return {
     ...story,
@@ -76,6 +92,11 @@ export function sanitizeStoryForPublic(story: Story): Story {
       ? `${baseWhyItMatters} Related coverage spans ${story.sources.length} publishers; that adds context but does not independently confirm every source-specific detail.`
       : baseWhyItMatters,
     category,
+    publishedAt: published.iso,
+    updatedAt: updated.iso,
+    tags: timestampCorrected
+      ? Array.from(new Set([...story.tags, "timestamp-corrected"]))
+      : story.tags,
     coverageAngle: multiSource
       ? `Related reports are grouped across ${story.sources.length} publishers. The synopsis is a bounded feed excerpt; source-specific claims remain attributed to the linked publishers.`
       : "The synopsis is a bounded RSS excerpt from the linked source. Fact Desk significance text is generated only from the visible headline, category, and bounded synopsis.",
