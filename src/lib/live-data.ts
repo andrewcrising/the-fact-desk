@@ -1,10 +1,10 @@
 /**
- * Production live RSS layer — assemble from source-level Next.js fetch caches
- * with a file fallback. Keeping a single cache layer avoids compounding a
- * five-minute feed cache with an additional stale whole-desk cache.
+ * Production live layer — publisher RSS plus opt-in social discovery, with a
+ * file fallback for publisher coverage. Social failures never take down RSS.
  */
 import { ingestEnabledFeeds } from "@/lib/ingest/ingest-feeds";
 import { sanitizeStoryForPublic } from "@/lib/ingest/public-story";
+import { ingestSocialSignalStories } from "@/lib/ingest/social-signal";
 import { readLiveStoriesCache } from "@/lib/live-stories-cache";
 import type { Story } from "@/types/story";
 
@@ -16,24 +16,32 @@ export interface LiveFeedResult {
   fetchedAt: string | null;
 }
 
-/** Live RSS for homepage/API. Never throws. */
-export async function getLiveFeed(): Promise<LiveFeedResult> {
+async function safeSocialStories(): Promise<Story[]> {
   try {
-    const stories = (await ingestEnabledFeeds()).map(sanitizeStoryForPublic);
-    if (stories.length > 0) {
-      return {
-        stories,
-        source: "live",
-        fetchedAt: new Date().toISOString(),
-      };
-    }
+    return await ingestSocialSignalStories();
   } catch {
-    // fall through to file cache
+    return [];
+  }
+}
+
+/** Publisher reporting plus non-legacy discovery signals. Never throws. */
+export async function getLiveFeed(): Promise<LiveFeedResult> {
+  const [publisherStories, socialStories] = await Promise.all([
+    ingestEnabledFeeds().catch(() => [] as Story[]),
+    safeSocialStories(),
+  ]);
+
+  if (publisherStories.length > 0) {
+    return {
+      stories: [...publisherStories, ...socialStories].map(sanitizeStoryForPublic),
+      source: "live",
+      fetchedAt: new Date().toISOString(),
+    };
   }
 
   const cache = readLiveStoriesCache();
   return {
-    stories: cache.stories.map(sanitizeStoryForPublic),
+    stories: [...cache.stories, ...socialStories].map(sanitizeStoryForPublic),
     source: "cache",
     fetchedAt: cache.generatedAt,
   };
