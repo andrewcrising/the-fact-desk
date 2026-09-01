@@ -22,6 +22,16 @@ export type StoryCategory =
   | "Energy"
   | "Culture";
 
+/**
+ * Evidence source class. Social/open-web items are discovery signals, not
+ * equivalent to independent publisher or primary-record corroboration.
+ */
+export type EvidenceSourceKind =
+  | "publisher"
+  | "primary"
+  | "social"
+  | "open-web";
+
 export interface Story {
   id: string;
   slug: string;
@@ -34,6 +44,8 @@ export interface Story {
   signal: Signal;
   sources: string[];
   sourceUrls?: string[];
+  /** Optional array aligned by index with `sources`. Legacy stories omit it. */
+  sourceKinds?: EvidenceSourceKind[];
   publishedAt: string;
   updatedAt: string;
   tags: string[];

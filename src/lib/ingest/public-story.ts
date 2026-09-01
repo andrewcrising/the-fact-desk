@@ -2,13 +2,18 @@ import {
   buildFastWhyItMatters,
   inferStoryCategory,
 } from "@/lib/ingest/fast-briefing";
+import {
+  independentEvidenceSourceCount,
+  isSocialOnlyStory,
+  socialSourceCount,
+} from "@/lib/stories";
 import type { Story } from "@/types/story";
 
 export const MAX_PUBLIC_SUMMARY_CHARS = 280;
 export const MAX_PUBLIC_WHAT_HAPPENED_CHARS = 480;
 
 /**
- * Bound third-party feed text before it can enter a browser/API payload.
+ * Bound third-party text before it can enter a browser/API payload.
  * Prefer a natural word/sentence boundary without ever exceeding maxChars.
  */
 export function boundPublicText(text: string, maxChars: number): string {
@@ -40,14 +45,7 @@ function sourceList(story: Story): string {
   return `${story.sources.slice(0, 2).join(", ")} and ${story.sources.length - 2} more sources`;
 }
 
-/**
- * Final public serialization boundary for live stories.
- *
- * The useful tile synopsis is preserved as a short attributed RSS excerpt, but
- * article-length feed bodies are discarded. Public category/significance copy
- * is then recomputed from the visible headline + bounded synopsis so hidden
- * publisher prose cannot create unsupported significance claims.
- */
+/** Final public serialization boundary for live stories. */
 export function sanitizeStoryForPublic(story: Story): Story {
   const summary = boundPublicText(
     story.summary || story.title,
@@ -59,11 +57,32 @@ export function sanitizeStoryForPublic(story: Story): Story {
     summary,
     category,
   );
-  const multiSource = story.sources.length >= 2;
+  const independentSources = independentEvidenceSourceCount(story);
+  const socialSources = socialSourceCount(story);
+  const multiSource = independentSources >= 2;
+  const socialOnly = isSocialOnlyStory(story);
   const sources = sourceList(story);
+
+  if (socialOnly) {
+    return {
+      ...story,
+      summary,
+      category,
+      confidence: "Single-source",
+      whatHappened: boundPublicText(
+        `${sources} surfaced this public social signal. ${story.whatHappened}`,
+        MAX_PUBLIC_WHAT_HAPPENED_CHARS,
+      ),
+      whyItMatters:
+        "Social activity can surface developments before broader reporting, but engagement, repetition, and account popularity are not proof. Treat this as a discovery signal until primary records or independent reporting establish the underlying facts.",
+      coverageAngle:
+        "Social/open-web discovery only. Fact Desk preserves the original post link and does not count this item as independent publisher corroboration or automatic lead evidence.",
+    };
+  }
+
   const whatHappened = multiSource
-    ? `${sources} carry related coverage of this development. Short feed context: ${summary}`
-    : `${sources} reports this development. Short feed context: ${summary}`;
+    ? `${sources} carry related coverage of this development. Short source context: ${summary}`
+    : `${sources} reports this development. Short source context: ${summary}`;
 
   return {
     ...story,
@@ -73,11 +92,13 @@ export function sanitizeStoryForPublic(story: Story): Story {
       MAX_PUBLIC_WHAT_HAPPENED_CHARS,
     ),
     whyItMatters: multiSource
-      ? `${baseWhyItMatters} Related coverage spans ${story.sources.length} publishers; that adds context but does not independently confirm every source-specific detail.`
+      ? `${baseWhyItMatters} Related coverage spans ${independentSources} independent publisher/primary sources${socialSources ? ` plus ${socialSources} social signal${socialSources === 1 ? "" : "s"}` : ""}; that adds context but does not independently confirm every source-specific detail.`
       : baseWhyItMatters,
     category,
     coverageAngle: multiSource
-      ? `Related reports are grouped across ${story.sources.length} publishers. The synopsis is a bounded feed excerpt; source-specific claims remain attributed to the linked publishers.`
-      : "The synopsis is a bounded RSS excerpt from the linked source. Fact Desk significance text is generated only from the visible headline, category, and bounded synopsis.",
+      ? `Related reports are grouped across ${independentSources} independent publisher/primary sources${socialSources ? ` with ${socialSources} additional social signal${socialSources === 1 ? "" : "s"}` : ""}. Social activity is discovery context, not confirmation.`
+      : socialSources > 0
+        ? `This cluster includes social/open-web activity but fewer than two independent publisher/primary sources. The social material remains attributed and does not raise confidence by itself.`
+        : "The synopsis is a bounded source-feed excerpt. Fact Desk significance text is generated only from the visible headline, category, and bounded synopsis.",
   };
 }
