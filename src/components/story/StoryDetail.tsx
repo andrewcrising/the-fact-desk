@@ -15,6 +15,7 @@ interface StoryDetailProps {
 export function StoryDetail({ story }: StoryDetailProps) {
   const sourceUrls = story.sourceUrls ?? [];
   const linksAreAligned = sourceUrls.length === story.sources.length;
+  const primarySourceUrl = linksAreAligned ? sourceUrls[0] : undefined;
   const priority = getStoryPriority(story);
 
   return (
@@ -50,7 +51,19 @@ export function StoryDetail({ story }: StoryDetailProps) {
       </div>
 
       <h1 className="font-serif text-3xl font-semibold leading-tight tracking-tight text-[var(--foreground)] sm:text-4xl">
-        {story.title}
+        {primarySourceUrl ? (
+          <a
+            href={primarySourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Open primary source for ${story.title}`}
+            className="hover:text-[var(--accent)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2"
+          >
+            {story.title}
+          </a>
+        ) : (
+          story.title
+        )}
       </h1>
 
       <p className="mt-4 text-lg leading-relaxed text-[var(--muted)]">
@@ -61,7 +74,12 @@ export function StoryDetail({ story }: StoryDetailProps) {
         <div>
           <dt className="desk-kicker mb-1">Source coverage</dt>
           <dd className="text-[var(--foreground)]">
-            {formatSourceSpread(story.sources)}
+            <a
+              href="#underlying-sources"
+              className="font-medium hover:text-[var(--accent)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2"
+            >
+              {formatSourceSpread(story.sources)}
+            </a>
           </dd>
         </div>
         <div>
@@ -99,7 +117,10 @@ export function StoryDetail({ story }: StoryDetailProps) {
         )}
       </section>
 
-      <section className="mt-8 border-t border-[var(--border-subtle)] pt-6">
+      <section
+        id="underlying-sources"
+        className="mt-8 scroll-mt-6 border-t border-[var(--border-subtle)] pt-6"
+      >
         <h2 className="desk-kicker mb-3 text-[var(--foreground)]">
           Read the underlying sources
         </h2>
