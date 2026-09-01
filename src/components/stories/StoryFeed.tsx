@@ -10,6 +10,7 @@ import {
   categoryCounts,
   filterByCategory,
   getHighestPriorityStory,
+  isSocialOnlyStory,
   rankStoriesByPriority,
 } from "@/lib/stories";
 import type { LiveDataSource } from "@/lib/live-data";
@@ -81,7 +82,7 @@ export function StoryFeed({
   );
 
   const topPriority = useMemo(
-    () => getHighestPriorityStory(filtered),
+    () => getHighestPriorityStory(filtered.filter((story) => !isSocialOnlyStory(story))),
     [filtered],
   );
 
