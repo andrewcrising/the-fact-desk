@@ -1,6 +1,7 @@
 import { getLiveFeed } from "@/lib/live-data";
 import { ingestEnabledFeedsWithDiagnostics } from "@/lib/ingest/ingest-feeds";
 import { sanitizeStoryForPublic } from "@/lib/ingest/public-story";
+import { independentEvidenceSourceCount } from "@/lib/stories";
 import { isLiveBetaEnabled } from "@/lib/story-repository";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -24,11 +25,18 @@ export async function GET(request: NextRequest) {
         activeSourceCount: result.activeSourceCount,
         activeSources: result.activeSources,
         rawStoryCount: result.rawStoryCount,
-        multiSourceStoryCount: stories.filter((story) => story.sources.length >= 2).length,
+        multiSourceStoryCount: stories.filter(
+          (story) => independentEvidenceSourceCount(story) >= 2,
+        ).length,
         failedFeedIds: result.failedFeedIds,
         emptyFeedIds: result.emptyFeedIds,
         activeSourceViewpointCounts: result.activeSourceViewpointCounts,
         storyViewpointCounts: result.storyViewpointCounts,
+        socialSourcesChecked: result.socialSourcesChecked,
+        socialSourcesWithSignals: result.socialSourcesWithSignals,
+        socialSignalCount: result.socialSignalCount,
+        socialFailedSourceIds: result.socialFailedSourceIds,
+        socialProviderCounts: result.socialProviderCounts,
         stories,
       });
     }
