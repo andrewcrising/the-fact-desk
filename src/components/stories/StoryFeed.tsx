@@ -19,6 +19,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo } from "react";
 import { CategoryFilter } from "./CategoryFilter";
 import { DeskTicker } from "./DeskTicker";
+import { EarlySignalRail } from "./EarlySignalRail";
 import { LeadSignal } from "./LeadSignal";
 import { LiveBetaFeed } from "./LiveBetaFeed";
 import { MobilePriorityRail } from "./MobilePriorityRail";
@@ -114,6 +115,7 @@ export function StoryFeed({
   return (
     <div className="space-y-3">
       <MobilePriorityRail stories={filtered} />
+      <EarlySignalRail stories={filtered} />
 
       {topPriority && (
         <section aria-labelledby="top-priority-heading">
@@ -131,16 +133,6 @@ export function StoryFeed({
         onChange={setCategory}
         counts={counts}
       />
-
-      {remainingStories.length > 0 && (
-        <LiveBetaFeed
-          key={activeCategory ?? "all"}
-          stories={remainingStories}
-          activeCategory={activeCategory}
-          source={liveFeedSource}
-          fetchedAt={liveFeedFetchedAt}
-        />
-      )}
 
       {filtered.length === 0 && (
         <div className="desk-card border-dashed px-6 py-8 text-center">
@@ -179,6 +171,16 @@ export function StoryFeed({
           </p>
         )}
       </section>
+
+      {remainingStories.length > 0 && (
+        <LiveBetaFeed
+          key={activeCategory ?? "all"}
+          stories={remainingStories}
+          activeCategory={activeCategory}
+          source={liveFeedSource}
+          fetchedAt={liveFeedFetchedAt}
+        />
+      )}
     </div>
   );
 }
