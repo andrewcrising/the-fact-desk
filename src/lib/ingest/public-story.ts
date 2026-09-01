@@ -1,3 +1,4 @@
+import { attributionSafeBriefing } from "@/lib/ingest/editorial-safety";
 import {
   buildFastWhyItMatters,
   inferStoryCategory,
@@ -33,51 +34,52 @@ export function boundPublicText(text: string, maxChars: number): string {
   return `${candidate.slice(0, preferredBoundary).trimEnd()}…`;
 }
 
-function sourceList(story: Story): string {
-  if (story.sources.length === 0) return "The linked source";
-  if (story.sources.length === 1) return story.sources[0] ?? "The linked source";
-  if (story.sources.length === 2) return `${story.sources[0]} and ${story.sources[1]}`;
-  return `${story.sources.slice(0, 2).join(", ")} and ${story.sources.length - 2} more sources`;
-}
-
 /**
  * Final public serialization boundary for live stories.
  *
- * The useful tile synopsis is preserved as a short attributed RSS excerpt, but
- * article-length feed bodies are discarded. Public category/significance copy
- * is then recomputed from the visible headline + bounded synopsis so hidden
- * publisher prose cannot create unsupported significance claims.
+ * Third-party feed text is bounded before browser/API delivery. Reputation-
+ * sensitive accusations, allegations and investigations are forced through an
+ * attribution-aware guard so the desk does not silently convert a publisher's
+ * claim into an independently asserted Fact Desk fact.
  */
 export function sanitizeStoryForPublic(story: Story): Story {
-  const summary = boundPublicText(
+  const boundedSummary = boundPublicText(
     story.summary || story.title,
     MAX_PUBLIC_SUMMARY_CHARS,
   );
-  const category = inferStoryCategory(story.title, story.category);
+  const protectedBriefing = attributionSafeBriefing(story, boundedSummary);
+  const category = inferStoryCategory(protectedBriefing.title, story.category);
   const baseWhyItMatters = buildFastWhyItMatters(
-    story.title,
-    summary,
+    protectedBriefing.title,
+    protectedBriefing.summary,
     category,
   );
   const multiSource = story.sources.length >= 2;
-  const sources = sourceList(story);
-  const whatHappened = multiSource
-    ? `${sources} carry related coverage of this development. Short feed context: ${summary}`
-    : `${sources} reports this development. Short feed context: ${summary}`;
+  const whatHappened = `${protectedBriefing.whatHappenedPrefix} Short source context: ${protectedBriefing.summary}`;
+  const corroborationNote = multiSource
+    ? ` Related coverage spans ${story.sources.length} publishers; that adds context but does not independently establish every source-specific claim.`
+    : "";
+  const safetyNote = protectedBriefing.safetyNote
+    ? ` ${protectedBriefing.safetyNote}`
+    : "";
 
   return {
     ...story,
-    summary,
+    title: protectedBriefing.title,
+    summary: protectedBriefing.summary,
     whatHappened: boundPublicText(
       whatHappened,
       MAX_PUBLIC_WHAT_HAPPENED_CHARS,
     ),
-    whyItMatters: multiSource
-      ? `${baseWhyItMatters} Related coverage spans ${story.sources.length} publishers; that adds context but does not independently confirm every source-specific detail.`
-      : baseWhyItMatters,
+    whyItMatters: `${baseWhyItMatters}${corroborationNote}${safetyNote}`,
     category,
-    coverageAngle: multiSource
-      ? `Related reports are grouped across ${story.sources.length} publishers. The synopsis is a bounded feed excerpt; source-specific claims remain attributed to the linked publishers.`
-      : "The synopsis is a bounded RSS excerpt from the linked source. Fact Desk significance text is generated only from the visible headline, category, and bounded synopsis.",
+    tags: protectedBriefing.sensitive
+      ? Array.from(new Set([...story.tags, "reputation-sensitive"]))
+      : story.tags,
+    coverageAngle: protectedBriefing.sensitive
+      ? "Source note: this briefing concerns an allegation, accusation, legal claim, or investigation. Fact Desk preserves attribution and does not treat source-specific accusations as established facts merely because they are repeated. Follow the source links for the original reporting and record."
+      : multiSource
+        ? `Source note: related reporting is grouped across ${story.sources.length} publishers. The public synopsis is bounded source-feed context; source-specific claims remain attributed to the linked publishers.`
+        : "Source note: the public synopsis is short source-feed context. Fact Desk adds separate significance context from the visible headline, category, and synopsis. Follow the source link for the original reporting.",
   };
 }

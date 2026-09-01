@@ -159,3 +159,45 @@ test("literal missile conflict still receives conflict context", () => {
 
   assert.match(briefing, /near-term security picture|further retaliation/);
 });
+
+test("unattributed reputation-sensitive headline is visibly framed as a report", () => {
+  const story = sanitizeStoryForPublic(
+    baseStory({
+      title: "Mayor took bribes from contractor",
+      summary: "A complaint filed Tuesday describes payments tied to a city contract.",
+      category: "Politics",
+    }),
+  );
+
+  assert.match(story.title, /^Report:/);
+  assert.match(story.whatHappened, /reputation-sensitive allegation|legal claim/);
+  assert.ok(story.tags.includes("reputation-sensitive"));
+  assert.match(story.coverageAngle ?? "", /preserves attribution/);
+});
+
+test("already attributed allegation stays attributed without redundant headline prefix", () => {
+  const story = sanitizeStoryForPublic(
+    baseStory({
+      title: "Prosecutors say mayor accepted bribes from contractor",
+      summary: "The mayor denied wrongdoing and has not been convicted.",
+      category: "Courts",
+    }),
+  );
+
+  assert.equal(story.title, "Prosecutors say mayor accepted bribes from contractor");
+  assert.ok(story.tags.includes("reputation-sensitive"));
+  assert.match(story.whyItMatters, /does not treat source-specific accusations as independently established facts/);
+});
+
+test("ordinary non-reputational use of claims is not escalated", () => {
+  const story = sanitizeStoryForPublic(
+    baseStory({
+      title: "Weekly jobless claims fall",
+      summary: "The labor department reported fewer applications for unemployment benefits.",
+      category: "Markets",
+    }),
+  );
+
+  assert.doesNotMatch(story.title, /^Report:/);
+  assert.ok(!story.tags.includes("reputation-sensitive"));
+});
