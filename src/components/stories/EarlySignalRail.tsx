@@ -12,25 +12,40 @@ interface EarlySignalRailProps {
   stories: Story[];
 }
 
-function isEarlySignal(story: Story): boolean {
-  return (
-    story.signal === "Developing" ||
-    story.signal === "Under-covered" ||
-    isSocialOnlyStory(story) ||
+const BREAKING_WINDOW_MS = 90 * 60 * 1000;
+
+function isRecentBreakingReport(story: Story, nowMs: number): boolean {
+  const updatedMs = Date.parse(story.updatedAt);
+  if (!Number.isFinite(updatedMs)) return false;
+
+  const ageMs = Math.max(0, nowMs - updatedMs);
+  const thinEvidence =
     story.confidence === "Single-source" ||
-    independentEvidenceSourceCount(story) <= 1
+    independentEvidenceSourceCount(story) <= 1;
+
+  return (
+    ageMs <= BREAKING_WINDOW_MS &&
+    thinEvidence &&
+    story.signal === "Developing"
   );
 }
 
+function isEarlySignal(story: Story, nowMs: number): boolean {
+  return isSocialOnlyStory(story) || isRecentBreakingReport(story, nowMs);
+}
+
 export function EarlySignalRail({ stories }: EarlySignalRailProps) {
-  const earlySignals = rankStoriesByPriority(stories.filter(isEarlySignal)).slice(0, 8);
+  const nowMs = Date.now();
+  const earlySignals = rankStoriesByPriority(
+    stories.filter((story) => isEarlySignal(story, nowMs)),
+  ).slice(0, 8);
 
   return (
     <section aria-labelledby="early-signal-heading">
       <div className="mb-1.5 flex items-center justify-between gap-3">
         <DeskLabel id="early-signal-heading">Developing / Early Signals</DeskLabel>
         <span className="text-[10px] font-medium text-[var(--muted-light)]">
-          Not yet fully corroborated
+          Social + breaking reports
         </span>
       </div>
 
@@ -48,9 +63,7 @@ export function EarlySignalRail({ stories }: EarlySignalRailProps) {
                   <span className="text-[9px] font-semibold uppercase tracking-wide text-[var(--muted)]">
                     {socialOnly
                       ? "Social signal · unverified"
-                      : story.signal === "Developing"
-                        ? "Developing"
-                        : "Early report · limited evidence"}
+                      : "Breaking report · limited evidence"}
                   </span>
                   <time
                     dateTime={story.updatedAt}
@@ -71,12 +84,12 @@ export function EarlySignalRail({ stories }: EarlySignalRailProps) {
         </div>
       ) : (
         <div className="desk-card border-dashed px-3 py-2 text-[11px] text-[var(--muted-light)]">
-          No active developing signals right now. This lane will populate automatically when thinly supported or emerging reports appear.
+          No active early signals right now. This lane only shows social signals and very recent, thinly corroborated breaking reports.
         </div>
       )}
 
       <p className="mt-1 text-[9px] leading-snug text-[var(--muted-light)]">
-        Developing signals are surfaced for awareness before full corroboration. They do not count as confirmed reporting by themselves.
+        This lane is for discovery: social signals and breaking reports from the last 90 minutes. Routine developing or under-covered stories stay in the main desk rather than repeating here.
       </p>
     </section>
   );
