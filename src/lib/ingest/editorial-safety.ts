@@ -1,7 +1,7 @@
 import type { Story } from "@/types/story";
 
 const REPUTATIONAL_CLAIM_PATTERN =
-  /\b(alleg(?:e|es|ed|edly|ation|ations)|accus(?:e|es|ed|ation|ations)|claim(?:s|ed)?|charged?|indict(?:ed|ment)|investigat(?:e|es|ed|ing|ion)|lawsuit|complaint|fraud|briber(?:y|y)|corrupt(?:ion|ed)?|misconduct|harass(?:ment|ed)?|assault(?:ed)?|abuse(?:d)?|embezzl(?:e|ed|ement)|theft|stole|scam(?:med)?|criminal|murder(?:ed)?|kill(?:ed|ing)|lied|false statement(?:s)?)\b/i;
+  /\b(alleg(?:e|es|ed|edly|ation|ations)|accus(?:e|es|ed|ation|ations)|charged?|indict(?:ed|ment)|investigat(?:e|es|ed|ing|ion)|lawsuit|complaint|fraud|bribery|corrupt(?:ion|ed)?|misconduct|harass(?:ment|ed)?|assault(?:ed)?|abuse(?:d)?|embezzl(?:e|ed|ement)|theft|stole|scam(?:med)?|criminal|murder(?:ed)?|kill(?:ed|ing)|lied|false statement(?:s)?)\b/i;
 
 const EXPLICIT_ATTRIBUTION_PATTERN =
   /\b(according to|police say|police said|prosecutors? say|prosecutors? said|court filing|lawsuit (?:says|said|alleges)|complaint (?:says|said|alleges)|was charged|were charged|was indicted|were indicted|was convicted|were convicted|alleged|allegedly|accused|claims?|reported by|reports?)\b/i;
