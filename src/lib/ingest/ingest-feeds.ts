@@ -1,19 +1,31 @@
 /**
- * Parallel, failure-isolated RSS ingestion for the live personal proof.
+ * Parallel, failure-isolated publisher/primary RSS ingestion plus an opt-in
+ * social discovery lane. Social signals may join clusters but never count as
+ * independent publisher corroboration.
  */
 import { getEnabledFeeds } from "@/data/rssFeeds";
 import { clusterAndBalanceStories } from "@/lib/ingest/cluster-stories";
 import { fetchRssStories } from "@/lib/ingest/rss";
+import {
+  ingestSocialSignalsWithDiagnostics,
+  socialSignalToStory,
+} from "@/lib/ingest/social-signal";
+import {
+  independentEvidenceSourceCount,
+  isSocialOnlyStory,
+} from "@/lib/stories";
 import {
   countStoriesByViewpoint,
   getSourceViewpoint,
   type ViewpointBand,
 } from "@/lib/viewpoints";
 import type { Story } from "@/types/story";
+import type { SocialPlatform } from "@/types/social-signal";
 
 const PER_FEED_LIMIT = 3;
 const FETCH_CONCURRENCY = 24;
 const FEED_TIMEOUT_MS = 5500;
+const SOCIAL_STORY_LIMIT = 8;
 
 export interface FeedIngestDiagnostics {
   stories: Story[];
@@ -27,6 +39,11 @@ export interface FeedIngestDiagnostics {
   emptyFeedIds: string[];
   activeSourceViewpointCounts: Record<ViewpointBand, number>;
   storyViewpointCounts: Record<ViewpointBand, number>;
+  socialSourcesChecked: number;
+  socialSourcesWithSignals: number;
+  socialSignalCount: number;
+  socialFailedSourceIds: string[];
+  socialProviderCounts: Partial<Record<SocialPlatform, number>>;
 }
 
 interface FeedResult {
@@ -68,13 +85,19 @@ async function fetchFeed(
 export async function ingestEnabledFeedsWithDiagnostics(): Promise<FeedIngestDiagnostics> {
   const feeds = getEnabledFeeds();
   const results: FeedResult[] = [];
+  const socialPromise = ingestSocialSignalsWithDiagnostics();
 
   for (let index = 0; index < feeds.length; index += FETCH_CONCURRENCY) {
     const batch = feeds.slice(index, index + FETCH_CONCURRENCY);
     results.push(...(await Promise.all(batch.map(fetchFeed))));
   }
 
-  const rawStories = results.flatMap((result) => result.stories);
+  const social = await socialPromise;
+  const socialStories = social.signals
+    .slice(0, SOCIAL_STORY_LIMIT)
+    .map(socialSignalToStory);
+  const publisherStories = results.flatMap((result) => result.stories);
+  const rawStories = [...publisherStories, ...socialStories];
   const stories = clusterAndBalanceStories(rawStories);
   const activeSources = Array.from(
     new Set(
@@ -95,6 +118,7 @@ export async function ingestEnabledFeedsWithDiagnostics(): Promise<FeedIngestDia
       "primary-source": 0,
     } satisfies Record<ViewpointBand, number>,
   );
+  const evidenceStories = stories.filter((story) => !isSocialOnlyStory(story));
 
   return {
     stories,
@@ -103,7 +127,9 @@ export async function ingestEnabledFeedsWithDiagnostics(): Promise<FeedIngestDia
     activeSourceCount: activeSources.length,
     activeSources,
     rawStoryCount: rawStories.length,
-    multiSourceStoryCount: stories.filter((story) => story.sources.length >= 2).length,
+    multiSourceStoryCount: stories.filter(
+      (story) => independentEvidenceSourceCount(story) >= 2,
+    ).length,
     failedFeedIds: results
       .filter((result) => result.status === "failed")
       .map((result) => result.id),
@@ -111,7 +137,12 @@ export async function ingestEnabledFeedsWithDiagnostics(): Promise<FeedIngestDia
       .filter((result) => result.status === "empty")
       .map((result) => result.id),
     activeSourceViewpointCounts,
-    storyViewpointCounts: countStoriesByViewpoint(stories),
+    storyViewpointCounts: countStoriesByViewpoint(evidenceStories),
+    socialSourcesChecked: social.sourcesChecked,
+    socialSourcesWithSignals: social.sourcesWithSignals,
+    socialSignalCount: social.signals.length,
+    socialFailedSourceIds: social.failedSourceIds,
+    socialProviderCounts: social.providerCounts,
   };
 }
 
