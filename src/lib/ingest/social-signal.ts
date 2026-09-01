@@ -1,6 +1,7 @@
 import type { SocialSourceConfig } from "@/data/socialSources";
 import { getEnabledSocialSources } from "@/data/socialSources";
 import { cleanFeedText } from "@/lib/ingest/rss";
+import { fetchXNewsSignals } from "@/lib/ingest/x-news";
 import type { Story } from "@/types/story";
 import type {
   RankedSocialSignal,
@@ -91,9 +92,11 @@ function rankSignals(signals: SocialSignalCandidate[]): RankedSocialSignal[] {
       return {
         ...signal,
         score,
-        reason: signal.directSource
-          ? "Recent direct-source social post; engagement is a discovery signal, not verification."
-          : "Recent public social post ranked by recency and engagement; not independently verified.",
+        reason: signal.platform === "x"
+          ? "Breaking-news cluster surfaced by X; treated as discovery context rather than independent verification."
+          : signal.directSource
+            ? "Recent direct-source social post; engagement is a discovery signal, not verification."
+            : "Recent public social post ranked by recency and engagement; not independently verified.",
       };
     })
     .sort((a, b) => b.score - a.score || Date.parse(b.createdAt) - Date.parse(a.createdAt));
@@ -189,6 +192,7 @@ async function fetchMastodonTag(source: Extract<SocialSourceConfig, { provider: 
 }
 
 async function fetchConfiguredSource(source: SocialSourceConfig): Promise<SocialSignalCandidate[]> {
+  if (source.provider === "x-news") return fetchXNewsSignals(source);
   if (source.provider === "bluesky-author") return fetchBlueskyAuthor(source);
   return fetchMastodonTag(source);
 }
@@ -222,14 +226,16 @@ export async function ingestSocialSignalsWithDiagnostics(
 export function socialSignalToStory(signal: RankedSocialSignal): Story {
   const terms = subjectTerms(signal.text);
   const subject = terms.length > 0 ? terms.join(" ") : "developing event";
-  const sourceName = `${signal.platform === "bluesky" ? "Bluesky" : "Mastodon"} ${signal.account}`;
+  const sourceName = signal.platform === "x"
+    ? "X breaking-news signal"
+    : `${signal.platform === "bluesky" ? "Bluesky" : "Mastodon"} ${signal.account}`;
   const createdAt = safeTimestamp(signal.createdAt);
   return {
     id: `social-${signal.id}`,
     slug: `social-${slugPart(signal.id)}`,
     title: `Social signal: ${subject}`,
-    summary: `${sourceName} posted about ${terms.slice(0, 6).join(", ") || "a developing event"}. Open the original post for exact wording and context.`,
-    whatHappened: `${sourceName} surfaced a public social signal about ${terms.slice(0, 6).join(", ") || "a developing event"}. Fact Desk has not independently established the post's factual claims.`,
+    summary: `${sourceName} surfaced activity about ${terms.slice(0, 6).join(", ") || "a developing event"}. Open the original post for exact wording and context.`,
+    whatHappened: `${sourceName} surfaced a public social signal about ${terms.slice(0, 6).join(", ") || "a developing event"}. Fact Desk has not independently established the underlying factual claims.`,
     whyItMatters: "Social activity can surface developments before broader reporting, but engagement and repetition are discovery signals rather than proof. Look for primary records or independent reporting before treating the underlying claim as established.",
     category: signal.categoryHint ?? "World",
     confidence: "Single-source",
