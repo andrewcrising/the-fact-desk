@@ -19,6 +19,8 @@ const ELECTION_PATTERN =
 
 const HEALTH_CATEGORY_PATTERN =
   /\b(cancer|drug|medication|fda|nih|cdc|health|medical|medicine|hospital|patient|clinical|vaccine|virus|disease|outbreak|therapy|treatment|diagnosis)\b/i;
+const SCIENCE_CATEGORY_PATTERN =
+  /\b(dark matter|physicists?|particle(?:s)?|lunar eclipse|solar eclipse|galax(?:y|ies)|astronom(?:y|er|ers|ical)|glacier(?:s)?|iceberg(?:s)?)\b/i;
 const TECHNOLOGY_CATEGORY_PATTERN =
   /\b(ai|artificial intelligence|technology|tech|cyber|software|semiconductor|chip|nasa|space|telescope|satellite|computer|internet|robot|quantum)\b/i;
 const MARKETS_CATEGORY_PATTERN =
@@ -28,7 +30,7 @@ const ENERGY_CATEGORY_PATTERN =
 const POLITICS_CATEGORY_PATTERN =
   /\b(congress|senate|house of representatives|white house|president|governor|election|campaign|administration|democrat|republican)\b/i;
 const CULTURE_CATEGORY_PATTERN =
-  /\b(film|movie|music|television|celebrity|sports?|golf|football|baseball|basketball|hockey|tennis|olympics?|athlete|head coach|championship|world cup|nfl|nba|mlb|nhl|soccer|arts?|culture)\b/i;
+  /\b(film|movie|music|television|celebrity|sports?|golf|football|baseball|basketball|hockey|tennis|olympics?|athlete|head coach|pitcher|pitching|championship|world cup|nfl|nba|mlb|nhl|soccer|arts?|culture)\b/i;
 
 function combinedText(title: string, summary: string): string {
   return `${title} ${summary}`;
@@ -69,10 +71,17 @@ export function inferStoryCategory(
   // Specific sports and culture signals outrank the generic word "tech",
   // which also appears in institution names such as Texas Tech.
   if (CULTURE_CATEGORY_PATTERN.test(classificationTitle)) return "Culture";
+  // The product does not expose a separate Science desk yet. High-confidence
+  // physical-science headlines therefore map to Technology instead of
+  // inheriting unrelated Energy/Health feed fallbacks.
+  if (SCIENCE_CATEGORY_PATTERN.test(classificationTitle)) return "Technology";
   if (TECHNOLOGY_CATEGORY_PATTERN.test(classificationTitle)) return "Technology";
   if (MARKETS_CATEGORY_PATTERN.test(classificationTitle)) return "Markets";
   if (ENERGY_CATEGORY_PATTERN.test(classificationTitle)) return "Energy";
   if (POLITICS_CATEGORY_PATTERN.test(classificationTitle)) return "Politics";
+  // Disaster wording is high-confidence evidence that a coarse Energy or other
+  // source-feed fallback is not the right public desk.
+  if (DISASTER_PATTERN.test(classificationTitle)) return "World";
   return fallback;
 }
 
