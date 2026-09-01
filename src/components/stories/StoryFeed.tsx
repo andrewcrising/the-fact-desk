@@ -19,6 +19,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo } from "react";
 import { CategoryFilter } from "./CategoryFilter";
 import { DeskTicker } from "./DeskTicker";
+import { EarlySignalRail } from "./EarlySignalRail";
 import { LeadSignal } from "./LeadSignal";
 import { LiveBetaFeed } from "./LiveBetaFeed";
 import { MobilePriorityRail } from "./MobilePriorityRail";
@@ -81,10 +82,27 @@ export function StoryFeed({
     [allStories, activeCategory],
   );
 
-  const topPriority = useMemo(
-    () => getHighestPriorityStory(filtered.filter((story) => !isSocialOnlyStory(story))),
+  const publisherStories = useMemo(
+    () => filtered.filter((story) => !isSocialOnlyStory(story)),
     [filtered],
   );
+
+  const topPriority = useMemo(
+    () => getHighestPriorityStory(publisherStories),
+    [publisherStories],
+  );
+
+  const priorityRailStories = useMemo(
+    () => rankStoriesByPriority(publisherStories).slice(0, 4),
+    [publisherStories],
+  );
+
+  const earlySignalExclusions = useMemo(() => {
+    const byId = new Map<string, Story>();
+    for (const story of priorityRailStories) byId.set(story.id, story);
+    if (topPriority) byId.set(topPriority.id, topPriority);
+    return [...byId.values()];
+  }, [priorityRailStories, topPriority]);
 
   const remainingStories = useMemo(
     () => filtered.filter((story) => story.id !== topPriority?.id),
@@ -114,6 +132,7 @@ export function StoryFeed({
   return (
     <div className="space-y-3">
       <MobilePriorityRail stories={filtered} />
+      <EarlySignalRail stories={filtered} excludedStories={earlySignalExclusions} />
 
       {topPriority && (
         <section aria-labelledby="top-priority-heading">
