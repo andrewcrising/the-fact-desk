@@ -61,6 +61,22 @@ test("headline inference corrects coarse science and health feed categories", ()
     "Technology",
   );
   assert.equal(
+    inferStoryCategory("Scientists Hunting Dark Matter Found Something Strange", "Energy"),
+    "Technology",
+  );
+  assert.equal(
+    inferStoryCategory("World’s biggest dark matter detector spots a single weird particle", "Health"),
+    "Technology",
+  );
+  assert.equal(
+    inferStoryCategory("APOD: 2026 September 1 – A Plane Lunar Eclipse", "Energy"),
+    "Technology",
+  );
+  assert.equal(
+    inferStoryCategory("Ice Island Survives Run-In With Joe Island", "Energy"),
+    "Energy",
+  );
+  assert.equal(
     inferStoryCategory("Cancer drug price falls after FDA approval", "Markets"),
     "Health",
   );
@@ -83,6 +99,14 @@ test("headline inference corrects coarse science and health feed categories", ()
   assert.equal(
     inferStoryCategory("Texas Tech head coach blasts USC over poor attendance at LA Coliseum", "Technology"),
     "Culture",
+  );
+  assert.equal(
+    inferStoryCategory("Logan Webb and Paul Skenes face off as struggling Giants visit Pirates in pitching duel", "World"),
+    "Culture",
+  );
+  assert.equal(
+    inferStoryCategory("One still missing after Grand Canyon floods kill two and prompt rescue efforts", "Energy"),
+    "World",
   );
 });
 
