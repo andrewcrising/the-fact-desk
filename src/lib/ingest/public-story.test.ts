@@ -57,6 +57,10 @@ test("headline inference corrects coarse science and health feed categories", ()
     "Technology",
   );
   assert.equal(
+    inferStoryCategory("Study A.I. Consciousness? The Bots Would Like a Word With You.", "Energy"),
+    "Technology",
+  );
+  assert.equal(
     inferStoryCategory("Cancer drug price falls after FDA approval", "Markets"),
     "Health",
   );
