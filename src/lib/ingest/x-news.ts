@@ -5,6 +5,7 @@ import type { SocialSignalCandidate } from "@/types/social-signal";
 const X_API_HOST = "api.x.com";
 const X_TIMEOUT_MS = 4500;
 const X_MAX_RESULTS = 8;
+const X_MAX_AGE_HOURS = 6;
 
 function safeTimestamp(value: unknown): string {
   const now = Date.now();
@@ -27,7 +28,7 @@ export async function fetchXNewsSignals(source: XNewsSourceConfig): Promise<Soci
   }
   url.searchParams.set("query", source.query);
   url.searchParams.set("max_results", String(X_MAX_RESULTS));
-  url.searchParams.set("max_age_hours", "36");
+  url.searchParams.set("max_age_hours", String(X_MAX_AGE_HOURS));
   url.searchParams.set("news.fields", "category,cluster_posts_results,id,name,updated_at");
 
   const response = await fetch(url, {
