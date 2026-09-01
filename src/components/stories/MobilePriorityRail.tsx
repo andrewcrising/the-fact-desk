@@ -3,6 +3,7 @@ import { DeskLabel } from "@/components/ui/DeskLabel";
 import {
   formatStoryTime,
   getStoryPriority,
+  isSocialOnlyStory,
   rankStoriesByPriority,
 } from "@/lib/stories";
 import type { Story } from "@/types/story";
@@ -13,7 +14,9 @@ interface MobilePriorityRailProps {
 }
 
 export function MobilePriorityRail({ stories }: MobilePriorityRailProps) {
-  const priorityStories = rankStoriesByPriority(stories).slice(0, 4);
+  const priorityStories = rankStoriesByPriority(
+    stories.filter((story) => !isSocialOnlyStory(story)),
+  ).slice(0, 4);
   if (priorityStories.length === 0) return null;
 
   return (
