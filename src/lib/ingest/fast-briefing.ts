@@ -34,6 +34,10 @@ function combinedText(title: string, summary: string): string {
   return `${title} ${summary}`;
 }
 
+function categoryClassificationText(text: string): string {
+  return text.replace(/\bA\.I\.(?=\s|$|[,:;!?])/gi, "AI");
+}
+
 /**
  * Keep figurative uses of "war" and "invasion" from being classified as armed
  * conflict. The source headline stays untouched; this normalization is used
@@ -59,13 +63,14 @@ export function inferStoryCategory(
   title: string,
   fallback: StoryCategory,
 ): StoryCategory {
-  if (COURT_PATTERN.test(title)) return "Courts";
-  if (HEALTH_CATEGORY_PATTERN.test(title)) return "Health";
-  if (TECHNOLOGY_CATEGORY_PATTERN.test(title)) return "Technology";
-  if (MARKETS_CATEGORY_PATTERN.test(title)) return "Markets";
-  if (ENERGY_CATEGORY_PATTERN.test(title)) return "Energy";
-  if (POLITICS_CATEGORY_PATTERN.test(title)) return "Politics";
-  if (CULTURE_CATEGORY_PATTERN.test(title)) return "Culture";
+  const classificationTitle = categoryClassificationText(title);
+  if (COURT_PATTERN.test(classificationTitle)) return "Courts";
+  if (HEALTH_CATEGORY_PATTERN.test(classificationTitle)) return "Health";
+  if (TECHNOLOGY_CATEGORY_PATTERN.test(classificationTitle)) return "Technology";
+  if (MARKETS_CATEGORY_PATTERN.test(classificationTitle)) return "Markets";
+  if (ENERGY_CATEGORY_PATTERN.test(classificationTitle)) return "Energy";
+  if (POLITICS_CATEGORY_PATTERN.test(classificationTitle)) return "Politics";
+  if (CULTURE_CATEGORY_PATTERN.test(classificationTitle)) return "Culture";
   return fallback;
 }
 
