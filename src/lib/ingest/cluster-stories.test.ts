@@ -56,3 +56,33 @@ test("does not let a bridge headline merge otherwise unrelated clusters", () => 
   assert.ok(clustered.some((item) => item.sources.length === 1));
   assert.ok(clustered.every((item) => item.sources.length < 3));
 });
+
+test("multi-source cluster receives an independent Fact Desk headline", () => {
+  const publishedAt = "2026-09-01T10:00:00.000Z";
+  const sourceA = story(
+    "source-a",
+    "First Thing: Duane Carter faces renewed scrutiny after federal filing",
+    "Publisher A",
+    publishedAt,
+  );
+  const sourceB = story(
+    "source-b",
+    "Federal filing brings renewed scrutiny for Duane Carter",
+    "Publisher B",
+    publishedAt,
+  );
+
+  const clustered = clusterAndBalanceStories([sourceA, sourceB]);
+  const merged = clustered.find((item) => item.sources.length === 2);
+
+  assert.ok(merged);
+  assert.notEqual(merged.title, sourceA.title);
+  assert.notEqual(merged.title, sourceB.title);
+  assert.match(merged.title, /^World briefing:/);
+  assert.match(merged.title, /Duane|Carter|federal|filing|scrutiny/i);
+  assert.doesNotMatch(merged.title, /First Thing/i);
+  assert.match(
+    merged.coverageAngle ?? "",
+    /independently synthesized from shared headline terms/i,
+  );
+});
