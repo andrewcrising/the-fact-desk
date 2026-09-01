@@ -57,7 +57,15 @@ test("headline inference corrects coarse science and health feed categories", ()
     "Technology",
   );
   assert.equal(
+    inferStoryCategory("Study A.I. Consciousness? The Bots Would Like a Word With You.", "Energy"),
+    "Technology",
+  );
+  assert.equal(
     inferStoryCategory("Cancer drug price falls after FDA approval", "Markets"),
+    "Health",
+  );
+  assert.equal(
+    inferStoryCategory("Trump admin shelves Cyclospora research despite record-breaking outbreak", "Technology"),
     "Health",
   );
   assert.equal(
@@ -70,6 +78,10 @@ test("headline inference corrects coarse science and health feed categories", ()
   );
   assert.equal(
     inferStoryCategory("Football star retires after World Cup", "World"),
+    "Culture",
+  );
+  assert.equal(
+    inferStoryCategory("Texas Tech head coach blasts USC over poor attendance at LA Coliseum", "Technology"),
     "Culture",
   );
 });
