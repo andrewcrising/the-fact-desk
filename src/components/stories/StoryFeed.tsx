@@ -87,6 +87,11 @@ export function StoryFeed({
     [filtered],
   );
 
+  const socialDiscoveryActive = useMemo(
+    () => filtered.some((story) => isSocialOnlyStory(story)),
+    [filtered],
+  );
+
   const topPriority = useMemo(
     () => getHighestPriorityStory(publisherStories),
     [publisherStories],
@@ -132,7 +137,9 @@ export function StoryFeed({
   return (
     <div className="space-y-3">
       <MobilePriorityRail stories={filtered} />
-      <EarlySignalRail stories={filtered} excludedStories={earlySignalExclusions} />
+      {socialDiscoveryActive && (
+        <EarlySignalRail stories={filtered} excludedStories={earlySignalExclusions} />
+      )}
 
       {topPriority && (
         <section aria-labelledby="top-priority-heading">
