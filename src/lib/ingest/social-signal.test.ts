@@ -19,12 +19,12 @@ import type { RankedSocialSignal } from "@/types/social-signal";
 function socialSignal(overrides: Partial<RankedSocialSignal> = {}): RankedSocialSignal {
   const createdAt = new Date(Date.now() - 5 * 60_000).toISOString();
   return {
-    id: "signal-1",
-    platform: "bluesky",
-    account: "@reporter.example",
-    displayName: "Reporter",
+    id: "x-news-signal-1",
+    platform: "x",
+    account: "X News cluster",
+    displayName: "X",
     text: "Earthquake reported near Harbor City after strong shaking across the region",
-    url: "https://bsky.app/profile/reporter.example/post/abc123",
+    url: "https://x.com/i/web/status/1234567890",
     createdAt,
     engagement: { likes: 100_000, reposts: 40_000, replies: 10_000, quotes: 5_000 },
     directSource: false,
@@ -55,7 +55,7 @@ function publisherStory(id: string, source: string): Story {
   };
 }
 
-test("viral social-only signal remains non-lead single-source evidence", () => {
+test("viral X-only signal remains non-lead single-source evidence", () => {
   const signal = socialSignal();
   const story = socialSignalToStory(signal);
 
@@ -67,7 +67,7 @@ test("viral social-only signal remains non-lead single-source evidence", () => {
   assert.ok(storyPriorityScore(story) < 45);
 });
 
-test("engagement score is discovery ranking rather than evidence confidence", () => {
+test("X discovery score is never evidence confidence", () => {
   const now = Date.now();
   const signal = socialSignal({ createdAt: new Date(now - 60_000).toISOString() });
   assert.ok(socialSignalScore(signal, now) > 0);
@@ -76,7 +76,7 @@ test("engagement score is discovery ranking rather than evidence confidence", ()
   assert.equal(isMultiSourceStory(story), false);
 });
 
-test("one publisher plus one social post does not become multi-source corroboration", () => {
+test("one publisher plus X does not become multi-source corroboration", () => {
   const publisher = publisherStory("publisher-a", "Publisher A");
   const social = socialSignalToStory(socialSignal());
   const clustered = clusterAndBalanceStories([publisher, social]);
@@ -88,7 +88,7 @@ test("one publisher plus one social post does not become multi-source corroborat
   assert.notEqual(merged.signal, "Cross-angle");
 });
 
-test("two independent publishers can establish cross-angle even with social context", () => {
+test("two independent publishers can establish cross-angle with X context", () => {
   const first = publisherStory("publisher-a", "Publisher A");
   const second = publisherStory("publisher-b", "Publisher B");
   const social = socialSignalToStory(socialSignal());
