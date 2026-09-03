@@ -204,6 +204,45 @@ export const RSS_FEEDS: RssFeedConfig[] = [
   },
 ];
 
+export function validateRssFeedCatalog(feeds: RssFeedConfig[] = RSS_FEEDS): string[] {
+  const errors: string[] = [];
+  const ids = new Set<string>();
+  const feedUrls = new Set<string>();
+
+  for (const feed of feeds) {
+    if (!feed.id.trim()) errors.push("feed has an empty id");
+    else if (ids.has(feed.id)) errors.push(`duplicate feed id: ${feed.id}`);
+    ids.add(feed.id);
+
+    if (!feed.sourceName.trim()) errors.push(`${feed.id}: empty source name`);
+    if (!feed.editorialLabel.trim()) errors.push(`${feed.id}: empty editorial label`);
+
+    for (const [label, value] of [
+      ["homepage", feed.homepageUrl],
+      ["feed", feed.feedUrl],
+    ] as const) {
+      try {
+        const url = new URL(value);
+        if (url.protocol !== "https:") errors.push(`${feed.id}: ${label} URL must use HTTPS`);
+      } catch {
+        errors.push(`${feed.id}: invalid ${label} URL`);
+      }
+    }
+
+    const normalizedFeedUrl = feed.feedUrl.trim().replace(/\/$/, "").toLowerCase();
+    if (feedUrls.has(normalizedFeedUrl)) {
+      errors.push(`duplicate feed URL: ${feed.feedUrl}`);
+    }
+    feedUrls.add(normalizedFeedUrl);
+  }
+
+  return errors;
+}
+
 export function getEnabledFeeds(): RssFeedConfig[] {
+  const errors = validateRssFeedCatalog();
+  if (errors.length > 0) {
+    throw new Error(`Invalid RSS feed catalog: ${errors.join("; ")}`);
+  }
   return RSS_FEEDS.filter((feed) => feed.enabled);
 }
