@@ -1,17 +1,20 @@
-import { CorrectionLog } from "./CorrectionLog";
-import { DailyBriefSignup } from "./DailyBriefSignup";
+import type { Story } from "@/types/story";
+import { ReaderSupportCard } from "@/components/support/ReaderSupportCard";
 import { HealthDeskPlaceholder } from "./HealthDeskPlaceholder";
 import { LiveSignals } from "./LiveSignals";
 import { SourceWatchlist } from "./SourceWatchlist";
 
-export function Sidebar() {
+interface SidebarProps {
+  stories: Story[];
+}
+
+export function Sidebar({ stories }: SidebarProps) {
   return (
     <>
-      <HealthDeskPlaceholder />
-      <LiveSignals />
-      <SourceWatchlist />
-      <CorrectionLog />
-      <DailyBriefSignup />
+      <LiveSignals stories={stories} />
+      <HealthDeskPlaceholder stories={stories} />
+      <SourceWatchlist stories={stories} />
+      <ReaderSupportCard />
     </>
   );
 }

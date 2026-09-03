@@ -1,6 +1,5 @@
 import { ConfidenceLabel } from "@/components/ui/ConfidenceLabel";
 import { DeskCard } from "@/components/ui/DeskCard";
-import { EvidenceLabel } from "@/components/ui/EvidenceLabel";
 import { SignalLabel } from "@/components/ui/SignalLabel";
 import { formatSourceSpread, formatStoryTime } from "@/lib/stories";
 import type { Story } from "@/types/story";
@@ -11,13 +10,19 @@ interface StoryCardProps {
 }
 
 export function StoryCard({ story }: StoryCardProps) {
+  const socialSignal = story.tags.includes("social-signal");
+
   return (
     <DeskCard className="group transition-colors hover:border-[var(--border)]">
       <Link href={`/story/${story.slug}`} className="block px-4 py-4 sm:px-5 sm:py-5">
         <div className="mb-2 flex flex-wrap items-center gap-2">
           <ConfidenceLabel confidence={story.confidence} />
-          <EvidenceLabel evidenceLevel={story.evidenceLevel} />
           <SignalLabel signal={story.signal} />
+          {socialSignal && (
+            <span className="rounded-sm border border-[var(--border)] px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-[var(--muted)]">
+              Social signal · unverified
+            </span>
+          )}
           <span className="text-[10px] font-medium uppercase tracking-wide text-[var(--muted-light)]">
             {story.category}
           </span>
@@ -32,8 +37,7 @@ export function StoryCard({ story }: StoryCardProps) {
         </p>
 
         <p className="mt-3 text-[12px] leading-relaxed text-[var(--muted-light)]">
-          {formatSourceSpread(story.sources)} · {story.sources.length} source
-          {story.sources.length === 1 ? "" : "s"} reviewed
+          {formatSourceSpread(story.sources)}
         </p>
 
         <div className="mt-3 flex items-center justify-between gap-2 border-t border-[var(--border-subtle)] pt-3">

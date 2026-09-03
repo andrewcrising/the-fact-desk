@@ -1,7 +1,10 @@
 import { ConfidenceLabel } from "@/components/ui/ConfidenceLabel";
-import { EvidenceLabel } from "@/components/ui/EvidenceLabel";
 import { SignalLabel } from "@/components/ui/SignalLabel";
-import { formatSourceSpread, formatStoryTime } from "@/lib/stories";
+import {
+  formatSourceSpread,
+  formatStoryTime,
+  getStoryPriority,
+} from "@/lib/stories";
 import type { Story } from "@/types/story";
 import Link from "next/link";
 
@@ -10,6 +13,10 @@ interface StoryDetailProps {
 }
 
 export function StoryDetail({ story }: StoryDetailProps) {
+  const sourceUrls = story.sourceUrls ?? [];
+  const linksAreAligned = sourceUrls.length === story.sources.length;
+  const priority = getStoryPriority(story);
+
   return (
     <article className="mx-auto max-w-3xl">
       <Link
@@ -19,9 +26,23 @@ export function StoryDetail({ story }: StoryDetailProps) {
         ← Back to desk
       </Link>
 
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+        <p className="desk-kicker text-[var(--accent-muted)]">
+          Fact Desk synopsis · live
+        </p>
+        <Link
+          href="/independence"
+          className="inline-flex min-h-7 items-center text-[10px] font-medium text-[var(--muted-light)] hover:text-[var(--accent)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 sm:text-[11px]"
+        >
+          Reader-supported · Independence &amp; funding →
+        </Link>
+      </div>
+
       <div className="mb-4 flex flex-wrap items-center gap-2">
+        <span className="text-[10px] font-semibold uppercase tracking-wide text-[var(--accent)]">
+          {priority} priority
+        </span>
         <ConfidenceLabel confidence={story.confidence} />
-        <EvidenceLabel evidenceLevel={story.evidenceLevel} />
         <SignalLabel signal={story.signal} />
         <span className="text-[11px] font-medium uppercase tracking-wide text-[var(--muted-light)]">
           {story.category}
@@ -38,7 +59,7 @@ export function StoryDetail({ story }: StoryDetailProps) {
 
       <dl className="mt-6 grid gap-4 border-y border-[var(--border-subtle)] py-5 text-sm sm:grid-cols-2">
         <div>
-          <dt className="desk-kicker mb-1">Sources</dt>
+          <dt className="desk-kicker mb-1">Source coverage</dt>
           <dd className="text-[var(--foreground)]">
             {formatSourceSpread(story.sources)}
           </dd>
@@ -76,40 +97,33 @@ export function StoryDetail({ story }: StoryDetailProps) {
             </p>
           </div>
         )}
-        <div className="border-l-2 border-[var(--border)] pl-4">
-          <h2 className="desk-kicker mb-2">Evidence / sourcing</h2>
-          <p className="text-[14px] leading-relaxed text-[var(--muted)]">
-            Evidence level: {story.evidenceLevel ?? "Moderate"}. Source spread:
-            {" "}
-            {formatSourceSpread(story.sources)}.
-          </p>
-          {story.sourceUrls && story.sourceUrls.length > 0 && (
-            <ul className="mt-2 space-y-1 text-[13px]">
-              {story.sourceUrls.map((url, index) => (
-                <li key={url}>
+      </section>
+
+      <section className="mt-8 border-t border-[var(--border-subtle)] pt-6">
+        <h2 className="desk-kicker mb-3 text-[var(--foreground)]">
+          Read the underlying sources
+        </h2>
+        <ul className="space-y-2 text-sm">
+          {story.sources.map((sourceName, index) => {
+            const url = linksAreAligned ? sourceUrls[index] : undefined;
+            return (
+              <li key={`${sourceName}-${index}`}>
+                {url ? (
                   <a
                     href={url}
                     target="_blank"
-                    rel="noreferrer"
-                    className="text-[var(--accent)] hover:underline"
+                    rel="noopener noreferrer"
+                    className="font-medium text-[var(--accent)] hover:underline"
                   >
-                    {story.sources[index] ?? `Source ${index + 1}`}
+                    {sourceName} ↗
                   </a>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-        {story.uncertaintyNote && (
-          <div>
-            <h2 className="desk-kicker mb-2 text-[var(--foreground)]">
-              What is still uncertain
-            </h2>
-            <p className="text-[15px] leading-relaxed text-[var(--muted)]">
-              {story.uncertaintyNote}
-            </p>
-          </div>
-        )}
+                ) : (
+                  <span className="text-[var(--muted)]">{sourceName}</span>
+                )}
+              </li>
+            );
+          })}
+        </ul>
       </section>
 
       {story.tags.length > 0 && (
@@ -126,8 +140,7 @@ export function StoryDetail({ story }: StoryDetailProps) {
       )}
 
       <p className="mt-10 border-t border-[var(--border-subtle)] pt-6 text-[13px] leading-relaxed text-[var(--muted-light)]">
-        Briefing labels are editorial signals, not verdicts. Draft and raw feed
-        items stay private until promoted and published.
+        Fast synopsis assembled from current source coverage and refreshed with the live desk. Priority measures urgency, not certainty; confidence and source coverage remain separate evidence signals.
       </p>
     </article>
   );

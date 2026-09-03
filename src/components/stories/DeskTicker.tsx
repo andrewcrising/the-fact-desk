@@ -1,4 +1,3 @@
-import { getEnabledFeeds } from "@/data/rssFeeds";
 import { getDeskStats } from "@/lib/stories";
 import type { Story } from "@/types/story";
 
@@ -14,11 +13,7 @@ const STAT_ITEMS = [
 ] as const;
 
 export function DeskTicker({ stories }: DeskTickerProps) {
-  const storyStats = getDeskStats(stories);
-  const stats = {
-    ...storyStats,
-    sourcesTracked: getEnabledFeeds().length,
-  };
+  const stats = getDeskStats(stories);
 
   return (
     <div
@@ -38,7 +33,7 @@ export function DeskTicker({ stories }: DeskTickerProps) {
         ))}
         <div className="shrink-0 px-3 py-1.5 sm:px-4">
           <span className="desk-kicker text-[8px] text-[var(--muted-light)]">
-            Evidence
+            Credibility
           </span>
           <span className="ml-1.5 text-[11px] font-medium text-[var(--muted)]">
             Labels active
