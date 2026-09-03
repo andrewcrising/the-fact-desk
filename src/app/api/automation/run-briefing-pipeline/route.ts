@@ -5,8 +5,20 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-function dryRunFromRequest(request: NextRequest): boolean {
+export function dryRunFromRequest(request: NextRequest): boolean {
   return request.nextUrl.searchParams.get("dry_run") === "true";
+}
+
+export function shouldDryRunPipelineRequest(
+  request: NextRequest,
+  method: "GET" | "POST",
+  body?: { dry_run?: boolean; dryRun?: boolean },
+): boolean {
+  // GET is intentionally read-only. This prevents crawlers, link prefetchers,
+  // health checks, or accidental browser navigation from mutating Supabase.
+  if (method === "GET") return true;
+
+  return body?.dry_run === true || body?.dryRun === true || dryRunFromRequest(request);
 }
 
 export async function POST(request: NextRequest) {
@@ -15,10 +27,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json().catch(() => ({}));
-    const dryRun =
-      body?.dry_run === true ||
-      body?.dryRun === true ||
-      dryRunFromRequest(request);
+    const dryRun = shouldDryRunPipelineRequest(request, "POST", body);
     const report = await runBriefingPipeline({
       dryRun,
       mode: getAutomationMode(),
@@ -43,7 +52,7 @@ export async function GET(request: NextRequest) {
   if (unauthorized) return unauthorized;
 
   const report = await runBriefingPipeline({
-    dryRun: dryRunFromRequest(request),
+    dryRun: shouldDryRunPipelineRequest(request, "GET"),
     mode: getAutomationMode(),
   });
   return NextResponse.json({ ok: true, report });
