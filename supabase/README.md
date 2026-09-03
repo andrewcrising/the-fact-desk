@@ -2,13 +2,15 @@
 
 Use a dedicated Supabase project for The Fact Desk. Do not share the database with another application.
 
-Apply the SQL files in this order before adding production credentials to Vercel:
+Apply the SQL files in this order before adding runtime credentials to Cloudflare:
 
 1. `schema.sql` — creates the editorial, ingest, subscriber, and automation tables.
-2. `security.sql` — enables Row Level Security on every application table in the exposed `public` schema.
+2. `security.sql` — enables Row Level Security and the server-only exposed-schema posture.
+3. `performance.sql` — adds the reviewed foreign-key/query indexes used by the pilot.
+4. `automation_concurrency.sql` — enforces one active mutating automation run so two schedulers cannot process the same inbox simultaneously.
 
-The MVP intentionally defines no `anon` or `authenticated` policies. Browser clients should not query these tables directly. The Next.js server uses the Supabase service role and exposes only the application/API responses intended by the product.
+The pilot intentionally defines no `anon` or `authenticated` table policies. Browser clients do not query these tables directly. The server runtime uses the Supabase secret key and exposes only the application/API responses intended by the product.
 
-After bootstrap, run Supabase security and performance advisors, then seed the source catalog/demo data and exercise the ingest → draft → publish lifecycle before production promotion.
+After bootstrap, run Supabase security and performance advisors, seed only the source catalog, then exercise the ingest → auto-draft → deliberate review → publish lifecycle before production promotion. Do not seed demonstration stories into the real database.
 
-Never expose `SUPABASE_SERVICE_ROLE_KEY` through a `NEXT_PUBLIC_*` environment variable or client component.
+Never expose `SUPABASE_SECRET_KEY` or the legacy `SUPABASE_SERVICE_ROLE_KEY` through a `NEXT_PUBLIC_*` environment variable or client component.
