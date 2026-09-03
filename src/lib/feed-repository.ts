@@ -12,7 +12,7 @@ import type {
   IngestSummary,
   PersistedStory,
 } from "@/types/editorial";
-import { createStory, getStoryById } from "@/lib/story-repository";
+import { archiveStory, createStory, getStoryById } from "@/lib/story-repository";
 
 const PER_FEED_LIMIT = 12;
 
@@ -52,6 +52,12 @@ function mapFeedItem(row: FeedItemRow): FeedItem {
   };
 }
 
+export function normalizeFeedPublishedAt(value?: string): string | null {
+  if (!value) return null;
+  const parsed = Date.parse(value);
+  return Number.isNaN(parsed) ? null : new Date(parsed).toISOString();
+}
+
 export async function listFeedItems(query: FeedItemQuery = {}): Promise<FeedItem[]> {
   const supabase = requireSupabaseAdmin();
   let request = supabase
@@ -60,30 +66,21 @@ export async function listFeedItems(query: FeedItemQuery = {}): Promise<FeedItem
     .order("created_at", { ascending: false })
     .limit(query.limit ?? 100);
 
-  if (query.status && query.status !== "all") {
-    request = request.eq("status", query.status);
-  }
-  if (query.source) {
-    request = request.eq("source_id", query.source);
-  }
-  if (query.search) {
-    request = request.ilike("title", `%${query.search}%`);
-  }
+  if (query.status && query.status !== "all") request = request.eq("status", query.status);
+  if (query.source) request = request.eq("source_id", query.source);
+  if (query.search) request = request.ilike("title", `%${query.search}%`);
 
   const { data, error } = await request;
   if (error) throw error;
   return ((data ?? []) as FeedItemRow[]).map(mapFeedItem);
 }
 
-export async function countFeedItemsByStatus(
-  status: FeedItemStatus,
-): Promise<number> {
+export async function countFeedItemsByStatus(status: FeedItemStatus): Promise<number> {
   const supabase = requireSupabaseAdmin();
   const { count, error } = await supabase
     .from("feed_items")
     .select("id", { count: "exact", head: true })
     .eq("status", status);
-
   if (error) throw error;
   return count ?? 0;
 }
@@ -95,7 +92,6 @@ export async function getFeedItemById(id: string): Promise<FeedItem | null> {
     .select("*, sources(name)")
     .eq("id", id)
     .maybeSingle();
-
   if (error) throw error;
   return data ? mapFeedItem(data as FeedItemRow) : null;
 }
@@ -111,7 +107,6 @@ export async function updateFeedItemStatus(
     .eq("id", id)
     .select("*, sources(name)")
     .single();
-
   if (error) throw error;
   return mapFeedItem(data as FeedItemRow);
 }
@@ -144,42 +139,49 @@ export async function ingestConfiguredRssFeeds(): Promise<IngestSummary> {
       const items = await fetchRssFeedItems(feed.feedUrl, PER_FEED_LIMIT);
       summary.itemsFound += items.length;
 
+      // One malformed item should not discard otherwise healthy items from the
+      // same feed. Dedupe remains database-enforced via dedupe_key uniqueness.
       for (const item of items) {
-        const url = item.link ?? feed.feedUrl;
-        const canonicalUrl = canonicalizeUrl(url);
-        const publishedAt = item.pubDate
-          ? new Date(item.pubDate).toISOString()
-          : null;
-        const dedupeKey = buildDedupeKey({
-          sourceId: source.id,
-          title: item.title,
-          canonicalUrl,
-          publishedAt,
-        });
+        try {
+          const url = item.link ?? feed.feedUrl;
+          const canonicalUrl = canonicalizeUrl(url);
+          const publishedAt = normalizeFeedPublishedAt(item.pubDate);
+          const dedupeKey = buildDedupeKey({
+            sourceId: source.id,
+            title: item.title,
+            canonicalUrl,
+            publishedAt,
+          });
 
-        const { error } = await supabase.from("feed_items").insert({
-          source_id: source.id,
-          title: item.title,
-          url,
-          canonical_url: canonicalUrl,
-          author: item.author ?? null,
-          published_at: publishedAt,
-          summary: item.description ?? null,
-          raw_payload: withFactDeskFeedMetadata(item.rawPayload, {
-            feedId: feed.id,
-            category: feed.category,
-            signal: feed.signal,
-          }),
-          status: "new",
-          dedupe_key: dedupeKey,
-        });
+          const { error } = await supabase.from("feed_items").insert({
+            source_id: source.id,
+            title: item.title,
+            url,
+            canonical_url: canonicalUrl,
+            author: item.author ?? null,
+            published_at: publishedAt,
+            summary: item.description ?? null,
+            raw_payload: withFactDeskFeedMetadata(item.rawPayload, {
+              feedId: feed.id,
+              category: feed.category,
+              signal: feed.signal,
+            }),
+            status: "new",
+            dedupe_key: dedupeKey,
+          });
 
-        if (error?.code === "23505") {
-          summary.duplicatesSkipped += 1;
-          continue;
+          if (error?.code === "23505") {
+            summary.duplicatesSkipped += 1;
+            continue;
+          }
+          if (error) throw error;
+          summary.newItemsInserted += 1;
+        } catch (error) {
+          summary.errors.push({
+            feedUrl: feed.feedUrl,
+            message: `${item.title}: ${error instanceof Error ? error.message : "Unable to persist feed item"}`,
+          });
         }
-        if (error) throw error;
-        summary.newItemsInserted += 1;
       }
     } catch (error) {
       summary.errors.push({
@@ -192,11 +194,33 @@ export async function ingestConfiguredRssFeeds(): Promise<IngestSummary> {
   return summary;
 }
 
+async function findStoryLinkedToFeedItem(feedItemId: string): Promise<PersistedStory | null> {
+  const supabase = requireSupabaseAdmin();
+  const { data, error } = await supabase
+    .from("story_sources")
+    .select("story_id")
+    .eq("feed_item_id", feedItemId)
+    .limit(1)
+    .maybeSingle();
+  if (error) throw error;
+  if (!data?.story_id) return null;
+  return getStoryById(data.story_id as string);
+}
+
+async function recordInboxSelection(feedItemId: string, storyId: string): Promise<void> {
+  const supabase = requireSupabaseAdmin();
+  const { error } = await supabase.from("editorial_selections").insert({
+    feed_item_id: feedItemId,
+    story_id: storyId,
+    selection_reason: "Promoted from editorial inbox",
+    status: "draft_created",
+  });
+  if (error) throw error;
+}
+
 export async function promoteFeedItemToDraft(id: string): Promise<PersistedStory> {
   const item = await getFeedItemById(id);
-  if (!item) {
-    throw new Error("Feed item not found");
-  }
+  if (!item) throw new Error("Feed item not found");
 
   const supabase = requireSupabaseAdmin();
   const { data: existingSelection, error: selectionError } = await supabase
@@ -211,8 +235,17 @@ export async function promoteFeedItemToDraft(id: string): Promise<PersistedStory
     if (existingStory) return existingStory;
   }
 
+  // Recover a draft created before a prior request failed to write its
+  // editorial_selection row. This prevents an orphan draft from multiplying.
+  const linkedStory = await findStoryLinkedToFeedItem(id);
+  if (linkedStory) {
+    await recordInboxSelection(id, linkedStory.id);
+    if (item.status !== "promoted") await updateFeedItemStatus(id, "promoted");
+    return linkedStory;
+  }
+
   if (item.status === "promoted") {
-    throw new Error("Feed item has already been promoted.");
+    throw new Error("Feed item is marked promoted but has no recoverable linked story.");
   }
 
   const metadata = readFactDeskFeedMetadata(item.rawPayload);
@@ -242,14 +275,26 @@ export async function promoteFeedItemToDraft(id: string): Promise<PersistedStory
     ],
   });
 
+  try {
+    await recordInboxSelection(id, story.id);
+  } catch (error) {
+    // If a concurrent request won the unique feed-item selection race, keep the
+    // canonical winner and archive this request's duplicate draft.
+    const { data: winner } = await supabase
+      .from("editorial_selections")
+      .select("story_id")
+      .eq("feed_item_id", id)
+      .maybeSingle();
+    if (winner?.story_id) {
+      await archiveStory(story.id);
+      const winnerStory = await getStoryById(winner.story_id as string);
+      if (winnerStory) return winnerStory;
+    }
+    throw error;
+  }
+
+  // Promotion status is the final step: a failed selection write therefore
+  // leaves the item retryable instead of permanently hiding it from the inbox.
   await updateFeedItemStatus(id, "promoted");
-
-  await supabase.from("editorial_selections").insert({
-    feed_item_id: id,
-    story_id: story.id,
-    selection_reason: "Promoted from editorial inbox",
-    status: "draft_created",
-  });
-
   return story;
 }
