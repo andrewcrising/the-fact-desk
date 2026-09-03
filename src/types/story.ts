@@ -25,6 +25,16 @@ export type StoryCategory =
 /** Evidence level = how directly the briefing is supported by sources. */
 export type EvidenceLevel = "Low" | "Moderate" | "Strong";
 
+/**
+ * Evidence source class. Social/open-web items are discovery signals, not
+ * equivalent to independent publisher or primary-record corroboration.
+ */
+export type EvidenceSourceKind =
+  | "publisher"
+  | "primary"
+  | "social"
+  | "open-web";
+
 export interface Story {
   id: string;
   slug: string;
@@ -38,6 +48,8 @@ export interface Story {
   signal: Signal;
   sources: string[];
   sourceUrls?: string[];
+  /** Optional array aligned by index with `sources`. Legacy/persisted stories may omit it. */
+  sourceKinds?: EvidenceSourceKind[];
   publishedAt: string;
   updatedAt: string;
   tags: string[];
