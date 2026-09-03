@@ -1,5 +1,6 @@
 import { requireAdminRequest } from "@/lib/auth";
-import { publishStory } from "@/lib/story-repository";
+import { assertStoryReadyForPublish } from "@/lib/editorial-publish-readiness";
+import { getStoryById, publishStory } from "@/lib/story-repository";
 import { asBoolean, asNumber, isRecord } from "@/lib/validation";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -22,6 +23,12 @@ export async function POST(request: NextRequest, { params }: RouteContext) {
         }
       : {};
     const { id } = await params;
+    const draft = await getStoryById(id);
+    if (!draft) throw new Error("Story not found.");
+    if (draft.status !== "draft" && draft.status !== "corrected") {
+      throw new Error(`Only draft or corrected stories can be deliberately published; current status is ${draft.status}.`);
+    }
+    assertStoryReadyForPublish(draft);
     const story = await publishStory(id, options);
     return NextResponse.json({ ok: true, story });
   } catch (error) {
