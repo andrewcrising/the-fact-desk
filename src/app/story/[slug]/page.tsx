@@ -1,7 +1,7 @@
 import { StoryDetail } from "@/components/story/StoryDetail";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { TopNav } from "@/components/layout/TopNav";
-import { getAllSlugs, getStoryBySlug } from "@/lib/story-repository";
+import { getStoryBySlug } from "@/lib/story-repository";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -9,9 +9,10 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateStaticParams() {
-  return getAllSlugs().map((slug) => ({ slug }));
-}
+// Published Supabase stories are created after deployment, so story routes
+// must resolve from the durable repository at request time rather than from a
+// build-time list of mock/cache slugs.
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -29,9 +30,7 @@ export default async function StoryPage({ params }: PageProps) {
   const { slug } = await params;
   const story = await getStoryBySlug(slug);
 
-  if (!story) {
-    notFound();
-  }
+  if (!story) notFound();
 
   return (
     <>
