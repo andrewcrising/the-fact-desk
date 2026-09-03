@@ -1,30 +1,18 @@
-/**
- * RSS ingestion — normalizes feeds into `Story`.
- *
- * Uses fast-xml-parser for reliable NPR/BBC/CISA-style RSS (namespaces, CDATA,
- * varying item shapes). Regex parsing was too fragile across feeds.
- *
- * Later: cron job writes to Supabase/Blob; this module stays the normalizer.
- */
+/** RSS/Atom ingestion shared by durable Supabase ingest and live discovery. */
+import { buildFastWhyItMatters } from "@/lib/ingest/fast-briefing";
+import {
+  boundPublicText,
+  MAX_PUBLIC_SUMMARY_CHARS,
+} from "@/lib/ingest/public-story";
+import { viewpointTag, type ViewpointBand } from "@/lib/viewpoints";
 import type { Signal, Story, StoryCategory } from "@/types/story";
 import { XMLParser } from "fast-xml-parser";
 
 const STORY_CATEGORIES: StoryCategory[] = [
-  "Politics",
-  "Markets",
-  "Technology",
-  "World",
-  "Health",
-  "Courts",
-  "Energy",
-  "Culture",
+  "Politics", "Markets", "Technology", "World", "Health", "Courts", "Energy", "Culture",
 ];
-
 const SIGNALS: Signal[] = [
-  "Top Signal",
-  "Under-covered",
-  "Cross-angle",
-  "Developing",
+  "Top Signal", "Under-covered", "Cross-angle", "Developing",
 ];
 
 export interface FetchRssStoriesOptions {
@@ -32,6 +20,9 @@ export interface FetchRssStoriesOptions {
   sourceName?: string;
   signal?: Signal | string;
   limit?: number;
+  timeoutMs?: number;
+  strict?: boolean;
+  viewpoint?: ViewpointBand;
 }
 
 export interface RssFeedItem {
@@ -50,16 +41,44 @@ const xmlParser = new XMLParser({
   parseTagValue: false,
 });
 
-function stripHtml(input: string): string {
-  return input
-    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/gi, "$1")
-    .replace(/<[^>]+>/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&nbsp;/g, " ")
+const NAMED_HTML_ENTITIES: Record<string, string> = {
+  amp: "&", apos: "'", bull: "•", hellip: "…", ldquo: "“", lsquo: "‘",
+  mdash: "—", middot: "·", nbsp: " ", ndash: "–", quot: '"', rdquo: "”",
+  rsquo: "’", lt: "<", gt: ">",
+};
+
+function decodeEntity(entity: string): string {
+  if (entity.startsWith("#")) {
+    const hexadecimal = entity[1]?.toLowerCase() === "x";
+    const digits = hexadecimal ? entity.slice(2) : entity.slice(1);
+    const codePoint = Number.parseInt(digits, hexadecimal ? 16 : 10);
+    if (
+      !Number.isInteger(codePoint) ||
+      codePoint <= 0 ||
+      codePoint > 0x10ffff ||
+      (codePoint >= 0xd800 && codePoint <= 0xdfff)
+    ) {
+      return `&${entity};`;
+    }
+    return String.fromCodePoint(codePoint);
+  }
+  return NAMED_HTML_ENTITIES[entity.toLowerCase()] ?? `&${entity};`;
+}
+
+/** Convert feed-supplied HTML/entity text into safe, readable plain text. */
+export function cleanFeedText(input: string): string {
+  let output = input.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/gi, "$1");
+  for (let pass = 0; pass < 3; pass += 1) {
+    const previous = output;
+    const decoded = output.replace(
+      /&(#(?:x[0-9a-f]+|\d+)|[a-z][a-z0-9]+);/gi,
+      (_, entity: string) => decodeEntity(entity),
+    );
+    output = decoded.replace(/<[^>]+>/g, " ");
+    if (output === previous) break;
+  }
+  return output
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -70,6 +89,25 @@ function asString(value: unknown): string | undefined {
   if (typeof value === "number") return String(value);
   if (typeof value === "object" && value !== null && "#text" in value) {
     return asString((value as { "#text": unknown })["#text"]);
+  }
+  return undefined;
+}
+
+function resolveLink(value: unknown): string | undefined {
+  const direct = asString(value);
+  if (direct) return direct;
+  if (Array.isArray(value)) {
+    const preferred =
+      value.find(
+        (entry) =>
+          typeof entry === "object" &&
+          entry !== null &&
+          (entry as { "@_rel"?: string })["@_rel"] === "alternate",
+      ) ?? value[0];
+    return resolveLink(preferred);
+  }
+  if (typeof value === "object" && value !== null) {
+    return asString((value as { "@_href"?: unknown })["@_href"]);
   }
   return undefined;
 }
@@ -96,85 +134,84 @@ function stableSlug(title: string, link?: string, index = 0): string {
 
 function parsePubDate(value?: string): string {
   if (!value) return new Date().toISOString();
+  const agencyDate = value.match(
+    /^(?:[A-Za-z]{3},\s*)?(\d{1,2})\/(\d{1,2})\/(\d{4})\s*-\s*(\d{1,2}):(\d{2})(?:\s*([AP]M))?/i,
+  );
+  if (agencyDate) {
+    const [, month, day, year, hourValue, minute, period] = agencyDate;
+    let hour = Number(hourValue);
+    if (period?.toUpperCase() === "PM" && hour < 12) hour += 12;
+    if (period?.toUpperCase() === "AM" && hour === 12) hour = 0;
+    return new Date(
+      Date.UTC(Number(year), Number(month) - 1, Number(day), hour, Number(minute)),
+    ).toISOString();
+  }
   const parsed = Date.parse(value);
   return Number.isNaN(parsed) ? new Date().toISOString() : new Date(parsed).toISOString();
 }
 
 function resolveCategory(value?: string): StoryCategory {
-  if (value && STORY_CATEGORIES.includes(value as StoryCategory)) {
-    return value as StoryCategory;
-  }
-  return "World";
+  return value && STORY_CATEGORIES.includes(value as StoryCategory)
+    ? (value as StoryCategory)
+    : "World";
 }
 
 function resolveSignal(value?: string): Signal {
-  if (value && SIGNALS.includes(value as Signal)) {
-    return value as Signal;
-  }
-  return "Developing";
+  return value && SIGNALS.includes(value as Signal)
+    ? (value as Signal)
+    : "Developing";
 }
 
 export function parseRssItems(xml: string): RssFeedItem[] {
   try {
     const parsed = xmlParser.parse(xml);
-    const channel = parsed?.rss?.channel ?? parsed?.feed;
+    const channel = parsed?.rss?.channel ?? parsed?.feed ?? parsed?.["rdf:RDF"];
     if (!channel) return [];
-
     const rawItems = channel.item ?? channel.entry;
     if (!rawItems) return [];
-
     const items = Array.isArray(rawItems) ? rawItems : [rawItems];
-
     const result: RssFeedItem[] = [];
 
     for (const item of items) {
       const record = item as Record<string, unknown>;
-      const title = stripHtml(asString(record.title) ?? "");
+      const title = cleanFeedText(asString(record.title) ?? "");
       if (!title) continue;
-
-      const link =
-        asString(record.link) ??
-        asString(record.guid) ??
-        (typeof record.link === "object" && record.link !== null
-          ? asString((record.link as { "@_href"?: string })["@_href"])
-          : undefined);
-
+      const link = resolveLink(record.link) ?? resolveLink(record.guid) ?? resolveLink(record.id);
       const description =
         asString(record.description) ??
         asString(record.summary) ??
+        asString(record.content) ??
         asString(record["content:encoded"]);
-
       const pubDate =
         asString(record.pubDate) ??
         asString(record.published) ??
-        asString(record.updated);
-
+        asString(record.updated) ??
+        asString(record["dc:date"]);
       const author =
         asString(record.author) ??
         asString(record["dc:creator"]) ??
         (typeof record.author === "object" && record.author !== null
-          ? asString((record.author as { name?: string })["name"])
+          ? asString((record.author as { name?: string }).name)
           : undefined);
 
       result.push({
         title,
         link,
         author,
-        description: description ? stripHtml(description) : undefined,
+        description: description ? cleanFeedText(description) : undefined,
         pubDate,
         rawPayload: record,
       });
     }
-
     return result;
   } catch {
     return [];
   }
 }
 
-function buildTags(sourceName: string): string[] {
+function buildTags(sourceName: string, viewpoint?: ViewpointBand): string[] {
   const slug = sourceName.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-  return ["live-rss", slug || "rss"];
+  return ["live-rss", slug || "rss", ...(viewpoint ? [viewpointTag(viewpoint)] : [])];
 }
 
 function normalizeItem(
@@ -183,16 +220,9 @@ function normalizeItem(
   options: FetchRssStoriesOptions,
 ): Story {
   const sourceName = options.sourceName ?? "RSS";
+  const category = resolveCategory(options.category);
   const description = item.description ?? "";
-  const summary =
-    description.length > 220
-      ? `${description.slice(0, 217)}…`
-      : description || item.title;
-
-  const whatHappened = description
-    ? `${item.title}. ${description}`
-    : item.title;
-
+  const summary = boundPublicText(description || item.title, MAX_PUBLIC_SUMMARY_CHARS);
   const publishedAt = parsePubDate(item.pubDate);
   const slug = stableSlug(item.title, item.link, index);
 
@@ -201,76 +231,65 @@ function normalizeItem(
     slug,
     title: item.title,
     summary,
-    whatHappened,
-    whyItMatters:
-      "This story is newly ingested and has not yet been fully analyzed.",
-    category: resolveCategory(options.category),
+    whatHappened: description ? `${item.title}. ${description}` : item.title,
+    whyItMatters: buildFastWhyItMatters(item.title, summary, category),
+    category,
     confidence: "Single-source",
     evidenceLevel: "Low",
     signal: resolveSignal(options.signal),
     sources: [sourceName],
     sourceUrls: item.link ? [item.link] : undefined,
+    sourceKinds: ["publisher"],
     publishedAt,
     updatedAt: publishedAt,
-    tags: buildTags(sourceName),
+    tags: buildTags(sourceName, options.viewpoint),
+    coverageAngle:
+      "Fast briefing generated from source-provided feed text; details should update as corroborating coverage arrives.",
     uncertaintyNote:
-      "Raw RSS item; not yet reviewed, ranked, or corroborated by The Fact Desk.",
+      "Feed-derived briefing; verify source content, claims, and context before editorial publication.",
   };
 }
 
-/**
- * Fetch an RSS feed and normalize entries into `Story` objects.
- * Returns [] on failure (does not throw to callers).
- */
 export async function fetchRssStories(
   feedUrl: string,
   options: FetchRssStoriesOptions = {},
 ): Promise<Story[]> {
   const limit = options.limit ?? 12;
-
   try {
     const response = await fetch(feedUrl, {
       headers: {
         Accept: "application/rss+xml, application/xml, text/xml, application/atom+xml, */*",
-        "User-Agent": "TheFactDesk/0.1 (RSS ingestion beta)",
+        "User-Agent": "TheFactDesk/0.2 (RSS editorial ingest)",
       },
+      signal: AbortSignal.timeout(options.timeoutMs ?? 8000),
       next: { revalidate: 300 },
     });
-
-    if (!response.ok) {
-      return [];
-    }
-
+    if (!response.ok) throw new Error(`Feed returned ${response.status}`);
     const xml = await response.text();
     const items = parseRssItems(xml).slice(0, limit);
-
     return items.map((item, index) => normalizeItem(item, index, options));
-  } catch {
+  } catch (error) {
+    if (options.strict) throw error;
     return [];
   }
 }
 
-/**
- * Fetch an RSS/Atom feed and return normalized raw inbox candidates.
- * This is the durable ingest path; callers persist these as feed_items.
- */
+/** Durable inbox ingest. Unlike the live path, failures are surfaced to callers. */
 export async function fetchRssFeedItems(
   feedUrl: string,
   limit = 12,
+  timeoutMs = 8000,
 ): Promise<RssFeedItem[]> {
   try {
     const response = await fetch(feedUrl, {
       headers: {
         Accept: "application/rss+xml, application/xml, text/xml, application/atom+xml, */*",
-        "User-Agent": "TheFactDesk/0.1 (RSS editorial ingest)",
+        "User-Agent": "TheFactDesk/0.2 (RSS editorial ingest)",
       },
+      signal: AbortSignal.timeout(timeoutMs),
       next: { revalidate: 300 },
     });
-
-    if (!response.ok) {
-      throw new Error(`Feed returned ${response.status}`);
-    }
-
+    if (!response.ok) throw new Error(`Feed returned ${response.status}`);
     const xml = await response.text();
     return parseRssItems(xml).slice(0, limit);
   } catch (error) {
@@ -279,7 +298,6 @@ export async function fetchRssFeedItems(
   }
 }
 
-/** Used by /api/test-rss proof route. */
 export const DEFAULT_TEST_RSS_FEED = "https://feeds.npr.org/1001/rss.xml";
 
 export const DEFAULT_TEST_RSS_OPTIONS: FetchRssStoriesOptions = {
