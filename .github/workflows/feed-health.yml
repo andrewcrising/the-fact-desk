@@ -9,6 +9,7 @@ on:
       - chatgpt/fact-desk-recovery
     paths:
       - "src/data/rssFeeds.ts"
+      - "src/data/rssFeeds.test.ts"
       - "src/lib/ingest/rss.ts"
       - "scripts/check-rss-feeds.ts"
       - ".github/workflows/feed-health.yml"
