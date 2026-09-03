@@ -5,12 +5,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-export function dryRunFromRequest(request: NextRequest): boolean {
-  return request.nextUrl.searchParams.get("dry_run") === "true";
+export function dryRunFromRequest(request: Request): boolean {
+  return new URL(request.url).searchParams.get("dry_run") === "true";
 }
 
 export function shouldDryRunPipelineRequest(
-  request: NextRequest,
+  request: Request,
   method: "GET" | "POST",
   body?: { dry_run?: boolean; dryRun?: boolean },
 ): boolean {
