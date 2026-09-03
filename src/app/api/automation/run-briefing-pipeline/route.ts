@@ -1,4 +1,5 @@
 import { requireAdminOrCronRequest } from "@/lib/auth";
+import { AUTOMATION_ALREADY_RUNNING_MESSAGE } from "@/lib/automation/automation-repository";
 import { runBriefingPipeline } from "@/lib/automation/briefing-pipeline";
 import { getAutomationMode } from "@/lib/automation/config";
 import { NextRequest, NextResponse } from "next/server";
@@ -34,15 +35,11 @@ export async function POST(request: NextRequest) {
     });
     return NextResponse.json({ ok: true, report });
   } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Unable to run briefing pipeline";
     return NextResponse.json(
-      {
-        ok: false,
-        error:
-          error instanceof Error
-            ? error.message
-            : "Unable to run briefing pipeline",
-      },
-      { status: 500 },
+      { ok: false, error: message },
+      { status: message === AUTOMATION_ALREADY_RUNNING_MESSAGE ? 409 : 500 },
     );
   }
 }
