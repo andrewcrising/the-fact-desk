@@ -1,12 +1,12 @@
 /**
- * Production live RSS layer — fetch with Next.js cache, file fallback.
- * Vercel Cron revalidates via /api/cron/revalidate-live (tag: live-rss).
- * Later: persist ingest results in Supabase/KV/Blob instead of unstable_cache only.
+ * Production live layer — publisher RSS plus opt-in social discovery, with a
+ * file fallback for publisher coverage. Social failures never take down RSS.
  */
 import { ingestEnabledFeeds } from "@/lib/ingest/ingest-feeds";
+import { sanitizeStoryForPublic } from "@/lib/ingest/public-story";
+import { ingestSocialSignalStories } from "@/lib/ingest/social-signal";
 import { readLiveStoriesCache } from "@/lib/live-stories-cache";
 import type { Story } from "@/types/story";
-import { unstable_cache } from "next/cache";
 
 export type LiveDataSource = "live" | "cache";
 
@@ -16,32 +16,32 @@ export interface LiveFeedResult {
   fetchedAt: string | null;
 }
 
-const REVALIDATE_SECONDS = 900;
-
-const fetchLiveRss = unstable_cache(
-  async () => ingestEnabledFeeds(),
-  ["live-rss-feed"],
-  { revalidate: REVALIDATE_SECONDS, tags: ["live-rss"] },
-);
-
-/** Live RSS for homepage/API. Never throws. */
-export async function getLiveFeed(): Promise<LiveFeedResult> {
+async function safeSocialStories(): Promise<Story[]> {
   try {
-    const stories = await fetchLiveRss();
-    if (stories.length > 0) {
-      return {
-        stories,
-        source: "live",
-        fetchedAt: new Date().toISOString(),
-      };
-    }
+    return await ingestSocialSignalStories();
   } catch {
-    // fall through to file cache
+    return [];
+  }
+}
+
+/** Publisher reporting plus non-legacy discovery signals. Never throws. */
+export async function getLiveFeed(): Promise<LiveFeedResult> {
+  const [publisherStories, socialStories] = await Promise.all([
+    ingestEnabledFeeds().catch(() => [] as Story[]),
+    safeSocialStories(),
+  ]);
+
+  if (publisherStories.length > 0) {
+    return {
+      stories: [...publisherStories, ...socialStories].map(sanitizeStoryForPublic),
+      source: "live",
+      fetchedAt: new Date().toISOString(),
+    };
   }
 
   const cache = readLiveStoriesCache();
   return {
-    stories: cache.stories,
+    stories: [...cache.stories, ...socialStories].map(sanitizeStoryForPublic),
     source: "cache",
     fetchedAt: cache.generatedAt,
   };
