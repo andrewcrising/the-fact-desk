@@ -1,6 +1,7 @@
 "use client";
 
 import { STORY_CATEGORIES } from "@/data/navigation";
+import { ReaderSupportCard } from "@/components/support/ReaderSupportCard";
 import {
   HealthDeskIntro,
   HealthDeskTicker,
@@ -8,9 +9,9 @@ import {
 import {
   categoryCounts,
   filterByCategory,
-  getTopSignalStory,
-  storiesBySignal,
-  storiesLowConfidence,
+  getHighestPriorityStory,
+  isSocialOnlyStory,
+  rankStoriesByPriority,
 } from "@/lib/stories";
 import type { LiveDataSource } from "@/lib/live-data";
 import type { Story, StoryCategory } from "@/types/story";
@@ -18,8 +19,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { CategoryFilter } from "./CategoryFilter";
 import { DeskTicker } from "./DeskTicker";
+import { EarlySignalRail } from "./EarlySignalRail";
 import { LeadSignal } from "./LeadSignal";
 import { LiveBetaFeed } from "./LiveBetaFeed";
+import { MobilePriorityRail } from "./MobilePriorityRail";
 import { StorySection } from "./StorySection";
 
 interface StoryFeedProps {
@@ -40,7 +43,12 @@ export function StoryFeed({
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const allStories = homepageStories;
+  // Published Supabase stories are the durable desk of record. Direct live
+  // ingestion is a discovery/diagnostic lane and must never silently replace it.
+  const allStories = useMemo(
+    () => rankStoriesByPriority(homepageStories),
+    [homepageStories],
+  );
 
   const activeCategory = useMemo(() => {
     const raw = searchParams.get("category");
@@ -53,11 +61,8 @@ export function StoryFeed({
   const setCategory = useCallback(
     (category: StoryCategory | null) => {
       const params = new URLSearchParams(searchParams.toString());
-      if (category) {
-        params.set("category", category);
-      } else {
-        params.delete("category");
-      }
+      if (category) params.set("category", category);
+      else params.delete("category");
       const query = params.toString();
       router.push(query ? `/?${query}` : "/", { scroll: false });
     },
@@ -65,47 +70,47 @@ export function StoryFeed({
   );
 
   const filtered = useMemo(
-    () => filterByCategory(allStories, activeCategory),
+    () => rankStoriesByPriority(filterByCategory(allStories, activeCategory)),
     [allStories, activeCategory],
   );
 
-  const filteredLivePreviewStories = useMemo(
-    () => filterByCategory(livePreviewStories, activeCategory),
-    [livePreviewStories, activeCategory],
-  );
-
-  const topSignal = useMemo(() => getTopSignalStory(filtered), [filtered]);
-
-  const otherTopSignals = useMemo(
+  const discoveryStories = useMemo(
     () =>
-      storiesBySignal(filtered, "Top Signal").filter(
-        (s) => s.id !== topSignal?.id,
+      rankStoriesByPriority(
+        filterByCategory(showLiveBeta ? livePreviewStories : [], activeCategory),
       ),
-    [filtered, topSignal],
+    [activeCategory, livePreviewStories, showLiveBeta],
   );
 
-  const underCovered = useMemo(
-    () => storiesBySignal(filtered, "Under-covered"),
+  const publisherStories = useMemo(
+    () => filtered.filter((story) => !isSocialOnlyStory(story)),
     [filtered],
   );
 
-  const crossAngle = useMemo(
-    () => storiesBySignal(filtered, "Cross-angle"),
-    [filtered],
+  const topPriority = useMemo(
+    () => getHighestPriorityStory(publisherStories),
+    [publisherStories],
   );
 
-  const developing = useMemo(() => {
-    const low = storiesLowConfidence(filtered);
-    const seen = new Set<string>();
-    return low.filter((s) => {
-      if (seen.has(s.id)) return false;
-      seen.add(s.id);
-      return true;
-    });
-  }, [filtered]);
+  const priorityRailStories = useMemo(
+    () => rankStoriesByPriority(publisherStories).slice(0, 4),
+    [publisherStories],
+  );
+
+  const earlySignalExclusions = useMemo(() => {
+    const byId = new Map<string, Story>();
+    for (const story of priorityRailStories) byId.set(story.id, story);
+    if (topPriority) byId.set(topPriority.id, topPriority);
+    return [...byId.values()];
+  }, [priorityRailStories, topPriority]);
+
+  const remainingStories = useMemo(
+    () => publisherStories.filter((story) => story.id !== topPriority?.id),
+    [publisherStories, topPriority],
+  );
 
   const healthStories = useMemo(
-    () => allStories.filter((s) => s.category === "Health"),
+    () => rankStoriesByPriority(allStories.filter((story) => story.category === "Health")),
     [allStories],
   );
 
@@ -113,58 +118,34 @@ export function StoryFeed({
 
   return (
     <div className="space-y-3">
-      {topSignal && (
-        <section aria-labelledby="top-signal-heading">
-          <h2 id="top-signal-heading" className="sr-only">
-            Top Signal
+      {publisherStories.length > 0 && <MobilePriorityRail stories={publisherStories} />}
+
+      {showLiveBeta && discoveryStories.length > 0 && (
+        <EarlySignalRail
+          stories={discoveryStories}
+          excludedStories={earlySignalExclusions}
+        />
+      )}
+
+      {topPriority && (
+        <section aria-labelledby="top-priority-heading">
+          <h2 id="top-priority-heading" className="sr-only">
+            Top priority
           </h2>
-          <LeadSignal story={topSignal} />
+          <LeadSignal story={topPriority} />
         </section>
       )}
 
       <DeskTicker stories={allStories} />
 
-      <div className="space-y-3">
-        <CategoryFilter
-          active={activeCategory}
-          onChange={setCategory}
-          counts={counts}
-        />
+      <CategoryFilter active={activeCategory} onChange={setCategory} counts={counts} />
 
-        {otherTopSignals.length > 0 && (
-          <StorySection
-            id="more-top-signals"
-            title="More top signals"
-            stories={otherTopSignals}
-          />
-        )}
-
-        <StorySection
-          id="under-covered"
-          title="Under-covered"
-          description="Public-interest signals with limited mainstream pickup."
-          stories={underCovered}
-        />
-
-        <StorySection
-          id="cross-angle"
-          title="Cross-angle view"
-          description="Multiple credible sources with differing emphasis."
-          stories={crossAngle}
-        />
-
-        <StorySection
-          id="developing"
-          title="Developing / low confidence"
-          description="Still forming, disputed, or thinly sourced — read with care."
-          stories={developing}
-        />
-
-        {filtered.length === 0 && (
-          <div className="desk-card border-dashed px-6 py-8 text-center">
-            <p className="text-sm text-[var(--muted)]">
-              No stories in this category.
-            </p>
+      {filtered.length === 0 && (
+        <div className="desk-card border-dashed px-6 py-8 text-center">
+          <p className="text-sm text-[var(--muted)]">
+            No reviewed stories are currently published in this category.
+          </p>
+          {activeCategory && (
             <button
               type="button"
               onClick={() => setCategory(null)}
@@ -172,9 +153,11 @@ export function StoryFeed({
             >
               View all desks
             </button>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
+
+      <ReaderSupportCard className="lg:hidden" />
 
       <section
         id="health-desk"
@@ -186,20 +169,29 @@ export function StoryFeed({
         {healthStories.length > 0 ? (
           <StorySection
             id="health-desk-stories"
-            title="Health desk preview"
-            description="Health policy and research signals only; not medical advice."
-            stories={healthStories}
+            title="Reviewed health updates"
+            description="Published health reporting ranked by Fact Desk priority; not medical advice."
+            stories={healthStories.slice(0, 8)}
           />
         ) : (
           <p className="text-[12px] text-[var(--muted-light)]">
-            Health desk stories will appear here as coverage is added.
+            No reviewed health stories are published right now.
           </p>
         )}
       </section>
 
-      {showLiveBeta && (
+      {remainingStories.length > 0 && (
+        <StorySection
+          id="reviewed-desk"
+          title="More reviewed briefings"
+          description="Published stories from the durable editorial desk."
+          stories={remainingStories}
+        />
+      )}
+
+      {showLiveBeta && discoveryStories.length > 0 && (
         <LiveBetaFeed
-          stories={filteredLivePreviewStories}
+          stories={discoveryStories}
           activeCategory={activeCategory}
           source={liveFeedSource}
           fetchedAt={liveFeedFetchedAt}
