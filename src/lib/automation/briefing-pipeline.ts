@@ -12,6 +12,7 @@ import {
 import { selectContinuingDraft } from "@/lib/automation/draft-continuity";
 import { evaluateGuardedPublish } from "@/lib/automation/publish-policy";
 import { mergeStorySources } from "@/lib/automation/story-source-merge";
+import { upsertAccumulatedStorySources } from "@/lib/automation/story-source-persistence";
 import {
   clusterFeedItems,
   type ClusterableFeedItem,
@@ -33,7 +34,6 @@ import {
   getStoryById,
   listStories,
   publishStory,
-  replaceStorySources,
   updateStory,
 } from "@/lib/story-repository";
 import { slugWithSuffix } from "@/lib/slug";
@@ -184,7 +184,7 @@ async function createOrUpdateDraftFromCluster(
     if (!existingStory) {
       throw new Error(`Existing story ${existingStoryId} could not be loaded.`);
     }
-    const story = await replaceStorySources(
+    const story = await upsertAccumulatedStorySources(
       existingStoryId,
       mergeStorySources(existingStory.storySources, attachments),
     );
