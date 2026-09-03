@@ -2,18 +2,20 @@
 
 Repo: **https://github.com/andrewcrising/the-fact-desk**
 
-Cloudflare Workers is the canonical deployment target for the low-cost pilot. Vercel may remain connected temporarily as a fallback until the Cloudflare preview is validated.
+Cloudflare Workers is the canonical deployment target for the low-cost pilot. Vercel may remain connected temporarily as an inactive fallback, but the production automation path must not depend on Vercel Cron.
 
 ## Current deployment shape
 
 - App: Next.js 16 + vinext on Cloudflare Workers
-- Database: existing dedicated Supabase **The Fact Desk** project
+- Database: dedicated Supabase **The Fact Desk** project
 - Production branch: `main`
 - Validation branch: `chatgpt/fact-desk-recovery`
 - Worker name: `the-fact-desk`
 - `workers.dev` and version preview URLs: enabled
+- Durable published stories: Supabase
+- Direct RSS/social preview: discovery/diagnostic only; it does not replace the reviewed desk
 
-The repository keeps the original Next.js build working alongside vinext. CI must pass both builds before promotion.
+The repository keeps the original Next.js build working alongside vinext. CI must pass both builds plus the Wrangler bundle gate before promotion.
 
 ## One-time Cloudflare Git connection
 
@@ -31,7 +33,7 @@ In Cloudflare:
 
 ## Required runtime variables
 
-Add these to the Worker before the real data smoke test:
+Add these to the recovery preview before the real-data smoke test:
 
 ```text
 NEXT_PUBLIC_SUPABASE_URL
@@ -45,31 +47,61 @@ NEXT_PUBLIC_SHOW_LIVE_BETA=false
 AI_DRAFT_ASSIST_ENABLED=false
 ```
 
+Optional non-legacy discovery can remain off for the backend proof. When deliberately enabled later:
+
+```text
+FACT_DESK_SOCIAL_SIGNALS=1
+FACT_DESK_X_BEARER_TOKEN=<server-only secret>
+```
+
 Security rules:
 
-- Store `SUPABASE_SECRET_KEY`, `ADMIN_API_TOKEN`, and `CRON_SECRET` as encrypted Worker secrets.
+- Store `SUPABASE_SECRET_KEY`, `ADMIN_API_TOKEN`, `CRON_SECRET`, and any X bearer token as encrypted Worker secrets.
 - Never commit secret values to GitHub.
 - The Supabase server key must never be exposed to browser code.
 - Keep `auto_draft` during pilot validation. Do not enable guarded auto-publish yet.
+- Do not configure a second recurring scheduler. The database rejects overlapping mutating automation runs and expires stale run claims after 30 minutes.
 
 ## Required validation before production
 
 A recovery-branch deployment is considered green only after all of the following pass:
 
-1. GitHub CI passes unit tests and lint.
-2. The original Next.js production build passes.
-3. The vinext/Cloudflare Worker build passes.
+1. Exact recovery head passes unit tests and lint.
+2. Original Next.js production build passes.
+3. vinext/Cloudflare Worker build passes.
 4. Wrangler bundle dry-run passes.
-5. Recovery preview loads successfully.
-6. Durable Supabase RSS ingest produces real `feed_items`.
-7. Automation produces drafts and story-source links.
-8. Evidence Assist completes without destructive source replacement.
-9. `stories_auto_published` remains `0` in `auto_draft` mode.
-10. At least one reviewed preview draft can be deliberately published and rendered correctly on the preview homepage.
+5. Recovery preview loads successfully with `ALLOW_MOCK_FALLBACK=false`.
+6. Send one authenticated `POST /api/automation/run-briefing-pipeline` with `{"dry_run":false}`. Do not use GET for writes; GET is forcibly dry-run/read-only.
+7. Durable Supabase RSS ingest produces real `feed_items`.
+8. `auto_draft` produces drafts and `story_sources`, with accumulated evidence preserved across repeat coverage.
+9. The automation run record completes and `stories_auto_published` remains exactly `0`.
+10. Review one generated draft in `/admin`, correct/expand it as needed, and deliberately publish it.
+11. The published story appears on the preview homepage on the next request and its dynamic `/story/<slug>` route renders with valid source links.
+12. Re-run security advisor, performance advisor, feed-health, and exact-head CI checks.
 
-Only after those checks should PR #5 be made ready for review and merged to `main`.
+Only after those checks should PR #5 be marked ready for review and merged to `main`.
 
-## Local commands
+## Smoke-test evidence to record
+
+Capture the following from the single proof run so the gate is reproducible rather than visual-only:
+
+```text
+preview URL
+recovery commit SHA
+automation run ID
+feeds_checked
+new_feed_items
+clusters_created
+drafts_created
+drafts_updated
+stories_auto_published
+stories_needing_review
+reviewed/published story ID + slug
+```
+
+The database should show non-zero `feed_items`, `stories`, and `story_sources`, while `stories_auto_published` remains zero during `auto_draft` validation.
+
+## Local / CI commands
 
 ```bash
 npm ci
@@ -77,19 +109,18 @@ npm test
 npm run lint
 npm run build
 npm run build:vinext
-npm run dev:vinext
-```
-
-Cloudflare bundle validation without deploying:
-
-```bash
 npx wrangler deploy --dry-run --config dist/server/wrangler.json
 ```
 
-## Scheduling
+## Scheduling after the proof run
 
-Do not turn on recurring ingestion until the one-time end-to-end preview smoke test is green. Once validated, use Cloudflare Cron Triggers or another protected scheduler to invoke the automation path. The scheduler must authenticate with `CRON_SECRET`, and the pilot should remain in `auto_draft` mode.
+Do **not** turn on recurring ingestion until the one-time end-to-end preview smoke test is green. Once validated, use one of these protected scheduler paths:
+
+- Cloudflare Cron Trigger invoking the protected automation endpoint, or
+- the existing GitHub Actions scheduler in `.github/workflows/fact-desk-automation.yml`.
+
+Whichever scheduler is chosen must authenticate with `CRON_SECRET`. Keep the pilot in `auto_draft` until reviewed production evidence supports a later policy change.
 
 ## Vercel fallback
 
-Do not delete the existing Vercel project until the Cloudflare deployment is proven. No new Vercel paid subscription is required for this migration. Once Cloudflare has passed the full smoke test and production deployment is stable, Vercel can be disconnected or retained only as an inactive fallback.
+The old Vercel cron path is not part of the production design. No Vercel paid subscription is required for this migration. The existing Vercel project may remain inactive as a rollback reference until Cloudflare is proven, then can be disconnected or retained only as an inactive fallback.
