@@ -9,7 +9,10 @@ import {
   isLiveBetaEnabled,
 } from "@/lib/story-repository";
 
-export const revalidate = 900;
+// Reviewed publication is an editorial state transition, not a cache-refresh
+// suggestion. Keep the durable homepage request-driven so a deliberately
+// published/corrected/archived story is reflected on the next page load.
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const stories = rankHomepageStories(await getHomepageStories());
