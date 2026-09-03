@@ -166,10 +166,6 @@ async function findExistingStoryForCluster(cluster: StoryCluster): Promise<strin
   if (error) throw error;
   if (data?.story_id) return data.story_id as string;
 
-  // New feed items have never been attached before, so direct feed-item lookup
-  // cannot provide continuity across normal automation runs. Conservatively
-  // compare only existing drafts in the same configured category. Published
-  // stories are intentionally excluded from automatic rewriting.
   const drafts = await listStories({ status: "draft", limit: 100 });
   return selectContinuingDraft(cluster, drafts)?.id ?? null;
 }
@@ -302,10 +298,6 @@ async function processCluster(input: {
     story = await maybeApplyAiDraft(story);
   }
 
-  for (const feedItemId of input.cluster.feed_item_ids) {
-    await updateFeedItemStatus(feedItemId, "promoted");
-  }
-
   const evidenceProfile = await getEvidenceAssistForStory(story.id);
   const decision = evaluateGuardedPublish({
     mode: input.mode,
@@ -339,6 +331,13 @@ async function processCluster(input: {
         `Story ${story.slug} needs review: ${decision.reasons.join("; ")}`,
       );
     }
+  }
+
+  // A feed item is only considered promoted after every downstream operation
+  // for its cluster has succeeded. If evidence evaluation, publishing, or audit
+  // logging fails, the items stay "new" so the next run can safely retry them.
+  for (const feedItemId of input.cluster.feed_item_ids) {
+    await updateFeedItemStatus(feedItemId, "promoted");
   }
 }
 
