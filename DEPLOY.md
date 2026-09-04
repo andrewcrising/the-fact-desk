@@ -8,7 +8,7 @@ Cloudflare Workers is the canonical deployment target for the low-cost pilot. Ve
 
 - App: Next.js 16 + vinext on Cloudflare Workers
 - Database: dedicated Supabase **The Fact Desk** project
-- Production branch: `main`
+- Production branch after validation: `main`
 - Validation branch: `chatgpt/fact-desk-recovery`
 - Worker name: `the-fact-desk`
 - `workers.dev` and version preview URLs: enabled
@@ -25,11 +25,13 @@ In Cloudflare:
 2. Authorize the Cloudflare Workers & Pages GitHub app for `andrewcrising/the-fact-desk` only.
 3. Select repository `andrewcrising/the-fact-desk`.
 4. Set the Worker/project name to **`the-fact-desk`**. It must match `wrangler.jsonc`.
-5. Use production branch **`main`**.
+5. During validation, set the production branch temporarily to **`chatgpt/fact-desk-recovery`** so the exact recovery head is what Cloudflare builds.
 6. Build command: `npm run build:vinext`
 7. Deploy command: `npm run deploy:vinext`
-8. Enable builds for non-production branches so `chatgpt/fact-desk-recovery` receives preview deployments.
-9. Save the project. Do not promote the recovery branch to production yet.
+8. Enable builds for non-production branches.
+9. Save the project.
+10. After changing branch control, push a fresh commit to the recovery branch. Do not use **Retry build** on an older `main` build because Cloudflare may replay that build's original source context.
+11. Do not switch production branch back to `main` until the real-data recovery preview gate is green and PR #5 has merged.
 
 ## Required runtime variables
 
