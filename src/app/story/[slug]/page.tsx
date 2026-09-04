@@ -1,8 +1,7 @@
 import { StoryDetail } from "@/components/story/StoryDetail";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { TopNav } from "@/components/layout/TopNav";
-import { getLivePreviewStories } from "@/lib/story-repository";
-import type { Story } from "@/types/story";
+import { getStoryBySlug } from "@/lib/story-repository";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -10,19 +9,16 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-export const dynamicParams = true;
+// Published Supabase stories are created after deployment, so story routes
+// must resolve from the durable repository at request time rather than from a
+// build-time list of mock/cache slugs.
 export const dynamic = "force-dynamic";
-
-async function resolveStory(slug: string): Promise<Story | undefined> {
-  const liveFeed = await getLivePreviewStories();
-  return liveFeed.stories.find((story) => story.slug === slug);
-}
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const story = await resolveStory(slug);
+  const story = await getStoryBySlug(slug);
   if (!story) return { title: "Story not found" };
   return {
     title: `${story.title} — The Fact Desk`,
@@ -32,11 +28,9 @@ export async function generateMetadata({
 
 export default async function StoryPage({ params }: PageProps) {
   const { slug } = await params;
-  const story = await resolveStory(slug);
+  const story = await getStoryBySlug(slug);
 
-  if (!story) {
-    notFound();
-  }
+  if (!story) notFound();
 
   return (
     <>
@@ -46,7 +40,7 @@ export default async function StoryPage({ params }: PageProps) {
           <StoryDetail story={story} />
         </div>
       </main>
-      <SiteFooter showLiveBeta />
+      <SiteFooter />
     </>
   );
 }

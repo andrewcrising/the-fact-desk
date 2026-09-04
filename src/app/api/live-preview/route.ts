@@ -1,56 +1,49 @@
+import { requireAdminOrCronRequest } from "@/lib/auth";
 import { getLiveFeed } from "@/lib/live-data";
-import { ingestEnabledFeedsWithDiagnostics } from "@/lib/ingest/ingest-feeds";
-import { sanitizeStoryForPublic } from "@/lib/ingest/public-story";
-import { independentEvidenceSourceCount } from "@/lib/stories";
 import { isLiveBetaEnabled } from "@/lib/story-repository";
 import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-/** GET /api/live-preview — current source-cached feed or a diagnostic live fetch. */
+/** GET /api/live-preview — returns current live feed (cached fetch + file fallback). */
 export async function GET(request: NextRequest) {
   const fresh = request.nextUrl.searchParams.get("fresh") === "1";
 
   try {
     if (fresh) {
-      const result = await ingestEnabledFeedsWithDiagnostics();
-      const stories = result.stories.map(sanitizeStoryForPublic);
+      const unauthorized = requireAdminOrCronRequest(request);
+      if (unauthorized) return unauthorized;
+
+      const { ingestEnabledFeeds } = await import("@/lib/ingest/ingest-feeds");
+      const stories = await ingestEnabledFeeds();
       return NextResponse.json({
         ok: true,
         source: "live fetch",
         count: stories.length,
         generatedAt: new Date().toISOString(),
-        feedsChecked: result.feedsChecked,
-        feedsWithStories: result.feedsWithStories,
-        activeSourceCount: result.activeSourceCount,
-        activeSources: result.activeSources,
-        rawStoryCount: result.rawStoryCount,
-        multiSourceStoryCount: stories.filter(
-          (story) => independentEvidenceSourceCount(story) >= 2,
-        ).length,
-        failedFeedIds: result.failedFeedIds,
-        emptyFeedIds: result.emptyFeedIds,
-        activeSourceViewpointCounts: result.activeSourceViewpointCounts,
-        storyViewpointCounts: result.storyViewpointCounts,
-        socialSourcesChecked: result.socialSourcesChecked,
-        socialSourcesWithSignals: result.socialSourcesWithSignals,
-        socialSignalCount: result.socialSignalCount,
-        socialFailedSourceIds: result.socialFailedSourceIds,
-        socialProviderCounts: result.socialProviderCounts,
         stories,
       });
     }
 
+    if (!isLiveBetaEnabled()) {
+      return NextResponse.json({
+        ok: true,
+        source: "disabled",
+        count: 0,
+        generatedAt: null,
+        liveBetaEnabled: false,
+        stories: [],
+      });
+    }
+
     const result = await getLiveFeed();
+
     return NextResponse.json({
       ok: true,
       source: result.source,
       count: result.stories.length,
       generatedAt: result.fetchedAt,
       liveBetaEnabled: isLiveBetaEnabled(),
-      activeSourceCount: new Set(
-        result.stories.flatMap((story) => story.sources),
-      ).size,
       stories: result.stories,
     });
   } catch (error) {

@@ -7,24 +7,43 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --import tsx --test src/lib/ingest/*.test.ts",
-    "ingest:rss": "tsx scripts/ingest-rss.ts"
+    "test": "tsx --test \"src/**/*.test.ts\"",
+    "test:integration": "RUN_INTEGRATION_TESTS=true tsx --test \"src/**/*.integration.test.ts\"",
+    "check:feeds": "tsx scripts/check-rss-feeds.ts",
+    "check:feeds:all": "tsx scripts/check-rss-feeds.ts --all",
+    "check:feeds:strict": "tsx scripts/check-rss-feeds.ts --strict",
+    "ingest:rss": "tsx scripts/ingest-rss.ts",
+    "seed": "tsx scripts/seed.ts",
+    "dev:vinext": "vinext dev --port 3001",
+    "build:vinext": "vinext build",
+    "start:vinext": "wrangler dev --config dist/server/wrangler.json",
+    "deploy:vinext": "vinext-cloudflare deploy --config dist/server/wrangler.json"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.106.2",
+    "@vinext/cloudflare": "^1.0.0-beta.6",
     "fast-xml-parser": "^5.8.0",
-    "next": "16.2.6",
-    "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "next": "16.3.3",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-server-dom-webpack": "^19.2.8",
+    "vinext": "^1.0.0-beta.8"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.54.2",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^6.1.1",
+    "@vitejs/plugin-rsc": "^0.5.34",
     "eslint": "^9",
-    "eslint-config-next": "16.2.6",
+    "eslint-config-next": "16.3.3",
     "tailwindcss": "^4",
     "tsx": "^4.19.4",
-    "typescript": "^5"
-  }
+    "typescript": "^5",
+    "vite": "^8.2.2",
+    "wrangler": "^4.127.1"
+  },
+  "type": "module"
 }

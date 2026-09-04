@@ -1,0 +1,40 @@
+name: Fact Desk Dependency Audit
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "41 11 * * *"
+  push:
+    branches:
+      - chatgpt/fact-desk-recovery
+    paths:
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/dependency-audit.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Require production dependencies free of high-severity advisories
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Report complete dependency tree advisories
+        continue-on-error: true
+        run: npm audit --audit-level=high
