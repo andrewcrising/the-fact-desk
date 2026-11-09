@@ -116,7 +116,7 @@ function mergeCluster(cluster: Story[]): Story {
   const sources = Array.from(sourceMap.keys());
   const linkedUrls = sources.map((source) => sourceMap.get(source)?.url);
   const sourceKinds = sources.map((source) => sourceMap.get(source)?.kind ?? "publisher");
-  const linksAreComplete = linkedUrls.every((url): url is string => Boolean(url));
+
   const bestSummary = ordered.reduce((best, story) =>
     story.summary.length > best.summary.length ? story : best,
   );
@@ -132,10 +132,12 @@ function mergeCluster(cluster: Story[]): Story {
       ? `${bestSummary.whyItMatters} Coverage includes ${independentEvidenceCount} independent publisher/primary sources${socialCount ? ` plus ${socialCount} social signal${socialCount === 1 ? "" : "s"}` : ""}; repeated reporting still does not establish every source-specific claim.`
       : bestSummary.whyItMatters,
     category: categoryFor(cluster),
-    confidence: multiSource ? "Developing" : "Single-source",
+    confidence: ordered.some((story) => story.confidence === "Disputed")
+      ? "Disputed"
+      : multiSource ? "Developing" : "Single-source",
     signal: multiSource ? "Cross-angle" : representative.signal,
     sources,
-    sourceUrls: linksAreComplete ? linkedUrls : representative.sourceUrls,
+    sourceUrls: linkedUrls.map((url) => url ?? ""),
     sourceKinds,
     publishedAt: oldestIso(ordered.map((story) => story.publishedAt)),
     updatedAt: newestIso(ordered.map((story) => story.updatedAt)),

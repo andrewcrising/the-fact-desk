@@ -56,3 +56,30 @@ test("does not let a bridge headline merge otherwise unrelated clusters", () => 
   assert.ok(clustered.some((item) => item.sources.length === 1));
   assert.ok(clustered.every((item) => item.sources.length < 3));
 });
+
+test("merged citations retain source order when a publisher has no URL", () => {
+  const now = new Date().toISOString();
+  const title = "Agency Reports Major Regional Transport Service Interruption";
+  const first = story("citation-first", title, "Publisher A", now);
+  const second = { ...story("citation-second", title, "Publisher B", now), sourceUrls: [] };
+  const third = story("citation-third", title, "Publisher C", now);
+  const merged = clusterAndBalanceStories([first, second, third]);
+  assert.equal(merged.length, 1);
+  const item = merged[0];
+  assert.equal(item.sources.length, 3);
+  assert.deepEqual(item.sources.map((source, index) => [source, item.sourceUrls?.[index]]), [
+    ["Publisher A", "https://example.com/citation-first"],
+    ["Publisher B", ""],
+    ["Publisher C", "https://example.com/citation-third"],
+  ]);
+});
+
+test("unresolved disputed confidence survives merging", () => {
+  const now = new Date().toISOString();
+  const title = "Agency Reports Major Regional Transport Service Interruption";
+  const disputed = { ...story("disputed-a", title, "Publisher A", now), confidence: "Disputed" as const };
+  const other = story("disputed-b", title, "Publisher B", now);
+  const merged = clusterAndBalanceStories([disputed, other]);
+  assert.equal(merged.length, 1);
+  assert.equal(merged[0]?.confidence, "Disputed");
+});
