@@ -127,12 +127,13 @@ async function mapPersistedStory(row: StoryRow): Promise<PersistedStory> {
   if (storySources.length > 0) {
     const db = requireSupabaseAdmin();
     const { data: reviews, error: reviewError } = await db.from("story_source_reviews")
-      .select("story_source_id,origin_id")
+      .select("story_source_id,origin_id,attested_url")
       .in("story_source_id", storySources.map((source) => source.id));
     if (!reviewError) {
       for (const review of reviews ?? []) {
         if (typeof review.origin_id === "string" && review.origin_id.trim()) {
-          reviewIds.set(review.story_source_id, review.origin_id.trim());
+          const source = storySources.find((item) => item.id === review.story_source_id);
+          if (source && source.url === review.attested_url) reviewIds.set(review.story_source_id, review.origin_id.trim());
         }
       }
     }
