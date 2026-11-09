@@ -2,6 +2,7 @@
 -- Must be applied and verified in a nonproduction database before enabling the route.
 create table if not exists public.story_source_reviews (
   story_source_id uuid primary key references public.story_sources(id) on delete cascade,
+  attested_url text not null,
   origin_id text not null check (length(btrim(origin_id)) between 1 and 256),
   reviewed_by text not null check (length(btrim(reviewed_by)) between 1 and 256),
   reviewed_at timestamptz not null default now(),
