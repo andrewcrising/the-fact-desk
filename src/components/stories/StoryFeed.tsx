@@ -10,6 +10,7 @@ import {
   categoryCounts,
   filterByCategory,
   getHighestPriorityStory,
+  isAutomaticLeadEligible,
   isSocialOnlyStory,
   rankStoriesByPriority,
 } from "@/lib/stories";
@@ -87,10 +88,16 @@ export function StoryFeed({
     [filtered],
   );
 
-  const topPriority = useMemo(
-    () => getHighestPriorityStory(publisherStories),
-    [publisherStories],
-  );
+  const topPriority = useMemo(() => {
+    // Preserve explicit editorial lead selections. Unreviewed source counts
+    // cannot produce an automatic public lead.
+    const editorialLead = publisherStories.find(
+      (story) => "isLead" in story && story.isLead === true,
+    );
+    return editorialLead ?? getHighestPriorityStory(
+      publisherStories.filter(isAutomaticLeadEligible),
+    );
+  }, [publisherStories]);
 
   const priorityRailStories = useMemo(
     () => rankStoriesByPriority(publisherStories).slice(0, 4),
