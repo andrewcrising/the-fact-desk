@@ -6,7 +6,7 @@ import type { Story } from "@/types/story";
 const now = new Date().toISOString();
 function item(id: string, source: string, url: string, overrides: Partial<Story> = {}): Story {
   return { id, slug: id, title: "Regional Agency Announces Significant Transit Service Interruption",
-    summary: "An agency announced a major regional interruption affecting passengers and commuter services.",
+    summary: `An agency announced a major regional interruption affecting passengers and commuter services. Original detail ${id}.`,
     whatHappened: "Transit interrupted", whyItMatters: "Commuters affected",
     category: "World", confidence: "Single-source", signal: "Developing",
     sources: [source], sourceUrls: [url], sourceKinds: ["publisher"],
@@ -51,4 +51,14 @@ test("independent verified origins remain aligned across distinct valid articles
     item("b", "Publisher B", "https://b.example/report", { verifiedIndependentOrigins: ["b-original"] })
   ])[0];
   assert.deepEqual(result.verifiedIndependentOrigins, ["a-original", "b-original"]);
+});
+
+test("identical substantive syndicated text is not independent corroboration", () => {
+  const summary = "A wire report describing the same transit interruption was republished without independent reporting or additional facts.";
+  const result = clusterAndBalanceStories([
+    item("a", "Publisher A", "https://a.example/report", { summary }),
+    item("b", "Publisher B", "https://b.example/report", { summary })
+  ])[0];
+  assert.deepEqual(result.sourceKinds, ["publisher", "open-web"]);
+  assert.notEqual(result.signal, "Cross-angle");
 });
