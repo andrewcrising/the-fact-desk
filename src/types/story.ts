@@ -50,6 +50,8 @@ export interface Story {
   sourceUrls?: string[];
   /** Optional array aligned by index with `sources`. Legacy/persisted stories may omit it. */
   sourceKinds?: EvidenceSourceKind[];
+  /** Independently reviewed origin IDs aligned with sources; absent entries remain unverified. */
+  verifiedIndependentOrigins?: Array<string | null>;
   publishedAt: string;
   updatedAt: string;
   tags: string[];

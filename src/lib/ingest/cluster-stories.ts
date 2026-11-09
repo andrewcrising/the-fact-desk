@@ -101,14 +101,22 @@ function mergeCluster(cluster: Story[]): Story {
     titleTerms(story.title).size > titleTerms(best.title).size ? story : best,
   );
 
-  const sourceMap = new Map<string, { url?: string; kind: EvidenceSourceKind }>();
+  const sourceMap = new Map<string, { url?: string; kind: EvidenceSourceKind; origin: string | null }>();
   for (const story of ordered) {
     story.sources.forEach((source, index) => {
       if (!sourceMap.has(source)) {
         sourceMap.set(source, {
           url: story.sourceUrls?.[index],
           kind: sourceKindAt(story, index),
+          origin: story.verifiedIndependentOrigins?.[index] ?? null,
         });
+      } else {
+        const existing = sourceMap.get(source)!;
+        const incomingOrigin = story.verifiedIndependentOrigins?.[index] ?? null;
+        // Conflicting or missing provenance for the same outlet fails closed.
+        if (existing.origin !== incomingOrigin || existing.url !== story.sourceUrls?.[index]) {
+          existing.origin = null;
+        }
       }
     });
   }
@@ -116,7 +124,8 @@ function mergeCluster(cluster: Story[]): Story {
   const sources = Array.from(sourceMap.keys());
   const linkedUrls = sources.map((source) => sourceMap.get(source)?.url);
   const sourceKinds = sources.map((source) => sourceMap.get(source)?.kind ?? "publisher");
-  const linksAreComplete = linkedUrls.every((url): url is string => Boolean(url));
+  const verifiedIndependentOrigins = sources.map((source) => sourceMap.get(source)?.origin ?? null);
+
   const bestSummary = ordered.reduce((best, story) =>
     story.summary.length > best.summary.length ? story : best,
   );
@@ -132,11 +141,14 @@ function mergeCluster(cluster: Story[]): Story {
       ? `${bestSummary.whyItMatters} Coverage includes ${independentEvidenceCount} independent publisher/primary sources${socialCount ? ` plus ${socialCount} social signal${socialCount === 1 ? "" : "s"}` : ""}; repeated reporting still does not establish every source-specific claim.`
       : bestSummary.whyItMatters,
     category: categoryFor(cluster),
-    confidence: multiSource ? "Developing" : "Single-source",
+    confidence: ordered.some((story) => story.confidence === "Disputed")
+      ? "Disputed"
+      : multiSource ? "Developing" : "Single-source",
     signal: multiSource ? "Cross-angle" : representative.signal,
     sources,
-    sourceUrls: linksAreComplete ? linkedUrls : representative.sourceUrls,
+    sourceUrls: linkedUrls.map((url) => url ?? ""),
     sourceKinds,
+    verifiedIndependentOrigins,
     publishedAt: oldestIso(ordered.map((story) => story.publishedAt)),
     updatedAt: newestIso(ordered.map((story) => story.updatedAt)),
     tags: Array.from(new Set(ordered.flatMap((story) => story.tags))),
