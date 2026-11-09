@@ -45,6 +45,24 @@ function publishedMs(story: Story): number {
   return Number.isNaN(parsed) ? 0 : parsed;
 }
 
+/** Reject invalid, credential-bearing and non-HTTP article URLs. */
+function validArticleUrl(value?: string): string {
+  if (!value) return "";
+  try {
+    const url = new URL(value.trim());
+    if (!["http:", "https:"].includes(url.protocol) || !url.hostname || url.username || url.password) return "";
+    url.hash = "";
+    return url.toString();
+  } catch {
+    return "";
+  }
+}
+
+function duplicateTextKey(story: Story): string | undefined {
+  const summary = story.summary.toLowerCase().replace(/\s+/g, " ").trim();
+  return summary.length >= 80 ? `${normalizeTitle(story.title)}:\u0000${summary}` : undefined;
+}
+
 function termsMatch(a: string, b: string): boolean {
   if (a === b) return true;
   if (Math.min(a.length, b.length) < 5) return false;
@@ -101,37 +119,49 @@ function mergeCluster(cluster: Story[]): Story {
     titleTerms(story.title).size > titleTerms(best.title).size ? story : best,
   );
 
-  const sourceMap = new Map<string, { url?: string; kind: EvidenceSourceKind; origin: string | null }>();
+  // A publisher label is not an article identifier. Preserve citations by URL.
+  const sourceMap = new Map<string, { source: string; url: string; kind: EvidenceSourceKind; origin: string | null }>();
+  const seenText = new Map<string, string>();
   for (const story of ordered) {
+    const textKey = duplicateTextKey(story);
+    const priorId = textKey ? seenText.get(textKey) : undefined;
+    if (textKey && !priorId) seenText.set(textKey, story.id);
+    const syndicated = priorId !== undefined && priorId !== story.id;
     story.sources.forEach((source, index) => {
-      if (!sourceMap.has(source)) {
-        sourceMap.set(source, {
-          url: story.sourceUrls?.[index],
-          kind: sourceKindAt(story, index),
-          origin: story.verifiedIndependentOrigins?.[index] ?? null,
-        });
-      } else {
-        const existing = sourceMap.get(source)!;
-        const incomingOrigin = story.verifiedIndependentOrigins?.[index] ?? null;
-        // Conflicting or missing provenance for the same outlet fails closed.
-        if (existing.origin !== incomingOrigin || existing.url !== story.sourceUrls?.[index]) {
+      const url = validArticleUrl(story.sourceUrls?.[index]);
+      const originalKind = sourceKindAt(story, index);
+      const kind: EvidenceSourceKind = originalKind === "social" ? "social" :
+        (!url || syndicated ? "open-web" : originalKind);
+      const key = url ? `url:${url}` : `unlinked:${source.trim().toLowerCase()}:${originalKind}`;
+      const origin = kind === "publisher" || kind === "primary"
+        ? story.verifiedIndependentOrigins?.[index]?.trim() || null : null;
+      const existing = sourceMap.get(key);
+      if (existing) {
+        // Duplicate URLs never multiply evidence; inconsistent provenance fails closed.
+        if (existing.origin !== origin || existing.kind !== kind) {
           existing.origin = null;
+          existing.kind = existing.kind === "social" || kind === "social" ? "social" : "open-web";
         }
+      } else {
+        sourceMap.set(key, { source, url, kind, origin });
       }
     });
   }
 
-  const sources = Array.from(sourceMap.keys());
-  const linkedUrls = sources.map((source) => sourceMap.get(source)?.url);
-  const sourceKinds = sources.map((source) => sourceMap.get(source)?.kind ?? "publisher");
-  const verifiedIndependentOrigins = sources.map((source) => sourceMap.get(source)?.origin ?? null);
+  const entries = Array.from(sourceMap.values());
+  const sources = entries.map((entry) => entry.source);
+  const linkedUrls = entries.map((entry) => entry.url);
+  const sourceKinds = entries.map((entry) => entry.kind);
+  const verifiedIndependentOrigins = entries.map((entry) => entry.origin);
 
   const bestSummary = ordered.reduce((best, story) =>
     story.summary.length > best.summary.length ? story : best,
   );
-  const independentEvidenceCount = sourceKinds.filter((kind) => kind === "publisher" || kind === "primary").length;
+  const independentEvidenceCount = new Set(entries.filter((entry) =>
+    entry.kind === "publisher" || entry.kind === "primary"
+  ).map((entry) => new URL(entry.url).hostname.replace(/^www\\./, "").toLowerCase())).size;
   const socialCount = sourceKinds.filter((kind) => kind === "social").length;
-  const multiSource = independentEvidenceCount >= 2;
+  const multiSource = independentEvidenceCount >= 2 && !ordered.some((story) => story.confidence === "Disputed");
 
   return {
     ...representative,
