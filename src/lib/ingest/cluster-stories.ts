@@ -159,7 +159,7 @@ function mergeCluster(cluster: Story[]): Story {
   );
   const independentEvidenceCount = new Set(entries.filter((entry) =>
     entry.kind === "publisher" || entry.kind === "primary"
-  ).map((entry) => new URL(entry.url).hostname.replace(/^www\\./, "").toLowerCase())).size;
+  ).map((entry) => new URL(entry.url).hostname.replace(/^www\./, "").toLowerCase())).size;
   const socialCount = sourceKinds.filter((kind) => kind === "social").length;
   const multiSource = independentEvidenceCount >= 2 && !ordered.some((story) => story.confidence === "Disputed");
 
