@@ -27,7 +27,7 @@ export async function PUT(request: NextRequest, { params }: Context) {
       throw new Error("Source URL is not reviewable");
     }
     const { error } = await db.from("story_source_reviews").upsert({
-      story_source_id: sourceId, origin_id: origin.trim(), reviewed_by: reviewer,
+      story_source_id: sourceId, attested_url: source.url, origin_id: origin.trim(), reviewed_by: reviewer,
       reviewed_at: new Date().toISOString(),
     }, { onConflict: "story_source_id" });
     if (error) throw error;
