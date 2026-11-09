@@ -79,6 +79,28 @@ export function independentEvidenceSourceCount(story: Story): number {
   return new Set(evidenceIdentities).size;
 }
 
+/** Only independently reviewed origin IDs may support automatic lead promotion.
+ * Outlet URLs and source labels alone cannot prove original, independent reporting.
+ * Pending authenticated provenance storage, legacy rows fail closed.
+ */
+export function verifiedIndependentEvidenceCount(story: Story): number {
+  const verified = new Set<string>();
+  for (let i = 0; i < story.sources.length; i += 1) {
+    const origin = story.verifiedIndependentOrigins?.[i];
+    const url = story.sourceUrls?.[i];
+    const kind = story.sourceKinds?.[i];
+    if (!origin?.trim() || !url || (kind !== "publisher" && kind !== "primary")) continue;
+    try {
+      const parsed = new URL(url);
+      if (parsed.protocol !== "https:" && parsed.protocol !== "http:") continue;
+      verified.add(origin.trim().toLowerCase());
+    } catch {
+      // Invalid URLs are never counted as verified evidence.
+    }
+  }
+  return verified.size;
+}
+
 export function socialSourceCount(story: Story): number {
   return story.sources.filter((_, index) => sourceKindAt(story, index) === "social").length;
 }
@@ -96,7 +118,12 @@ export function isMultiSourceStory(story: Story): boolean {
 }
 
 export function isAutomaticLeadEligible(story: Story): boolean {
-  return !isSocialOnlyStory(story) && isMultiSourceStory(story) && story.confidence !== "Single-source";
+  return (
+    !isSocialOnlyStory(story) &&
+    verifiedIndependentEvidenceCount(story) >= 2 &&
+    story.confidence !== "Single-source" &&
+    story.confidence !== "Disputed"
+  );
 }
 
 export function getTopSignalStory(stories: Story[]): Story | undefined {
