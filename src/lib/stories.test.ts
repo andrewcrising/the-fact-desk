@@ -48,6 +48,8 @@ test("multi-source Top Signal can become the automatic lead", () => {
     signal: "Top Signal",
     sources: ["Reuters", "Associated Press"],
     sourceUrls: ["https://reuters.com/a", "https://apnews.com/b"],
+    sourceKinds: ["publisher", "publisher"],
+    verifiedIndependentOrigins: ["reuters-original", "ap-original"],
   });
 
   assert.equal(uniqueSourceCount(multi), 2);
