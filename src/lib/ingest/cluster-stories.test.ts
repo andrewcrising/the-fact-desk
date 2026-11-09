@@ -83,3 +83,38 @@ test("unresolved disputed confidence survives merging", () => {
   assert.equal(merged.length, 1);
   assert.equal(merged[0]?.confidence, "Disputed");
 });
+
+test("merged verified origins remain aligned with their actual publishers", () => {
+  const now = "2026-11-09T12:00:00Z";
+  const title = "Agency Reports Major Regional Transport Service Interruption";
+  const a = { ...story("origin-a", title, "Publisher A", now), verifiedIndependentOrigins: ["original-a"] };
+  const b = { ...story("origin-b", title, "Publisher B", now), verifiedIndependentOrigins: ["original-b"] };
+  const merged = clusterAndBalanceStories([a, b]);
+  assert.equal(merged.length, 1);
+  assert.deepEqual(merged[0].sources.map((name, i) => [name, merged[0].verifiedIndependentOrigins?.[i]]), [
+    ["Publisher A", "original-a"],
+    ["Publisher B", "original-b"],
+  ]);
+});
+
+test("unverified source cannot inherit representative verified origin", () => {
+  const now = "2026-11-09T12:00:00Z";
+  const title = "Agency Reports Major Regional Transport Service Interruption";
+  const a = { ...story("verified", title, "Publisher A", now), verifiedIndependentOrigins: ["original-a"] };
+  const b = story("unverified", title, "Publisher B", now);
+  const merged = clusterAndBalanceStories([a, b]);
+  assert.deepEqual(merged[0].sources.map((name, i) => [name, merged[0].verifiedIndependentOrigins?.[i]]), [
+    ["Publisher A", "original-a"],
+    ["Publisher B", null],
+  ]);
+});
+
+test("conflicting origin for repeated publisher is not considered verified", () => {
+  const now = "2026-11-09T12:00:00Z";
+  const title = "Agency Reports Major Regional Transport Service Interruption";
+  const a = { ...story("conflict-a", title, "Publisher A", now), verifiedIndependentOrigins: ["original-a"] };
+  const b = { ...story("conflict-b", title, "Publisher A", now), verifiedIndependentOrigins: ["original-b"] };
+  const merged = clusterAndBalanceStories([a, b]);
+  assert.equal(merged.length, 1);
+  assert.deepEqual(merged[0].verifiedIndependentOrigins, [null]);
+});
