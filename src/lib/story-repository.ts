@@ -121,6 +121,22 @@ async function getStorySources(storyId: string): Promise<StorySource[]> {
 
 async function mapPersistedStory(row: StoryRow): Promise<PersistedStory> {
   const storySources = await getStorySources(row.id);
+  // Reviewed origin IDs are never read from story input, RSS, or feed metadata.
+  // Missing/unapplied review schema fails closed: no verified origins.
+  const reviewIds = new Map<string, string>();
+  if (storySources.length > 0) {
+    const db = requireSupabaseAdmin();
+    const { data: reviews, error: reviewError } = await db.from("story_source_reviews")
+      .select("story_source_id,origin_id")
+      .in("story_source_id", storySources.map((source) => source.id));
+    if (!reviewError) {
+      for (const review of reviews ?? []) {
+        if (typeof review.origin_id === "string" && review.origin_id.trim()) {
+          reviewIds.set(review.story_source_id, review.origin_id.trim());
+        }
+      }
+    }
+  }
   const sourceNames =
     storySources.length > 0
       ? storySources.map((source) => source.sourceName)
@@ -139,6 +155,8 @@ async function mapPersistedStory(row: StoryRow): Promise<PersistedStory> {
     signal: row.signal,
     sources: sourceNames,
     sourceUrls: storySources.map((source) => source.url),
+    sourceKinds: storySources.map(() => "publisher" as const),
+    verifiedIndependentOrigins: storySources.map((source) => reviewIds.get(source.id) ?? null),
     publishedAt: row.published_at ?? row.created_at,
     updatedAt: row.updated_at,
     tags: tagsFromJson(row.tags),
