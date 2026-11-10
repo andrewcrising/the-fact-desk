@@ -106,33 +106,33 @@ test("different domains sharing one wire origin do not establish independence", 
   assert.equal(result.signal, "Developing");
 });
 
-test("unverified citation volume cannot win an equal-priority cluster tie", () => {
-  const unverified = item("unverified", "Publisher A", "https://a.example/one", {
+
+test("unverified citation volume cannot break equal-priority cluster ties", () => {
+  const single = item("single", "Publisher D", "https://d.example/four", {
+    title: "Municipal Water Supply Interrupted Following Equipment Failure",
+  });
+  const many = item("many", "Publisher A", "https://a.example/one", {
     title: "Regional Rail Services Disrupted Following Equipment Fault",
     sources: ["Publisher A", "Publisher B", "Publisher C"],
     sourceUrls: ["https://a.example/one", "https://b.example/two", "https://c.example/three"],
     sourceKinds: ["publisher", "publisher", "publisher"],
   });
-  const verified = item("verified", "Publisher D", "https://d.example/four", {
-    title: "Municipal Water Supply Interrupted Following Equipment Failure",
-    verifiedIndependentOrigins: ["reviewed-original-d"],
-  });
-  const result = clusterAndBalanceStories([unverified, verified]);
+  const result = clusterAndBalanceStories([single, many]);
   assert.equal(result.length, 2);
-  assert.equal(result[0]?.id, "verified");
+  assert.equal(result[0]?.id, "single");
 });
-test("invalid claimed origins cannot win an equal-priority cluster tie", () => {
-  const invalid = item("invalid", "Publisher A", "https://a.example/one", {
+test("untrusted claimed origins cannot break equal-priority cluster ties", () => {
+  const single = item("single", "Publisher D", "https://d.example/four", {
+    title: "Municipal Water Supply Interrupted Following Equipment Failure",
+  });
+  const claimed = item("claimed", "Publisher A", "https://a.example/one", {
     title: "Regional Rail Services Disrupted Following Equipment Fault",
     sources: ["Publisher A", "Publisher B"],
     sourceUrls: ["https://a.example/one", "https://b.example/two"],
     sourceKinds: ["open-web", "open-web"],
     verifiedIndependentOrigins: ["claimed-a", "claimed-b"],
   });
-  const verified = item("verified", "Publisher D", "https://d.example/four", {
-    title: "Municipal Water Supply Interrupted Following Equipment Failure",
-    verifiedIndependentOrigins: ["reviewed-original-d"],
-  });
-  const result = clusterAndBalanceStories([invalid, verified]);
-  assert.equal(result[0]?.id, "verified");
+  const result = clusterAndBalanceStories([single, claimed]);
+  assert.equal(result.length, 2);
+  assert.equal(result[0]?.id, "single");
 });
