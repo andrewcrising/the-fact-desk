@@ -171,7 +171,7 @@ async function mapPersistedStory(row: StoryRow): Promise<PersistedStory> {
   };
 }
 
-function mapMockStory(story: Story): PersistedStory {
+export function mapMockStory(story: Story): PersistedStory {
   return {
     ...story,
     // Demo/cache payloads are not reviewer attestations, even if they carry an origin field.
