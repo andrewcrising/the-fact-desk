@@ -76,6 +76,8 @@ test("live items are separated into multi-source, primary-only, and incoming lan
     id: "multi",
     sources: ["Reuters", "BBC"],
     sourceUrls: ["https://reuters.com/a", "https://bbc.com/b"],
+    sourceKinds: ["publisher", "publisher"],
+    verifiedIndependentOrigins: ["reuters-original", "bbc-original"],
   });
   const primary = story({
     id: "primary",
@@ -101,12 +103,16 @@ test("multi-source lane ranks stronger corroboration above fresher weak coverage
       "https://apnews.com/b",
       "https://agency.gov/release",
     ],
+    sourceKinds: ["publisher", "publisher", "primary"],
+    verifiedIndependentOrigins: ["reuters-original", "ap-original", "agency-original"],
     updatedAt: "2026-08-30T10:00:00.000Z",
   });
   const fresher = story({
     id: "fresher",
     sources: ["Outlet A", "Outlet B"],
     sourceUrls: ["https://a.example/story", "https://b.example/story"],
+    sourceKinds: ["publisher", "publisher"],
+    verifiedIndependentOrigins: ["outlet-a-original", "outlet-b-original"],
     updatedAt: "2026-08-30T13:00:00.000Z",
   });
 
@@ -126,4 +132,22 @@ test("distinct verified origins increase priority evidence, duplicate origins do
   const independent = story({ ...duplicated, id: "independent", verifiedIndependentOrigins: ["original-a", "original-b"] });
   assert.equal(storyPriorityScore(duplicated), storyPriorityScore(baseline));
   assert.equal(storyPriorityScore(independent) - storyPriorityScore(baseline), 7);
+});
+
+
+test("different unverified publisher domains cannot enter multi-source lane", () => {
+  const unverified = story({ id: "unverified", sources: ["Outlet A", "Outlet B"], sourceUrls: ["https://a.example/a", "https://b.example/b"], sourceKinds: ["publisher", "publisher"] });
+  const buckets = partitionLiveStoriesByEvidence([unverified]);
+  assert.deepEqual(buckets.multiSource, []);
+  assert.deepEqual(buckets.incoming.map((item) => item.id), ["unverified"]);
+});
+
+test("syndicated duplicate origin cannot enter multi-source lane", () => {
+  const syndicated = story({ id: "syndicated", sources: ["Outlet A", "Outlet B"], sourceUrls: ["https://a.example/a", "https://b.example/b"], sourceKinds: ["publisher", "publisher"], verifiedIndependentOrigins: ["wire-a", " WIRE-A "] });
+  assert.deepEqual(partitionLiveStoriesByEvidence([syndicated]).multiSource, []);
+});
+
+test("two verified origins qualify for multi-source lane", () => {
+  const independent = story({ id: "independent", sources: ["Outlet A", "Outlet B"], sourceUrls: ["https://a.example/a", "https://b.example/b"], sourceKinds: ["publisher", "publisher"], verifiedIndependentOrigins: ["original-a", "original-b"] });
+  assert.deepEqual(partitionLiveStoriesByEvidence([independent]).multiSource.map((item) => item.id), ["independent"]);
 });
