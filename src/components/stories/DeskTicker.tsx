@@ -33,6 +33,10 @@ export function DeskTicker({ stories, discoveryStories = [] }: DeskTickerProps) 
           </div>
         ))}
         <div className="shrink-0 px-3 py-1.5 sm:px-4">
+          <span className="desk-kicker text-[8px] text-[var(--muted-light)]">Developing source reports</span>
+          <span className="ml-1.5 font-mono text-sm font-semibold tabular-nums">{discoveryStories.filter((story) => story.signal === "Developing").length}</span>
+        </div>
+        <div className="shrink-0 px-3 py-1.5 sm:px-4">
           <span className="desk-kicker text-[8px] text-[var(--muted-light)]">Unreviewed source reports</span>
           <span className="ml-1.5 font-mono text-sm font-semibold tabular-nums">{discoveryStories.length}</span>
         </div>
