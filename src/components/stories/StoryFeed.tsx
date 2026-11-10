@@ -158,6 +158,29 @@ export function StoryFeed({
         </section>
       )}
 
+      {!topPriority && discoveryStories.length > 1 && (
+        <section aria-label="Latest source reports" className="space-y-2">
+          <h2 className="text-xs font-semibold uppercase tracking-wide text-[var(--muted)]">
+            Latest source reports · unreviewed
+          </h2>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {discoveryStories.filter((story) => story.id !== discoveryLead?.id)
+              .slice(0, 4).map((story) => {
+                const url = safeArticleUrl(story.sourceUrls?.[0]);
+                return url ? (
+                  <a key={story.id} href={url} target="_blank" rel="noopener noreferrer"
+                    className="desk-card block px-4 py-3 hover:underline">
+                    <span className="text-[10px] text-[var(--muted)]">
+                      {story.category} · {story.sources.join(" · ")} · source report
+                    </span>
+                    <h3 className="mt-1 font-serif text-base font-semibold">{story.title}</h3>
+                  </a>
+                ) : null;
+              })}
+          </div>
+        </section>
+      )}
+
       <DeskTicker stories={allStories} discoveryStories={discoveryStories} />
 
       <CategoryFilter active={activeCategory} onChange={setCategory} counts={counts} />
