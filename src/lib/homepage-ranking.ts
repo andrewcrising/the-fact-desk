@@ -9,8 +9,16 @@ export interface HomepageRankableStory {
   confidence: Confidence;
   signal: Signal;
   storySources: Array<unknown>;
+  /** Reviewer-attested origins aligned with sources; missing entries are not evidence. */
+  verifiedIndependentOrigins?: Array<string | null>;
   publishedAt?: string | null;
   updatedAt?: string | null;
+}
+
+function verifiedOriginCount(story: HomepageRankableStory): number {
+  const origins = story.verifiedIndependentOrigins;
+  if (!origins || origins.length !== story.storySources.length) return 0;
+  return new Set(origins.filter((origin): origin is string => typeof origin === "string" && origin.trim().length > 0)).size;
 }
 
 function automatedScore(story: HomepageRankableStory): number {
@@ -20,7 +28,7 @@ function automatedScore(story: HomepageRankableStory): number {
       evidenceLevel: story.evidenceLevel,
       confidence: story.confidence,
       signal: story.signal,
-      sourceCount: story.storySources.length,
+      sourceCount: verifiedOriginCount(story),
       undercoveredIndicator: story.signal === "Under-covered",
       publishedAt: story.publishedAt,
       updatedAt: story.updatedAt,
@@ -34,10 +42,10 @@ function automatedScore(story: HomepageRankableStory): number {
 }
 
 function automaticSupportTier(story: HomepageRankableStory): number {
-  if (story.storySources.length >= 2 && story.confidence !== "Single-source") {
+  if (verifiedOriginCount(story) >= 2 && story.confidence !== "Single-source" && story.confidence !== "Disputed") {
     return 2;
   }
-  if (story.storySources.length >= 2) return 1;
+  if (verifiedOriginCount(story) >= 2) return 1;
   return 0;
 }
 
