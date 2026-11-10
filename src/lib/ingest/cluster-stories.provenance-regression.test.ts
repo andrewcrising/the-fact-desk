@@ -105,3 +105,34 @@ test("different domains sharing one wire origin do not establish independence", 
   ])[0];
   assert.equal(result.signal, "Developing");
 });
+
+test("unverified citation volume cannot win an equal-priority cluster tie", () => {
+  const unverified = item("unverified", "Publisher A", "https://a.example/one", {
+    title: "Regional Rail Services Disrupted Following Equipment Fault",
+    sources: ["Publisher A", "Publisher B", "Publisher C"],
+    sourceUrls: ["https://a.example/one", "https://b.example/two", "https://c.example/three"],
+    sourceKinds: ["publisher", "publisher", "publisher"],
+  });
+  const verified = item("verified", "Publisher D", "https://d.example/four", {
+    title: "Municipal Water Supply Interrupted Following Equipment Failure",
+    verifiedIndependentOrigins: ["reviewed-original-d"],
+  });
+  const result = clusterAndBalanceStories([unverified, verified]);
+  assert.equal(result.length, 2);
+  assert.equal(result[0]?.id, "verified");
+});
+test("invalid claimed origins cannot win an equal-priority cluster tie", () => {
+  const invalid = item("invalid", "Publisher A", "https://a.example/one", {
+    title: "Regional Rail Services Disrupted Following Equipment Fault",
+    sources: ["Publisher A", "Publisher B"],
+    sourceUrls: ["https://a.example/one", "https://b.example/two"],
+    sourceKinds: ["open-web", "open-web"],
+    verifiedIndependentOrigins: ["claimed-a", "claimed-b"],
+  });
+  const verified = item("verified", "Publisher D", "https://d.example/four", {
+    title: "Municipal Water Supply Interrupted Following Equipment Failure",
+    verifiedIndependentOrigins: ["reviewed-original-d"],
+  });
+  const result = clusterAndBalanceStories([invalid, verified]);
+  assert.equal(result[0]?.id, "verified");
+});
