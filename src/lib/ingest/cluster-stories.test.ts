@@ -29,7 +29,7 @@ function story(
 }
 
 test("does not let a bridge headline merge otherwise unrelated clusters", () => {
-  const publishedAt = "2026-08-31T22:00:00.000Z";
+  const publishedAt = new Date().toISOString();
   const first = story(
     "first",
     "Alpha Beta Gamma Delta Epsilon Theta Iota",
@@ -85,7 +85,7 @@ test("unresolved disputed confidence survives merging", () => {
 });
 
 test("merged verified origins remain aligned with their actual publishers", () => {
-  const now = "2026-11-09T12:00:00Z";
+  const now = new Date().toISOString();
   const title = "Agency Reports Major Regional Transport Service Interruption";
   const a = { ...story("origin-a", title, "Publisher A", now), verifiedIndependentOrigins: ["original-a"] };
   const b = { ...story("origin-b", title, "Publisher B", now), verifiedIndependentOrigins: ["original-b"] };
@@ -98,7 +98,7 @@ test("merged verified origins remain aligned with their actual publishers", () =
 });
 
 test("unverified source cannot inherit representative verified origin", () => {
-  const now = "2026-11-09T12:00:00Z";
+  const now = new Date().toISOString();
   const title = "Agency Reports Major Regional Transport Service Interruption";
   const a = { ...story("verified", title, "Publisher A", now), verifiedIndependentOrigins: ["original-a"] };
   const b = story("unverified", title, "Publisher B", now);
@@ -110,11 +110,22 @@ test("unverified source cannot inherit representative verified origin", () => {
 });
 
 test("conflicting origin for repeated publisher is not considered verified", () => {
-  const now = "2026-11-09T12:00:00Z";
+  const now = new Date().toISOString();
   const title = "Agency Reports Major Regional Transport Service Interruption";
   const a = { ...story("conflict-a", title, "Publisher A", now), verifiedIndependentOrigins: ["original-a"] };
   const b = { ...story("conflict-b", title, "Publisher A", now), verifiedIndependentOrigins: ["original-b"] };
   const merged = clusterAndBalanceStories([a, b]);
   assert.equal(merged.length, 1);
   assert.deepEqual(merged[0].verifiedIndependentOrigins, [null]);
+});
+
+
+test("rejects stories older than the production fourteen-day freshness window", () => {
+  const stale = new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString();
+  const fresh = new Date().toISOString();
+  const result = clusterAndBalanceStories([
+    story("expired", "Expired Regional Transit Disruption", "Publisher A", stale),
+    story("current", "Current Municipal Water Service Interruption", "Publisher B", fresh),
+  ]);
+  assert.deepEqual(result.map((item) => item.id), ["current"]);
 });
