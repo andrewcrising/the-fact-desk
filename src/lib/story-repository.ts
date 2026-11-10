@@ -174,6 +174,8 @@ async function mapPersistedStory(row: StoryRow): Promise<PersistedStory> {
 function mapMockStory(story: Story): PersistedStory {
   return {
     ...story,
+    // Demo/cache payloads are not reviewer attestations, even if they carry an origin field.
+    verifiedIndependentOrigins: story.sources.map(() => null),
     status: "published",
     homepageRank: null,
     isLead: story.signal === "Top Signal",
