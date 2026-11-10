@@ -266,6 +266,11 @@ export async function readBoundedRssBody(response: Response, maxBytes = 262144):
       if (bytes > maxBytes) throw new Error("RSS body exceeds size limit");
       chunks.push(value);
     }
+  } catch (error) {
+    // Do not leave an oversized upstream response streaming after rejection.
+    // Do not await cancellation: a non-cooperative source must not hang cleanup.
+    void reader.cancel().catch(() => {});
+    throw error;
   } finally {
     reader.releaseLock();
   }
