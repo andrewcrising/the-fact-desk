@@ -1,7 +1,20 @@
 -- Execute only in a disposable PostgreSQL test database with the base schema
 -- and the review migration installed. All changes roll back.
 begin;
-do $$
+-- Verify least-privilege grants without connecting as production roles.
+do $privileges$
+begin
+  if has_table_privilege('anon', 'public.story_source_reviews', 'SELECT')
+     or has_table_privilege('authenticated', 'public.story_source_reviews', 'INSERT')
+     or has_function_privilege('anon', 'public.attest_story_source_origin(uuid,uuid,text,text,text)', 'EXECUTE')
+     or has_function_privilege('authenticated', 'public.attest_story_source_origin(uuid,uuid,text,text,text)', 'EXECUTE') then
+    raise exception 'Unprivileged provenance access granted';
+  end if;
+  if not has_function_privilege('service_role', 'public.attest_story_source_origin(uuid,uuid,text,text,text)', 'EXECUTE') then
+    raise exception 'Service role cannot execute attestation RPC';
+  end if;
+end $privileges$;
+do $
 declare
   v_source uuid := gen_random_uuid();
   v_story uuid := gen_random_uuid();
@@ -18,6 +31,11 @@ begin
   if v_ok then raise exception 'Stale URL accepted'; end if;
   select public.attest_story_source_origin(v_story,v_link,'https://example.org/original','origin-A','reviewer-A') into v_ok;
   if not v_ok then raise exception 'Valid review rejected'; end if;
+  -- A no-op URL update must not discard a valid attestation.
+  update public.story_sources set url='https://example.org/original' where id=v_link;
+  if not exists (select 1 from public.story_source_reviews where story_source_id=v_link and origin_id='origin-A') then
+    raise exception 'No-op URL update incorrectly revoked attestation';
+  end if;
   update public.story_sources set url='https://example.org/replaced' where id=v_link;
   select origin_id into v_origin from public.story_source_reviews
     where story_source_id=v_link and attested_url=(select url from public.story_sources where id=v_link);
