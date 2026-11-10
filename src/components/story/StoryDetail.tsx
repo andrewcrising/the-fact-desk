@@ -1,3 +1,4 @@
+import { safeArticleUrl } from "@/lib/article-source-links";
 import { ConfidenceLabel } from "@/components/ui/ConfidenceLabel";
 import { SignalLabel } from "@/components/ui/SignalLabel";
 import {
@@ -15,18 +16,6 @@ interface StoryDetailProps {
 export function StoryDetail({ story }: StoryDetailProps) {
   const sourceUrls = story.sourceUrls ?? [];
   const linksAreAligned = sourceUrls.length === story.sources.length;
-  // Story URLs can originate in external feeds. Never render non-web schemes as links.
-  const safeArticleUrl = (value: string | undefined): string | null => {
-    if (!value) return null;
-    try {
-      const parsed = new URL(value);
-      return (parsed.protocol === "https:" || parsed.protocol === "http:") &&
-        Boolean(parsed.hostname) && !parsed.username && !parsed.password
-        ? parsed.href : null;
-    } catch {
-      return null;
-    }
-  };
   const priority = getStoryPriority(story);
 
   return (
