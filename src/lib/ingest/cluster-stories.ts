@@ -1,4 +1,4 @@
-import { sourceKindAt, storyPriorityScore } from "@/lib/stories";
+import { sourceKindAt, storyPriorityScore, verifiedIndependentEvidenceCount } from "@/lib/stories";
 import {
   storyHasViewpoint,
   type ViewpointBand,
@@ -196,7 +196,7 @@ function balanceStories(stories: Story[]): Story[] {
   const compareStories = (a: Story, b: Story): number => {
     const priorityDelta = storyPriorityScore(b) - storyPriorityScore(a);
     if (priorityDelta !== 0) return priorityDelta;
-    const coverageDelta = Math.min(new Set((b.verifiedIndependentOrigins ?? []).filter((origin): origin is string => Boolean(origin?.trim())).map((origin) => origin.trim().toLowerCase())).size, 4) - Math.min(new Set((a.verifiedIndependentOrigins ?? []).filter((origin): origin is string => Boolean(origin?.trim())).map((origin) => origin.trim().toLowerCase())).size, 4);
+    const coverageDelta = Math.min(verifiedIndependentEvidenceCount(b), 4) - Math.min(verifiedIndependentEvidenceCount(a), 4);
     if (coverageDelta !== 0) return coverageDelta;
     return Date.parse(b.updatedAt) - Date.parse(a.updatedAt);
   };
