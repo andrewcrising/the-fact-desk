@@ -114,7 +114,7 @@ export function isPrimaryBackedStory(story: Story): boolean {
 }
 
 export function isMultiSourceStory(story: Story): boolean {
-  return independentEvidenceSourceCount(story) >= 2;
+  return verifiedIndependentEvidenceCount(story) >= 2;
 }
 
 export function isAutomaticLeadEligible(story: Story): boolean {
