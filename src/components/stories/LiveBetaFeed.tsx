@@ -36,6 +36,23 @@ function LiveBetaCard({ story }: { story: Story }) {
       <p className="mt-1.5 line-clamp-2 text-[13px] leading-relaxed text-[var(--muted)]">
         {story.summary}
       </p>
+      {story.sources.length > 1 && (
+        <div className="mt-2 border-t border-[var(--border-subtle)] pt-2">
+          <p className="text-[10px] text-[var(--muted)]">Related publisher reports · not independently verified</p>
+          <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1">
+            {story.sources.map((source, index) => {
+              const url = safeArticleUrl(story.sourceUrls?.[index]);
+              return url ? (
+                <a key={url} href={url} target="_blank" rel="noopener noreferrer"
+                  onClick={(event) => event.stopPropagation()}
+                  className="text-[12px] font-medium text-[var(--accent)] hover:underline">
+                  {source}
+                </a>
+              ) : null;
+            })}
+          </div>
+        </div>
+      )}
       <div className="mt-2 flex flex-wrap items-center justify-between gap-2 border-t border-[var(--border-subtle)] pt-2">
         <time
           dateTime={story.updatedAt}
