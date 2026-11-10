@@ -71,7 +71,7 @@ function LiveBetaCard({ story }: { story: Story }) {
 
   return (
     <DeskCard className="transition-colors hover:border-[var(--border)]">
-      {externalUrl ? (
+      {externalUrl && story.sources.length === 1 ? (
         <a
           href={externalUrl}
           target="_blank"
