@@ -3,6 +3,7 @@ import type { Story } from "@/types/story";
 
 interface DeskTickerProps {
   stories: Story[];
+  discoveryStories?: Story[];
 }
 
 const STAT_ITEMS = [
@@ -12,7 +13,7 @@ const STAT_ITEMS = [
   { key: "sourcesTracked" as const, label: "Sources tracked" },
 ] as const;
 
-export function DeskTicker({ stories }: DeskTickerProps) {
+export function DeskTicker({ stories, discoveryStories = [] }: DeskTickerProps) {
   const stats = getDeskStats(stories);
 
   return (
@@ -31,6 +32,10 @@ export function DeskTicker({ stories }: DeskTickerProps) {
             </span>
           </div>
         ))}
+        <div className="shrink-0 px-3 py-1.5 sm:px-4">
+          <span className="desk-kicker text-[8px] text-[var(--muted-light)]">Unreviewed source reports</span>
+          <span className="ml-1.5 font-mono text-sm font-semibold tabular-nums">{discoveryStories.length}</span>
+        </div>
         <div className="shrink-0 px-3 py-1.5 sm:px-4">
           <span className="desk-kicker text-[8px] text-[var(--muted-light)]">
             Credibility
