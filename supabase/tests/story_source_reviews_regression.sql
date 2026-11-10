@@ -14,7 +14,7 @@ begin
     raise exception 'Service role cannot execute attestation RPC';
   end if;
 end $privileges$;
-do $
+do $regression$
 declare
   v_source uuid := gen_random_uuid();
   v_story uuid := gen_random_uuid();
@@ -64,5 +64,5 @@ begin
   if exists(select 1 from public.story_source_reviews where story_source_id=v_link) then
     raise exception 'Deleted source retained review';
   end if;
-end $$;
+end $regression$;
 rollback;
