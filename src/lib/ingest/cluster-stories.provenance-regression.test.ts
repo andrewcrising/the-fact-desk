@@ -62,3 +62,21 @@ test("identical substantive syndicated text is not independent corroboration", (
   assert.deepEqual(result.sourceKinds, ["publisher", "open-web"]);
   assert.notEqual(result.signal, "Cross-angle");
 });
+
+test("inherited Cross-angle is revoked when citations are unverified", () => {
+  const result = clusterAndBalanceStories([
+    item("a", "Publisher A", "", { signal: "Cross-angle" }),
+    item("b", "Publisher B", "https://user:pass@publisher.example/b")
+  ])[0];
+  assert.equal(result.signal, "Developing");
+  assert.equal(result.confidence, "Single-source");
+});
+
+test("disputed Cross-angle input cannot survive a failed corroboration gate", () => {
+  const result = clusterAndBalanceStories([
+    item("a", "Publisher A", "https://a.example/report", { signal: "Cross-angle", confidence: "Disputed" }),
+    item("b", "Publisher B", "https://b.example/report")
+  ])[0];
+  assert.equal(result.signal, "Developing");
+  assert.equal(result.confidence, "Disputed");
+});
