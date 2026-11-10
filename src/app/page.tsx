@@ -24,6 +24,9 @@ const EVALUATION_FEEDS = [
   { url: "https://www.nasa.gov/news-release/feed/", name: "NASA", category: "Technology" },
   { url: "https://www.federalreserve.gov/feeds/press_all.xml", name: "Federal Reserve", category: "Markets" },
   { url: "https://www.justice.gov/news/rss", name: "U.S. Department of Justice", category: "Courts" },
+  { url: "https://feeds.bbci.co.uk/news/health/rss.xml", name: "BBC Health", category: "Health" },
+  { url: "https://feeds.bbci.co.uk/news/science_and_environment/rss.xml", name: "BBC Science", category: "Energy" },
+  { url: "https://www.theguardian.com/culture/rss", name: "The Guardian", category: "Culture" },
 ] as const;
 const DISCOVERY_TTL_MS = 5 * 60 * 1000;
 let discoveryCache: { stories: Story[]; fetchedAt: string; expiresAt: number } | null = null;
