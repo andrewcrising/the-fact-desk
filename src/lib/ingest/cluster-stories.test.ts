@@ -129,3 +129,20 @@ test("rejects stories older than the production fourteen-day freshness window", 
   ]);
   assert.deepEqual(result.map((item) => item.id), ["current"]);
 });
+
+test("two related unreviewed publishers remain discovery, not verified corroboration", () => {
+  const now = new Date().toISOString();
+  const title = "Regional Authority Announces Emergency Water Supply Restrictions";
+  const a = story("unreviewed-a", title, "Publisher A", now);
+  const b = story("unreviewed-b", title, "Publisher B", now);
+  const merged = clusterAndBalanceStories([a, b]);
+  assert.equal(merged.length, 1);
+  assert.deepEqual(merged[0]?.sources, ["Publisher A", "Publisher B"]);
+  assert.deepEqual(merged[0]?.verifiedIndependentOrigins, [null, null]);
+  assert.equal(merged[0]?.confidence, "Single-source");
+  assert.notEqual(merged[0]?.signal, "Cross-angle");
+  assert.deepEqual(merged[0]?.sourceUrls, [
+    "https://example.com/unreviewed-a",
+    "https://example.com/unreviewed-b",
+  ]);
+});
