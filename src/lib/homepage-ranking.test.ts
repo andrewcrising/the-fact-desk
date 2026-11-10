@@ -125,3 +125,20 @@ test("explicit editorial lead remains authoritative without provenance", () => {
   const verified = story({ id: "verified", storySources: [{}, {}], verifiedIndependentOrigins: ["a", "b"] });
   assert.equal(rankHomepageStories([verified, lead])[0]?.id, "lead");
 });
+
+
+test("whitespace variants of the same origin cannot manufacture corroboration", () => {
+  const duplicated = story({
+    id: "duplicated",
+    storySources: [{}, {}],
+    verifiedIndependentOrigins: ["wire-story-1", " wire-story-1 "],
+    confidence: "Developing",
+  });
+  const distinct = story({
+    id: "distinct",
+    storySources: [{}, {}],
+    verifiedIndependentOrigins: ["wire-story-1", "original-report-2"],
+    confidence: "Developing",
+  });
+  assert.equal(rankHomepageStories([duplicated, distinct])[0]?.id, "distinct");
+});
