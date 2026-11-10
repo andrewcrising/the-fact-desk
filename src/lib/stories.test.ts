@@ -7,6 +7,7 @@ import {
   isPrimaryBackedStory,
   partitionLiveStoriesByEvidence,
   uniqueSourceCount,
+  storyPriorityScore,
 } from "./stories";
 
 function story(overrides: Partial<Story> & Pick<Story, "id">): Story {
@@ -111,4 +112,18 @@ test("multi-source lane ranks stronger corroboration above fresher weak coverage
 
   const buckets = partitionLiveStoriesByEvidence([fresher, stronger]);
   assert.equal(buckets.multiSource[0]?.id, "stronger");
+});
+
+test("unverified extra publishers cannot inflate live priority evidence bonus", () => {
+  const baseline = story({ id: "baseline", sources: ["Outlet A"], sourceUrls: ["https://a.example/one"], sourceKinds: ["publisher"] });
+  const syndicated = story({ ...baseline, id: "syndicated", sources: ["Outlet A", "Outlet B", "Outlet C"], sourceUrls: ["https://a.example/one", "https://b.example/two", "https://c.example/three"], sourceKinds: ["publisher", "publisher", "publisher"] });
+  assert.equal(storyPriorityScore(syndicated), storyPriorityScore(baseline));
+});
+
+test("distinct verified origins increase priority evidence, duplicate origins do not", () => {
+  const baseline = story({ id: "baseline", sources: ["Outlet A"], sourceUrls: ["https://a.example/one"], sourceKinds: ["publisher"], verifiedIndependentOrigins: ["original-a"] });
+  const duplicated = story({ ...baseline, id: "duplicate", sources: ["Outlet A", "Outlet B"], sourceUrls: ["https://a.example/one", "https://b.example/two"], sourceKinds: ["publisher", "publisher"], verifiedIndependentOrigins: ["original-a", " original-a "] });
+  const independent = story({ ...duplicated, id: "independent", verifiedIndependentOrigins: ["original-a", "original-b"] });
+  assert.equal(storyPriorityScore(duplicated), storyPriorityScore(baseline));
+  assert.equal(storyPriorityScore(independent) - storyPriorityScore(baseline), 7);
 });
