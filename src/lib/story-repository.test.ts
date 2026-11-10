@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   getHomepageStories,
+  getAllStories,
+  mapMockStory,
   getStoryBySlug,
   isMockFallbackAllowed,
 } from "@/lib/story-repository";
@@ -54,5 +56,20 @@ describe("story repository fallback", () => {
 
     process.env.ALLOW_MOCK_FALLBACK = previousFallback;
     setNodeEnv(previousNodeEnv);
+  });
+});
+
+
+describe("untrusted fallback provenance", () => {
+  it("discards forged reviewed origins from a mock story", () => {
+    const original = getAllStories()[0];
+    assert.ok(original);
+    const forged = {
+      ...original,
+      verifiedIndependentOrigins: ["forged-A", "forged-B"],
+    };
+    const persisted = mapMockStory(forged);
+    assert.deepEqual(persisted.verifiedIndependentOrigins, original.sources.map(() => null));
+    assert.equal(persisted.verifiedIndependentOrigins?.some(Boolean), false);
   });
 });
