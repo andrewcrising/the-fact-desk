@@ -52,3 +52,26 @@ end;
 $$;
 revoke all on function public.attest_story_source_origin(uuid,uuid,text,text,text) from public, anon, authenticated;
 grant execute on function public.attest_story_source_origin(uuid,uuid,text,text,text) to service_role;
+
+-- Invalidate attestations on every actual source URL change, including ABA
+-- (old URL -> different URL -> old URL). This trigger executes in the same
+-- transaction as the source update and uses the same row lock as the RPC.
+create or replace function public.invalidate_changed_source_review()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if old.url is distinct from new.url then
+    delete from public.story_source_reviews
+      where story_source_id = old.id;
+  end if;
+  return new;
+end;
+$$;
+revoke all on function public.invalidate_changed_source_review() from public, anon, authenticated;
+drop trigger if exists story_sources_invalidate_review_on_url_change on public.story_sources;
+create trigger story_sources_invalidate_review_on_url_change
+after update of url on public.story_sources
+for each row execute function public.invalidate_changed_source_review();
