@@ -22,6 +22,14 @@ begin
   select origin_id into v_origin from public.story_source_reviews
     where story_source_id=v_link and attested_url=(select url from public.story_sources where id=v_link);
   if v_origin is not null then raise exception 'Replaced URL retained verified origin'; end if;
+  if exists (select 1 from public.story_source_reviews where story_source_id=v_link) then
+    raise exception 'URL replacement failed to revoke prior attestation';
+  end if;
+  update public.story_sources set url='https://example.org/original' where id=v_link;
+  if exists (select 1 from public.story_source_reviews where story_source_id=v_link) then
+    raise exception 'ABA URL restoration resurrected old attestation';
+  end if;
+  update public.story_sources set url='https://example.org/replaced' where id=v_link;
   select public.attest_story_source_origin(v_story,v_link,'https://example.org/original','origin-B','reviewer-B') into v_ok;
   if v_ok then raise exception 'Concurrent/stale reviewer URL accepted'; end if;
   select public.attest_story_source_origin(v_story,v_link,'https://example.org/replaced','origin-B','reviewer-B') into v_ok;
