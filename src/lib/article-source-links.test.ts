@@ -14,3 +14,24 @@ test("reader citations refuse dangerous schemes, credentials and malformed links
     "https://", "not-a-url", "", undefined,
   ]) assert.equal(safeArticleUrl(url), null, String(url));
 });
+
+test("live discovery link guard rejects untrusted feed citations", () => {
+  const candidates = [
+    "javascript:alert(document.domain)",
+    "data:text/html,unsafe",
+    "https://editor:secret@example.org/report",
+    "relative/story",
+    "https://",
+  ];
+  for (const candidate of candidates) {
+    assert.equal(safeArticleUrl(candidate), null, candidate);
+  }
+  assert.equal(safeArticleUrl("https://publisher.example/article"), "https://publisher.example/article");
+});
+
+test("live feed renders only URLs that passed the citation guard", async () => {
+  const { readFile } = await import("node:fs/promises");
+  const component = await readFile("src/components/stories/LiveBetaFeed.tsx", "utf8");
+  assert.match(component, /safeArticleUrl\(story\.sourceUrls\?\.\[0\]\)/);
+  assert.doesNotMatch(component, /const externalUrl = story\.sourceUrls\?\.\[0\]/);
+});
