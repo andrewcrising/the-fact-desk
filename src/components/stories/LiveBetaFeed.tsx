@@ -130,7 +130,7 @@ export function LiveBetaFeed({
 }: LiveBetaFeedProps) {
   const statusLine =
     source === "live"
-      ? "Live RSS · refreshes about every 15 minutes"
+      ? "RSS discovery · per-Worker cache up to 5 minutes"
       : "Cached RSS fallback · run ingest locally or wait for cron";
   const heading = activeCategory
     ? `${activeCategory} Evidence Feed`
@@ -147,8 +147,7 @@ export function LiveBetaFeed({
         <div>
           <DeskLabel id="live-beta-heading">{heading}</DeskLabel>
           <p className="mt-0.5 max-w-2xl text-[11px] leading-snug text-[var(--muted-light)]">
-            Multi-source coverage leads. Primary-only updates are separated, and
-            single-newsroom items remain incoming signals until corroborated.
+            Related publisher reports are linked individually, not independently verified. Primary updates and single-newsroom reports remain unreviewed discovery.
           </p>
         </div>
         {fetchedAt && (
