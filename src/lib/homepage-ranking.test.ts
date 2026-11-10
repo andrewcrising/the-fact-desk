@@ -96,6 +96,7 @@ test("single-source Top Signal cannot outrank supported unpinned coverage", () =
     confidence: "Developing",
     signal: "Developing",
     storySources: [{}, {}],
+    verifiedIndependentOrigins: ["independent-a", "independent-b"],
     updatedAt: "2026-08-20T12:00:00.000Z",
   });
 
@@ -103,4 +104,41 @@ test("single-source Top Signal cannot outrank supported unpinned coverage", () =
     rankHomepageStories([singleTopSignal, supported])[0]?.id,
     "supported",
   );
+});
+
+
+test("unverified syndicated copies do not receive automatic corroboration", () => {
+  const syndicated = story({ id: "syndicated", storySources: [{}, {}, {}], verifiedIndependentOrigins: [null, null, null], confidence: "Developing" });
+  const verified = story({ id: "verified", storySources: [{}, {}], verifiedIndependentOrigins: ["origin-a", "origin-b"], confidence: "Developing" });
+  assert.equal(rankHomepageStories([syndicated, verified])[0]?.id, "verified");
+});
+
+test("duplicate and malformed origins fail closed", () => {
+  const duplicate = story({ id: "duplicate", storySources: [{}, {}, {}], verifiedIndependentOrigins: ["wire", "wire", "wire"] });
+  const malformed = story({ id: "malformed", storySources: [{}, {}], verifiedIndependentOrigins: ["origin-a"] });
+  const verified = story({ id: "verified", storySources: [{}, {}], verifiedIndependentOrigins: ["origin-a", "origin-b"] });
+  assert.equal(rankHomepageStories([duplicate, malformed, verified])[0]?.id, "verified");
+});
+
+test("explicit editorial lead remains authoritative without provenance", () => {
+  const lead = story({ id: "lead", isLead: true, storySources: [{}] });
+  const verified = story({ id: "verified", storySources: [{}, {}], verifiedIndependentOrigins: ["a", "b"] });
+  assert.equal(rankHomepageStories([verified, lead])[0]?.id, "lead");
+});
+
+
+test("whitespace variants of the same origin cannot manufacture corroboration", () => {
+  const duplicated = story({
+    id: "duplicated",
+    storySources: [{}, {}],
+    verifiedIndependentOrigins: ["wire-story-1", " wire-story-1 "],
+    confidence: "Developing",
+  });
+  const distinct = story({
+    id: "distinct",
+    storySources: [{}, {}],
+    verifiedIndependentOrigins: ["wire-story-1", "original-report-2"],
+    confidence: "Developing",
+  });
+  assert.equal(rankHomepageStories([duplicated, distinct])[0]?.id, "distinct");
 });
