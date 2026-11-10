@@ -174,7 +174,7 @@ function mergeCluster(cluster: Story[]): Story {
     confidence: ordered.some((story) => story.confidence === "Disputed")
       ? "Disputed"
       : multiSource ? "Developing" : "Single-source",
-    signal: multiSource ? "Cross-angle" : representative.signal,
+    signal: multiSource ? "Cross-angle" : representative.signal === "Cross-angle" ? "Developing" : representative.signal,
     sources,
     sourceUrls: linkedUrls.map((url) => url ?? ""),
     sourceKinds,
