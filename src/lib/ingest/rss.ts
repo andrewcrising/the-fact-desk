@@ -250,6 +250,31 @@ function normalizeItem(
   };
 }
 
+/** Bound remote RSS bodies before XML parsing; never trust Content-Length. */
+export async function readBoundedRssBody(response: Response, maxBytes = 262144): Promise<string> {
+  const declared = Number(response.headers.get("content-length"));
+  if (Number.isFinite(declared) && declared > maxBytes) throw new Error("RSS body exceeds size limit");
+  if (!response.body) return "";
+  const reader = response.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let bytes = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      bytes += value.byteLength;
+      if (bytes > maxBytes) throw new Error("RSS body exceeds size limit");
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+  const joined = new Uint8Array(bytes);
+  let offset = 0;
+  for (const chunk of chunks) { joined.set(chunk, offset); offset += chunk.byteLength; }
+  return new TextDecoder().decode(joined);
+}
+
 export async function fetchRssStories(
   feedUrl: string,
   options: FetchRssStoriesOptions = {},
@@ -265,7 +290,7 @@ export async function fetchRssStories(
       next: { revalidate: 300 },
     });
     if (!response.ok) throw new Error(`Feed returned ${response.status}`);
-    const xml = await response.text();
+    const xml = await readBoundedRssBody(response);
     const items = parseRssItems(xml).slice(0, limit);
     return items.map((item, index) => normalizeItem(item, index, options));
   } catch (error) {
@@ -290,7 +315,7 @@ export async function fetchRssFeedItems(
       next: { revalidate: 300 },
     });
     if (!response.ok) throw new Error(`Feed returned ${response.status}`);
-    const xml = await response.text();
+    const xml = await readBoundedRssBody(response);
     return parseRssItems(xml).slice(0, limit);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown RSS error";
