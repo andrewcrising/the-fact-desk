@@ -31,7 +31,9 @@ begin
      or length(p_origin_id) > 256 or p_origin_id <> btrim(p_origin_id)
      or nullif(btrim(p_reviewer_id), '') is null
      or length(p_reviewer_id) > 256 or p_reviewer_id <> btrim(p_reviewer_id)
-     or p_expected_url is null then
+     or p_expected_url is null
+     or p_expected_url !~* '^https?://[^/@[:space:]]+(/|\\?|#|$)'
+     or p_expected_url ~ '[[:space:]]' then
     raise exception 'Invalid attestation';
   end if;
   select s.url into v_url from public.story_sources s
