@@ -147,7 +147,7 @@ function confidenceWeight(confidence: Confidence): number {
 
 function liveEvidenceScore(story: Story): number {
   return (
-    Math.min(independentEvidenceSourceCount(story), 4) * 10 +
+    Math.min(verifiedIndependentEvidenceCount(story), 4) * 10 +
     confidenceWeight(story.confidence) +
     (isPrimaryBackedStory(story) ? 12 : 0)
   );
@@ -196,7 +196,7 @@ function categoryImpactScore(category: StoryCategory): number {
 
 /** Editorial urgency score, not a truth score. */
 export function storyPriorityScore(story: Story): number {
-  const evidence = Math.min(independentEvidenceSourceCount(story), 4) * 7;
+  const evidence = Math.min(verifiedIndependentEvidenceCount(story), 4) * 7;
   const confidence =
     story.confidence === "Confirmed"
       ? 8
