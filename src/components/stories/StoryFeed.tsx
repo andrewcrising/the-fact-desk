@@ -129,7 +129,7 @@ export function StoryFeed({
     <div className="space-y-3">
       {publisherStories.length > 0 && <MobilePriorityRail stories={publisherStories} />}
 
-      {showLiveBeta && discoveryStories.length > 0 && (
+      {showLiveBeta && discoveryStories.some(isSocialOnlyStory) && (
         <EarlySignalRail
           stories={discoveryStories}
           excludedStories={earlySignalExclusions}
