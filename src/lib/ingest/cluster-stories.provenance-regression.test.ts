@@ -80,3 +80,28 @@ test("disputed Cross-angle input cannot survive a failed corroboration gate", ()
   assert.equal(result.signal, "Developing");
   assert.equal(result.confidence, "Disputed");
 });
+
+test("different publisher domains without attested origins cannot create Cross-angle", () => {
+  const result = clusterAndBalanceStories([
+    item("unverified-a", "Publisher A", "https://a.example/report"),
+    item("unverified-b", "Publisher B", "https://b.example/report"),
+  ])[0];
+  assert.equal(result.signal, "Developing");
+  assert.equal(result.confidence, "Single-source");
+});
+
+test("distinct attested reporting origins support Cross-angle", () => {
+  const result = clusterAndBalanceStories([
+    item("attested-a", "Publisher A", "https://a.example/report", { verifiedIndependentOrigins: ["origin-a"] }),
+    item("attested-b", "Publisher B", "https://b.example/report", { verifiedIndependentOrigins: ["origin-b"] }),
+  ])[0];
+  assert.equal(result.signal, "Cross-angle");
+});
+
+test("different domains sharing one wire origin do not establish independence", () => {
+  const result = clusterAndBalanceStories([
+    item("wire-a", "Publisher A", "https://a.example/report", { verifiedIndependentOrigins: ["wire-1"] }),
+    item("wire-b", "Publisher B", "https://b.example/report", { verifiedIndependentOrigins: [" wire-1 "] }),
+  ])[0];
+  assert.equal(result.signal, "Developing");
+});
