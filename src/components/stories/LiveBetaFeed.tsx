@@ -1,3 +1,4 @@
+import { safeArticleUrl } from "@/lib/article-source-links";
 import { ConfidenceLabel } from "@/components/ui/ConfidenceLabel";
 import { DeskCard } from "@/components/ui/DeskCard";
 import { DeskLabel } from "@/components/ui/DeskLabel";
@@ -18,7 +19,7 @@ interface LiveBetaFeedProps {
 }
 
 function LiveBetaCard({ story }: { story: Story }) {
-  const externalUrl = story.sourceUrls?.[0];
+  const externalUrl = safeArticleUrl(story.sourceUrls?.[0]);
 
   const content = (
     <>
