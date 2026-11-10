@@ -26,11 +26,16 @@ export async function PUT(request: NextRequest, { params }: Context) {
     if (!["http:", "https:"].includes(parsed.protocol) || parsed.username || parsed.password) {
       throw new Error("Source URL is not reviewable");
     }
-    const { error } = await db.from("story_source_reviews").upsert({
-      story_source_id: sourceId, attested_url: source.url, origin_id: origin.trim(), reviewed_by: reviewer,
-      reviewed_at: new Date().toISOString(),
-    }, { onConflict: "story_source_id" });
+    const expectedUrl = (body as Record<string, unknown>).expectedUrl;
+    if (typeof expectedUrl !== "string" || expectedUrl !== source.url) {
+      return NextResponse.json({ ok: false, error: "Stale source review" }, { status: 409 });
+    }
+    const { data: accepted, error } = await db.rpc("attest_story_source_origin", {
+      p_story_id: id, p_source_id: sourceId, p_expected_url: expectedUrl,
+      p_origin_id: origin.trim(), p_reviewer_id: reviewer,
+    });
     if (error) throw error;
+    if (accepted !== true) return NextResponse.json({ ok: false, error: "Stale source review" }, { status: 409 });
     return NextResponse.json({ ok: true, sourceId });
   } catch (error) {
     return NextResponse.json({ ok: false, error: error instanceof Error ? error.message : "Review failed" }, { status: 400 });
