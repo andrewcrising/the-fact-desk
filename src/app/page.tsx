@@ -35,7 +35,7 @@ let pendingDiscovery: Promise<Story[]> | null = null;
 async function fetchDiscovery(): Promise<Story[]> {
   const seen = new Set<string>();
   const stories: Story[] = [];
-  // Three concurrent requests at most, two reports per feed and short deadlines.
+  // Three concurrent requests at most, four reports per feed and short deadlines.
   for (let i = 0; i < EVALUATION_FEEDS.length; i += 3) {
     const batch = EVALUATION_FEEDS.slice(i, i + 3);
     const results = await Promise.allSettled(batch.map((feed) =>
@@ -43,7 +43,7 @@ async function fetchDiscovery(): Promise<Story[]> {
         sourceName: feed.name,
         category: feed.category,
         signal: "Developing",
-        limit: 2,
+        limit: 4,
         timeoutMs: 2300,
         strict: true,
       }),
