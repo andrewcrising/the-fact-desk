@@ -18,7 +18,7 @@ export interface HomepageRankableStory {
 function verifiedOriginCount(story: HomepageRankableStory): number {
   const origins = story.verifiedIndependentOrigins;
   if (!origins || origins.length !== story.storySources.length) return 0;
-  return new Set(origins.filter((origin): origin is string => typeof origin === "string" && origin.trim().length > 0)).size;
+  return new Set(origins.filter((origin): origin is string => typeof origin === "string").map((origin) => origin.trim()).filter(Boolean)).size;
 }
 
 function automatedScore(story: HomepageRankableStory): number {
