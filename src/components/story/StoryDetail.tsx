@@ -15,6 +15,18 @@ interface StoryDetailProps {
 export function StoryDetail({ story }: StoryDetailProps) {
   const sourceUrls = story.sourceUrls ?? [];
   const linksAreAligned = sourceUrls.length === story.sources.length;
+  // Story URLs can originate in external feeds. Never render non-web schemes as links.
+  const safeArticleUrl = (value: string | undefined): string | null => {
+    if (!value) return null;
+    try {
+      const parsed = new URL(value);
+      return (parsed.protocol === "https:" || parsed.protocol === "http:") &&
+        Boolean(parsed.hostname) && !parsed.username && !parsed.password
+        ? parsed.href : null;
+    } catch {
+      return null;
+    }
+  };
   const priority = getStoryPriority(story);
 
   return (
@@ -105,7 +117,7 @@ export function StoryDetail({ story }: StoryDetailProps) {
         </h2>
         <ul className="space-y-2 text-sm">
           {story.sources.map((sourceName, index) => {
-            const url = linksAreAligned ? sourceUrls[index] : undefined;
+            const url = safeArticleUrl(linksAreAligned ? sourceUrls[index] : undefined);
             return (
               <li key={`${sourceName}-${index}`}>
                 {url ? (
