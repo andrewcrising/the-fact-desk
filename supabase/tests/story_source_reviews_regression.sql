@@ -29,6 +29,14 @@ begin
     values(v_link,v_story,v_source,'https://example.org/original','Fixture','Fixture publisher');
   select public.attest_story_source_origin(v_story,v_link,'https://example.org/stale','origin-A','reviewer-A') into v_ok;
   if v_ok then raise exception 'Stale URL accepted'; end if;
+  -- Even service-role RPC callers must not attest arbitrary schemes.
+  begin
+    perform public.attest_story_source_origin(v_story,v_link,'javascript:alert(1)','origin-A','reviewer-A');
+    raise exception 'Non-HTTP attestation unexpectedly accepted';
+  exception
+    when others then
+      if sqlerrm = 'Non-HTTP attestation unexpectedly accepted' then raise; end if;
+  end;
   select public.attest_story_source_origin(v_story,v_link,'https://example.org/original','origin-A','reviewer-A') into v_ok;
   if not v_ok then raise exception 'Valid review rejected'; end if;
   -- A no-op URL update must not discard a valid attestation.
