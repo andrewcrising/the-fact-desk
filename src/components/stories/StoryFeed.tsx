@@ -1,6 +1,7 @@
 "use client";
 
 import { STORY_CATEGORIES } from "@/data/navigation";
+import { safeArticleUrl } from "@/lib/article-source-links";
 import { ReaderSupportCard } from "@/components/support/ReaderSupportCard";
 import {
   HealthDeskIntro,
@@ -121,7 +122,8 @@ export function StoryFeed({
     [allStories],
   );
 
-  const counts = useMemo(() => categoryCounts(allStories), [allStories]);
+  const counts = useMemo(() => categoryCounts([...allStories, ...livePreviewStories]), [allStories, livePreviewStories]);
+  const discoveryLead = !topPriority ? discoveryStories.find((story) => safeArticleUrl(story.sourceUrls?.[0])) : undefined;
 
   return (
     <div className="space-y-3">
@@ -134,6 +136,19 @@ export function StoryFeed({
         />
       )}
 
+      {!topPriority && discoveryLead && (
+        <section aria-label="Leading unreviewed discovery" className="desk-card border-l-4 border-l-amber-400 px-5 py-4">
+          <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--muted)]">
+            Latest source report · unreviewed · not confirmed
+          </p>
+          <a href={safeArticleUrl(discoveryLead.sourceUrls?.[0]) || "#"} target="_blank" rel="noopener noreferrer"
+            className="mt-1 block font-serif text-xl font-semibold hover:underline">
+            {discoveryLead.title}
+          </a>
+          <p className="mt-1 text-sm text-[var(--muted)]">{discoveryLead.summary}</p>
+          <p className="mt-2 text-xs text-[var(--muted)]">Source: {discoveryLead.sources.join(" · ")}. This is not a reviewed Fact Desk lead.</p>
+        </section>
+      )}
       {topPriority && (
         <section aria-labelledby="top-priority-heading">
           <h2 id="top-priority-heading" className="sr-only">
@@ -143,11 +158,11 @@ export function StoryFeed({
         </section>
       )}
 
-      <DeskTicker stories={allStories} />
+      <DeskTicker stories={allStories} discoveryStories={discoveryStories} />
 
       <CategoryFilter active={activeCategory} onChange={setCategory} counts={counts} />
 
-      {filtered.length === 0 && (
+      {filtered.length === 0 && discoveryStories.length === 0 && (
         <div className="desk-card border-dashed px-6 py-8 text-center">
           <p className="text-sm text-[var(--muted)]">
             No reviewed stories are currently published in this category.
