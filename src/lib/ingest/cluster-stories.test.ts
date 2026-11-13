@@ -109,11 +109,12 @@ test("unverified source cannot inherit representative verified origin", () => {
   ]);
 });
 
-test("conflicting origin for repeated publisher is not considered verified", () => {
+test("conflicting origin for repeated article URL is not considered verified", () => {
   const now = new Date().toISOString();
   const title = "Agency Reports Major Regional Transport Service Interruption";
   const a = { ...story("conflict-a", title, "Publisher A", now), verifiedIndependentOrigins: ["original-a"] };
   const b = { ...story("conflict-b", title, "Publisher A", now), verifiedIndependentOrigins: ["original-b"] };
+  b.sourceUrls = a.sourceUrls;
   const merged = clusterAndBalanceStories([a, b]);
   assert.equal(merged.length, 1);
   assert.deepEqual(merged[0].verifiedIndependentOrigins, [null]);
@@ -145,4 +146,22 @@ test("two related unreviewed publishers remain discovery, not verified corrobora
     "https://example.com/unreviewed-a",
     "https://example.com/unreviewed-b",
   ]);
+});
+
+test("institutional headline templates do not merge unrelated releases", () => {
+  const now = new Date().toISOString();
+  const a = story("pricing", "Federal Reserve Board announces pricing for payment services", "Federal Reserve", now);
+  const b = story("order", "Federal Reserve Board announces approval of application for bank merger", "Federal Reserve", now);
+  assert.equal(clusterAndBalanceStories([a, b]).length, 2);
+});
+
+test("the representative headline and excerpt retain their own first citation", () => {
+  const now = new Date().toISOString();
+  const a = story("short", "Regional authority announces emergency water supply restrictions", "Publisher A", now);
+  const b = story("long", "Regional authority announces emergency water supply restrictions following prolonged drought", "Publisher B", now);
+  const [merged] = clusterAndBalanceStories([a, b]);
+  assert.equal(merged.title, b.title);
+  assert.equal(merged.summary, b.summary);
+  assert.equal(merged.sourceUrls?.[0], b.sourceUrls?.[0]);
+  assert.equal(merged.sources[0], b.sources[0]);
 });

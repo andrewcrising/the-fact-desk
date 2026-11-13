@@ -1,0 +1,22 @@
+import { execFileSync } from "node:child_process";
+import { resolve } from "node:path";
+import { fetchDiscoveryWithDiagnostics } from "../src/lib/discovery";
+import { summarizeFeedHealth } from "../src/lib/discovery-snapshot";
+import { produceSnapshotFile, publishSnapshot, readSnapshotHead } from "./evaluation-snapshot-store";
+
+const publish = process.argv.includes("--publish");
+const directoryIndex = process.argv.indexOf("--state-dir");
+if (directoryIndex < 0 || !process.argv[directoryIndex + 1] || process.argv[directoryIndex + 1].startsWith("--")) throw Error("Provide --state-dir outside the source tree");
+const repo = process.cwd();
+const directory = resolve(process.argv[directoryIndex + 1]);
+if (directory === repo || directory.startsWith(`${repo}/`)) throw Error("State must remain outside the source tree");
+if (publish && (process.env.FACT_DESK_EVALUATION_INGESTION_ENABLED !== "true" || process.env.FACT_DESK_NONPRODUCTION_BUILDS_DISABLED !== "true")) throw Error("Publication requires explicit ingestion and verified automatic-build isolation gates");
+if (execFileSync("git", ["status", "--porcelain"], { encoding: "utf8" }).trim()) throw Error("Commit reviewed source before ingestion; refuse misleading source provenance");
+const sourceSha = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
+const previous = publish ? readSnapshotHead(repo) : { sha: null, snapshot: null };
+const snapshot = await produceSnapshotFile({ directory, sourceSha, previous: previous.snapshot, fetch: fetchDiscoveryWithDiagnostics });
+if (publish) console.log(JSON.stringify({ publishedCommit: publishSnapshot(repo, snapshot, previous.sha) }));
+console.log(JSON.stringify(summarizeFeedHealth(snapshot), null, 2));
+const failed = snapshot.feeds.filter((f) => f.status !== "ok").length;
+if (process.env.GITHUB_ACTIONS === "true" && failed) console.warn(`::warning::${failed} evaluation feeds supplied no eligible content; inspect /api/feed-health`);
+if (!snapshot.stories.length) process.exitCode = 2;

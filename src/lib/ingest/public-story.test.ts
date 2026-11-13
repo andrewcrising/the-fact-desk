@@ -95,7 +95,7 @@ test("RSS normalization preserves a natural synopsis boundary", async () => {
         <title>Search continues after canyon flooding</title>
         <link>https://example.com/flood</link>
         <description>${firstSentence} This second sentence contains additional background that should not be cut in the middle of a word when the public synopsis reaches its maximum length.</description>
-        <pubDate>Mon, 31 Aug 2026 12:00:00 GMT</pubDate>
+        <pubDate>${new Date(Date.now() - 60_000).toUTCString()}</pubDate>
       </item></channel></rss>`,
       { status: 200, headers: { "content-type": "application/rss+xml" } },
     );
@@ -111,6 +111,13 @@ test("RSS normalization preserves a natural synopsis boundary", async () => {
   } finally {
     globalThis.fetch = originalFetch;
   }
+});
+
+test("James Bond casting coverage stays in Culture while financial bonds remain Markets", () => {
+  assert.equal(inferStoryCategory("Robert Pattinson reportedly leads James Bond contenders", "Culture"), "Culture");
+  assert.equal(inferStoryCategory("Robert Pattinson reportedly leads James Bond contenders", "World"), "Culture");
+  assert.equal(inferStoryCategory("Government bond yields rise after inflation report", "World"), "Markets");
+  assert.equal(inferStoryCategory("Corporate bonds rally after interest rate cut", "Culture"), "Markets");
 });
 
 test("court significance cannot be hijacked by unrelated words in feed context", () => {

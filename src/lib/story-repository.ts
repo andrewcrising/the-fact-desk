@@ -1,3 +1,4 @@
+import { isReadOnlyEvaluation } from "@/lib/evaluation-mode";
 /**
  * Story repository — the data access boundary for public pages, APIs, and
  * editorial tools.
@@ -81,6 +82,7 @@ export function isMergedStoriesEnabled(): boolean {
 }
 
 export function isMockFallbackAllowed(): boolean {
+  if (isReadOnlyEvaluation() || process.env.ALLOW_MOCK_FALLBACK === "false") return false;
   return (
     process.env.ALLOW_MOCK_FALLBACK === "true" ||
     process.env.NODE_ENV !== "production"
@@ -141,7 +143,7 @@ async function mapPersistedStory(row: StoryRow): Promise<PersistedStory> {
   const sourceNames =
     storySources.length > 0
       ? storySources.map((source) => source.sourceName)
-      : ["Editorial desk"];
+      : [];
 
   return {
     id: row.id,

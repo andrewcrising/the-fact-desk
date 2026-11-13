@@ -83,6 +83,12 @@ function titlesLikelyMatch(a: Story, b: Story): boolean {
   const normalizedA = normalizeTitle(a.title);
   const normalizedB = normalizeTitle(b.title);
   if (normalizedA === normalizedB) return true;
+  // Repeated institutional boilerplate must not merge separate releases.
+  // A newsroom can publish several unrelated articles in the same hour.
+  try {
+    if (a.sources[0] === b.sources[0] && aUrl && bUrl && new URL(aUrl).hostname === new URL(bUrl).hostname) return false;
+  } catch { /* Invalid links cannot establish duplicate identity. */ }
+  if (a.category !== b.category) return false;
   if (Math.abs(publishedMs(a) - publishedMs(b)) > CLUSTER_WINDOW_MS) return false;
 
   const aTerms = titleTerms(a.title);
@@ -114,10 +120,12 @@ function oldestIso(values: string[]): string {
 }
 
 function mergeCluster(cluster: Story[]): Story {
-  const ordered = [...cluster].sort((a, b) => publishedMs(b) - publishedMs(a));
-  const representative = ordered.reduce((best, story) =>
+  const sorted = [...cluster].sort((a, b) => publishedMs(b) - publishedMs(a));
+  const representative = sorted.reduce((best, story) =>
     titleTerms(story.title).size > titleTerms(best.title).size ? story : best,
   );
+
+  const ordered = [representative, ...sorted.filter((story) => story !== representative)];
 
   // A publisher label is not an article identifier. Preserve citations by URL.
   const sourceMap = new Map<string, { source: string; url: string; kind: EvidenceSourceKind; origin: string | null }>();
@@ -154,9 +162,7 @@ function mergeCluster(cluster: Story[]): Story {
   const sourceKinds = entries.map((entry) => entry.kind);
   const verifiedIndependentOrigins = entries.map((entry) => entry.origin);
 
-  const bestSummary = ordered.reduce((best, story) =>
-    story.summary.length > best.summary.length ? story : best,
-  );
+  const bestSummary = representative;
   // Different publisher domains do not prove independent reporting.
   // Only distinct reviewed origins qualify for automatic corroboration.
   const independentEvidenceCount = new Set(entries.filter((entry) =>

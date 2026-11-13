@@ -1,3 +1,4 @@
+import { isReadOnlyEvaluation } from "@/lib/evaluation-mode";
 import { NextResponse } from "next/server";
 
 export function hasBearerToken(request: Request, expected?: string): boolean {
@@ -6,10 +7,12 @@ export function hasBearerToken(request: Request, expected?: string): boolean {
 }
 
 export function isAdminRequest(request: Request): boolean {
+  if (isReadOnlyEvaluation()) return false;
   return hasBearerToken(request, process.env.ADMIN_API_TOKEN);
 }
 
 export function isCronRequest(request: Request): boolean {
+  if (isReadOnlyEvaluation()) return false;
   return hasBearerToken(request, process.env.CRON_SECRET);
 }
 

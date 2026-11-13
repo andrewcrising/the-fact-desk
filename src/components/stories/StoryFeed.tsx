@@ -2,6 +2,7 @@
 
 import { STORY_CATEGORIES } from "@/data/navigation";
 import { safeArticleUrl } from "@/lib/article-source-links";
+import { deduplicateReaderStories } from "@/lib/reader-stories";
 import { ReaderSupportCard } from "@/components/support/ReaderSupportCard";
 import {
   HealthDeskIntro,
@@ -18,7 +19,7 @@ import {
 import type { LiveDataSource } from "@/lib/live-data";
 import type { Story, StoryCategory } from "@/types/story";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useEffect } from "react";
 import { CategoryFilter } from "./CategoryFilter";
 import { DeskTicker } from "./DeskTicker";
 import { EarlySignalRail } from "./EarlySignalRail";
@@ -45,10 +46,17 @@ export function StoryFeed({
   const searchParams = useSearchParams();
   const router = useRouter();
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (document.visibilityState === "visible") router.refresh();
+    }, 5 * 60 * 1000);
+    return () => clearInterval(timer);
+  }, [router]);
+
   // Published Supabase stories are the durable desk of record. Direct live
   // ingestion is a discovery/diagnostic lane and must never silently replace it.
   const allStories = useMemo(
-    () => rankStoriesByPriority(homepageStories),
+    () => deduplicateReaderStories(rankStoriesByPriority(homepageStories)),
     [homepageStories],
   );
 
@@ -79,9 +87,9 @@ export function StoryFeed({
   const discoveryStories = useMemo(
     () =>
       rankStoriesByPriority(
-        filterByCategory(showLiveBeta ? livePreviewStories : [], activeCategory),
+        filterByCategory(deduplicateReaderStories(showLiveBeta ? livePreviewStories : [], allStories), activeCategory),
       ),
-    [activeCategory, livePreviewStories, showLiveBeta],
+    [activeCategory, livePreviewStories, showLiveBeta, allStories],
   );
 
   const publisherStories = useMemo(
@@ -97,7 +105,7 @@ export function StoryFeed({
     );
     return editorialLead ?? getHighestPriorityStory(
       publisherStories.filter(isAutomaticLeadEligible),
-    );
+    ) ?? getHighestPriorityStory(publisherStories);
   }, [publisherStories]);
 
   const priorityRailStories = useMemo(
@@ -118,16 +126,18 @@ export function StoryFeed({
   );
 
   const healthStories = useMemo(
-    () => rankStoriesByPriority(allStories.filter((story) => story.category === "Health")),
-    [allStories],
+    () => remainingStories.filter((story) => story.category === "Health"),
+    [remainingStories],
   );
-
-  const counts = useMemo(() => categoryCounts([...allStories, ...livePreviewStories]), [allStories, livePreviewStories]);
+  const counts = useMemo(() => categoryCounts([
+    ...allStories, ...deduplicateReaderStories(showLiveBeta ? livePreviewStories : [], allStories),
+  ]), [allStories, livePreviewStories, showLiveBeta]);
   const discoveryLead = !topPriority ? discoveryStories.find((story) => safeArticleUrl(story.sourceUrls?.[0])) : undefined;
+  const secondaryDiscovery = discoveryStories.filter((story) => story.id !== discoveryLead?.id);
 
   return (
     <div className="space-y-3">
-      {publisherStories.length > 0 && <MobilePriorityRail stories={publisherStories} />}
+      {remainingStories.length > 0 && <MobilePriorityRail stories={remainingStories} />}
 
       {showLiveBeta && discoveryStories.some(isSocialOnlyStory) && (
         <EarlySignalRail
@@ -139,14 +149,20 @@ export function StoryFeed({
       {!topPriority && discoveryLead && (
         <section aria-label="Leading unreviewed discovery" className="desk-card border-l-4 border-l-amber-400 px-5 py-4">
           <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--muted)]">
-            Latest source report · unreviewed · not confirmed
+            Lead story · source report · unreviewed
           </p>
           <a href={safeArticleUrl(discoveryLead.sourceUrls?.[0]) || "#"} target="_blank" rel="noopener noreferrer"
             className="mt-1 block font-serif text-xl font-semibold hover:underline">
             {discoveryLead.title}
           </a>
           <p className="mt-1 text-sm text-[var(--muted)]">{discoveryLead.summary}</p>
-          <p className="mt-2 text-xs text-[var(--muted)]">Source: {discoveryLead.sources.join(" · ")}. This is not a reviewed Fact Desk lead.</p>
+          <div className="mt-2 flex flex-wrap gap-3 text-xs text-[var(--muted)]">
+            {discoveryLead.sources.map((source, index) => {
+              const url = safeArticleUrl(discoveryLead.sourceUrls?.[index]);
+              return url ? <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="hover:underline">{source}</a> : null;
+            })}
+          </div>
+          <p className="mt-1 text-xs text-[var(--muted)]">Related reports do not establish independently verified coverage.</p>
         </section>
       )}
       {topPriority && (
@@ -155,29 +171,6 @@ export function StoryFeed({
             Top priority
           </h2>
           <LeadSignal story={topPriority} />
-        </section>
-      )}
-
-      {!topPriority && discoveryStories.length > 1 && (
-        <section aria-label="Latest source reports" className="space-y-2">
-          <h2 className="text-xs font-semibold uppercase tracking-wide text-[var(--muted)]">
-            Latest source reports · unreviewed
-          </h2>
-          <div className="grid gap-2 sm:grid-cols-2">
-            {discoveryStories.filter((story) => story.id !== discoveryLead?.id)
-              .slice(0, 4).map((story) => {
-                const url = safeArticleUrl(story.sourceUrls?.[0]);
-                return url ? (
-                  <a key={story.id} href={url} target="_blank" rel="noopener noreferrer"
-                    className="desk-card block px-4 py-3 hover:underline">
-                    <span className="text-[10px] text-[var(--muted)]">
-                      {story.category} · {story.sources.join(" · ")} · source report
-                    </span>
-                    <h3 className="mt-1 font-serif text-base font-semibold">{story.title}</h3>
-                  </a>
-                ) : null;
-              })}
-          </div>
         </section>
       )}
 
@@ -204,7 +197,7 @@ export function StoryFeed({
 
       <ReaderSupportCard className="lg:hidden" />
 
-      <section
+      {(!activeCategory || activeCategory === "Health") && <section
         id="health-desk"
         aria-labelledby="health-desk-heading"
         className="scroll-mt-20 space-y-2 border-t border-[var(--border)] pt-3"
@@ -223,20 +216,20 @@ export function StoryFeed({
             No reviewed health stories are published right now.
           </p>
         )}
-      </section>
+      </section>}
 
       {remainingStories.length > 0 && (
         <StorySection
           id="reviewed-desk"
           title="More reviewed briefings"
           description="Published stories from the durable editorial desk."
-          stories={remainingStories}
+          stories={remainingStories.filter((story) => story.category !== "Health")}
         />
       )}
 
-      {showLiveBeta && discoveryStories.length > 0 && (
+      {showLiveBeta && secondaryDiscovery.length > 0 && (
         <LiveBetaFeed
-          stories={discoveryStories}
+          stories={secondaryDiscovery}
           activeCategory={activeCategory}
           source={liveFeedSource}
           fetchedAt={liveFeedFetchedAt}

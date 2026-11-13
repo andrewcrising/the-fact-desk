@@ -18,7 +18,7 @@ test("public create payload cannot set reviewer provenance", () => {
   assert.equal("verifiedIndependentOrigins" in parsed, false);
   assert.deepEqual(parsed.sourceAttachments?.[0], {
     sourceId: undefined, sourceName: "Publisher", url: "https://publisher.example/report",
-    title: undefined, feedItemId: undefined, publishedAt: undefined,
+    title: undefined, feedItemId: null, publishedAt: null,
   });
 });
 test("public update payload cannot set reviewer provenance", () => {

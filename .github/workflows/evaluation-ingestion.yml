@@ -1,0 +1,45 @@
+name: Evaluation RSS ingestion (activation gated)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "7,22,37,52 * * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: evaluation-rss-snapshot
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    # Scheduling requires this workflow on the default branch. Both gates default
+    # closed. Confirm Cloudflare excludes the data branch BEFORE enabling writes.
+    if: >-
+      github.repository == 'andrewcrising/the-fact-desk' &&
+      vars.FACT_DESK_EVALUATION_INGESTION_ENABLED == 'true' &&
+      vars.FACT_DESK_NONPRODUCTION_BUILDS_DISABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Check out reviewed source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 1
+          # The ephemeral, job-scoped repository token is required for the
+          # explicit data-branch lease push; never use production credentials.
+          persist-credentials: true
+      - name: Set up Node 24
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+      - name: Install exact dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Ingest public feeds and publish isolated snapshot
+        env:
+          FACT_DESK_EVALUATION_INGESTION_ENABLED: "true"
+          FACT_DESK_NONPRODUCTION_BUILDS_DISABLED: "true"
+        run: npm run ingest:evaluation -- --state-dir "$RUNNER_TEMP/factdesk-evaluation" --publish

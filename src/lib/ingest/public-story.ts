@@ -3,9 +3,9 @@ import {
   inferStoryCategory,
 } from "@/lib/ingest/fast-briefing";
 import {
-  independentEvidenceSourceCount,
   isSocialOnlyStory,
   socialSourceCount,
+  verifiedIndependentEvidenceCount,
 } from "@/lib/stories";
 import type { Story } from "@/types/story";
 
@@ -57,7 +57,7 @@ export function sanitizeStoryForPublic(story: Story): Story {
     summary,
     category,
   );
-  const independentSources = independentEvidenceSourceCount(story);
+  const independentSources = verifiedIndependentEvidenceCount(story);
   const socialSources = socialSourceCount(story);
   const multiSource = independentSources >= 2;
   const socialOnly = isSocialOnlyStory(story);

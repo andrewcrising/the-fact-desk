@@ -1,3 +1,4 @@
+import { isReadOnlyEvaluation } from "@/lib/evaluation-mode";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 let cachedAdminClient: SupabaseClient | null | undefined;
@@ -22,6 +23,8 @@ export function hasSupabaseConfig(): boolean {
  * into Client Components or exposed through NEXT_PUBLIC_* variables.
  */
 export function getSupabaseAdmin(): SupabaseClient | null {
+  // An evaluation reader must never reuse inherited production credentials.
+  if (isReadOnlyEvaluation()) return null;
   if (cachedAdminClient !== undefined) return cachedAdminClient;
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;

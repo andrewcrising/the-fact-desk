@@ -88,7 +88,7 @@ test("one publisher plus X does not become multi-source corroboration", () => {
   assert.notEqual(merged.signal, "Cross-angle");
 });
 
-test("two independent publishers can establish cross-angle with X context", () => {
+test("two unreviewed publishers with X context cannot establish verified cross-angle", () => {
   const first = publisherStory("publisher-a", "Publisher A");
   const second = publisherStory("publisher-b", "Publisher B");
   const social = socialSignalToStory(socialSignal());
@@ -97,6 +97,6 @@ test("two independent publishers can establish cross-angle with X context", () =
 
   assert.ok(merged);
   assert.equal(independentEvidenceSourceCount(merged), 2);
-  assert.equal(merged.confidence, "Developing");
-  assert.equal(merged.signal, "Cross-angle");
+  assert.equal(merged.confidence, "Single-source");
+  assert.notEqual(merged.signal, "Cross-angle");
 });

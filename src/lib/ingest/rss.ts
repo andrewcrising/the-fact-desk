@@ -1,3 +1,5 @@
+import { parseFeedTimestamp, isCurrentFeedTimestamp } from "@/lib/ingest/feed-time";
+import { safeArticleUrl } from "@/lib/article-source-links";
 /** RSS/Atom ingestion shared by durable Supabase ingest and live discovery. */
 import { buildFastWhyItMatters } from "@/lib/ingest/fast-briefing";
 import {
@@ -132,23 +134,6 @@ function stableSlug(title: string, link?: string, index = 0): string {
   return `${base}-${index}`;
 }
 
-function parsePubDate(value?: string): string {
-  if (!value) return new Date().toISOString();
-  const agencyDate = value.match(
-    /^(?:[A-Za-z]{3},\s*)?(\d{1,2})\/(\d{1,2})\/(\d{4})\s*-\s*(\d{1,2}):(\d{2})(?:\s*([AP]M))?/i,
-  );
-  if (agencyDate) {
-    const [, month, day, year, hourValue, minute, period] = agencyDate;
-    let hour = Number(hourValue);
-    if (period?.toUpperCase() === "PM" && hour < 12) hour += 12;
-    if (period?.toUpperCase() === "AM" && hour === 12) hour = 0;
-    return new Date(
-      Date.UTC(Number(year), Number(month) - 1, Number(day), hour, Number(minute)),
-    ).toISOString();
-  }
-  const parsed = Date.parse(value);
-  return Number.isNaN(parsed) ? new Date().toISOString() : new Date(parsed).toISOString();
-}
 
 function resolveCategory(value?: string): StoryCategory {
   return value && STORY_CATEGORIES.includes(value as StoryCategory)
@@ -223,7 +208,7 @@ function normalizeItem(
   const category = resolveCategory(options.category);
   const description = item.description ?? "";
   const summary = boundPublicText(description || item.title, MAX_PUBLIC_SUMMARY_CHARS);
-  const publishedAt = parsePubDate(item.pubDate);
+  const publishedAt = parseFeedTimestamp(item.pubDate)!;
   const slug = stableSlug(item.title, item.link, index);
 
   return {
@@ -296,7 +281,9 @@ export async function fetchRssStories(
     });
     if (!response.ok) throw new Error(`Feed returned ${response.status}`);
     const xml = await readBoundedRssBody(response);
-    const items = parseRssItems(xml).slice(0, limit);
+    const items = parseRssItems(xml)
+      .filter((item) => isCurrentFeedTimestamp(item.pubDate) && safeArticleUrl(item.link))
+      .slice(0, Math.max(0, limit));
     return items.map((item, index) => normalizeItem(item, index, options));
   } catch (error) {
     if (options.strict) throw error;

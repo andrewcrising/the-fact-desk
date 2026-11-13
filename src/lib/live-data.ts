@@ -1,3 +1,4 @@
+import { freshCacheStories } from "@/lib/discovery-cache";
 /**
  * Production live layer — publisher RSS plus opt-in social discovery, with a
  * file fallback for publisher coverage. Social failures never take down RSS.
@@ -8,7 +9,7 @@ import { ingestSocialSignalStories } from "@/lib/ingest/social-signal";
 import { readLiveStoriesCache } from "@/lib/live-stories-cache";
 import type { Story } from "@/types/story";
 
-export type LiveDataSource = "live" | "cache";
+export type LiveDataSource = "live" | "cache" | "scheduled";
 
 export interface LiveFeedResult {
   stories: Story[];
@@ -41,8 +42,8 @@ export async function getLiveFeed(): Promise<LiveFeedResult> {
 
   const cache = readLiveStoriesCache();
   return {
-    stories: [...cache.stories, ...socialStories].map(sanitizeStoryForPublic),
+    stories: [...freshCacheStories(cache.stories, cache.generatedAt), ...socialStories].map(sanitizeStoryForPublic),
     source: "cache",
-    fetchedAt: cache.generatedAt,
+    fetchedAt: freshCacheStories(cache.stories, cache.generatedAt).length ? cache.generatedAt : null,
   };
 }

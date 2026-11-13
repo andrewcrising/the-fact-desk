@@ -12,5 +12,10 @@
     "directory": "dist/client",
     "not_found_handling": "none",
     "binding": "ASSETS"
+  },
+  "previews": {
+    "vars": {
+      "FACT_DESK_PREVIEW_ISOLATED": "true"
+    }
   }
 }

@@ -62,7 +62,7 @@ function LiveBetaCard({ story }: { story: Story }) {
         </time>
         {externalUrl && (
           <span className="text-[12px] font-medium text-[var(--accent)]">
-            Read at source →
+            {story.sources.length > 1 ? "Choose a publisher link above ↑" : "Read at source →"}
           </span>
         )}
       </div>
@@ -129,9 +129,11 @@ export function LiveBetaFeed({
   fetchedAt,
 }: LiveBetaFeedProps) {
   const statusLine =
-    source === "live"
+    source === "scheduled"
+      ? "Stored RSS snapshot · last successful ingestion"
+      : source === "live"
       ? "RSS discovery · per-Worker cache up to 5 minutes"
-      : "Cached RSS fallback · run ingest locally or wait for cron";
+      : "Recent cached RSS reports · refresh temporarily unavailable";
   const heading = activeCategory
     ? `${activeCategory} Evidence Feed`
     : "Evidence-ranked Live Feed";

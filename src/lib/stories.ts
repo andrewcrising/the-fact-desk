@@ -92,7 +92,7 @@ export function verifiedIndependentEvidenceCount(story: Story): number {
     if (!origin?.trim() || !url || (kind !== "publisher" && kind !== "primary")) continue;
     try {
       const parsed = new URL(url);
-      if (parsed.protocol !== "https:" && parsed.protocol !== "http:") continue;
+      if ((parsed.protocol !== "https:" && parsed.protocol !== "http:") || parsed.username || parsed.password) continue;
       verified.add(origin.trim().toLowerCase());
     } catch {
       // Invalid URLs are never counted as verified evidence.
