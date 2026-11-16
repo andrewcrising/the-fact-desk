@@ -11,7 +11,7 @@ const TRADE_ENERGY_PATTERN =
 const HEALTH_PATTERN =
   /\b(outbreak|pandemic|recall|fda approv(?:e|es|ed|al)|drug approval|emergency use authorization|eua|cancer|vaccine|clinical trial|treatment|therapy)\b/i;
 const COURT_PATTERN =
-  /\b(supreme court|appeals court|court ruling|court|judge|defen[sc]e lawyers?|criminal case|murder case|ruling|injunction|indictment|conviction|petition)\b/i;
+  /\b(supreme court|appeals court|court ruling|court|judge|defen[sc]e lawyers?|criminal case|murder case|pleads? guilty|pleading guilty|sentenced|ruling|injunction|indictment|conviction|petition)\b/i;
 const CYBER_PATTERN =
   /\b(cyberattack|data breach|zero-day|vulnerabilit(?:y|ies)|cve-|ransomware|exploit)\b/i;
 const ELECTION_PATTERN =
@@ -25,6 +25,8 @@ const MARKETS_CATEGORY_PATTERN =
   /\b(federal reserve|fed chair|inflation|interest rates?|rate hike|rate cut|stocks?|bonds?|markets?|earnings|economy|economic|tariffs?)\b/i;
 const ENERGY_CATEGORY_PATTERN =
   /\b(oil|gas|energy|power grid|electricity|nuclear power|solar|wind power|pipeline|opec)\b/i;
+const ASTRONOMY_CATEGORY_PATTERN =
+  /\b(solar system|solar eclipse|solar flare|solar storm|solar wind|solar corona|solar atmosphere|solar observatory|solar telescope|solar probe|solar orbit|solar maximum|solar minimum|solar cycle|solar radiation|solar physics|solar activity|solar eruption|solar prominence|solar filament|solar magnetic field|sunspot|astronomy|astronomers?|astronomical (?:observatory|observations?|research|surveys?|objects?|events?|telescopes?)|cosmic|galaxy|planetary|exoplanet|planets? orbiting)\b/i;
 const POLITICS_CATEGORY_PATTERN =
   /\b(congress|senate|house of representatives|white house|president|governor|election|campaign|administration|democrat|republican)\b/i;
 const CULTURE_CATEGORY_PATTERN =
@@ -69,6 +71,7 @@ export function inferStoryCategory(
   // Specific sports and culture signals outrank the generic word "tech",
   // which also appears in institution names such as Texas Tech.
   if (CULTURE_CATEGORY_PATTERN.test(classificationTitle)) return "Culture";
+  if (ASTRONOMY_CATEGORY_PATTERN.test(classificationTitle)) return "Technology";
   if (TECHNOLOGY_CATEGORY_PATTERN.test(classificationTitle)) return "Technology";
   if (MARKETS_CATEGORY_PATTERN.test(classificationTitle)) return "Markets";
   if (ENERGY_CATEGORY_PATTERN.test(classificationTitle)) return "Energy";
