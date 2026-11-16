@@ -1,13 +1,28 @@
 import { mkdir, readFile, writeFile, rename, rm } from "node:fs/promises";
 import { join } from "node:path";
 import { execFileSync } from "node:child_process";
-import { buildDiscoverySnapshot, parseDiscoverySnapshot, SNAPSHOT_MAX_BYTES, type DiscoverySnapshot, type FeedAttempt } from "../src/lib/discovery-snapshot";
+import { buildDiscoverySnapshot, parseDiscoverySnapshot, SNAPSHOT_MAX_BYTES, type DiscoverySnapshot, type FeedAttempt, type SnapshotProducer } from "../src/lib/discovery-snapshot";
 import type { Story } from "../src/types/story";
 
 export const SNAPSHOT_BRANCH = "data/evaluation-live-feed";
 const ref = `refs/heads/${SNAPSHOT_BRANCH}`;
 function git(repo: string, args: string[], input?: string): string {
   return execFileSync("git", ["-C", repo, ...args], { input, encoding: "utf8", timeout: 30_000, stdio: ["pipe", "pipe", "pipe"], env: { ...process.env, GIT_AUTHOR_NAME: "Fact Desk evaluation ingestion", GIT_AUTHOR_EMAIL: "evaluation@thefactdesk.invalid", GIT_COMMITTER_NAME: "Fact Desk evaluation ingestion", GIT_COMMITTER_EMAIL: "evaluation@thefactdesk.invalid" } }).trim();
+}
+
+export function githubSnapshotProducer(env: Readonly<Record<string, string | undefined>> = process.env): SnapshotProducer | null {
+  if (env.GITHUB_ACTIONS !== "true" || env.GITHUB_REPOSITORY !== "andrewcrising/the-fact-desk") return null;
+  if (env.GITHUB_EVENT_NAME !== "schedule" && env.GITHUB_EVENT_NAME !== "workflow_dispatch") return null;
+  if (!/^\d{1,24}$/.test(env.GITHUB_RUN_ID ?? "") || !/^\d{1,7}$/.test(env.GITHUB_RUN_ATTEMPT ?? "")) return null;
+  if (!/^andrewcrising\/the-fact-desk\/\.github\/workflows\/evaluation-ingestion\.yml@refs\/heads\/[A-Za-z0-9._/-]{1,200}$/.test(env.GITHUB_WORKFLOW_REF ?? "")) return null;
+  return {
+    platform: "github-actions",
+    event: env.GITHUB_EVENT_NAME,
+    repository: "andrewcrising/the-fact-desk",
+    runId: env.GITHUB_RUN_ID!,
+    runAttempt: Number(env.GITHUB_RUN_ATTEMPT),
+    workflowRef: env.GITHUB_WORKFLOW_REF!,
+  };
 }
 export function readSnapshotHead(repo: string): { sha: string | null; snapshot: DiscoverySnapshot | null } {
   let advertisement: string;
@@ -38,7 +53,9 @@ export function publishSnapshot(repo: string, snapshot: DiscoverySnapshot, expec
   const blob = git(repo, ["hash-object", "-w", "--stdin"], raw);
   const config = git(repo, ["hash-object", "-w", "--stdin"], '{"git":{"deploymentEnabled":false}}\n');
   const tree = git(repo, ["mktree"], `100644 blob ${blob}\tdiscovery.json\n100644 blob ${config}\tvercel.json\n`);
-  const sha = git(repo, ["commit-tree", tree, ...(expectedSha ? ["-p", expectedSha] : [])], `[skip ci] Evaluation feed snapshot ${parsed.attemptedAt}\n`);
+  // Each update is a single-commit orphan. The exact ref lease preserves
+  // concurrency safety without retaining an unbounded 15-minute history.
+  const sha = git(repo, ["commit-tree", tree], `[skip ci] Evaluation feed snapshot ${parsed.attemptedAt}\n`);
   // Explicit branch and exact lease: never write main, app code or another producer's result.
   git(repo, ["push", `--force-with-lease=${ref}:${expectedSha ?? ""}`, "origin", `${sha}:${ref}`]);
   const readback = readSnapshotHead(repo);
@@ -52,6 +69,7 @@ export async function produceSnapshotFile(options: {
   previous?: DiscoverySnapshot | null;
   fetch: () => Promise<{ stories: Story[]; feeds: FeedAttempt[] }>;
   now?: () => number;
+  producer?: SnapshotProducer | null;
 }): Promise<DiscoverySnapshot> {
   await mkdir(options.directory, { recursive: true });
   const lock = join(options.directory, ".ingestion-lock");
@@ -67,7 +85,7 @@ export async function produceSnapshotFile(options: {
       if (!previous || Date.parse(parsed.attemptedAt) > Date.parse(previous.attemptedAt)) previous = parsed;
     } catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error; }
     const result = await options.fetch();
-    const snapshot = buildDiscoverySnapshot(result, previous, options.sourceSha, (options.now ?? Date.now)());
+    const snapshot = buildDiscoverySnapshot(result, previous, options.sourceSha, (options.now ?? Date.now)(), options.producer ?? null);
     const raw = JSON.stringify(snapshot);
     if (Buffer.byteLength(raw) > SNAPSHOT_MAX_BYTES) throw Error("Snapshot too large");
     await writeFile(temporary, raw, { flag: "wx", mode: 0o600 });

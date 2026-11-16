@@ -1,7 +1,7 @@
 import { fetchRssStories } from "@/lib/ingest/rss";
 import { clusterAndBalanceStories } from "@/lib/ingest/cluster-stories";
 import { sanitizeStoryForPublic } from "@/lib/ingest/public-story";
-import { EVALUATION_FEEDS } from "@/lib/discovery-feeds";
+import { EVALUATION_FEEDS, isEligibleFeedArticle } from "@/lib/discovery-feeds";
 import { getScheduledSnapshot } from "@/lib/scheduled-discovery";
 import { createDiscoveryCache } from "@/lib/discovery-cache";
 import type { Story } from "@/types/story";
@@ -29,9 +29,16 @@ export async function fetchDiscoveryWithDiagnostics() {
     ));
     for (const [index, result] of results.entries()) {
       const feed = batch[index];
-      feeds.push({ url: feed.url, source: feed.name, category: feed.category, count: result.status === "fulfilled" ? result.value.length : 0, status: result.status === "fulfilled" ? (result.value.length ? "ok" : "empty") : "failed" });
-      if (result.status !== "fulfilled") continue;
-      for (const story of result.value) {
+      if (result.status !== "fulfilled") {
+        feeds.push({ url: feed.url, source: feed.name, category: feed.category, count: 0, status: "failed" });
+        continue;
+      }
+      const eligible = result.value.filter((story) => {
+        const url = story.sourceUrls?.[0];
+        return typeof url === "string" && isEligibleFeedArticle(feed, url);
+      });
+      feeds.push({ url: feed.url, source: feed.name, category: feed.category, count: eligible.length, status: eligible.length ? "ok" : "empty" });
+      for (const story of eligible) {
         const raw = story.sourceUrls?.[0];
         if (!raw) continue;
         let canonical: string;

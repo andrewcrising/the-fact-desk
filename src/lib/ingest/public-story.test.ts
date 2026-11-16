@@ -61,6 +61,10 @@ test("headline inference corrects coarse science and health feed categories", ()
     "Technology",
   );
   assert.equal(
+    inferStoryCategory("SpaceX to attempt double catch of huge Starship rocket", "Energy"),
+    "Technology",
+  );
+  assert.equal(
     inferStoryCategory("Cancer drug price falls after FDA approval", "Markets"),
     "Health",
   );

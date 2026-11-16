@@ -13,6 +13,14 @@ export interface FeedHealth extends FeedAttempt {
   lastSuccessAt: string | null;
   consecutiveFailures: number;
 }
+export interface SnapshotProducer {
+  platform: "github-actions";
+  event: "schedule" | "workflow_dispatch";
+  repository: "andrewcrising/the-fact-desk";
+  runId: string;
+  runAttempt: number;
+  workflowRef: string;
+}
 export interface DiscoverySnapshot {
   schemaVersion: 1;
   sourceSha: string;
@@ -20,6 +28,7 @@ export interface DiscoverySnapshot {
   fetchedAt: string | null;
   stories: Story[];
   feeds: FeedHealth[];
+  producer: SnapshotProducer | null;
 }
 
 const PUBLISHER_DOMAINS: Record<string, string[]> = {
@@ -62,6 +71,16 @@ export function parseDiscoverySnapshot(input: unknown, now = Date.now()): Discov
   const s = input as DiscoverySnapshot;
   if (s.schemaVersion !== 1 || !/^[a-f0-9]{40}$/.test(s.sourceSha ?? "") || typeof s.attemptedAt !== "string" || !parseFeedTimestamp(s.attemptedAt) || Date.parse(s.attemptedAt) > now || !Array.isArray(s.stories) || s.stories.length > 56 || !Array.isArray(s.feeds) || s.feeds.length !== EVALUATION_FEEDS.length) return null;
   if (s.fetchedAt !== null && (typeof s.fetchedAt !== "string" || !parseFeedTimestamp(s.fetchedAt) || Date.parse(s.fetchedAt) > Date.parse(s.attemptedAt))) return null;
+  const producer = s.producer ?? null;
+  if (producer !== null && (
+    typeof producer !== "object" ||
+    producer.platform !== "github-actions" ||
+    !["schedule", "workflow_dispatch"].includes(producer.event) ||
+    producer.repository !== "andrewcrising/the-fact-desk" ||
+    !/^\d{1,24}$/.test(producer.runId) ||
+    !Number.isInteger(producer.runAttempt) || producer.runAttempt < 1 || producer.runAttempt > 1_000_000 ||
+    !/^andrewcrising\/the-fact-desk\/\.github\/workflows\/evaluation-ingestion\.yml@refs\/heads\/[A-Za-z0-9._/-]{1,200}$/.test(producer.workflowRef)
+  )) return null;
   const feeds: FeedHealth[] = [];
   for (const feed of EVALUATION_FEEDS) {
     const matches = s.feeds.filter((f) => f && f.url === feed.url);
@@ -76,10 +95,10 @@ export function parseDiscoverySnapshot(input: unknown, now = Date.now()): Discov
   // Reject poison rather than silently accepting a partially forged envelope.
   if (decoded.some((story) => story === null) && s.fetchedAt && now - Date.parse(s.fetchedAt) <= MAX_FALLBACK_AGE_MS) return null;
   const fresh = s.fetchedAt && now - Date.parse(s.fetchedAt) <= MAX_FALLBACK_AGE_MS;
-  return { schemaVersion: 1, sourceSha: s.sourceSha, attemptedAt: s.attemptedAt, fetchedAt: s.fetchedAt, stories: fresh ? decoded.filter((story): story is Story => story !== null) : [], feeds };
+  return { schemaVersion: 1, sourceSha: s.sourceSha, attemptedAt: s.attemptedAt, fetchedAt: s.fetchedAt, stories: fresh ? decoded.filter((story): story is Story => story !== null) : [], feeds, producer };
 }
 
-export function buildDiscoverySnapshot(result: { stories: Story[]; feeds: FeedAttempt[] }, previous: DiscoverySnapshot | null, sourceSha: string, now = Date.now()): DiscoverySnapshot {
+export function buildDiscoverySnapshot(result: { stories: Story[]; feeds: FeedAttempt[] }, previous: DiscoverySnapshot | null, sourceSha: string, now = Date.now(), producer: SnapshotProducer | null = null): DiscoverySnapshot {
   const attemptedAt = new Date(now).toISOString();
   if (previous && Date.parse(previous.attemptedAt) >= now) throw Error("Snapshot attempt must advance monotonically");
   const feeds = EVALUATION_FEEDS.map((feed): FeedHealth => {
@@ -88,14 +107,14 @@ export function buildDiscoverySnapshot(result: { stories: Story[]; feeds: FeedAt
     const count = current?.status === "ok" ? current.count : 0;
     return { url: feed.url, source: feed.name, category: feed.category, count, status: count ? "ok" : current?.status === "empty" ? "empty" : "failed", lastSuccessAt: count ? attemptedAt : prior?.lastSuccessAt ?? null, consecutiveFailures: count ? 0 : Math.min(1_000_000, (prior?.consecutiveFailures ?? 0) + 1) };
   });
-  const snapshot = parseDiscoverySnapshot({ schemaVersion: 1, sourceSha, attemptedAt, fetchedAt: result.stories.length ? attemptedAt : previous?.fetchedAt ?? null, stories: result.stories.length ? result.stories : previous?.stories ?? [], feeds }, now);
+  const snapshot = parseDiscoverySnapshot({ schemaVersion: 1, sourceSha, attemptedAt, fetchedAt: result.stories.length ? attemptedAt : previous?.fetchedAt ?? null, stories: result.stories.length ? result.stories : previous?.stories ?? [], feeds, producer }, now);
   if (!snapshot) throw Error("Invalid ingestion output; previous snapshot must remain untouched");
   return snapshot;
 }
 
 export function summarizeFeedHealth(snapshot: DiscoverySnapshot | null, now = Date.now()) {
-  if (!snapshot) return { status: "unavailable", schedulerVerified: false, attemptedAt: null, fetchedAt: null, stories: 0, categories: Object.fromEntries(CATEGORIES.map((c) => [c, 0])), feeds: [] };
+  if (!snapshot) return { status: "unavailable", schedulerVerified: false, schedulerObserved: false, producer: null, attemptedAt: null, fetchedAt: null, stories: 0, categories: Object.fromEntries(CATEGORIES.map((c) => [c, 0])), feeds: [] };
   const ageMs = now - Date.parse(snapshot.attemptedAt);
   const current = snapshot.fetchedAt !== null && now - Date.parse(snapshot.fetchedAt) <= MAX_FALLBACK_AGE_MS;
-  return { status: !current || !snapshot.stories.length || ageMs > MAX_FALLBACK_AGE_MS ? "stale" : snapshot.feeds.some((f) => f.status !== "ok") ? "degraded" : "healthy", schedulerVerified: false, sourceSha: snapshot.sourceSha, attemptedAt: snapshot.attemptedAt, fetchedAt: snapshot.fetchedAt, ageMs, stories: snapshot.stories.length, categories: Object.fromEntries(CATEGORIES.map((c) => [c, snapshot.stories.filter((s) => s.category === c).length])), feeds: snapshot.feeds };
+  return { status: !current || !snapshot.stories.length || ageMs > MAX_FALLBACK_AGE_MS ? "stale" : snapshot.feeds.some((f) => f.status !== "ok") ? "degraded" : "healthy", schedulerVerified: false, schedulerObserved: snapshot.producer?.event === "schedule", producer: snapshot.producer, sourceSha: snapshot.sourceSha, attemptedAt: snapshot.attemptedAt, fetchedAt: snapshot.fetchedAt, ageMs, stories: snapshot.stories.length, categories: Object.fromEntries(CATEGORIES.map((c) => [c, snapshot.stories.filter((s) => s.category === c).length])), feeds: snapshot.feeds };
 }

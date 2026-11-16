@@ -1,8 +1,9 @@
 import { execFileSync } from "node:child_process";
+import { appendFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { fetchDiscoveryWithDiagnostics } from "../src/lib/discovery";
 import { summarizeFeedHealth } from "../src/lib/discovery-snapshot";
-import { produceSnapshotFile, publishSnapshot, readSnapshotHead } from "./evaluation-snapshot-store";
+import { githubSnapshotProducer, produceSnapshotFile, publishSnapshot, readSnapshotHead } from "./evaluation-snapshot-store";
 
 const publish = process.argv.includes("--publish");
 const directoryIndex = process.argv.indexOf("--state-dir");
@@ -14,9 +15,18 @@ if (publish && (process.env.FACT_DESK_EVALUATION_INGESTION_ENABLED !== "true" ||
 if (execFileSync("git", ["status", "--porcelain"], { encoding: "utf8" }).trim()) throw Error("Commit reviewed source before ingestion; refuse misleading source provenance");
 const sourceSha = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
 const previous = publish ? readSnapshotHead(repo) : { sha: null, snapshot: null };
-const snapshot = await produceSnapshotFile({ directory, sourceSha, previous: previous.snapshot, fetch: fetchDiscoveryWithDiagnostics });
+const producer = githubSnapshotProducer();
+if (process.env.GITHUB_ACTIONS === "true" && !producer) throw Error("GitHub ingestion provenance is incomplete or does not match the fixed workflow");
+const snapshot = await produceSnapshotFile({ directory, sourceSha, previous: previous.snapshot, fetch: fetchDiscoveryWithDiagnostics, producer });
 if (publish) console.log(JSON.stringify({ publishedCommit: publishSnapshot(repo, snapshot, previous.sha) }));
-console.log(JSON.stringify(summarizeFeedHealth(snapshot), null, 2));
+const health = summarizeFeedHealth(snapshot);
+console.log(JSON.stringify(health, null, 2));
 const failed = snapshot.feeds.filter((f) => f.status !== "ok").length;
 if (process.env.GITHUB_ACTIONS === "true" && failed) console.warn(`::warning::${failed} evaluation feeds supplied no eligible content; inspect /api/feed-health`);
-if (!snapshot.stories.length) process.exitCode = 2;
+const missingCategories = Object.entries(health.categories).filter(([, count]) => count === 0).map(([category]) => category);
+if (process.env.GITHUB_ACTIONS === "true" && missingCategories.length) console.warn(`::warning::Missing current coverage for categories: ${missingCategories.join(", ")}`);
+if (process.env.GITHUB_STEP_SUMMARY) {
+  const categoryRows = Object.entries(health.categories).map(([category, count]) => `| ${category} | ${count} |`).join("\n");
+  appendFileSync(process.env.GITHUB_STEP_SUMMARY, `## Fact Desk evaluation ingestion\n\n- Status: **${health.status}**\n- Current source reports: **${health.stories}**\n- Healthy feeds: **${snapshot.feeds.length - failed}/${snapshot.feeds.length}**\n- Trigger: **${producer?.event ?? "unattested"}**\n\n| Category | Reports |\n| --- | ---: |\n${categoryRows}\n`);
+}
+if (!snapshot.stories.length || missingCategories.length || failed > Math.floor(snapshot.feeds.length / 2)) process.exitCode = 2;

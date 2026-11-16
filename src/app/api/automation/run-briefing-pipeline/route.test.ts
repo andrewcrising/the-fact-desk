@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   POST,
-  shouldDryRunPipelineRequest,
 } from "@/app/api/automation/run-briefing-pipeline/route";
+import { shouldDryRunPipelineRequest } from "@/lib/automation/pipeline-request";
 import type { NextRequest } from "next/server";
 
 function request(token?: string, url = "https://example.com/api/automation/run-briefing-pipeline") {

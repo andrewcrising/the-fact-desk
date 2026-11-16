@@ -6,7 +6,7 @@ export const EVALUATION_FEEDS = [
   { url: "https://moxie.foxnews.com/google-publisher/politics.xml", name: "Fox News", category: "Politics" },
   { url: "https://www.nasa.gov/news-release/feed/", name: "NASA", category: "Technology" },
   { url: "https://www.federalreserve.gov/feeds/press_all.xml", name: "Federal Reserve", category: "Markets" },
-  { url: "https://www.theguardian.com/law/rss", name: "The Guardian Law", category: "Courts" },
+  { url: "https://www.theguardian.com/law/rss", name: "The Guardian Law", category: "Courts", articlePathPrefix: "/law/" },
   { url: "https://feeds.bbci.co.uk/news/technology/rss.xml", name: "BBC Technology", category: "Technology" },
   { url: "https://feeds.bbci.co.uk/news/business/rss.xml", name: "BBC Business", category: "Markets" },
   { url: "https://www.justice.gov/news/rss", name: "U.S. Department of Justice", category: "Courts" },
@@ -14,3 +14,15 @@ export const EVALUATION_FEEDS = [
   { url: "https://feeds.bbci.co.uk/news/science_and_environment/rss.xml", name: "BBC Science", category: "Energy" },
   { url: "https://www.theguardian.com/culture/rss", name: "The Guardian", category: "Culture" },
 ] as const;
+
+export type EvaluationFeed = (typeof EVALUATION_FEEDS)[number];
+
+/** Keep broad/cross-posted RSS channels from silently polluting a desk. */
+export function isEligibleFeedArticle(feed: EvaluationFeed, input: string): boolean {
+  if (!("articlePathPrefix" in feed)) return true;
+  try {
+    return new URL(input).pathname.startsWith(feed.articlePathPrefix);
+  } catch {
+    return false;
+  }
+}

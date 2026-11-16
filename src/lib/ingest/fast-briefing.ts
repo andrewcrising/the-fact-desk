@@ -20,7 +20,7 @@ const ELECTION_PATTERN =
 const HEALTH_CATEGORY_PATTERN =
   /\b(cancer|drug|medication|fda|nih|cdc|health|medical|medicine|hospital|patient|clinical|vaccine|virus|disease|outbreak|therapy|treatment|diagnosis)\b/i;
 const TECHNOLOGY_CATEGORY_PATTERN =
-  /\b(ai|artificial intelligence|technology|tech|cyber|software|semiconductor|chip|nasa|space|telescope|satellite|computer|internet|robot|quantum)\b/i;
+  /\b(ai|artificial intelligence|technology|tech|cyber|software|semiconductor|chip|nasa|spacex|starship|spacecraft|space|telescope|satellite|computer|internet|robot|quantum)\b/i;
 const MARKETS_CATEGORY_PATTERN =
   /\b(federal reserve|fed chair|inflation|interest rates?|rate hike|rate cut|stocks?|bonds?|markets?|earnings|economy|economic|tariffs?)\b/i;
 const ENERGY_CATEGORY_PATTERN =

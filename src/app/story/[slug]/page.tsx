@@ -1,9 +1,10 @@
 import { StoryDetail } from "@/components/story/StoryDetail";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { TopNav } from "@/components/layout/TopNav";
-import { getStoryBySlug } from "@/lib/story-repository";
+import { resolveReaderStoryBySlug } from "@/lib/reader-story";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { cache } from "react";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -14,11 +15,13 @@ interface PageProps {
 // build-time list of mock/cache slugs.
 export const dynamic = "force-dynamic";
 
+const getReaderStory = cache(resolveReaderStoryBySlug);
+
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const story = await getStoryBySlug(slug);
+  const story = await getReaderStory(slug);
   if (!story) return { title: "Story not found" };
   return {
     title: `${story.title} — The Fact Desk`,
@@ -28,7 +31,7 @@ export async function generateMetadata({
 
 export default async function StoryPage({ params }: PageProps) {
   const { slug } = await params;
-  const story = await getStoryBySlug(slug);
+  const story = await getReaderStory(slug);
 
   if (!story) notFound();
 

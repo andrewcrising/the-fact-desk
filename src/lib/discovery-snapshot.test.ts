@@ -23,6 +23,24 @@ test("durable envelope forces source-only provenance and reconstructs bounded pu
   assert.equal(summarizeFeedHealth(parsed, now).categories.World, 1);
 });
 
+test("scheduled provenance is bounded, visible and never upgrades editorial evidence", () => {
+  const producer = {
+    platform: "github-actions" as const,
+    event: "schedule" as const,
+    repository: "andrewcrising/the-fact-desk" as const,
+    runId: "987654321",
+    runAttempt: 1,
+    workflowRef: "andrewcrising/the-fact-desk/.github/workflows/evaluation-ingestion.yml@refs/heads/main",
+  };
+  const produced = buildDiscoverySnapshot({ stories: [report], feeds }, null, sourceSha, now, producer);
+  const health = summarizeFeedHealth(produced, now);
+  assert.equal(health.schedulerObserved, true);
+  assert.equal(health.schedulerVerified, false, "the envelope alone cannot independently verify GitHub execution");
+  assert.equal(health.producer?.runId, producer.runId);
+  assert.equal(produced.stories[0].confidence, "Single-source");
+  assert.equal(parseDiscoverySnapshot({ ...produced, producer: { ...producer, event: "push" } }, now), null);
+});
+
 test("outage preserves the content timestamp, increments per-feed failures and expires content", () => {
   const first = snapshot();
   const failed = buildDiscoverySnapshot({ stories: [], feeds: [] }, first, sourceSha, now + 60_000);

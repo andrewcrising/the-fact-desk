@@ -2,25 +2,10 @@ import { requireAdminOrCronRequest } from "@/lib/auth";
 import { AUTOMATION_ALREADY_RUNNING_MESSAGE } from "@/lib/automation/automation-repository";
 import { runBriefingPipeline } from "@/lib/automation/briefing-pipeline";
 import { getAutomationMode } from "@/lib/automation/config";
+import { shouldDryRunPipelineRequest } from "@/lib/automation/pipeline-request";
 import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
-
-export function dryRunFromRequest(request: Request): boolean {
-  return new URL(request.url).searchParams.get("dry_run") === "true";
-}
-
-export function shouldDryRunPipelineRequest(
-  request: Request,
-  method: "GET" | "POST",
-  body?: { dry_run?: boolean; dryRun?: boolean },
-): boolean {
-  // GET is intentionally read-only. This prevents crawlers, link prefetchers,
-  // health checks, or accidental browser navigation from mutating Supabase.
-  if (method === "GET") return true;
-
-  return body?.dry_run === true || body?.dryRun === true || dryRunFromRequest(request);
-}
 
 export async function POST(request: NextRequest) {
   const unauthorized = requireAdminOrCronRequest(request);

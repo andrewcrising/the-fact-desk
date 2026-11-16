@@ -8,7 +8,7 @@ import { promisify } from "node:util";
 import { stories } from "@/data/stories";
 import { EVALUATION_FEEDS } from "./discovery-feeds";
 import { buildDiscoverySnapshot } from "./discovery-snapshot";
-import { produceSnapshotFile, publishSnapshot, readSnapshotHead } from "../../scripts/evaluation-snapshot-store";
+import { githubSnapshotProducer, produceSnapshotFile, publishSnapshot, readSnapshotHead } from "../../scripts/evaluation-snapshot-store";
 const sourceSha = "b".repeat(40);
 const now = Date.now() - 120_000;
 const result = { stories: [{ ...stories[0], sources: ["BBC World"], sourceUrls: ["https://www.bbc.com/news/articles/example"], publishedAt: new Date(now - 1000).toISOString() }], feeds: EVALUATION_FEEDS.map((f) => ({ url: f.url, source: f.name, category: f.category, count: 1, status: "ok" })) };
@@ -44,6 +44,7 @@ test("native Git snapshot publication is isolated, read back and protected by ex
     const second = buildDiscoverySnapshot(result, first, sourceSha, now + 1000);
     const sha2 = publishSnapshot(b, second, sha1);
     assert.notEqual(sha2, sha1);
+    assert.equal(run(["--git-dir", remote, "rev-list", "--count", sha2]), "1", "snapshot branch history must remain bounded");
     assert.throws(() => publishSnapshot(a, buildDiscoverySnapshot(result, first, sourceSha, now + 2000), sha1), /changed/);
     assert.throws(() => publishSnapshot(a, first, sha2), /Out-of-order/);
     assert.equal(readSnapshotHead(a).sha, sha2);
@@ -57,6 +58,24 @@ test("native Git snapshot publication is isolated, read back and protected by ex
     assert.equal(run(["--git-dir", remote, "for-each-ref", "--format=%(refname)"]), "refs/heads/data/evaluation-live-feed");
     assert.equal(run(["-C", a, "show", `${sha2}:vercel.json`]), '{"git":{"deploymentEnabled":false}}');
   } finally { await rm(directory, { recursive: true, force: true }); }
+});
+
+test("scheduler provenance accepts only the fixed GitHub workflow identity", () => {
+  const valid = {
+    GITHUB_ACTIONS: "true",
+    GITHUB_REPOSITORY: "andrewcrising/the-fact-desk",
+    GITHUB_EVENT_NAME: "schedule",
+    GITHUB_RUN_ID: "123456789",
+    GITHUB_RUN_ATTEMPT: "2",
+    GITHUB_WORKFLOW_REF: "andrewcrising/the-fact-desk/.github/workflows/evaluation-ingestion.yml@refs/heads/main",
+  };
+  assert.deepEqual(githubSnapshotProducer(valid), {
+    platform: "github-actions", event: "schedule", repository: "andrewcrising/the-fact-desk",
+    runId: "123456789", runAttempt: 2, workflowRef: valid.GITHUB_WORKFLOW_REF,
+  });
+  assert.equal(githubSnapshotProducer({ ...valid, GITHUB_EVENT_NAME: "push" }), null);
+  assert.equal(githubSnapshotProducer({ ...valid, GITHUB_REPOSITORY: "attacker/fork" }), null);
+  assert.equal(githubSnapshotProducer({ ...valid, GITHUB_WORKFLOW_REF: "andrewcrising/the-fact-desk/.github/workflows/other.yml@refs/heads/main" }), null);
 });
 
 test("CLI refuses publication while automatic-build and ingestion gates are closed", () => {
