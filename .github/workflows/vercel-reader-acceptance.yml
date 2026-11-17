@@ -4,6 +4,20 @@ on:
   pull_request:
     branches: ["work/vercel-production-gates-20261116"]
   workflow_dispatch:
+    inputs:
+      target:
+        description: Local production build or read-only public production checks
+        type: choice
+        options: [local, production]
+        default: local
+      expected_producer_sha:
+        description: Exact reviewed snapshot producer commit
+        type: string
+        default: 66dd22d4454702390c9a15ab544447906cf4cb92
+      reader_sha:
+        description: Exact reviewed reader commit for a manual acceptance run
+        type: string
+        default: b53d4755f12fd5e29a69b886700480827cd45494
 
 permissions:
   contents: read
@@ -14,9 +28,18 @@ jobs:
     timeout-minutes: 10
     env:
       PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
-      FACT_DESK_E2E_LOCAL: "true"
+      FACT_DESK_E2E_LOCAL: ${{ github.event_name == 'workflow_dispatch' && inputs.target == 'production' && 'false' || 'true' }}
+      FACT_DESK_E2E_BASE_URL: https://the-fact-desk.vercel.app
+      FACT_DESK_EXPECTED_PRODUCER_SHA: ${{ inputs.expected_producer_sha || '66dd22d4454702390c9a15ab544447906cf4cb92' }}
+      FACT_DESK_READER_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.reader_sha || github.sha }}
     steps:
+      - name: Require an immutable expected producer
+        run: |
+          node -e 'for (const key of ["FACT_DESK_EXPECTED_PRODUCER_SHA", "FACT_DESK_READER_SHA"]) if (!/^[a-f0-9]{40}$/.test(process.env[key] ?? "")) process.exit(1)'
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ env.FACT_DESK_READER_SHA }}
+          persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 24
@@ -28,9 +51,11 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - name: Inspect degraded public upstream feeds
+        if: env.FACT_DESK_E2E_LOCAL == 'true'
         run: node --import tsx scripts/diagnose-discovery-feeds.ts
       - run: npm test
       - name: Verify repaired live discovery without publishing
+        if: env.FACT_DESK_E2E_LOCAL == 'true'
         run: node --import tsx scripts/check-discovery-live.ts
-      - name: Desktop and mobile production-build acceptance
+      - name: Desktop and mobile reader acceptance
         run: npm run test:e2e

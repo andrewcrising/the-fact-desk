@@ -47,7 +47,7 @@ test("scheduled health is fresh, complete and from the reviewed producer", async
   expect(["healthy", "degraded"]).toContain(health.status);
   expect(health.schedulerObserved).toBe(true);
   expect(health.producer.event).toBe("schedule");
-  expect(health.sourceSha).toBe(process.env.FACT_DESK_EXPECTED_PRODUCER_SHA ?? "552f4849216cd63c2775c8359da1240dbb5b2a42");
+  expect(health.sourceSha).toBe(process.env.FACT_DESK_EXPECTED_PRODUCER_SHA ?? "66dd22d4454702390c9a15ab544447906cf4cb92");
   for (const category of categories) expect(health.categories[category]).toBeGreaterThan(0);
   expect(health.ageMs).toBeLessThanOrEqual(30 * 60 * 1000);
 });
