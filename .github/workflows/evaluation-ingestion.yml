@@ -24,7 +24,7 @@ jobs:
     permissions:
       contents: write
     env:
-      REVIEWED_SOURCE_SHA: 552f4849216cd63c2775c8359da1240dbb5b2a42
+      REVIEWED_SOURCE_SHA: 66dd22d4454702390c9a15ab544447906cf4cb92
     steps:
       - name: Require immutable reviewed evaluation source
         run: |
