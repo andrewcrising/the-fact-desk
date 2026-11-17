@@ -30,5 +30,7 @@ jobs:
       - name: Inspect degraded public upstream feeds
         run: node --import tsx scripts/diagnose-discovery-feeds.ts
       - run: npm test
+      - name: Verify repaired live discovery without publishing
+        run: node --import tsx scripts/check-discovery-live.ts
       - name: Desktop and mobile production-build acceptance
         run: npm run test:e2e

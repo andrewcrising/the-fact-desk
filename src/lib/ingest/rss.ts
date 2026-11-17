@@ -25,6 +25,9 @@ export interface FetchRssStoriesOptions {
   timeoutMs?: number;
   strict?: boolean;
   viewpoint?: ViewpointBand;
+  /** Explicit feed-specific allowance; the ordinary feed limit remains 256 KiB. */
+  maxBodyBytes?: number;
+  isEligibleArticle?: (url: string) => boolean;
 }
 
 export interface RssFeedItem {
@@ -280,9 +283,14 @@ export async function fetchRssStories(
       next: { revalidate: 300 },
     });
     if (!response.ok) throw new Error(`Feed returned ${response.status}`);
-    const xml = await readBoundedRssBody(response);
+    const maxBodyBytes = options.maxBodyBytes ?? 262144;
+    if (!Number.isInteger(maxBodyBytes) || maxBodyBytes < 1 || maxBodyBytes > 524288) {
+      throw new Error("Invalid RSS body size allowance");
+    }
+    const xml = await readBoundedRssBody(response, maxBodyBytes);
     const items = parseRssItems(xml)
       .filter((item) => isCurrentFeedTimestamp(item.pubDate) && safeArticleUrl(item.link))
+      .filter((item) => !options.isEligibleArticle || options.isEligibleArticle(item.link!))
       .slice(0, Math.max(0, limit));
     return items.map((item, index) => normalizeItem(item, index, options));
   } catch (error) {
