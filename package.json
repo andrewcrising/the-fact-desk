@@ -22,7 +22,8 @@
     "test:postgres": "node scripts/check-provenance-postgres.mjs",
     "check:preview": "node scripts/check-evaluation-config.mjs",
     "ingest:evaluation": "node --import tsx scripts/run-evaluation-ingestion.ts",
-    "test:editorial-http": "node scripts/check-editorial-http.mjs"
+    "test:editorial-http": "node scripts/check-editorial-http.mjs",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.106.2",
@@ -36,6 +37,7 @@
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.54.2",
+    "@playwright/test": "1.65.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
