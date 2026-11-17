@@ -1,0 +1,1706 @@
+RUN 1
+﻿2026-11-17T15:10:38.9486730Z Current runner version: '2.338.2'
+2026-11-17T15:10:38.9512457Z ##[group]Runner Image Provisioner
+2026-11-17T15:10:38.9513370Z Hosted Compute Agent
+2026-11-17T15:10:38.9514069Z Version: 20261103.629
+2026-11-17T15:10:38.9514722Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+2026-11-17T15:10:38.9515572Z Build Date: 2026-11-03T17:26:59Z
+2026-11-17T15:10:38.9516286Z Worker ID: {3bf3ea22-2442-4707-9a82-67ef24c97d2a}
+2026-11-17T15:10:38.9517001Z Region: westus
+2026-11-17T15:10:38.9517606Z Cloud: Azure
+2026-11-17T15:10:38.9518680Z ##[endgroup]
+2026-11-17T15:10:38.9520269Z ##[group]Operating System
+2026-11-17T15:10:38.9521069Z Ubuntu
+2026-11-17T15:10:38.9521604Z 24.04.5
+2026-11-17T15:10:38.9522151Z LTS
+2026-11-17T15:10:38.9522694Z ##[endgroup]
+2026-11-17T15:10:38.9523313Z ##[group]Runner Image
+2026-11-17T15:10:38.9524010Z Image: ubuntu-24.04
+2026-11-17T15:10:38.9524593Z Version: 20261111.370.1
+2026-11-17T15:10:38.9525920Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261111.370/images/ubuntu/Ubuntu2404-Readme.md
+2026-11-17T15:10:38.9527499Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261111.370
+2026-11-17T15:10:38.9528862Z ##[endgroup]
+2026-11-17T15:10:38.9529973Z ##[group]GITHUB_TOKEN Permissions
+2026-11-17T15:10:38.9532009Z Contents: read
+2026-11-17T15:10:38.9532627Z Metadata: read
+2026-11-17T15:10:38.9533301Z ##[endgroup]
+2026-11-17T15:10:38.9535553Z Secret source: Actions
+2026-11-17T15:10:38.9536604Z Cache mode: write
+2026-11-17T15:10:38.9537334Z Prepare workflow directory
+2026-11-17T15:10:38.9954046Z Prepare all required actions
+2026-11-17T15:10:39.0005140Z Getting action download info
+2026-11-17T15:10:39.3842941Z Download action repository 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' (SHA:11bd71901bbe5b1630ceea73d27597364c9af683)
+2026-11-17T15:10:39.6054319Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-11-17T15:10:39.8318822Z Complete job name: reader
+2026-11-17T15:10:39.9223332Z ##[group]Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+2026-11-17T15:10:39.9224500Z with:
+2026-11-17T15:10:39.9224993Z   repository: andrewcrising/the-fact-desk
+2026-11-17T15:10:39.9228907Z   token: ***
+2026-11-17T15:10:39.9229370Z   ssh-strict: true
+2026-11-17T15:10:39.9229827Z   ssh-user: git
+2026-11-17T15:10:39.9230284Z   persist-credentials: true
+2026-11-17T15:10:39.9230780Z   clean: true
+2026-11-17T15:10:39.9231245Z   sparse-checkout-cone-mode: true
+2026-11-17T15:10:39.9231776Z   fetch-depth: 1
+2026-11-17T15:10:39.9232215Z   fetch-tags: false
+2026-11-17T15:10:39.9232673Z   show-progress: true
+2026-11-17T15:10:39.9233129Z   lfs: false
+2026-11-17T15:10:39.9233557Z   submodules: false
+2026-11-17T15:10:39.9234029Z   set-safe-directory: true
+2026-11-17T15:10:39.9234823Z env:
+2026-11-17T15:10:39.9235406Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:10:39.9236112Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:10:39.9236629Z ##[endgroup]
+2026-11-17T15:10:40.1966748Z Syncing repository: andrewcrising/the-fact-desk
+2026-11-17T15:10:40.1968956Z ##[group]Getting Git version info
+2026-11-17T15:10:40.1969779Z Working directory is '/home/runner/work/the-fact-desk/the-fact-desk'
+2026-11-17T15:10:40.1970873Z [command]/usr/bin/git version
+2026-11-17T15:10:40.2077149Z git version 2.56.1
+2026-11-17T15:10:40.2102027Z ##[endgroup]
+2026-11-17T15:10:40.2117431Z Temporarily overriding HOME='/home/runner/work/_temp/ccdf4f8e-8785-419c-a2c8-8a4c2825fba2' before making global git config changes
+2026-11-17T15:10:40.2119409Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-17T15:10:40.2123963Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/the-fact-desk/the-fact-desk
+2026-11-17T15:10:40.2181175Z Deleting the contents of '/home/runner/work/the-fact-desk/the-fact-desk'
+2026-11-17T15:10:40.2185479Z ##[group]Initializing the repository
+2026-11-17T15:10:40.2191368Z [command]/usr/bin/git init /home/runner/work/the-fact-desk/the-fact-desk
+2026-11-17T15:10:40.2313026Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-17T15:10:40.2314612Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-17T15:10:40.2316055Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-17T15:10:40.2316990Z hint: call:
+2026-11-17T15:10:40.2317481Z hint:
+2026-11-17T15:10:40.2318453Z hint: 	git config --global init.defaultBranch <name>
+2026-11-17T15:10:40.2319394Z hint:
+2026-11-17T15:10:40.2320107Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-17T15:10:40.2321265Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-17T15:10:40.2322508Z hint:
+2026-11-17T15:10:40.2323362Z hint: 	git branch -m <name>
+2026-11-17T15:10:40.2324417Z hint:
+2026-11-17T15:10:40.2325645Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-17T15:10:40.2327118Z Initialized empty Git repository in /home/runner/work/the-fact-desk/the-fact-desk/.git/
+2026-11-17T15:10:40.2337218Z [command]/usr/bin/git remote add origin https://github.com/andrewcrising/the-fact-desk
+2026-11-17T15:10:40.2391082Z ##[endgroup]
+2026-11-17T15:10:40.2391918Z ##[group]Disabling automatic garbage collection
+2026-11-17T15:10:40.2394919Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-17T15:10:40.2428127Z ##[endgroup]
+2026-11-17T15:10:40.2429493Z ##[group]Setting up auth
+2026-11-17T15:10:40.2435759Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-17T15:10:40.2472863Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-17T15:10:40.2887338Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-17T15:10:40.2927974Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-17T15:10:40.3171454Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-17T15:10:40.3231058Z ##[endgroup]
+2026-11-17T15:10:40.3232041Z ##[group]Fetching the repository
+2026-11-17T15:10:40.3244542Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +e4512fb700c4134814f30674953293d9e7a22d9e:refs/remotes/pull/42/merge
+2026-11-17T15:10:40.8279912Z From https://github.com/andrewcrising/the-fact-desk
+2026-11-17T15:10:40.8282387Z  * [new ref]         e4512fb700c4134814f30674953293d9e7a22d9e -> pull/42/merge
+2026-11-17T15:10:40.8287081Z ##[endgroup]
+2026-11-17T15:10:40.8289580Z ##[group]Determining the checkout info
+2026-11-17T15:10:40.8292165Z ##[endgroup]
+2026-11-17T15:10:40.8294517Z [command]/usr/bin/git sparse-checkout disable
+2026-11-17T15:10:40.8356658Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-17T15:10:40.8389598Z ##[group]Checking out the ref
+2026-11-17T15:10:40.8394713Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/42/merge
+2026-11-17T15:10:40.8588651Z Note: switching to 'refs/remotes/pull/42/merge'.
+2026-11-17T15:10:40.8590005Z 
+2026-11-17T15:10:40.8590924Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-11-17T15:10:40.8593098Z changes and commit them, and you can discard any commits you make in this
+2026-11-17T15:10:40.8595138Z state without impacting any branches by switching back to a branch.
+2026-11-17T15:10:40.8595964Z 
+2026-11-17T15:10:40.8596528Z If you want to create a new branch to retain commits you create, you may
+2026-11-17T15:10:40.8597974Z do so (now or later) by using -c with the switch command. Example:
+2026-11-17T15:10:40.8599495Z 
+2026-11-17T15:10:40.8599881Z   git switch -c <new-branch-name>
+2026-11-17T15:10:40.8600792Z 
+2026-11-17T15:10:40.8601142Z Or undo this operation with:
+2026-11-17T15:10:40.8601666Z 
+2026-11-17T15:10:40.8601953Z   git switch -
+2026-11-17T15:10:40.8602369Z 
+2026-11-17T15:10:40.8603033Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-11-17T15:10:40.8604065Z 
+2026-11-17T15:10:40.8605295Z HEAD is now at e4512fb Merge f638c9f0d9d87d350f9af24ea0bbf8b48b400e88 into 157beef9f95fd5099dd0dd1f0f68867621b4bc5a
+2026-11-17T15:10:40.8612760Z ##[endgroup]
+2026-11-17T15:10:40.8654877Z [command]/usr/bin/git log -1 --format=%H
+2026-11-17T15:10:40.8683067Z e4512fb700c4134814f30674953293d9e7a22d9e
+2026-11-17T15:10:40.9211631Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+2026-11-17T15:10:40.9213331Z with:
+2026-11-17T15:10:40.9214122Z   node-version: 24
+2026-11-17T15:10:40.9215013Z   always-auth: false
+2026-11-17T15:10:40.9215926Z   check-latest: false
+2026-11-17T15:10:40.9226065Z   token: ***
+2026-11-17T15:10:40.9226907Z env:
+2026-11-17T15:10:40.9228091Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:10:40.9229934Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:10:40.9230915Z ##[endgroup]
+2026-11-17T15:10:41.0960259Z Found in cache @ /opt/hostedtoolcache/node/24.22.2/x64
+2026-11-17T15:10:41.0966000Z (node:2316) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-17T15:10:41.0970545Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-17T15:10:41.0973257Z ##[group]Environment details
+2026-11-17T15:10:52.8975487Z node: v24.22.2
+2026-11-17T15:10:52.8976228Z npm: 11.19.1
+2026-11-17T15:10:52.8976695Z yarn: 1.22.22
+2026-11-17T15:10:52.8978111Z ##[endgroup]
+2026-11-17T15:10:52.9153089Z ##[group]Run test -x "$PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH"
+2026-11-17T15:10:52.9153705Z [36;1mtest -x "$PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH"[0m
+2026-11-17T15:10:52.9154188Z [36;1m"$PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH" --version[0m
+2026-11-17T15:10:52.9379797Z shell: /usr/bin/bash -e {0}
+2026-11-17T15:10:52.9380226Z env:
+2026-11-17T15:10:52.9380666Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:10:52.9381204Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:10:52.9381564Z ##[endgroup]
+2026-11-17T15:10:59.8582858Z [1117/151059.461315:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /opt/google/chrome/CHROME_VERSION_EXTRA
+2026-11-17T15:11:01.2261188Z Google Chrome 157.0.8103.50 
+2026-11-17T15:11:01.5677177Z ##[group]Run npm ci --no-audit --no-fund
+2026-11-17T15:11:01.5677600Z [36;1mnpm ci --no-audit --no-fund[0m
+2026-11-17T15:11:01.5698827Z shell: /usr/bin/bash -e {0}
+2026-11-17T15:11:01.5699085Z env:
+2026-11-17T15:11:01.5699373Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:11:01.5699751Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:11:01.5699984Z ##[endgroup]
+2026-11-17T15:11:24.1725848Z 
+2026-11-17T15:11:24.1726741Z added 541 packages in 23s
+2026-11-17T15:11:24.1742720Z npm warn install-scripts 6 packages have install scripts not yet covered by allowScripts:
+2026-11-17T15:11:24.1744649Z npm warn install-scripts   @embedded-postgres/linux-x64@18.6.0-beta.19 (postinstall: node scripts/hydrate-symlinks.js)
+2026-11-17T15:11:24.1746125Z npm warn install-scripts   esbuild@0.28.1 (postinstall: node install.js)
+2026-11-17T15:11:24.1747046Z npm warn install-scripts   unrs-resolver@1.12.2 (postinstall: node postinstall.js)
+2026-11-17T15:11:24.1748626Z npm warn install-scripts   workerd@1.20260828.1 (postinstall: node install.js)
+2026-11-17T15:11:24.1750023Z npm warn install-scripts   esbuild@0.28.2 (postinstall: node install.js)
+2026-11-17T15:11:24.1750918Z npm warn install-scripts   workerd@1.20261110.1 (postinstall: node install.js)
+2026-11-17T15:11:24.1751467Z npm warn install-scripts
+2026-11-17T15:11:24.1752495Z npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+2026-11-17T15:11:24.2645689Z ##[group]Run npm run lint
+2026-11-17T15:11:24.2646261Z [36;1mnpm run lint[0m
+2026-11-17T15:11:24.2666776Z shell: /usr/bin/bash -e {0}
+2026-11-17T15:11:24.2667036Z env:
+2026-11-17T15:11:24.2667338Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:11:24.2667724Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:11:24.2667961Z ##[endgroup]
+2026-11-17T15:11:24.3689977Z 
+2026-11-17T15:11:24.3690699Z > the-fact-desk@0.1.0 lint
+2026-11-17T15:11:24.3691202Z > eslint
+2026-11-17T15:11:24.3691384Z 
+2026-11-17T15:11:30.3273897Z ##[group]Run npm run typecheck
+2026-11-17T15:11:30.3274228Z [36;1mnpm run typecheck[0m
+2026-11-17T15:11:30.3295225Z shell: /usr/bin/bash -e {0}
+2026-11-17T15:11:30.3295478Z env:
+2026-11-17T15:11:30.3295761Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:11:30.3296127Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:11:30.3296355Z ##[endgroup]
+2026-11-17T15:11:30.4278534Z 
+2026-11-17T15:11:30.4279474Z > the-fact-desk@0.1.0 typecheck
+2026-11-17T15:11:30.4280070Z > next typegen && tsc --noEmit
+2026-11-17T15:11:30.4280339Z 
+2026-11-17T15:11:30.7132304Z Generating route types...
+2026-11-17T15:11:30.7316438Z ✓ Types generated successfully
+2026-11-17T15:11:35.4307337Z ##[group]Run npm test
+2026-11-17T15:11:35.4307630Z [36;1mnpm test[0m
+2026-11-17T15:11:35.4327248Z shell: /usr/bin/bash -e {0}
+2026-11-17T15:11:35.4327517Z env:
+2026-11-17T15:11:35.4327810Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:11:35.4328523Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:11:35.4328776Z ##[endgroup]
+2026-11-17T15:11:35.5833982Z 
+2026-11-17T15:11:35.5834651Z > the-fact-desk@0.1.0 test
+2026-11-17T15:11:35.5835378Z > node --import tsx --test "src/**/*.test.ts"
+2026-11-17T15:11:35.5835803Z 
+2026-11-17T15:11:36.5277812Z ▶ automation pipeline route
+2026-11-17T15:11:36.5310964Z   ✔ rejects missing admin or cron token (6.670558ms)
+2026-11-17T15:11:36.5331001Z   ✔ forces GET requests to be dry-run even when no query flag is present (0.539762ms)
+2026-11-17T15:11:36.5353596Z   ✔ allows writes only through an explicit POST without dry-run (0.679283ms)
+2026-11-17T15:11:36.5427716Z ✔ automation pipeline route (9.858043ms)
+2026-11-17T15:11:36.5593548Z ✔ unauthenticated and isolated-preview refresh requests cannot fetch or invalidate feeds (9.847709ms)
+2026-11-17T15:11:36.5596194Z ✔ disabled monitoring reports unavailable without contacting feeds or granting write access (38.357317ms)
+2026-11-17T15:11:36.6692095Z ▶ newsletter signup route
+2026-11-17T15:11:36.6693733Z   ✔ rejects invalid email addresses (9.035988ms)
+2026-11-17T15:11:36.6721059Z   ✔ silently accepts honeypot spam submissions without storing PII (5.263616ms)
+2026-11-17T15:11:36.6810156Z ✔ newsletter signup route (16.081834ms)
+2026-11-17T15:11:36.8489665Z ▶ AI Draft Assist route
+2026-11-17T15:11:36.8510754Z   ✔ rejects missing admin token (13.299399ms)
+2026-11-17T15:11:36.8520000Z   ✔ returns unavailable when AI Draft Assist is disabled (7.779978ms)
+2026-11-17T15:11:36.8522371Z ✔ AI Draft Assist route (22.86841ms)
+2026-11-17T15:11:37.1330464Z ▶ review authorization fail-closed
+2026-11-17T15:11:37.1350778Z   ✔ rejects unauthenticated review before touching the database (5.769615ms)
+2026-11-17T15:11:37.1360539Z   ✔ rejects cron credentials and does not authorize them as reviewers (0.907561ms)
+2026-11-17T15:11:37.1362231Z   ✔ refuses to review without a configured server-side reviewer identity (1.293695ms)
+2026-11-17T15:11:37.1363734Z ✔ review authorization fail-closed (9.732984ms)
+2026-11-17T15:11:37.1630643Z ✔ pilot RSS catalog has unique secure source configuration (2.599613ms)
+2026-11-17T15:11:37.1657544Z ✔ catalog validation rejects duplicate ids and feed URLs (0.369954ms)
+2026-11-17T15:11:37.1676331Z ✔ catalog validation rejects non-HTTPS endpoints (0.257754ms)
+2026-11-17T15:11:37.3346745Z ▶ AI editorial draft assist
+2026-11-17T15:11:37.3348922Z   ✔ builds a grounded prompt with sources and evidence assist (0.963246ms)
+2026-11-17T15:11:37.3350754Z   ✔ validates complete JSON output (0.884277ms)
+2026-11-17T15:11:37.3379442Z   ✔ handles missing optional fields safely (0.154509ms)
+2026-11-17T15:11:37.3380734Z   ✔ rejects invalid JSON gracefully (0.474409ms)
+2026-11-17T15:11:37.3385510Z   ✔ uses mocked providers without external API calls (0.279965ms)
+2026-11-17T15:11:37.3386632Z ✔ AI editorial draft assist (4.333243ms)
+2026-11-17T15:11:37.3700452Z ✔ reader citations accept HTTP and HTTPS article URLs (1.343288ms)
+2026-11-17T15:11:37.3702038Z ✔ reader citations refuse dangerous schemes, credentials and malformed links (0.315411ms)
+2026-11-17T15:11:37.3703599Z ✔ live discovery link guard rejects untrusted feed citations (0.455214ms)
+2026-11-17T15:11:37.3704953Z ✔ live feed renders only URLs that passed the citation guard (16.489278ms)
+2026-11-17T15:11:37.5544525Z ▶ admin and cron auth guards
+2026-11-17T15:11:37.5545835Z   ✔ rejects missing or invalid admin bearer token (8.404762ms)
+2026-11-17T15:11:37.5559586Z   ✔ accepts admin and cron bearer tokens only when configured (0.771065ms)
+2026-11-17T15:11:37.5619375Z ✔ admin and cron auth guards (10.984247ms)
+2026-11-17T15:11:37.6061133Z ✔ distinct URLs and newsroom names are not verified independent reporting (1.910071ms)
+2026-11-17T15:11:37.6062628Z ✔ syndicated reports with the same verified origin do not corroborate (0.258124ms)
+2026-11-17T15:11:37.6079899Z ✔ verified independent primary reporting remains eligible (0.19787ms)
+2026-11-17T15:11:37.6094834Z ✔ disputed reporting cannot be an automatic lead (0.590737ms)
+2026-11-17T15:11:37.6096361Z ✔ source kinds must be explicitly publisher or primary (0.225062ms)
+2026-11-17T15:11:37.6097674Z ✔ invalid evidence URLs never count (0.205786ms)
+2026-11-17T15:11:37.6099272Z ✔ incomplete aligned provenance cannot claim two independent sources (0.199784ms)
+2026-11-17T15:11:37.6179434Z ✔ continues a strongly matching draft in the same category (1.364798ms)
+2026-11-17T15:11:37.6181086Z ✔ does not merge a similar title from a different category (0.263213ms)
+2026-11-17T15:11:37.6182299Z ✔ unknown-category clusters never merge across runs (0.204814ms)
+2026-11-17T15:11:37.6183590Z ✔ weak one-term overlap is not enough to merge distinct stories (0.280185ms)
+2026-11-17T15:11:37.8569900Z ▶ guarded publish policy
+2026-11-17T15:11:37.8591874Z   ✔ blocks when automation mode is not guarded auto publish (1.650073ms)
+2026-11-17T15:11:37.8599365Z   ✔ blocks stories without sources (0.270607ms)
+2026-11-17T15:11:37.8600489Z   ✔ allows an official source at moderate threshold (0.226485ms)
+2026-11-17T15:11:37.8601487Z   ✔ blocks claims to verify from AI output (0.314699ms)
+2026-11-17T15:11:37.8602641Z   ✔ blocks low evidence and missing uncertainty for developing stories (0.228689ms)
+2026-11-17T15:11:37.8603955Z   ✔ blocks health auto-publish by default (0.216076ms)
+2026-11-17T15:11:37.8623768Z ✔ guarded publish policy (5.257986ms)
+2026-11-17T15:11:37.8906823Z ▶ automation ranking
+2026-11-17T15:11:37.8908132Z   ✔ ranks stronger evidence higher (1.675982ms)
+2026-11-17T15:11:37.8909534Z   ✔ boosts under-covered signals (0.343043ms)
+2026-11-17T15:11:37.8910671Z   ✔ keeps preference hooks from changing facts (1.041523ms)
+2026-11-17T15:11:37.8945756Z ✔ automation ranking (5.098066ms)
+2026-11-17T15:11:37.8946647Z ▶ story clustering
+2026-11-17T15:11:37.8947338Z   ✔ groups duplicate canonical URLs (2.751387ms)
+2026-11-17T15:11:37.8948401Z   ✔ groups similar titles with shared key terms (0.592531ms)
+2026-11-17T15:11:37.8949389Z ✔ story clustering (5.113926ms)
+2026-11-17T15:11:38.0472721Z ✔ mergeStorySources preserves earlier evidence when a new source arrives (1.082549ms)
+2026-11-17T15:11:38.0491861Z ✔ mergeStorySources deduplicates the same URL and keeps fresh feed metadata (0.177914ms)
+2026-11-17T15:11:38.1413302Z ✔ discovery coalesces concurrent requests and does not relabel a failed refresh as live (3.278595ms)
+2026-11-17T15:11:38.1457276Z ✔ future, undated and old articles cannot seed the discovery cache (0.463749ms)
+2026-11-17T15:11:38.1462301Z ✔ invalidation fences an older refresh and preserves the newer in-flight request (1.673337ms)
+2026-11-17T15:11:38.1681698Z ✔ desk-specific feeds reject cross-posted article paths (1.018118ms)
+2026-11-17T15:11:38.4037623Z ✔ durable envelope forces source-only provenance and reconstructs bounded public fields (11.229178ms)
+2026-11-17T15:11:38.4040025Z ✔ scheduled provenance is bounded, visible and never upgrades editorial evidence (1.218294ms)
+2026-11-17T15:11:38.4055061Z ✔ outage preserves the content timestamp, increments per-feed failures and expires content (1.614185ms)
+2026-11-17T15:11:38.4058089Z ✔ rejects invalid envelopes, timestamp lies, unsafe URLs and publisher-link mismatch (2.561992ms)
+2026-11-17T15:11:38.4060789Z ✔ independent readers recover durable content; failed reads never rejuvenate timestamps (5.015261ms)
+2026-11-17T15:11:38.4067382Z ✔ snapshot reader rejects rollbacks and fences older in-flight results (3.973839ms)
+2026-11-17T15:11:38.4080235Z ✔ production cannot opt into evaluation storage; disabled previews perform no fetch (1.075516ms)
+2026-11-17T15:11:38.4084121Z ✔ remote snapshot reads use only the fixed HTTPS origin and enforce streamed body limits (36.004512ms)
+2026-11-17T15:11:38.4095290Z ✔ rolling feed upgrade accepts exact old manifest but rejects other missing feeds (1.184377ms)
+2026-11-17T15:11:38.8610534Z ﹣ Supabase editorial lifecycle integration (0.918361ms) # Set RUN_INTEGRATION_TESTS=true to run Supabase integration tests.
+2026-11-17T15:11:38.8870508Z ✔ reviewed draft with source evidence is publish-ready (2.255738ms)
+2026-11-17T15:11:38.8878087Z ✔ source-less draft cannot be published (0.255369ms)
+2026-11-17T15:11:38.8879838Z ✔ thin evidence requires explicit uncertainty language (0.16533ms)
+2026-11-17T15:11:38.8881052Z ✔ malformed source URL blocks publication (0.193233ms)
+2026-11-17T15:11:39.9976269Z ▶ native ingestion CLI preserves the accepted snapshot on coverage loss or outage
+2026-11-17T15:11:39.9977869Z   ✔ missing-energy (1300.804329ms)
+2026-11-17T15:11:40.9636771Z   ✔ outage (967.196839ms)
+2026-11-17T15:11:42.1999361Z   ✔ complete (1233.57708ms)
+2026-11-17T15:11:42.2020611Z ✔ native ingestion CLI preserves the accepted snapshot on coverage loss or outage (3504.317402ms)
+2026-11-17T15:11:42.2180582Z ✔ atomic file ingestion survives restart and failed production without corrupting prior data (47.860139ms)
+2026-11-17T15:11:42.2184292Z ✔ native Git snapshot publication is isolated, read back and protected by exact leases (992.679847ms)
+2026-11-17T15:11:42.2185918Z ✔ scheduler provenance accepts only the fixed GitHub workflow identity (2.908264ms)
+2026-11-17T15:11:42.2187426Z ✔ CLI refuses publication while automatic-build and ingestion gates are closed (417.297319ms)
+2026-11-17T15:11:42.2189440Z ▶ evidence scoring
+2026-11-17T15:11:42.2190703Z   ✔ scores a single RSS/news source as low evidence (2.72602ms)
+2026-11-17T15:11:42.2191861Z   ✔ scores one official source as moderate evidence (0.270036ms)
+2026-11-17T15:11:42.2193077Z   ✔ scores an official source plus secondary source as strong evidence (0.221254ms)
+2026-11-17T15:11:42.2194262Z   ✔ scores three independent news sources as strong evidence (1.531743ms)
+2026-11-17T15:11:42.2195569Z   ✔ does not let duplicate sources inflate unique source count (0.334937ms)
+2026-11-17T15:11:42.2196827Z   ✔ flags no sources and weak support for confirmed confidence (0.393568ms)
+2026-11-17T15:11:42.2198463Z   ✔ mentions uncertainty in explanation when uncertainty note is present (0.417112ms)
+2026-11-17T15:11:42.2199998Z   ✔ marks public-interest low-pickup stories as under-covered candidates (0.274886ms)
+2026-11-17T15:11:42.2201196Z ✔ evidence scoring (8.412762ms)
+2026-11-17T15:11:42.2202275Z ✔ round-trips configured category and signal (2.313216ms)
+2026-11-17T15:11:42.2203426Z ✔ ignores invalid untrusted metadata (0.243927ms)
+2026-11-17T15:11:42.2204755Z ✔ normalizes valid feed timestamps for durable storage (1.487408ms)
+2026-11-17T15:11:42.2206247Z ✔ malformed feed timestamps degrade to null instead of aborting a feed (0.198191ms)
+2026-11-17T15:11:42.2207555Z ✔ explicit lead override remains first (1.809933ms)
+2026-11-17T15:11:42.2209077Z ✔ explicit homepage rank beats unpinned automated score (0.841508ms)
+2026-11-17T15:11:42.2210895Z ✔ unpinned stories use evidence-first automated ordering (0.59775ms)
+2026-11-17T15:11:42.2212345Z ✔ single-source Top Signal cannot outrank supported unpinned coverage (0.51724ms)
+2026-11-17T15:11:42.2213827Z ✔ unverified syndicated copies do not receive automatic corroboration (0.287028ms)
+2026-11-17T15:11:42.2215140Z ✔ duplicate and malformed origins fail closed (0.396914ms)
+2026-11-17T15:11:42.2216474Z ✔ explicit editorial lead remains authoritative without provenance (0.220563ms)
+2026-11-17T15:11:42.2218097Z ✔ whitespace variants of the same origin cannot manufacture corroboration (0.241994ms)
+2026-11-17T15:11:42.2220402Z ✔ same publisher different articles preserve citation alignment (3.267757ms)
+2026-11-17T15:11:42.2221864Z ✔ missing URL and credential-bearing URL do not earn publisher credit (0.305694ms)
+2026-11-17T15:11:42.2223155Z ✔ same URL from different outlets cannot double-count (0.342883ms)
+2026-11-17T15:11:42.2224429Z ✔ disputed reports never become Cross-angle on aggregation (0.513793ms)
+2026-11-17T15:11:42.2226232Z ✔ independent verified origins remain aligned across distinct valid articles (0.530825ms)
+2026-11-17T15:11:42.2227921Z ✔ identical substantive syndicated text is not independent corroboration (0.461986ms)
+2026-11-17T15:11:42.2229755Z ✔ inherited Cross-angle is revoked when citations are unverified (0.395652ms)
+2026-11-17T15:11:42.2231309Z ✔ disputed Cross-angle input cannot survive a failed corroboration gate (0.464812ms)
+2026-11-17T15:11:42.2232937Z ✔ different publisher domains without attested origins cannot create Cross-angle (0.372569ms)
+2026-11-17T15:11:42.2234429Z ✔ distinct attested reporting origins support Cross-angle (0.528982ms)
+2026-11-17T15:11:42.2235931Z ✔ different domains sharing one wire origin do not establish independence (0.347311ms)
+2026-11-17T15:11:42.2237510Z ✔ unverified citation volume cannot break equal-priority cluster ties (2.323376ms)
+2026-11-17T15:11:42.2239301Z ✔ untrusted claimed origins cannot break equal-priority cluster ties (0.473077ms)
+2026-11-17T15:11:42.2240776Z ✔ does not let a bridge headline merge otherwise unrelated clusters (6.995353ms)
+2026-11-17T15:11:42.2242182Z ✔ merged citations retain source order when a publisher has no URL (1.54722ms)
+2026-11-17T15:11:42.2243447Z ✔ unresolved disputed confidence survives merging (0.473908ms)
+2026-11-17T15:11:42.2244818Z ✔ merged verified origins remain aligned with their actual publishers (0.679053ms)
+2026-11-17T15:11:42.2246260Z ✔ unverified source cannot inherit representative verified origin (0.519383ms)
+2026-11-17T15:11:42.2247804Z ✔ conflicting origin for repeated article URL is not considered verified (0.46967ms)
+2026-11-17T15:11:42.2249788Z ✔ rejects stories older than the production fourteen-day freshness window (0.404318ms)
+2026-11-17T15:11:42.2251429Z ✔ two related unreviewed publishers remain discovery, not verified corroboration (0.628188ms)
+2026-11-17T15:11:42.2252955Z ✔ institutional headline templates do not merge unrelated releases (0.67748ms)
+2026-11-17T15:11:42.2254459Z ✔ the representative headline and excerpt retain their own first citation (0.532768ms)
+2026-11-17T15:11:42.2255954Z ✔ same-event wording is deduped across social and priority stories (3.711899ms)
+2026-11-17T15:11:42.2257340Z ✔ only recent social/open discovery stories enter the early lane (0.708479ms)
+2026-11-17T15:11:42.2258911Z ✔ duplicates inside the early lane collapse to one event (0.341971ms)
+2026-11-17T15:11:42.2260356Z ✔ headline classification: Solar system planet discovery [World] (3.087178ms)
+2026-11-17T15:11:42.2261926Z ✔ headline classification: Solar eclipse visible tomorrow [World] (0.507441ms)
+2026-11-17T15:11:42.2263412Z ✔ headline classification: Solar storm may disrupt satellites [World] (0.182803ms)
+2026-11-17T15:11:42.2264981Z ✔ headline classification: Solar panels expand electricity output [World] (0.694692ms)
+2026-11-17T15:11:42.2266463Z ✔ headline classification: Solar energy prices fall [World] (0.317996ms)
+2026-11-17T15:11:42.2268524Z ✔ headline classification: Nuclear power plant expansion [World] (0.163326ms)
+2026-11-17T15:11:42.2270094Z ✔ headline classification: NASA telescope images solar corona [World] (0.148498ms)
+2026-11-17T15:11:42.2271482Z ✔ headline classification: Wind power grid upgrade [World] (0.309159ms)
+2026-11-17T15:11:42.2272789Z ✔ headline classification: Oil pipeline shut down [World] (0.168686ms)
+2026-11-17T15:11:42.2274272Z ✔ headline classification: Solar flare threatens power grid [World] (0.239539ms)
+2026-11-17T15:11:42.2275916Z ✔ headline classification: Planet-saving solar energy investments [World] (0.194225ms)
+2026-11-17T15:11:42.2277789Z ✔ headline classification: Solar panel plant expands power production [World] (0.079539ms)
+2026-11-17T15:11:42.2279514Z ✔ headline classification: Astronomers discover exoplanet [World] (0.056536ms)
+2026-11-17T15:11:42.2280749Z ✔ headline classification: Astronomy mission measures solar wind [World] (0.082033ms)
+2026-11-17T15:11:42.2281941Z ✔ headline classification: Solar-powered telescope launch [World] (0.08521ms)
+2026-11-17T15:11:42.2283101Z ✔ headline classification: Solar battery storage prices fall [World] (0.227797ms)
+2026-11-17T15:11:42.2284710Z ✔ headline classification: Nuclear fusion energy reactor announced [World] (0.070983ms)
+2026-11-17T15:11:42.2285986Z ✔ headline classification: Wind power capacity doubles [World] (0.100028ms)
+2026-11-17T15:11:42.2287227Z ✔ headline classification: Cosmic radiation telescope discovery [World] (0.074439ms)
+2026-11-17T15:11:42.2288843Z ✔ headline classification: Solar eclipse tourism boosts local economy [World] (0.069159ms)
+2026-11-17T15:11:42.2289837Z ✔ headline classification: NASA Webb telescope spots an early galaxy [Energy] (0.065823ms)
+2026-11-17T15:11:42.2290778Z ✔ headline classification: Study A.I. Consciousness? The Bots Would Like a Word With You. [Energy] (0.076082ms)
+2026-11-17T15:11:42.2291638Z ✔ headline classification: Cancer drug price falls after FDA approval [Markets] (0.047159ms)
+2026-11-17T15:11:42.2292728Z ✔ headline classification: Trump admin shelves Cyclospora research despite record-breaking outbreak [Technology] (0.045155ms)
+2026-11-17T15:11:42.2293661Z ✔ headline classification: Supreme Court agrees to hear privacy case [World] (0.07972ms)
+2026-11-17T15:11:42.2294429Z ✔ headline classification: Defense lawyers withdraw from murder case [World] (0.086652ms)
+2026-11-17T15:11:42.2295969Z ✔ headline classification: Football star retires after World Cup [World] (0.076223ms)
+2026-11-17T15:11:42.2297459Z ✔ headline classification: Texas Tech head coach blasts USC over poor attendance at LA Coliseum [Technology] (0.074089ms)
+2026-11-17T15:11:42.2298890Z ✔ headline classification: Astronomical energy bills force households to cut back [World] (0.082615ms)
+2026-11-17T15:11:42.2300370Z ✔ headline classification: Wind power costs reach astronomical highs [World] (0.068439ms)
+2026-11-17T15:11:42.2301802Z ✔ headline classification: Electricity bills soar to astronomical levels [World] (0.06976ms)
+2026-11-17T15:11:42.2303320Z ✔ headline classification: Astronomical observations reveal a new solar system [World] (0.428383ms)
+2026-11-17T15:11:42.2304704Z ✔ headline classification: Astronomers map a distant galaxy [Energy] (0.137568ms)
+2026-11-17T15:11:42.2306102Z ✔ headline classification: A solar observatory measures solar radiation [Energy] (0.0644ms)
+2026-11-17T15:11:42.2307432Z ✔ headline classification: Congress passes budget [World] (0.302337ms)
+2026-11-17T15:11:42.2309093Z ✔ headline classification: Federal Reserve cuts interest rates [World] (0.065693ms)
+2026-11-17T15:11:42.2310576Z ✔ headline classification: Software update improves internet security [World] (0.061396ms)
+2026-11-17T15:11:42.2311908Z ✔ headline classification: International talks resume [World] (0.162084ms)
+2026-11-17T15:11:42.2313199Z ✔ headline classification: Cancer vaccine clinical trial begins [World] (0.133881ms)
+2026-11-17T15:11:42.2314464Z ✔ headline classification: Supreme Court issues ruling [World] (0.052819ms)
+2026-11-17T15:11:42.2316041Z ✔ headline classification: Nuclear power plant expands [World] (0.044724ms)
+2026-11-17T15:11:42.2317360Z ✔ headline classification: Film festival announces winners [World] (0.442008ms)
+2026-11-17T15:11:42.2319047Z ✔ headline classification: Solar-panel plant expands power production [World] (0.08563ms)
+2026-11-17T15:11:42.2320540Z ✔ headline classification: Solar wind threatens power grids [Energy] (0.825227ms)
+2026-11-17T15:11:42.2321864Z ✔ headline classification: Astronomer observes a new star [Energy] (0.081604ms)
+2026-11-17T15:11:42.2323222Z ✔ headline classification: School astronomers study distant objects [Energy] (0.078588ms)
+2026-11-17T15:11:42.2324614Z ✔ headline classification: Solar battery storage lowers energy costs [World] (0.116328ms)
+2026-11-17T15:11:42.2326072Z ✔ headline classification: Utility reports astronomical oil and gas costs [World] (0.070823ms)
+2026-11-17T15:11:42.2327644Z ✔ headline classification: NASA telescope schedules a solar eclipse observation [Energy] (0.057688ms)
+2026-11-17T15:11:42.2329619Z ✔ headline classification: Texas Tech head coach discusses astronomical ticket prices [Technology] (0.059151ms)
+2026-11-17T15:11:42.2331437Z ✔ headline classification: James Bond franchise announces a new actor [Markets] (0.061124ms)
+2026-11-17T15:11:42.2333520Z ✔ headline classification: SpaceX successfully catches top of huge Starship rocket for first time [World] (0.070923ms)
+2026-11-17T15:11:42.2335401Z ✔ headline classification: GTA 6 hacker pleads guilty after release from secure hospital [Technology] (0.063749ms)
+2026-11-17T15:11:42.2337394Z ✔ headline classification: Man sentenced over 'horrific' attempted murder of three children [World] (0.066644ms)
+2026-11-17T15:11:42.2339411Z ✔ headline classification: Patient pleads guilty after hospital data theft [Health] (0.162385ms)
+2026-11-17T15:11:42.2340902Z ✔ headline classification: Satellite launch monitors solar storms [Energy] (0.09063ms)
+2026-11-17T15:11:42.2342297Z ✔ broad BBC Science discovery does not default weather to Energy (0.345818ms)
+2026-11-17T15:11:42.2343608Z ✔ feed dates reject impossible calendars and unknown timezones (2.615102ms)
+2026-11-17T15:11:42.2345085Z ✔ live validation precedes limit while the editorial inbox retains undated inputs (48.920568ms)
+2026-11-17T15:11:42.2346696Z ✔ public serialization keeps a useful synopsis but drops article-length body text (6.500355ms)
+2026-11-17T15:11:42.2348534Z ✔ headline inference corrects coarse science and health feed categories (0.877946ms)
+2026-11-17T15:11:42.2349912Z ✔ RSS normalization preserves a natural synopsis boundary (40.348589ms)
+2026-11-17T15:11:42.2351423Z ✔ James Bond casting coverage stays in Culture while financial bonds remain Markets (0.356238ms)
+2026-11-17T15:11:42.2353009Z ✔ court significance cannot be hijacked by unrelated words in feed context (0.276669ms)
+2026-11-17T15:11:42.2354532Z ✔ health story stays health-grounded even when synopsis mentions prices or inflation (0.387045ms)
+2026-11-17T15:11:42.2355991Z ✔ figurative trade-war language is not described as armed conflict (0.407935ms)
+2026-11-17T15:11:42.2357318Z ✔ invasion of privacy is not described as armed conflict (0.331321ms)
+2026-11-17T15:11:42.2358823Z ✔ literal missile conflict still receives conflict context (0.301636ms)
+2026-11-17T15:11:42.2359651Z ▶ RSS parsing
+2026-11-17T15:11:42.2360353Z   ✔ normalizes RSS items for the editorial inbox (5.432804ms)
+2026-11-17T15:11:42.2361128Z ✔ RSS parsing (7.125668ms)
+2026-11-17T15:11:42.2361694Z ▶ bounded RSS transport
+2026-11-17T15:11:42.2362359Z   ✔ reads a complete small body (32.317319ms)
+2026-11-17T15:11:42.2363384Z   ✔ rejects oversized declared Content-Length before streaming (1.06676ms)
+2026-11-17T15:11:42.2364563Z   ✔ rejects chunked oversized feeds even without Content-Length (0.631434ms)
+2026-11-17T15:11:42.2365578Z   ✔ accepts a body exactly at the byte boundary (0.441568ms)
+2026-11-17T15:11:42.2366421Z ✔ bounded RSS transport (35.046315ms)
+2026-11-17T15:11:42.2367467Z ✔ viral X-only signal remains non-lead single-source evidence (3.555075ms)
+2026-11-17T15:11:42.2369399Z ✔ X discovery score is never evidence confidence (0.448551ms)
+2026-11-17T15:11:42.2370662Z ✔ one publisher plus X does not become multi-source corroboration (1.618604ms)
+2026-11-17T15:11:42.2372149Z ✔ two unreviewed publishers with X context cannot establish verified cross-angle (0.737223ms)
+2026-11-17T15:11:42.2373800Z ✔ isolated reader disables inherited database credentials, editorial writes and mock fallback (11.746691ms)
+2026-11-17T15:11:42.2375491Z ✔ Vercel Preview automatically disables privileged clients, tokens and fabricated fallback (1.041052ms)
+2026-11-17T15:11:42.2376776Z ✔ public create payload cannot set reviewer provenance (2.620894ms)
+2026-11-17T15:11:42.2377833Z ✔ public update payload cannot set reviewer provenance (0.31512ms)
+2026-11-17T15:11:42.4376002Z ✔ reader deduplication excludes lead articles across published and RSS sections (2.69387ms)
+2026-11-17T15:11:42.6787001Z ✔ reader routes prefer the durable published story (1.428818ms)
+2026-11-17T15:11:42.6821334Z ✔ reader routes resolve live discovery links without publishing them (0.391444ms)
+2026-11-17T15:11:42.6907349Z ✔ reader routes remain not found when neither source contains the slug (0.279894ms)
+2026-11-17T15:11:42.7249083Z ✔ ordinary single-newsroom Top Signal is not automatic lead eligible (2.798937ms)
+2026-11-17T15:11:42.7251095Z ✔ multi-source Top Signal can become the automatic lead (0.45352ms)
+2026-11-17T15:11:42.7252574Z ✔ primary-only update is recognized but does not become automatic lead (0.292538ms)
+2026-11-17T15:11:42.7254017Z ✔ live items are separated into multi-source, primary-only, and incoming lanes (1.279048ms)
+2026-11-17T15:11:42.7255568Z ✔ multi-source lane ranks stronger corroboration above fresher weak coverage (0.577553ms)
+2026-11-17T15:11:42.7257073Z ✔ unverified extra publishers cannot inflate live priority evidence bonus (1.818358ms)
+2026-11-17T15:11:42.7258901Z ✔ distinct verified origins increase priority evidence, duplicate origins do not (1.805061ms)
+2026-11-17T15:11:42.7260611Z ✔ different unverified publisher domains cannot enter multi-source lane (0.198893ms)
+2026-11-17T15:11:42.7262169Z ✔ syndicated duplicate origin cannot enter multi-source lane (0.341119ms)
+2026-11-17T15:11:42.7263600Z ✔ two verified origins qualify for multi-source lane (0.392476ms)
+2026-11-17T15:11:42.7469166Z ▶ story input validation
+2026-11-17T15:11:42.7470563Z   ✔ creates draft story input from required editor fields (2.810999ms)
+2026-11-17T15:11:42.7489798Z   ✔ forces publishing through the publish action (0.931306ms)
+2026-11-17T15:11:42.7491163Z ✔ story input validation (6.768368ms)
+2026-11-17T15:11:42.8991359Z ▶ story repository fallback
+2026-11-17T15:11:42.9000182Z   ✔ returns published mock stories when Supabase is not configured (1.245245ms)
+2026-11-17T15:11:42.9002267Z   ✔ resolves detail slugs shown by fallback homepage stories (0.313899ms)
+2026-11-17T15:11:42.9006524Z   ✔ allows mock fallback outside production (0.183765ms)
+2026-11-17T15:11:42.9007694Z   ✔ requires explicit mock fallback in production (0.17078ms)
+2026-11-17T15:11:42.9009369Z ✔ story repository fallback (3.18456ms)
+2026-11-17T15:11:42.9033756Z ▶ untrusted fallback provenance
+2026-11-17T15:11:42.9034691Z   ✔ discards forged reviewed origins from a mock story (0.907541ms)
+2026-11-17T15:11:42.9035702Z ✔ untrusted fallback provenance (1.056721ms)
+2026-11-17T15:11:42.9354056Z ▶ url utilities
+2026-11-17T15:11:42.9355265Z   ✔ canonicalizes tracking-heavy URLs (0.940673ms)
+2026-11-17T15:11:42.9357873Z   ✔ builds stable feed-item dedupe keys (0.221074ms)
+2026-11-17T15:11:42.9362607Z ✔ url utilities (2.415799ms)
+2026-11-17T15:11:42.9521565Z ℹ tests 225
+2026-11-17T15:11:42.9521999Z ℹ suites 17
+2026-11-17T15:11:42.9522275Z ℹ pass 225
+2026-11-17T15:11:42.9522537Z ℹ fail 0
+2026-11-17T15:11:42.9522803Z ℹ cancelled 0
+2026-11-17T15:11:42.9523095Z ℹ skipped 0
+2026-11-17T15:11:42.9523366Z ℹ todo 0
+2026-11-17T15:11:42.9523674Z ℹ duration_ms 7331.136036
+2026-11-17T15:11:42.9734793Z ##[group]Run npm run test:e2e
+2026-11-17T15:11:42.9735303Z [36;1mnpm run test:e2e[0m
+2026-11-17T15:11:42.9755088Z shell: /usr/bin/bash -e {0}
+2026-11-17T15:11:42.9755331Z env:
+2026-11-17T15:11:42.9755621Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:11:42.9755980Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:11:42.9756211Z ##[endgroup]
+2026-11-17T15:11:43.0783631Z 
+2026-11-17T15:11:43.0784244Z > the-fact-desk@0.1.0 test:e2e
+2026-11-17T15:11:43.0784777Z > playwright test
+2026-11-17T15:11:43.0784976Z 
+2026-11-17T15:11:59.5064140Z 
+2026-11-17T15:11:59.5064986Z Running 32 tests using 2 workers
+2026-11-17T15:11:59.5065562Z 
+2026-11-17T15:12:29.8740012Z   ✓   1 [desktop-chromium] › e2e/article-reader.spec.ts:5:1 › all eight article routes retain their title, source citations and bounded context (12.2s)
+2026-11-17T15:12:31.4110689Z READER_ACCESSIBILITY []
+2026-11-17T15:12:31.4622054Z   ✓   3 [desktop-chromium] › e2e/article-reader.spec.ts:28:1 › scrolling tickers are focusable and support keyboard scrolling (1.6s)
+2026-11-17T15:12:31.5217056Z   ✓   2 [desktop-chromium] › e2e/accessibility.spec.ts:5:3 › WCAG accessibility: / (13.8s)
+2026-11-17T15:12:31.6816113Z   ✓   4 [desktop-chromium] › e2e/article-reader.spec.ts:44:1 › local public-reader mode denies inherited admin and cron credentials over real HTTP (204ms)
+2026-11-17T15:12:33.1842139Z READER_ACCESSIBILITY []
+2026-11-17T15:12:33.2588082Z   ✓   5 [desktop-chromium] › e2e/accessibility.spec.ts:5:3 › WCAG accessibility: /?category=Energy (1.7s)
+2026-11-17T15:12:33.7910630Z   ✓   7 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Politics: populated, source-linked and truthful (501ms)
+2026-11-17T15:12:34.3040592Z   ✓   8 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Markets: populated, source-linked and truthful (499ms)
+2026-11-17T15:12:34.8200934Z   ✓   9 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Technology: populated, source-linked and truthful (500ms)
+2026-11-17T15:12:35.3430510Z   ✓  10 [desktop-chromium] › e2e/reader.spec.ts:7:3 › World: populated, source-linked and truthful (500ms)
+2026-11-17T15:12:35.8736876Z   ✓  11 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Health: populated, source-linked and truthful (522ms)
+2026-11-17T15:12:36.4038080Z   ✓  12 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Courts: populated, source-linked and truthful (519ms)
+2026-11-17T15:12:36.9044344Z   ✓  13 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Energy: populated, source-linked and truthful (486ms)
+2026-11-17T15:12:37.4560743Z   ✓  14 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Culture: populated, source-linked and truthful (532ms)
+2026-11-17T15:12:39.2616104Z   ✓  15 [desktop-chromium] › e2e/reader.spec.ts:27:1 › category controls navigate and show eight distinct category leads (1.8s)
+2026-11-17T15:12:39.3312549Z   ✓  16 [desktop-chromium] › e2e/reader.spec.ts:43:1 › scheduled health is fresh, complete and from the reviewed producer (63ms)
+2026-11-17T15:12:41.9958964Z READER_ACCESSIBILITY []
+2026-11-17T15:12:42.1741110Z   ✓  17 [mobile-chromium] › e2e/accessibility.spec.ts:5:3 › WCAG accessibility: / (1.9s)
+2026-11-17T15:12:43.4277252Z READER_ACCESSIBILITY []
+2026-11-17T15:12:43.6003773Z   ✓  18 [mobile-chromium] › e2e/accessibility.spec.ts:5:3 › WCAG accessibility: /?category=Energy (1.4s)
+2026-11-17T15:12:45.2106924Z   ✓  19 [mobile-chromium] › e2e/article-reader.spec.ts:5:1 › all eight article routes retain their title, source citations and bounded context (1.6s)
+2026-11-17T15:12:46.2537642Z   ✓  20 [mobile-chromium] › e2e/article-reader.spec.ts:28:1 › scrolling tickers are focusable and support keyboard scrolling (1.0s)
+2026-11-17T15:12:46.3251213Z   ✓  21 [mobile-chromium] › e2e/article-reader.spec.ts:44:1 › local public-reader mode denies inherited admin and cron credentials over real HTTP (61ms)
+2026-11-17T15:12:47.8844483Z   ✘   6 [desktop-chromium] › e2e/category-keyboard.spec.ts:3:1 › category tabs support arrows, wraparound, Home and End with one keyboard stop (16.0s)
+2026-11-17T15:12:49.1432098Z   ✓  23 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Politics: populated, source-linked and truthful (613ms)
+2026-11-17T15:12:49.7164543Z   ✓  24 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Markets: populated, source-linked and truthful (551ms)
+2026-11-17T15:12:50.2757929Z   ✓  25 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Technology: populated, source-linked and truthful (519ms)
+2026-11-17T15:12:51.0184064Z   ✓  26 [mobile-chromium] › e2e/reader.spec.ts:7:3 › World: populated, source-linked and truthful (717ms)
+2026-11-17T15:12:51.6163139Z   ✓  27 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Health: populated, source-linked and truthful (578ms)
+2026-11-17T15:12:52.1816398Z   ✓  28 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Courts: populated, source-linked and truthful (546ms)
+2026-11-17T15:12:52.7202116Z   ✓  29 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Energy: populated, source-linked and truthful (514ms)
+2026-11-17T15:12:53.2627848Z   ✓  30 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Culture: populated, source-linked and truthful (528ms)
+2026-11-17T15:12:54.8836097Z   ✓  31 [mobile-chromium] › e2e/reader.spec.ts:27:1 › category controls navigate and show eight distinct category leads (1.6s)
+2026-11-17T15:12:54.9210160Z   ✓  32 [mobile-chromium] › e2e/reader.spec.ts:43:1 › scheduled health is fresh, complete and from the reviewed producer (31ms)
+2026-11-17T15:13:02.0353583Z   ✘  22 [mobile-chromium] › e2e/category-keyboard.spec.ts:3:1 › category tabs support arrows, wraparound, Home and End with one keyboard stop (15.6s)
+2026-11-17T15:13:02.1007944Z 
+2026-11-17T15:13:02.1013999Z 
+2026-11-17T15:13:02.1024792Z   1) [desktop-chromium] › e2e/category-keyboard.spec.ts:3:1 › category tabs support arrows, wraparound, Home and End with one keyboard stop 
+2026-11-17T15:13:02.1025991Z 
+2026-11-17T15:13:02.1026322Z     Error: expect(locator).toBeFocused() failed
+2026-11-17T15:13:02.1026755Z 
+2026-11-17T15:13:02.1027425Z     Locator:  getByRole('tablist', { name: 'Filter by category' }).getByRole('tab', { name: /^Culture/ })
+2026-11-17T15:13:02.1028650Z     Expected: focused
+2026-11-17T15:13:02.1029058Z     Received: inactive
+2026-11-17T15:13:02.1029475Z     Timeout:  15000ms
+2026-11-17T15:13:02.1029729Z 
+2026-11-17T15:13:02.1029913Z     Call log:
+2026-11-17T15:13:02.1031069Z       - Expect "toBeFocused" getByRole('tablist', { name: 'Filter by category' }).getByRole('tab', { name: /^Culture/ }) with timeout 15000ms
+2026-11-17T15:13:02.1032721Z       - waiting for getByRole('tablist', { name: 'Filter by category' }).getByRole('tab', { name: /^Culture/ })
+2026-11-17T15:13:02.1035467Z         34 × locator resolved to <button role="tab" type="button" aria-selected="false" class="shrink-0 border-b-2 px-3 py-2.5 text-xs font-medium sm:px-4 sm:text-[13px] border-transparent text-[var(--muted)] hover:text-[var(--foreground)]">…</button>
+2026-11-17T15:13:02.1037325Z            - unexpected value "inactive"
+2026-11-17T15:13:02.1037702Z 
+2026-11-17T15:13:02.1037712Z 
+2026-11-17T15:13:02.1037941Z        9 |   await energy.focus();
+2026-11-17T15:13:02.1041595Z       10 |   await energy.press("ArrowRight");
+2026-11-17T15:13:02.1042311Z     > 11 |   await expect(culture).toBeFocused();
+2026-11-17T15:13:02.1042897Z          |                         ^
+2026-11-17T15:13:02.1043664Z       12 |   await expect(culture).toHaveAttribute("aria-selected", "true");
+2026-11-17T15:13:02.1044522Z       13 |   await expect(page).toHaveURL(/category=Culture/);
+2026-11-17T15:13:02.1045282Z       14 |   await expect(tabs.locator('[tabindex="0"]')).toHaveCount(1);
+2026-11-17T15:13:02.1046364Z         at /home/runner/work/the-fact-desk/the-fact-desk/e2e/category-keyboard.spec.ts:11:25
+2026-11-17T15:13:02.1047038Z 
+2026-11-17T15:13:02.1047944Z     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+2026-11-17T15:13:02.1049971Z     test-results/category-keyboard-category-1555d--End-with-one-keyboard-stop-desktop-chromium/test-failed-1.png
+2026-11-17T15:13:02.1052366Z     ────────────────────────────────────────────────────────────────────────────────────────────────
+2026-11-17T15:13:02.1052958Z 
+2026-11-17T15:13:02.1054310Z     Error Context: test-results/category-keyboard-category-1555d--End-with-one-keyboard-stop-desktop-chromium/error-context.md
+2026-11-17T15:13:02.1055377Z 
+2026-11-17T15:13:02.1056214Z     attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+2026-11-17T15:13:02.1057720Z     test-results/category-keyboard-category-1555d--End-with-one-keyboard-stop-desktop-chromium/trace.zip
+2026-11-17T15:13:02.1059129Z     Usage:
+2026-11-17T15:13:02.1059329Z 
+2026-11-17T15:13:02.1060364Z         npx playwright show-trace test-results/category-keyboard-category-1555d--End-with-one-keyboard-stop-desktop-chromium/trace.zip
+2026-11-17T15:13:02.1061400Z 
+2026-11-17T15:13:02.1062129Z     ────────────────────────────────────────────────────────────────────────────────────────────────
+2026-11-17T15:13:02.1062663Z 
+2026-11-17T15:13:02.1063823Z   2) [mobile-chromium] › e2e/category-keyboard.spec.ts:3:1 › category tabs support arrows, wraparound, Home and End with one keyboard stop 
+2026-11-17T15:13:02.1064803Z 
+2026-11-17T15:13:02.1065082Z     Error: expect(locator).toBeFocused() failed
+2026-11-17T15:13:02.1065467Z 
+2026-11-17T15:13:02.1066080Z     Locator:  getByRole('tablist', { name: 'Filter by category' }).getByRole('tab', { name: /^Culture/ })
+2026-11-17T15:13:02.1066944Z     Expected: focused
+2026-11-17T15:13:02.1067334Z     Received: inactive
+2026-11-17T15:13:02.1067709Z     Timeout:  15000ms
+2026-11-17T15:13:02.1067941Z 
+2026-11-17T15:13:02.1068076Z     Call log:
+2026-11-17T15:13:02.1069421Z       - Expect "toBeFocused" getByRole('tablist', { name: 'Filter by category' }).getByRole('tab', { name: /^Culture/ }) with timeout 15000ms
+2026-11-17T15:13:02.1070985Z       - waiting for getByRole('tablist', { name: 'Filter by category' }).getByRole('tab', { name: /^Culture/ })
+2026-11-17T15:13:02.1073706Z         34 × locator resolved to <button role="tab" type="button" aria-selected="false" class="shrink-0 border-b-2 px-3 py-2.5 text-xs font-medium sm:px-4 sm:text-[13px] border-transparent text-[var(--muted)] hover:text-[var(--foreground)]">…</button>
+2026-11-17T15:13:02.1075600Z            - unexpected value "inactive"
+2026-11-17T15:13:02.1075953Z 
+2026-11-17T15:13:02.1075963Z 
+2026-11-17T15:13:02.1076186Z        9 |   await energy.focus();
+2026-11-17T15:13:02.1076794Z       10 |   await energy.press("ArrowRight");
+2026-11-17T15:13:02.1077410Z     > 11 |   await expect(culture).toBeFocused();
+2026-11-17T15:13:02.1077998Z          |                         ^
+2026-11-17T15:13:02.1078975Z       12 |   await expect(culture).toHaveAttribute("aria-selected", "true");
+2026-11-17T15:13:02.1079797Z       13 |   await expect(page).toHaveURL(/category=Culture/);
+2026-11-17T15:13:02.1080544Z       14 |   await expect(tabs.locator('[tabindex="0"]')).toHaveCount(1);
+2026-11-17T15:13:02.1081460Z         at /home/runner/work/the-fact-desk/the-fact-desk/e2e/category-keyboard.spec.ts:11:25
+2026-11-17T15:13:02.1082120Z 
+2026-11-17T15:13:02.1082931Z     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+2026-11-17T15:13:02.1084729Z     test-results/category-keyboard-category-1555d--End-with-one-keyboard-stop-mobile-chromium/test-failed-1.png
+2026-11-17T15:13:02.1086365Z     ────────────────────────────────────────────────────────────────────────────────────────────────
+2026-11-17T15:13:02.1086866Z 
+2026-11-17T15:13:02.1087768Z     Error Context: test-results/category-keyboard-category-1555d--End-with-one-keyboard-stop-mobile-chromium/error-context.md
+2026-11-17T15:13:02.1088974Z 
+2026-11-17T15:13:02.1089696Z     attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+2026-11-17T15:13:02.1091032Z     test-results/category-keyboard-category-1555d--End-with-one-keyboard-stop-mobile-chromium/trace.zip
+2026-11-17T15:13:02.1091859Z     Usage:
+2026-11-17T15:13:02.1092012Z 
+2026-11-17T15:13:02.1093051Z         npx playwright show-trace test-results/category-keyboard-category-1555d--End-with-one-keyboard-stop-mobile-chromium/trace.zip
+2026-11-17T15:13:02.1093931Z 
+2026-11-17T15:13:02.1094474Z     ────────────────────────────────────────────────────────────────────────────────────────────────
+2026-11-17T15:13:02.1094900Z 
+2026-11-17T15:13:02.1095031Z   2 failed
+2026-11-17T15:13:02.1096092Z     [desktop-chromium] › e2e/category-keyboard.spec.ts:3:1 › category tabs support arrows, wraparound, Home and End with one keyboard stop 
+2026-11-17T15:13:02.1097866Z     [mobile-chromium] › e2e/category-keyboard.spec.ts:3:1 › category tabs support arrows, wraparound, Home and End with one keyboard stop 
+2026-11-17T15:13:02.1099259Z   30 passed (1.3m)
+2026-11-17T15:13:02.1705560Z ##[error]Process completed with exit code 1.
+2026-11-17T15:13:02.1850662Z Post job cleanup.
+2026-11-17T15:13:02.2746854Z [command]/usr/bin/git version
+2026-11-17T15:13:02.2819421Z git version 2.56.1
+2026-11-17T15:13:02.2859137Z Temporarily overriding HOME='/home/runner/work/_temp/7a31c295-7c90-4295-9e58-d7281a11c97c' before making global git config changes
+2026-11-17T15:13:02.2861066Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-17T15:13:02.2864617Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/the-fact-desk/the-fact-desk
+2026-11-17T15:13:02.2906558Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-17T15:13:02.2947199Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-17T15:13:02.3195109Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-17T15:13:02.3225679Z http.https://github.com/.extraheader
+2026-11-17T15:13:02.3238876Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-17T15:13:02.3277236Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-17T15:13:02.3703083Z Cleaning up orphan processes
+2026-11-17T15:13:02.4105827Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+
+
+RUN 2
+﻿2026-11-17T15:13:32.1272747Z Current runner version: '2.338.2'
+2026-11-17T15:13:32.1287428Z ##[group]Runner Image Provisioner
+2026-11-17T15:13:32.1287936Z Hosted Compute Agent
+2026-11-17T15:13:32.1288362Z Version: 20261103.629
+2026-11-17T15:13:32.1288790Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+2026-11-17T15:13:32.1289218Z Build Date: 2026-11-03T17:26:59Z
+2026-11-17T15:13:32.1289652Z Worker ID: {7affd368-fc8b-4f50-a2c4-22a2e6d0f586}
+2026-11-17T15:13:32.1290074Z Region: northcentralus
+2026-11-17T15:13:32.1290415Z Cloud: Azure
+2026-11-17T15:13:32.1290813Z ##[endgroup]
+2026-11-17T15:13:32.1291529Z ##[group]Operating System
+2026-11-17T15:13:32.1291910Z Ubuntu
+2026-11-17T15:13:32.1292240Z 24.04.5
+2026-11-17T15:13:32.1292553Z LTS
+2026-11-17T15:13:32.1292949Z ##[endgroup]
+2026-11-17T15:13:32.1293275Z ##[group]Runner Image
+2026-11-17T15:13:32.1293652Z Image: ubuntu-24.04
+2026-11-17T15:13:32.1294005Z Version: 20261111.370.1
+2026-11-17T15:13:32.1294785Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261111.370/images/ubuntu/Ubuntu2404-Readme.md
+2026-11-17T15:13:32.1295788Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261111.370
+2026-11-17T15:13:32.1296352Z ##[endgroup]
+2026-11-17T15:13:32.1297024Z ##[group]GITHUB_TOKEN Permissions
+2026-11-17T15:13:32.1298179Z Contents: read
+2026-11-17T15:13:32.1298534Z Metadata: read
+2026-11-17T15:13:32.1298871Z ##[endgroup]
+2026-11-17T15:13:32.1300072Z Secret source: Actions
+2026-11-17T15:13:32.1300651Z Cache mode: write
+2026-11-17T15:13:32.1301093Z Prepare workflow directory
+2026-11-17T15:13:32.1539501Z Prepare all required actions
+2026-11-17T15:13:32.1576825Z Getting action download info
+2026-11-17T15:13:32.3902338Z Download action repository 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' (SHA:11bd71901bbe5b1630ceea73d27597364c9af683)
+2026-11-17T15:13:32.4787499Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-11-17T15:13:32.6419884Z Complete job name: reader
+2026-11-17T15:13:32.6899129Z ##[group]Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+2026-11-17T15:13:32.6899606Z with:
+2026-11-17T15:13:32.6899852Z   repository: andrewcrising/the-fact-desk
+2026-11-17T15:13:32.6901856Z   token: ***
+2026-11-17T15:13:32.6902083Z   ssh-strict: true
+2026-11-17T15:13:32.6902461Z   ssh-user: git
+2026-11-17T15:13:32.6902819Z   persist-credentials: true
+2026-11-17T15:13:32.6903078Z   clean: true
+2026-11-17T15:13:32.6903315Z   sparse-checkout-cone-mode: true
+2026-11-17T15:13:32.6903585Z   fetch-depth: 1
+2026-11-17T15:13:32.6903812Z   fetch-tags: false
+2026-11-17T15:13:32.6904049Z   show-progress: true
+2026-11-17T15:13:32.6904328Z   lfs: false
+2026-11-17T15:13:32.6904570Z   submodules: false
+2026-11-17T15:13:32.6904808Z   set-safe-directory: true
+2026-11-17T15:13:32.6905339Z env:
+2026-11-17T15:13:32.6905629Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:13:32.6905992Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:13:32.6906259Z ##[endgroup]
+2026-11-17T15:13:32.8593410Z Syncing repository: andrewcrising/the-fact-desk
+2026-11-17T15:13:32.8594919Z ##[group]Getting Git version info
+2026-11-17T15:13:32.8595703Z Working directory is '/home/runner/work/the-fact-desk/the-fact-desk'
+2026-11-17T15:13:32.8596577Z [command]/usr/bin/git version
+2026-11-17T15:13:32.8653475Z git version 2.56.1
+2026-11-17T15:13:32.8664599Z ##[endgroup]
+2026-11-17T15:13:32.8672443Z Temporarily overriding HOME='/home/runner/work/_temp/ca7e1cdb-0e2a-45f5-8dac-3ed11352b622' before making global git config changes
+2026-11-17T15:13:32.8673595Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-17T15:13:32.8675498Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/the-fact-desk/the-fact-desk
+2026-11-17T15:13:32.8711185Z Deleting the contents of '/home/runner/work/the-fact-desk/the-fact-desk'
+2026-11-17T15:13:32.8713312Z ##[group]Initializing the repository
+2026-11-17T15:13:32.8715995Z [command]/usr/bin/git init /home/runner/work/the-fact-desk/the-fact-desk
+2026-11-17T15:13:32.8786478Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-17T15:13:32.8787189Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-17T15:13:32.8787736Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-17T15:13:32.8788190Z hint: call:
+2026-11-17T15:13:32.8788403Z hint:
+2026-11-17T15:13:32.8788680Z hint: 	git config --global init.defaultBranch <name>
+2026-11-17T15:13:32.8788997Z hint:
+2026-11-17T15:13:32.8789296Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-17T15:13:32.8789905Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-17T15:13:32.8790283Z hint:
+2026-11-17T15:13:32.8790502Z hint: 	git branch -m <name>
+2026-11-17T15:13:32.8790749Z hint:
+2026-11-17T15:13:32.8791072Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-17T15:13:32.8793134Z Initialized empty Git repository in /home/runner/work/the-fact-desk/the-fact-desk/.git/
+2026-11-17T15:13:32.8799697Z [command]/usr/bin/git remote add origin https://github.com/andrewcrising/the-fact-desk
+2026-11-17T15:13:32.8836294Z ##[endgroup]
+2026-11-17T15:13:32.8836698Z ##[group]Disabling automatic garbage collection
+2026-11-17T15:13:32.8838206Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-17T15:13:32.8860770Z ##[endgroup]
+2026-11-17T15:13:32.8861150Z ##[group]Setting up auth
+2026-11-17T15:13:32.8864369Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-17T15:13:32.8889806Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-17T15:13:32.9146268Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-17T15:13:32.9169773Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-17T15:13:32.9335804Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-17T15:13:32.9363893Z ##[endgroup]
+2026-11-17T15:13:32.9364428Z ##[group]Fetching the repository
+2026-11-17T15:13:32.9370552Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +7fcb40e0f635ae4d000b998941e45b8f661a7c00:refs/remotes/pull/42/merge
+2026-11-17T15:13:33.3252138Z From https://github.com/andrewcrising/the-fact-desk
+2026-11-17T15:13:33.3252943Z  * [new ref]         7fcb40e0f635ae4d000b998941e45b8f661a7c00 -> pull/42/merge
+2026-11-17T15:13:33.3256969Z ##[endgroup]
+2026-11-17T15:13:33.3257454Z ##[group]Determining the checkout info
+2026-11-17T15:13:33.3258757Z ##[endgroup]
+2026-11-17T15:13:33.3262760Z [command]/usr/bin/git sparse-checkout disable
+2026-11-17T15:13:33.3305392Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-17T15:13:33.3328104Z ##[group]Checking out the ref
+2026-11-17T15:13:33.3330091Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/42/merge
+2026-11-17T15:13:33.3454546Z Note: switching to 'refs/remotes/pull/42/merge'.
+2026-11-17T15:13:33.3454988Z 
+2026-11-17T15:13:33.3455483Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-11-17T15:13:33.3456353Z changes and commit them, and you can discard any commits you make in this
+2026-11-17T15:13:33.3457148Z state without impacting any branches by switching back to a branch.
+2026-11-17T15:13:33.3457534Z 
+2026-11-17T15:13:33.3457741Z If you want to create a new branch to retain commits you create, you may
+2026-11-17T15:13:33.3458209Z do so (now or later) by using -c with the switch command. Example:
+2026-11-17T15:13:33.3458483Z 
+2026-11-17T15:13:33.3458610Z   git switch -c <new-branch-name>
+2026-11-17T15:13:33.3458976Z 
+2026-11-17T15:13:33.3459103Z Or undo this operation with:
+2026-11-17T15:13:33.3459280Z 
+2026-11-17T15:13:33.3459417Z   git switch -
+2026-11-17T15:13:33.3459574Z 
+2026-11-17T15:13:33.3459800Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-11-17T15:13:33.3460122Z 
+2026-11-17T15:13:33.3460473Z HEAD is now at 7fcb40e Merge 431ff7757bc41323b32b389258fcf7be56fdb901 into 157beef9f95fd5099dd0dd1f0f68867621b4bc5a
+2026-11-17T15:13:33.3462660Z ##[endgroup]
+2026-11-17T15:13:33.3496841Z [command]/usr/bin/git log -1 --format=%H
+2026-11-17T15:13:33.3516735Z 7fcb40e0f635ae4d000b998941e45b8f661a7c00
+2026-11-17T15:13:33.3782622Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+2026-11-17T15:13:33.3783039Z with:
+2026-11-17T15:13:33.3783272Z   node-version: 24
+2026-11-17T15:13:33.3783516Z   always-auth: false
+2026-11-17T15:13:33.3783771Z   check-latest: false
+2026-11-17T15:13:33.3785914Z   token: ***
+2026-11-17T15:13:33.3786155Z env:
+2026-11-17T15:13:33.3786490Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:13:33.3786886Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:13:33.3787156Z ##[endgroup]
+2026-11-17T15:13:33.4673668Z (node:2076) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-17T15:13:33.4674478Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-17T15:13:33.4687635Z Found in cache @ /opt/hostedtoolcache/node/24.22.2/x64
+2026-11-17T15:13:33.4688475Z ##[group]Environment details
+2026-11-17T15:13:33.7365496Z node: v24.22.2
+2026-11-17T15:13:33.7366286Z npm: 11.19.1
+2026-11-17T15:13:33.7366764Z yarn: 1.22.22
+2026-11-17T15:13:33.7368016Z ##[endgroup]
+2026-11-17T15:13:33.7509632Z ##[group]Run test -x "$PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH"
+2026-11-17T15:13:33.7510887Z [36;1mtest -x "$PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH"[0m
+2026-11-17T15:13:33.7512012Z [36;1m"$PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH" --version[0m
+2026-11-17T15:13:33.7536509Z shell: /usr/bin/bash -e {0}
+2026-11-17T15:13:33.7537221Z env:
+2026-11-17T15:13:33.7538011Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:13:33.7539024Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:13:33.7539698Z ##[endgroup]
+2026-11-17T15:13:33.8444482Z [1117/151333.839863:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /opt/google/chrome/CHROME_VERSION_EXTRA
+2026-11-17T15:13:33.8571522Z Google Chrome 157.0.8103.50 
+2026-11-17T15:13:33.8686092Z ##[group]Run npm ci --no-audit --no-fund
+2026-11-17T15:13:33.8686841Z [36;1mnpm ci --no-audit --no-fund[0m
+2026-11-17T15:13:33.8702888Z shell: /usr/bin/bash -e {0}
+2026-11-17T15:13:33.8703469Z env:
+2026-11-17T15:13:33.8704144Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:13:33.8705039Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:13:33.8705762Z ##[endgroup]
+2026-11-17T15:13:44.9302582Z 
+2026-11-17T15:13:44.9303378Z added 541 packages in 11s
+2026-11-17T15:13:44.9310892Z npm warn install-scripts 6 packages have install scripts not yet covered by allowScripts:
+2026-11-17T15:13:44.9311780Z npm warn install-scripts   @embedded-postgres/linux-x64@18.6.0-beta.19 (postinstall: node scripts/hydrate-symlinks.js)
+2026-11-17T15:13:44.9312460Z npm warn install-scripts   esbuild@0.28.1 (postinstall: node install.js)
+2026-11-17T15:13:44.9313058Z npm warn install-scripts   unrs-resolver@1.12.2 (postinstall: node postinstall.js)
+2026-11-17T15:13:44.9313954Z npm warn install-scripts   workerd@1.20260828.1 (postinstall: node install.js)
+2026-11-17T15:13:44.9314865Z npm warn install-scripts   esbuild@0.28.2 (postinstall: node install.js)
+2026-11-17T15:13:44.9315768Z npm warn install-scripts   workerd@1.20261110.1 (postinstall: node install.js)
+2026-11-17T15:13:44.9316345Z npm warn install-scripts
+2026-11-17T15:13:44.9317061Z npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+2026-11-17T15:13:45.0021560Z ##[group]Run npm run lint
+2026-11-17T15:13:45.0021897Z [36;1mnpm run lint[0m
+2026-11-17T15:13:45.0038407Z shell: /usr/bin/bash -e {0}
+2026-11-17T15:13:45.0038558Z env:
+2026-11-17T15:13:45.0038731Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:13:45.0038940Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:13:45.0039078Z ##[endgroup]
+2026-11-17T15:13:45.0631913Z 
+2026-11-17T15:13:45.0632288Z > the-fact-desk@0.1.0 lint
+2026-11-17T15:13:45.0632500Z > eslint
+2026-11-17T15:13:45.0632574Z 
+2026-11-17T15:13:48.4203753Z ##[group]Run npm run typecheck
+2026-11-17T15:13:48.4204008Z [36;1mnpm run typecheck[0m
+2026-11-17T15:13:48.4220852Z shell: /usr/bin/bash -e {0}
+2026-11-17T15:13:48.4221000Z env:
+2026-11-17T15:13:48.4221154Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:13:48.4221345Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:13:48.4221472Z ##[endgroup]
+2026-11-17T15:13:48.5873633Z 
+2026-11-17T15:13:48.5873997Z > the-fact-desk@0.1.0 typecheck
+2026-11-17T15:13:48.5874324Z > next typegen && tsc --noEmit
+2026-11-17T15:13:48.5874419Z 
+2026-11-17T15:13:48.7581424Z Generating route types...
+2026-11-17T15:13:48.7691411Z ✓ Types generated successfully
+2026-11-17T15:13:51.6017238Z ##[group]Run npm test
+2026-11-17T15:13:51.6017459Z [36;1mnpm test[0m
+2026-11-17T15:13:51.6033982Z shell: /usr/bin/bash -e {0}
+2026-11-17T15:13:51.6034112Z env:
+2026-11-17T15:13:51.6034266Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:13:51.6034454Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:13:51.6034579Z ##[endgroup]
+2026-11-17T15:13:51.6928224Z 
+2026-11-17T15:13:51.6928689Z > the-fact-desk@0.1.0 test
+2026-11-17T15:13:51.6929059Z > node --import tsx --test "src/**/*.test.ts"
+2026-11-17T15:13:51.6929257Z 
+2026-11-17T15:13:52.2562154Z ▶ automation pipeline route
+2026-11-17T15:13:52.2563036Z   ✔ rejects missing admin or cron token (3.65882ms)
+2026-11-17T15:13:52.2565735Z   ✔ forces GET requests to be dry-run even when no query flag is present (0.2495ms)
+2026-11-17T15:13:52.2601306Z   ✔ allows writes only through an explicit POST without dry-run (0.412227ms)
+2026-11-17T15:13:52.2621875Z ✔ automation pipeline route (5.204023ms)
+2026-11-17T15:13:52.2941412Z ✔ unauthenticated and isolated-preview refresh requests cannot fetch or invalidate feeds (6.446599ms)
+2026-11-17T15:13:52.2955250Z ✔ disabled monitoring reports unavailable without contacting feeds or granting write access (19.129073ms)
+2026-11-17T15:13:52.3016135Z ▶ newsletter signup route
+2026-11-17T15:13:52.3016720Z   ✔ rejects invalid email addresses (4.3814ms)
+2026-11-17T15:13:52.3023037Z   ✔ silently accepts honeypot spam submissions without storing PII (1.079183ms)
+2026-11-17T15:13:52.3023873Z ✔ newsletter signup route (6.637896ms)
+2026-11-17T15:13:52.4866537Z ▶ AI Draft Assist route
+2026-11-17T15:13:52.4891459Z   ✔ rejects missing admin token (3.557676ms)
+2026-11-17T15:13:52.4926143Z   ✔ returns unavailable when AI Draft Assist is disabled (1.26733ms)
+2026-11-17T15:13:52.4966766Z ✔ AI Draft Assist route (5.737044ms)
+2026-11-17T15:13:52.6167098Z ▶ review authorization fail-closed
+2026-11-17T15:13:52.6168555Z   ✔ rejects unauthenticated review before touching the database (3.189676ms)
+2026-11-17T15:13:52.6176007Z   ✔ rejects cron credentials and does not authorize them as reviewers (0.462244ms)
+2026-11-17T15:13:52.6215529Z   ✔ refuses to review without a configured server-side reviewer identity (0.645663ms)
+2026-11-17T15:13:52.6216332Z ✔ review authorization fail-closed (5.157592ms)
+2026-11-17T15:13:52.6378335Z ✔ pilot RSS catalog has unique secure source configuration (1.394062ms)
+2026-11-17T15:13:52.6379194Z ✔ catalog validation rejects duplicate ids and feed URLs (0.220175ms)
+2026-11-17T15:13:52.6379826Z ✔ catalog validation rejects non-HTTPS endpoints (0.143418ms)
+2026-11-17T15:13:52.7350812Z ▶ AI editorial draft assist
+2026-11-17T15:13:52.7356142Z   ✔ builds a grounded prompt with sources and evidence assist (0.652243ms)
+2026-11-17T15:13:52.7359638Z   ✔ validates complete JSON output (0.649509ms)
+2026-11-17T15:13:52.7373479Z   ✔ handles missing optional fields safely (0.682579ms)
+2026-11-17T15:13:52.7376131Z   ✔ rejects invalid JSON gracefully (0.37472ms)
+2026-11-17T15:13:52.7376709Z   ✔ uses mocked providers without external API calls (0.1905ms)
+2026-11-17T15:13:52.7377222Z ✔ AI editorial draft assist (3.495142ms)
+2026-11-17T15:13:52.7623790Z ✔ reader citations accept HTTP and HTTPS article URLs (0.502946ms)
+2026-11-17T15:13:52.7648209Z ✔ reader citations refuse dangerous schemes, credentials and malformed links (0.169408ms)
+2026-11-17T15:13:52.7666966Z ✔ live discovery link guard rejects untrusted feed citations (0.145862ms)
+2026-11-17T15:13:52.7674041Z ✔ live feed renders only URLs that passed the citation guard (10.005288ms)
+2026-11-17T15:13:52.8623174Z ▶ admin and cron auth guards
+2026-11-17T15:13:52.8639482Z   ✔ rejects missing or invalid admin bearer token (3.572535ms)
+2026-11-17T15:13:52.8640547Z   ✔ accepts admin and cron bearer tokens only when configured (0.401075ms)
+2026-11-17T15:13:52.8659745Z ✔ admin and cron auth guards (4.925047ms)
+2026-11-17T15:13:52.8904845Z ✔ distinct URLs and newsroom names are not verified independent reporting (0.971227ms)
+2026-11-17T15:13:52.8917602Z ✔ syndicated reports with the same verified origin do not corroborate (0.162916ms)
+2026-11-17T15:13:52.8952918Z ✔ verified independent primary reporting remains eligible (0.103587ms)
+2026-11-17T15:13:52.8953613Z ✔ disputed reporting cannot be an automatic lead (0.329577ms)
+2026-11-17T15:13:52.8954139Z ✔ source kinds must be explicitly publisher or primary (0.13258ms)
+2026-11-17T15:13:52.8954537Z ✔ invalid evidence URLs never count (0.100271ms)
+2026-11-17T15:13:52.9056254Z ✔ incomplete aligned provenance cannot claim two independent sources (0.115364ms)
+2026-11-17T15:13:52.9056851Z ✔ continues a strongly matching draft in the same category (0.88769ms)
+2026-11-17T15:13:52.9064482Z ✔ does not merge a similar title from a different category (0.121613ms)
+2026-11-17T15:13:52.9065466Z ✔ unknown-category clusters never merge across runs (0.085469ms)
+2026-11-17T15:13:52.9090943Z ✔ weak one-term overlap is not enough to merge distinct stories (0.121964ms)
+2026-11-17T15:13:53.0094752Z ▶ guarded publish policy
+2026-11-17T15:13:53.0095862Z   ✔ blocks when automation mode is not guarded auto publish (0.72213ms)
+2026-11-17T15:13:53.0096489Z   ✔ blocks stories without sources (0.11891ms)
+2026-11-17T15:13:53.0097028Z   ✔ allows an official source at moderate threshold (0.095725ms)
+2026-11-17T15:13:53.0097561Z   ✔ blocks claims to verify from AI output (0.12578ms)
+2026-11-17T15:13:53.0098154Z   ✔ blocks low evidence and missing uncertainty for developing stories (0.116606ms)
+2026-11-17T15:13:53.0110700Z   ✔ blocks health auto-publish by default (0.086681ms)
+2026-11-17T15:13:53.0128023Z ✔ guarded publish policy (2.235115ms)
+2026-11-17T15:13:53.0377057Z ▶ automation ranking
+2026-11-17T15:13:53.0379694Z   ✔ ranks stronger evidence higher (0.632295ms)
+2026-11-17T15:13:53.0380066Z   ✔ boosts under-covered signals (0.190828ms)
+2026-11-17T15:13:53.0380449Z   ✔ keeps preference hooks from changing facts (0.280544ms)
+2026-11-17T15:13:53.0380858Z ✔ automation ranking (1.973219ms)
+2026-11-17T15:13:53.0620939Z ▶ story clustering
+2026-11-17T15:13:53.0621548Z   ✔ groups duplicate canonical URLs (1.340063ms)
+2026-11-17T15:13:53.0640543Z   ✔ groups similar titles with shared key terms (0.307925ms)
+2026-11-17T15:13:53.0665921Z ✔ story clustering (2.542018ms)
+2026-11-17T15:13:53.1525320Z ✔ mergeStorySources preserves earlier evidence when a new source arrives (0.843644ms)
+2026-11-17T15:13:53.1573377Z ✔ mergeStorySources deduplicates the same URL and keeps fresh feed metadata (0.135885ms)
+2026-11-17T15:13:53.1887136Z ✔ discovery coalesces concurrent requests and does not relabel a failed refresh as live (1.40402ms)
+2026-11-17T15:13:53.1888390Z ✔ future, undated and old articles cannot seed the discovery cache (0.166722ms)
+2026-11-17T15:13:53.1889154Z ✔ invalidation fences an older refresh and preserves the newer in-flight request (0.579074ms)
+2026-11-17T15:13:53.2232553Z ✔ desk-specific feeds reject cross-posted article paths (0.739757ms)
+2026-11-17T15:13:53.3519994Z ✔ durable envelope forces source-only provenance and reconstructs bounded public fields (5.307093ms)
+2026-11-17T15:13:53.3526979Z ✔ scheduled provenance is bounded, visible and never upgrades editorial evidence (0.520225ms)
+2026-11-17T15:13:53.3560624Z ✔ outage preserves the content timestamp, increments per-feed failures and expires content (0.725756ms)
+2026-11-17T15:13:53.3597315Z ✔ rejects invalid envelopes, timestamp lies, unsafe URLs and publisher-link mismatch (0.896634ms)
+2026-11-17T15:13:53.3634079Z ✔ independent readers recover durable content; failed reads never rejuvenate timestamps (1.811696ms)
+2026-11-17T15:13:53.3659753Z ✔ snapshot reader rejects rollbacks and fences older in-flight results (1.415577ms)
+2026-11-17T15:13:53.3660650Z ✔ production cannot opt into evaluation storage; disabled previews perform no fetch (0.540736ms)
+2026-11-17T15:13:53.3661451Z ✔ remote snapshot reads use only the fixed HTTPS origin and enforce streamed body limits (19.319766ms)
+2026-11-17T15:13:53.3662253Z ✔ rolling feed upgrade accepts exact old manifest but rejects other missing feeds (1.805025ms)
+2026-11-17T15:13:53.5902601Z ﹣ Supabase editorial lifecycle integration (0.376839ms) # Set RUN_INTEGRATION_TESTS=true to run Supabase integration tests.
+2026-11-17T15:13:53.6148283Z ✔ reviewed draft with source evidence is publish-ready (1.136376ms)
+2026-11-17T15:13:53.6149000Z ✔ source-less draft cannot be published (0.155705ms)
+2026-11-17T15:13:53.6149588Z ✔ thin evidence requires explicit uncertainty language (0.100842ms)
+2026-11-17T15:13:53.6153658Z ✔ malformed source URL blocks publication (0.11239ms)
+2026-11-17T15:13:54.2674918Z ▶ native ingestion CLI preserves the accepted snapshot on coverage loss or outage
+2026-11-17T15:13:54.2686131Z   ✔ missing-energy (720.785203ms)
+2026-11-17T15:13:54.8124311Z   ✔ outage (545.190455ms)
+2026-11-17T15:13:55.5564495Z   ✔ complete (742.654724ms)
+2026-11-17T15:13:55.5565627Z ✔ native ingestion CLI preserves the accepted snapshot on coverage loss or outage (2010.170606ms)
+2026-11-17T15:13:55.5717008Z ✔ atomic file ingestion survives restart and failed production without corrupting prior data (20.084667ms)
+2026-11-17T15:13:55.5727225Z ✔ native Git snapshot publication is isolated, read back and protected by exact leases (549.275021ms)
+2026-11-17T15:13:55.5756275Z ✔ scheduler provenance accepts only the fixed GitHub workflow identity (1.210017ms)
+2026-11-17T15:13:55.5757124Z ✔ CLI refuses publication while automatic-build and ingestion gates are closed (235.434923ms)
+2026-11-17T15:13:55.5757676Z ▶ evidence scoring
+2026-11-17T15:13:55.5758136Z   ✔ scores a single RSS/news source as low evidence (1.47052ms)
+2026-11-17T15:13:55.5758714Z   ✔ scores one official source as moderate evidence (0.221945ms)
+2026-11-17T15:13:55.5759327Z   ✔ scores an official source plus secondary source as strong evidence (0.154883ms)
+2026-11-17T15:13:55.5759964Z   ✔ scores three independent news sources as strong evidence (0.157117ms)
+2026-11-17T15:13:55.5760613Z   ✔ does not let duplicate sources inflate unique source count (0.161504ms)
+2026-11-17T15:13:55.5761245Z   ✔ flags no sources and weak support for confirmed confidence (0.188825ms)
+2026-11-17T15:13:55.5761908Z   ✔ mentions uncertainty in explanation when uncertainty note is present (0.227744ms)
+2026-11-17T15:13:55.5762602Z   ✔ marks public-interest low-pickup stories as under-covered candidates (0.144388ms)
+2026-11-17T15:13:55.5763151Z ✔ evidence scoring (3.886648ms)
+2026-11-17T15:13:55.5763634Z ✔ round-trips configured category and signal (1.240964ms)
+2026-11-17T15:13:55.5764138Z ✔ ignores invalid untrusted metadata (0.121584ms)
+2026-11-17T15:13:55.5764697Z ✔ normalizes valid feed timestamps for durable storage (0.881511ms)
+2026-11-17T15:13:55.5765509Z ✔ malformed feed timestamps degrade to null instead of aborting a feed (0.104497ms)
+2026-11-17T15:13:55.5766115Z ✔ explicit lead override remains first (0.810534ms)
+2026-11-17T15:13:55.5766682Z ✔ explicit homepage rank beats unpinned automated score (0.641909ms)
+2026-11-17T15:13:55.5767762Z ✔ unpinned stories use evidence-first automated ordering (0.277018ms)
+2026-11-17T15:13:55.5768477Z ✔ single-source Top Signal cannot outrank supported unpinned coverage (0.339322ms)
+2026-11-17T15:13:55.5769208Z ✔ unverified syndicated copies do not receive automatic corroboration (0.180823ms)
+2026-11-17T15:13:55.5769823Z ✔ duplicate and malformed origins fail closed (0.153401ms)
+2026-11-17T15:13:55.5770469Z ✔ explicit editorial lead remains authoritative without provenance (0.106781ms)
+2026-11-17T15:13:55.5771199Z ✔ whitespace variants of the same origin cannot manufacture corroboration (0.093041ms)
+2026-11-17T15:13:55.5771928Z ✔ same publisher different articles preserve citation alignment (2.724374ms)
+2026-11-17T15:13:55.5772639Z ✔ missing URL and credential-bearing URL do not earn publisher credit (0.184568ms)
+2026-11-17T15:13:55.5773287Z ✔ same URL from different outlets cannot double-count (0.201874ms)
+2026-11-17T15:13:55.5773892Z ✔ disputed reports never become Cross-angle on aggregation (0.331581ms)
+2026-11-17T15:13:55.5774620Z ✔ independent verified origins remain aligned across distinct valid articles (0.296598ms)
+2026-11-17T15:13:55.5775757Z ✔ identical substantive syndicated text is not independent corroboration (0.153362ms)
+2026-11-17T15:13:55.5776472Z ✔ inherited Cross-angle is revoked when citations are unverified (0.115615ms)
+2026-11-17T15:13:55.5777143Z ✔ disputed Cross-angle input cannot survive a failed corroboration gate (0.14574ms)
+2026-11-17T15:13:55.5777910Z ✔ different publisher domains without attested origins cannot create Cross-angle (0.175595ms)
+2026-11-17T15:13:55.5778623Z ✔ distinct attested reporting origins support Cross-angle (0.252351ms)
+2026-11-17T15:13:55.5779333Z ✔ different domains sharing one wire origin do not establish independence (0.136817ms)
+2026-11-17T15:13:55.5780058Z ✔ unverified citation volume cannot break equal-priority cluster ties (1.405022ms)
+2026-11-17T15:13:55.5780773Z ✔ untrusted claimed origins cannot break equal-priority cluster ties (0.613416ms)
+2026-11-17T15:13:55.5781484Z ✔ does not let a bridge headline merge otherwise unrelated clusters (4.145333ms)
+2026-11-17T15:13:55.5782183Z ✔ merged citations retain source order when a publisher has no URL (0.588068ms)
+2026-11-17T15:13:55.5782798Z ✔ unresolved disputed confidence survives merging (0.198429ms)
+2026-11-17T15:13:55.5783459Z ✔ merged verified origins remain aligned with their actual publishers (0.329958ms)
+2026-11-17T15:13:55.5784149Z ✔ unverified source cannot inherit representative verified origin (0.227243ms)
+2026-11-17T15:13:55.5784860Z ✔ conflicting origin for repeated article URL is not considered verified (0.268836ms)
+2026-11-17T15:13:55.5785758Z ✔ rejects stories older than the production fourteen-day freshness window (0.184869ms)
+2026-11-17T15:13:55.5786540Z ✔ two related unreviewed publishers remain discovery, not verified corroboration (0.217458ms)
+2026-11-17T15:13:55.5787339Z ✔ institutional headline templates do not merge unrelated releases (0.230057ms)
+2026-11-17T15:13:55.5788066Z ✔ the representative headline and excerpt retain their own first citation (0.341325ms)
+2026-11-17T15:13:55.5788784Z ✔ same-event wording is deduped across social and priority stories (1.652184ms)
+2026-11-17T15:13:55.5789480Z ✔ only recent social/open discovery stories enter the early lane (0.246793ms)
+2026-11-17T15:13:55.5790121Z ✔ duplicates inside the early lane collapse to one event (0.131318ms)
+2026-11-17T15:13:55.5790797Z ✔ headline classification: Solar system planet discovery [World] (3.242766ms)
+2026-11-17T15:13:55.5791571Z ✔ headline classification: Solar eclipse visible tomorrow [World] (0.451682ms)
+2026-11-17T15:13:55.5792284Z ✔ headline classification: Solar storm may disrupt satellites [World] (0.103356ms)
+2026-11-17T15:13:55.5793034Z ✔ headline classification: Solar panels expand electricity output [World] (0.51031ms)
+2026-11-17T15:13:55.5793741Z ✔ headline classification: Solar energy prices fall [World] (0.349357ms)
+2026-11-17T15:13:55.5794629Z ✔ headline classification: Nuclear power plant expansion [World] (0.088493ms)
+2026-11-17T15:13:55.5795550Z ✔ headline classification: NASA telescope images solar corona [World] (0.209676ms)
+2026-11-17T15:13:55.5796255Z ✔ headline classification: Wind power grid upgrade [World] (0.133181ms)
+2026-11-17T15:13:55.5796911Z ✔ headline classification: Oil pipeline shut down [World] (1.141884ms)
+2026-11-17T15:13:55.5797565Z ✔ headline classification: Solar flare threatens power grid [World] (0.307194ms)
+2026-11-17T15:13:55.5806083Z ✔ headline classification: Planet-saving solar energy investments [World] (0.062454ms)
+2026-11-17T15:13:55.5806873Z ✔ headline classification: Solar panel plant expands power production [World] (0.033901ms)
+2026-11-17T15:13:55.5807721Z ✔ headline classification: Astronomers discover exoplanet [World] (0.045559ms)
+2026-11-17T15:13:55.5808382Z ✔ headline classification: Astronomy mission measures solar wind [World] (0.038408ms)
+2026-11-17T15:13:55.5809062Z ✔ headline classification: Solar-powered telescope launch [World] (0.028643ms)
+2026-11-17T15:13:55.5809735Z ✔ headline classification: Solar battery storage prices fall [World] (0.133532ms)
+2026-11-17T15:13:55.5810636Z ✔ headline classification: Nuclear fusion energy reactor announced [World] (0.03319ms)
+2026-11-17T15:13:55.5811316Z ✔ headline classification: Wind power capacity doubles [World] (0.0332ms)
+2026-11-17T15:13:55.5811994Z ✔ headline classification: Cosmic radiation telescope discovery [World] (0.027141ms)
+2026-11-17T15:13:55.5812716Z ✔ headline classification: Solar eclipse tourism boosts local economy [World] (0.024677ms)
+2026-11-17T15:13:55.5813449Z ✔ headline classification: NASA Webb telescope spots an early galaxy [Energy] (0.028493ms)
+2026-11-17T15:13:55.5814292Z ✔ headline classification: Study A.I. Consciousness? The Bots Would Like a Word With You. [Energy] (0.025238ms)
+2026-11-17T15:13:55.5815062Z ✔ headline classification: Cancer drug price falls after FDA approval [Markets] (0.020701ms)
+2026-11-17T15:13:55.5816060Z ✔ headline classification: Trump admin shelves Cyclospora research despite record-breaking outbreak [Technology] (0.022354ms)
+2026-11-17T15:13:55.5816879Z ✔ headline classification: Supreme Court agrees to hear privacy case [World] (0.027401ms)
+2026-11-17T15:13:55.5817594Z ✔ headline classification: Defense lawyers withdraw from murder case [World] (0.020601ms)
+2026-11-17T15:13:55.5818423Z ✔ headline classification: Football star retires after World Cup [World] (0.028253ms)
+2026-11-17T15:13:55.5819260Z ✔ headline classification: Texas Tech head coach blasts USC over poor attendance at LA Coliseum [Technology] (0.021873ms)
+2026-11-17T15:13:55.5820119Z ✔ headline classification: Astronomical energy bills force households to cut back [World] (0.02622ms)
+2026-11-17T15:13:55.5820868Z ✔ headline classification: Wind power costs reach astronomical highs [World] (0.023776ms)
+2026-11-17T15:13:55.5821609Z ✔ headline classification: Electricity bills soar to astronomical levels [World] (0.054402ms)
+2026-11-17T15:13:55.5822445Z ✔ headline classification: Astronomical observations reveal a new solar system [World] (0.192351ms)
+2026-11-17T15:13:55.5823177Z ✔ headline classification: Astronomers map a distant galaxy [Energy] (0.041763ms)
+2026-11-17T15:13:55.5823887Z ✔ headline classification: A solar observatory measures solar radiation [Energy] (0.023155ms)
+2026-11-17T15:13:55.5824546Z ✔ headline classification: Congress passes budget [World] (0.174433ms)
+2026-11-17T15:13:55.5825275Z ✔ headline classification: Federal Reserve cuts interest rates [World] (0.028614ms)
+2026-11-17T15:13:55.5825968Z ✔ headline classification: Software update improves internet security [World] (0.02694ms)
+2026-11-17T15:13:55.5826623Z ✔ headline classification: International talks resume [World] (0.086741ms)
+2026-11-17T15:13:55.5827254Z ✔ headline classification: Cancer vaccine clinical trial begins [World] (0.024718ms)
+2026-11-17T15:13:55.5827817Z ✔ headline classification: Supreme Court issues ruling [World] (0.020821ms)
+2026-11-17T15:13:55.5828582Z ✔ headline classification: Nuclear power plant expands [World] (0.023255ms)
+2026-11-17T15:13:55.5829227Z ✔ headline classification: Film festival announces winners [World] (0.120141ms)
+2026-11-17T15:13:55.5829924Z ✔ headline classification: Solar-panel plant expands power production [World] (0.035233ms)
+2026-11-17T15:13:55.5830615Z ✔ headline classification: Solar wind threatens power grids [Energy] (0.287164ms)
+2026-11-17T15:13:55.5831262Z ✔ headline classification: Astronomer observes a new star [Energy] (0.043686ms)
+2026-11-17T15:13:55.5831942Z ✔ headline classification: School astronomers study distant objects [Energy] (0.0865ms)
+2026-11-17T15:13:55.5832646Z ✔ headline classification: Solar battery storage lowers energy costs [World] (0.030436ms)
+2026-11-17T15:13:55.5833446Z ✔ headline classification: Utility reports astronomical oil and gas costs [World] (0.025198ms)
+2026-11-17T15:13:55.5834228Z ✔ headline classification: NASA telescope schedules a solar eclipse observation [Energy] (0.022915ms)
+2026-11-17T15:13:55.5835191Z ✔ headline classification: Texas Tech head coach discusses astronomical ticket prices [Technology] (0.023085ms)
+2026-11-17T15:13:55.5836174Z ✔ headline classification: James Bond franchise announces a new actor [Markets] (0.020371ms)
+2026-11-17T15:13:55.5837011Z ✔ headline classification: SpaceX successfully catches top of huge Starship rocket for first time [World] (0.020891ms)
+2026-11-17T15:13:55.5837909Z ✔ headline classification: GTA 6 hacker pleads guilty after release from secure hospital [Technology] (0.021232ms)
+2026-11-17T15:13:55.5838786Z ✔ headline classification: Man sentenced over 'horrific' attempted murder of three children [World] (0.021352ms)
+2026-11-17T15:13:55.5839597Z ✔ headline classification: Patient pleads guilty after hospital data theft [Health] (0.030897ms)
+2026-11-17T15:13:55.5840319Z ✔ headline classification: Satellite launch monitors solar storms [Energy] (0.027701ms)
+2026-11-17T15:13:55.5840972Z ✔ broad BBC Science discovery does not default weather to Energy (0.143607ms)
+2026-11-17T15:13:55.5841595Z ✔ feed dates reject impossible calendars and unknown timezones (1.447266ms)
+2026-11-17T15:13:55.5842306Z ✔ live validation precedes limit while the editorial inbox retains undated inputs (19.878511ms)
+2026-11-17T15:13:55.5843058Z ✔ public serialization keeps a useful synopsis but drops article-length body text (3.398261ms)
+2026-11-17T15:13:55.5843762Z ✔ headline inference corrects coarse science and health feed categories (0.440905ms)
+2026-11-17T15:13:55.5844387Z ✔ RSS normalization preserves a natural synopsis boundary (21.589329ms)
+2026-11-17T15:13:55.5845177Z ✔ James Bond casting coverage stays in Culture while financial bonds remain Markets (0.207473ms)
+2026-11-17T15:13:55.5845896Z ✔ court significance cannot be hijacked by unrelated words in feed context (0.2122ms)
+2026-11-17T15:13:55.5846627Z ✔ health story stays health-grounded even when synopsis mentions prices or inflation (0.218239ms)
+2026-11-17T15:13:55.5847319Z ✔ figurative trade-war language is not described as armed conflict (0.197929ms)
+2026-11-17T15:13:55.5847926Z ✔ invasion of privacy is not described as armed conflict (0.266653ms)
+2026-11-17T15:13:55.5848492Z ✔ literal missile conflict still receives conflict context (0.338901ms)
+2026-11-17T15:13:55.5848906Z ▶ RSS parsing
+2026-11-17T15:13:55.5849290Z   ✔ normalizes RSS items for the editorial inbox (2.192461ms)
+2026-11-17T15:13:55.5849691Z ✔ RSS parsing (2.749711ms)
+2026-11-17T15:13:55.5850000Z ▶ bounded RSS transport
+2026-11-17T15:13:55.5850348Z   ✔ reads a complete small body (18.846336ms)
+2026-11-17T15:13:55.5850851Z   ✔ rejects oversized declared Content-Length before streaming (0.656571ms)
+2026-11-17T15:13:55.5851443Z   ✔ rejects chunked oversized feeds even without Content-Length (0.323718ms)
+2026-11-17T15:13:55.5851967Z   ✔ accepts a body exactly at the byte boundary (0.168063ms)
+2026-11-17T15:13:55.5852376Z ✔ bounded RSS transport (20.367623ms)
+2026-11-17T15:13:55.5852877Z ✔ viral X-only signal remains non-lead single-source evidence (2.047491ms)
+2026-11-17T15:13:55.5853587Z ✔ X discovery score is never evidence confidence (0.245401ms)
+2026-11-17T15:13:55.5854183Z ✔ one publisher plus X does not become multi-source corroboration (1.226412ms)
+2026-11-17T15:13:55.5854878Z ✔ two unreviewed publishers with X context cannot establish verified cross-angle (0.42375ms)
+2026-11-17T15:13:55.5855921Z ✔ isolated reader disables inherited database credentials, editorial writes and mock fallback (5.045789ms)
+2026-11-17T15:13:55.5856730Z ✔ Vercel Preview automatically disables privileged clients, tokens and fabricated fallback (0.627678ms)
+2026-11-17T15:13:55.5857368Z ✔ public create payload cannot set reviewer provenance (1.15831ms)
+2026-11-17T15:13:55.5857924Z ✔ public update payload cannot set reviewer provenance (0.145659ms)
+2026-11-17T15:13:55.6328608Z ✔ reader deduplication excludes lead articles across published and RSS sections (1.387716ms)
+2026-11-17T15:13:55.8210647Z ✔ reader routes prefer the durable published story (0.532343ms)
+2026-11-17T15:13:55.8213765Z ✔ reader routes resolve live discovery links without publishing them (0.123166ms)
+2026-11-17T15:13:55.8214937Z ✔ reader routes remain not found when neither source contains the slug (0.135224ms)
+2026-11-17T15:13:55.8446617Z ✔ ordinary single-newsroom Top Signal is not automatic lead eligible (1.111979ms)
+2026-11-17T15:13:55.8447536Z ✔ multi-source Top Signal can become the automatic lead (0.187062ms)
+2026-11-17T15:13:55.8448473Z ✔ primary-only update is recognized but does not become automatic lead (0.17205ms)
+2026-11-17T15:13:55.8449152Z ✔ live items are separated into multi-source, primary-only, and incoming lanes (0.546014ms)
+2026-11-17T15:13:55.8449807Z ✔ multi-source lane ranks stronger corroboration above fresher weak coverage (0.661078ms)
+2026-11-17T15:13:55.8450448Z ✔ unverified extra publishers cannot inflate live priority evidence bonus (0.828641ms)
+2026-11-17T15:13:55.8451104Z ✔ distinct verified origins increase priority evidence, duplicate origins do not (0.153902ms)
+2026-11-17T15:13:55.8451821Z ✔ different unverified publisher domains cannot enter multi-source lane (0.080562ms)
+2026-11-17T15:13:55.8452426Z ✔ syndicated duplicate origin cannot enter multi-source lane (0.100331ms)
+2026-11-17T15:13:55.8452920Z ✔ two verified origins qualify for multi-source lane (0.148504ms)
+2026-11-17T15:13:55.8453265Z ▶ story input validation
+2026-11-17T15:13:55.8453644Z   ✔ creates draft story input from required editor fields (0.890475ms)
+2026-11-17T15:13:55.8454082Z   ✔ forces publishing through the publish action (0.308236ms)
+2026-11-17T15:13:55.8454446Z ✔ story input validation (2.582429ms)
+2026-11-17T15:13:55.9487422Z ▶ story repository fallback
+2026-11-17T15:13:55.9487969Z   ✔ returns published mock stories when Supabase is not configured (0.623221ms)
+2026-11-17T15:13:55.9508759Z   ✔ resolves detail slugs shown by fallback homepage stories (0.155685ms)
+2026-11-17T15:13:55.9509242Z   ✔ allows mock fallback outside production (0.108594ms)
+2026-11-17T15:13:55.9547682Z   ✔ requires explicit mock fallback in production (0.114283ms)
+2026-11-17T15:13:55.9548412Z ✔ story repository fallback (1.665324ms)
+2026-11-17T15:13:55.9548888Z ▶ untrusted fallback provenance
+2026-11-17T15:13:55.9549279Z   ✔ discards forged reviewed origins from a mock story (0.479785ms)
+2026-11-17T15:13:55.9549678Z ✔ untrusted fallback provenance (0.57616ms)
+2026-11-17T15:13:55.9685641Z ▶ url utilities
+2026-11-17T15:13:55.9686008Z   ✔ canonicalizes tracking-heavy URLs (0.621198ms)
+2026-11-17T15:13:55.9686377Z   ✔ builds stable feed-item dedupe keys (0.165601ms)
+2026-11-17T15:13:55.9686691Z ✔ url utilities (1.509008ms)
+2026-11-17T15:13:55.9688563Z ℹ tests 225
+2026-11-17T15:13:55.9689046Z ℹ suites 17
+2026-11-17T15:13:55.9689195Z ℹ pass 225
+2026-11-17T15:13:55.9689315Z ℹ fail 0
+2026-11-17T15:13:55.9689430Z ℹ cancelled 0
+2026-11-17T15:13:55.9689556Z ℹ skipped 0
+2026-11-17T15:13:55.9689669Z ℹ todo 0
+2026-11-17T15:13:55.9689805Z ℹ duration_ms 4254.718646
+2026-11-17T15:13:55.9837035Z ##[group]Run npm run test:e2e
+2026-11-17T15:13:55.9837205Z [36;1mnpm run test:e2e[0m
+2026-11-17T15:13:55.9852369Z shell: /usr/bin/bash -e {0}
+2026-11-17T15:13:55.9852503Z env:
+2026-11-17T15:13:55.9852654Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:13:55.9852842Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:13:55.9852968Z ##[endgroup]
+2026-11-17T15:13:56.0413287Z 
+2026-11-17T15:13:56.0413614Z > the-fact-desk@0.1.0 test:e2e
+2026-11-17T15:13:56.0413903Z > playwright test
+2026-11-17T15:13:56.0413999Z 
+2026-11-17T15:14:05.8372674Z 
+2026-11-17T15:14:05.8373449Z Running 32 tests using 2 workers
+2026-11-17T15:14:05.8373635Z 
+2026-11-17T15:14:08.0937336Z   ✓   1 [desktop-chromium] › e2e/article-reader.spec.ts:5:1 › all eight article routes retain their title, source citations and bounded context (1.6s)
+2026-11-17T15:14:08.4322757Z READER_ACCESSIBILITY []
+2026-11-17T15:14:08.5027546Z   ✓   2 [desktop-chromium] › e2e/accessibility.spec.ts:5:3 › WCAG accessibility: / (2.0s)
+2026-11-17T15:14:08.8037684Z   ✓   3 [desktop-chromium] › e2e/article-reader.spec.ts:28:1 › scrolling tickers are focusable and support keyboard scrolling (692ms)
+2026-11-17T15:14:08.9321389Z   ✓   5 [desktop-chromium] › e2e/article-reader.spec.ts:44:1 › local public-reader mode denies inherited admin and cron credentials over real HTTP (114ms)
+2026-11-17T15:14:09.6213593Z READER_ACCESSIBILITY []
+2026-11-17T15:14:09.6798163Z   ✓   4 [desktop-chromium] › e2e/accessibility.spec.ts:5:3 › WCAG accessibility: /?category=Energy (1.2s)
+2026-11-17T15:14:09.7152326Z   ✓   6 [desktop-chromium] › e2e/category-keyboard.spec.ts:3:1 › category tabs support arrows, wraparound, Home and End with one keyboard stop (769ms)
+2026-11-17T15:14:10.1090899Z   ✓   7 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Politics: populated, source-linked and truthful (401ms)
+2026-11-17T15:14:10.5882843Z   ✓   8 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Markets: populated, source-linked and truthful (462ms)
+2026-11-17T15:14:11.0391036Z   ✓  10 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Technology: populated, source-linked and truthful (440ms)
+2026-11-17T15:14:11.6329157Z   ✓  11 [desktop-chromium] › e2e/reader.spec.ts:7:3 › World: populated, source-linked and truthful (588ms)
+2026-11-17T15:14:11.9036790Z READER_ACCESSIBILITY []
+2026-11-17T15:14:12.0386781Z   ✓   9 [mobile-chromium] › e2e/accessibility.spec.ts:5:3 › WCAG accessibility: / (1.7s)
+2026-11-17T15:14:12.0653260Z   ✓  12 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Health: populated, source-linked and truthful (422ms)
+2026-11-17T15:14:12.5362858Z   ✓  14 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Courts: populated, source-linked and truthful (457ms)
+2026-11-17T15:14:12.9447033Z   ✓  15 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Energy: populated, source-linked and truthful (393ms)
+2026-11-17T15:14:13.1300492Z READER_ACCESSIBILITY []
+2026-11-17T15:14:13.2873683Z   ✓  13 [mobile-chromium] › e2e/accessibility.spec.ts:5:3 › WCAG accessibility: /?category=Energy (1.2s)
+2026-11-17T15:14:13.3975017Z   ✓  16 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Culture: populated, source-linked and truthful (442ms)
+2026-11-17T15:14:14.7407719Z   ✓  17 [mobile-chromium] › e2e/article-reader.spec.ts:5:1 › all eight article routes retain their title, source citations and bounded context (1.4s)
+2026-11-17T15:14:15.0090681Z   ✓  18 [desktop-chromium] › e2e/reader.spec.ts:27:1 › category controls navigate and show eight distinct category leads (1.6s)
+2026-11-17T15:14:15.0916406Z   ✓  20 [desktop-chromium] › e2e/reader.spec.ts:43:1 › scheduled health is fresh, complete and from the reviewed producer (71ms)
+2026-11-17T15:14:15.7037427Z   ✓  19 [mobile-chromium] › e2e/article-reader.spec.ts:28:1 › scrolling tickers are focusable and support keyboard scrolling (947ms)
+2026-11-17T15:14:15.7709752Z   ✓  22 [mobile-chromium] › e2e/article-reader.spec.ts:44:1 › local public-reader mode denies inherited admin and cron credentials over real HTTP (64ms)
+2026-11-17T15:14:16.2730794Z   ✓  23 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Politics: populated, source-linked and truthful (487ms)
+2026-11-17T15:14:16.5002430Z   ✓  21 [mobile-chromium] › e2e/category-keyboard.spec.ts:3:1 › category tabs support arrows, wraparound, Home and End with one keyboard stop (940ms)
+2026-11-17T15:14:16.6996956Z   ✓  24 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Markets: populated, source-linked and truthful (421ms)
+2026-11-17T15:14:17.3006855Z   ✓  25 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Technology: populated, source-linked and truthful (593ms)
+2026-11-17T15:14:17.6338908Z   ✓  26 [mobile-chromium] › e2e/reader.spec.ts:7:3 › World: populated, source-linked and truthful (324ms)
+2026-11-17T15:14:17.9987262Z   ✓  27 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Health: populated, source-linked and truthful (355ms)
+2026-11-17T15:14:18.3490030Z   ✓  28 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Courts: populated, source-linked and truthful (340ms)
+2026-11-17T15:14:18.6868445Z   ✓  29 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Energy: populated, source-linked and truthful (322ms)
+2026-11-17T15:14:19.2834065Z   ✓  30 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Culture: populated, source-linked and truthful (593ms)
+2026-11-17T15:14:20.7813963Z   ✓  31 [mobile-chromium] › e2e/reader.spec.ts:27:1 › category controls navigate and show eight distinct category leads (1.5s)
+2026-11-17T15:14:20.8006312Z   ✓  32 [mobile-chromium] › e2e/reader.spec.ts:43:1 › scheduled health is fresh, complete and from the reviewed producer (13ms)
+2026-11-17T15:14:20.9111445Z 
+2026-11-17T15:14:20.9114388Z   32 passed (24.5s)
+2026-11-17T15:14:20.9555680Z Post job cleanup.
+2026-11-17T15:14:21.0303213Z (node:5264) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-17T15:14:21.0303711Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-17T15:14:21.0435266Z Post job cleanup.
+2026-11-17T15:14:21.1015282Z [command]/usr/bin/git version
+2026-11-17T15:14:21.1044743Z git version 2.56.1
+2026-11-17T15:14:21.1066995Z Temporarily overriding HOME='/home/runner/work/_temp/f2523e2c-95ce-4f3a-ab10-377295d17eda' before making global git config changes
+2026-11-17T15:14:21.1067797Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-17T15:14:21.1070570Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/the-fact-desk/the-fact-desk
+2026-11-17T15:14:21.1099756Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-17T15:14:21.1151112Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-17T15:14:21.1327823Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-17T15:14:21.1346413Z http.https://github.com/.extraheader
+2026-11-17T15:14:21.1354171Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-17T15:14:21.1380287Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-17T15:14:21.1662939Z Cleaning up orphan processes
+2026-11-17T15:14:21.1923292Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+
+
+RUN 3
+﻿2026-11-17T15:14:52.8945206Z Current runner version: '2.338.2'
+2026-11-17T15:14:52.8967496Z ##[group]Runner Image Provisioner
+2026-11-17T15:14:52.8968223Z Hosted Compute Agent
+2026-11-17T15:14:52.8968793Z Version: 20261103.629
+2026-11-17T15:14:52.8969346Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+2026-11-17T15:14:52.8970094Z Build Date: 2026-11-03T17:26:59Z
+2026-11-17T15:14:52.8970724Z Worker ID: {b4b3fd1c-0beb-4c5a-87c5-ba1d42027179}
+2026-11-17T15:14:52.8971326Z Region: westus2
+2026-11-17T15:14:52.8971839Z Cloud: Azure
+2026-11-17T15:14:52.8972311Z ##[endgroup]
+2026-11-17T15:14:52.8973545Z ##[group]Operating System
+2026-11-17T15:14:52.8974361Z Ubuntu
+2026-11-17T15:14:52.8974836Z 24.04.5
+2026-11-17T15:14:52.8975313Z LTS
+2026-11-17T15:14:52.8975785Z ##[endgroup]
+2026-11-17T15:14:52.8976265Z ##[group]Runner Image
+2026-11-17T15:14:52.8976898Z Image: ubuntu-24.04
+2026-11-17T15:14:52.8977390Z Version: 20261111.370.1
+2026-11-17T15:14:52.8978498Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261111.370/images/ubuntu/Ubuntu2404-Readme.md
+2026-11-17T15:14:52.8979758Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261111.370
+2026-11-17T15:14:52.8980642Z ##[endgroup]
+2026-11-17T15:14:52.8981594Z ##[group]GITHUB_TOKEN Permissions
+2026-11-17T15:14:52.8983239Z Contents: read
+2026-11-17T15:14:52.8984023Z Metadata: read
+2026-11-17T15:14:52.8984605Z ##[endgroup]
+2026-11-17T15:14:52.8986453Z Secret source: Actions
+2026-11-17T15:14:52.8987318Z Cache mode: write
+2026-11-17T15:14:52.8987931Z Prepare workflow directory
+2026-11-17T15:14:52.9299323Z Prepare all required actions
+2026-11-17T15:14:52.9338000Z Getting action download info
+2026-11-17T15:14:53.2666867Z Download action repository 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' (SHA:11bd71901bbe5b1630ceea73d27597364c9af683)
+2026-11-17T15:14:53.4199577Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-11-17T15:14:53.7345542Z Complete job name: reader
+2026-11-17T15:14:53.8042070Z ##[group]Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+2026-11-17T15:14:53.8042970Z with:
+2026-11-17T15:14:53.8043362Z   repository: andrewcrising/the-fact-desk
+2026-11-17T15:14:53.8046619Z   token: ***
+2026-11-17T15:14:53.8046988Z   ssh-strict: true
+2026-11-17T15:14:53.8047356Z   ssh-user: git
+2026-11-17T15:14:53.8047733Z   persist-credentials: true
+2026-11-17T15:14:53.8048137Z   clean: true
+2026-11-17T15:14:53.8048516Z   sparse-checkout-cone-mode: true
+2026-11-17T15:14:53.8048940Z   fetch-depth: 1
+2026-11-17T15:14:53.8049296Z   fetch-tags: false
+2026-11-17T15:14:53.8049662Z   show-progress: true
+2026-11-17T15:14:53.8050039Z   lfs: false
+2026-11-17T15:14:53.8050385Z   submodules: false
+2026-11-17T15:14:53.8050753Z   set-safe-directory: true
+2026-11-17T15:14:53.8051313Z env:
+2026-11-17T15:14:53.8051767Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:14:53.8052325Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:14:53.8052751Z ##[endgroup]
+2026-11-17T15:14:54.1649985Z Syncing repository: andrewcrising/the-fact-desk
+2026-11-17T15:14:54.1651472Z ##[group]Getting Git version info
+2026-11-17T15:14:54.1652085Z Working directory is '/home/runner/work/the-fact-desk/the-fact-desk'
+2026-11-17T15:14:54.1652919Z [command]/usr/bin/git version
+2026-11-17T15:14:54.1734930Z git version 2.56.1
+2026-11-17T15:14:54.1751306Z ##[endgroup]
+2026-11-17T15:14:54.1765699Z Temporarily overriding HOME='/home/runner/work/_temp/887347f1-c6ea-4444-9802-bae4136e2376' before making global git config changes
+2026-11-17T15:14:54.1767436Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-17T15:14:54.1771037Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/the-fact-desk/the-fact-desk
+2026-11-17T15:14:54.1818032Z Deleting the contents of '/home/runner/work/the-fact-desk/the-fact-desk'
+2026-11-17T15:14:54.1821288Z ##[group]Initializing the repository
+2026-11-17T15:14:54.1826307Z [command]/usr/bin/git init /home/runner/work/the-fact-desk/the-fact-desk
+2026-11-17T15:14:54.1985628Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-17T15:14:54.1986468Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-17T15:14:54.1987214Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-17T15:14:54.1987807Z hint: call:
+2026-11-17T15:14:54.1988136Z hint:
+2026-11-17T15:14:54.1988564Z hint: 	git config --global init.defaultBranch <name>
+2026-11-17T15:14:54.1989054Z hint:
+2026-11-17T15:14:54.1989509Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-17T15:14:54.1990225Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-17T15:14:54.1990806Z hint:
+2026-11-17T15:14:54.1991146Z hint: 	git branch -m <name>
+2026-11-17T15:14:54.1991538Z hint:
+2026-11-17T15:14:54.1992034Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-17T15:14:54.2001697Z Initialized empty Git repository in /home/runner/work/the-fact-desk/the-fact-desk/.git/
+2026-11-17T15:14:54.2012847Z [command]/usr/bin/git remote add origin https://github.com/andrewcrising/the-fact-desk
+2026-11-17T15:14:54.2066474Z ##[endgroup]
+2026-11-17T15:14:54.2067385Z ##[group]Disabling automatic garbage collection
+2026-11-17T15:14:54.2070371Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-17T15:14:54.2105120Z ##[endgroup]
+2026-11-17T15:14:54.2111870Z ##[group]Setting up auth
+2026-11-17T15:14:54.2113120Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-17T15:14:54.2145117Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-17T15:14:54.2480328Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-17T15:14:54.2511038Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-17T15:14:54.2716023Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-17T15:14:54.2755049Z ##[endgroup]
+2026-11-17T15:14:54.2764418Z ##[group]Fetching the repository
+2026-11-17T15:14:54.2765618Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +4c1a3cdacb42be6e3b8998e60ca747fb37450a09:refs/remotes/pull/42/merge
+2026-11-17T15:14:54.7440482Z From https://github.com/andrewcrising/the-fact-desk
+2026-11-17T15:14:54.7442091Z  * [new ref]         4c1a3cdacb42be6e3b8998e60ca747fb37450a09 -> pull/42/merge
+2026-11-17T15:14:54.7445042Z ##[endgroup]
+2026-11-17T15:14:54.7445990Z ##[group]Determining the checkout info
+2026-11-17T15:14:54.7447055Z ##[endgroup]
+2026-11-17T15:14:54.7449748Z [command]/usr/bin/git sparse-checkout disable
+2026-11-17T15:14:54.7505745Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-17T15:14:54.7536236Z ##[group]Checking out the ref
+2026-11-17T15:14:54.7539187Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/42/merge
+2026-11-17T15:14:54.7688174Z Note: switching to 'refs/remotes/pull/42/merge'.
+2026-11-17T15:14:54.7688985Z 
+2026-11-17T15:14:54.7694605Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-11-17T15:14:54.7696532Z changes and commit them, and you can discard any commits you make in this
+2026-11-17T15:14:54.7698181Z state without impacting any branches by switching back to a branch.
+2026-11-17T15:14:54.7698987Z 
+2026-11-17T15:14:54.7699547Z If you want to create a new branch to retain commits you create, you may
+2026-11-17T15:14:54.7701056Z do so (now or later) by using -c with the switch command. Example:
+2026-11-17T15:14:54.7701749Z 
+2026-11-17T15:14:54.7702069Z   git switch -c <new-branch-name>
+2026-11-17T15:14:54.7702920Z 
+2026-11-17T15:14:54.7703287Z Or undo this operation with:
+2026-11-17T15:14:54.7704114Z 
+2026-11-17T15:14:54.7704511Z   git switch -
+2026-11-17T15:14:54.7705027Z 
+2026-11-17T15:14:54.7705930Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-11-17T15:14:54.7706969Z 
+2026-11-17T15:14:54.7708130Z HEAD is now at 4c1a3cd Merge 3005d87af254154ba412c6d624eb813194d4fd7a into 157beef9f95fd5099dd0dd1f0f68867621b4bc5a
+2026-11-17T15:14:54.7712284Z ##[endgroup]
+2026-11-17T15:14:54.7747113Z [command]/usr/bin/git log -1 --format=%H
+2026-11-17T15:14:54.7771150Z 4c1a3cdacb42be6e3b8998e60ca747fb37450a09
+2026-11-17T15:14:54.8194129Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+2026-11-17T15:14:54.8195648Z with:
+2026-11-17T15:14:54.8196387Z   node-version: 24
+2026-11-17T15:14:54.8197180Z   always-auth: false
+2026-11-17T15:14:54.8198002Z   check-latest: false
+2026-11-17T15:14:54.8206195Z   token: ***
+2026-11-17T15:14:54.8206944Z env:
+2026-11-17T15:14:54.8207998Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:14:54.8209312Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:14:54.8210182Z ##[endgroup]
+2026-11-17T15:14:54.9479836Z Found in cache @ /opt/hostedtoolcache/node/24.22.2/x64
+2026-11-17T15:14:54.9482991Z (node:2101) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-17T15:14:54.9486586Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-17T15:14:54.9490000Z ##[group]Environment details
+2026-11-17T15:14:55.5351147Z node: v24.22.2
+2026-11-17T15:14:55.5351768Z npm: 11.19.1
+2026-11-17T15:14:55.5352094Z yarn: 1.22.22
+2026-11-17T15:14:55.5352983Z ##[endgroup]
+2026-11-17T15:14:55.5484414Z ##[group]Run test -x "$PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH"
+2026-11-17T15:14:55.5484956Z [36;1mtest -x "$PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH"[0m
+2026-11-17T15:14:55.5485362Z [36;1m"$PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH" --version[0m
+2026-11-17T15:14:55.5514251Z shell: /usr/bin/bash -e {0}
+2026-11-17T15:14:55.5514537Z env:
+2026-11-17T15:14:55.5514832Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:14:55.5515181Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:14:55.5515428Z ##[endgroup]
+2026-11-17T15:14:58.3440693Z [1117/151458.202766:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /opt/google/chrome/CHROME_VERSION_EXTRA
+2026-11-17T15:14:58.6850169Z Google Chrome 157.0.8103.50 
+2026-11-17T15:14:58.7854049Z ##[group]Run npm ci --no-audit --no-fund
+2026-11-17T15:14:58.7854384Z [36;1mnpm ci --no-audit --no-fund[0m
+2026-11-17T15:14:58.7872393Z shell: /usr/bin/bash -e {0}
+2026-11-17T15:14:58.7872604Z env:
+2026-11-17T15:14:58.7872842Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:14:58.7873140Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:14:58.7873329Z ##[endgroup]
+2026-11-17T15:15:15.7600413Z 
+2026-11-17T15:15:15.7601126Z added 541 packages in 17s
+2026-11-17T15:15:15.7619566Z npm warn install-scripts 6 packages have install scripts not yet covered by allowScripts:
+2026-11-17T15:15:15.7624751Z npm warn install-scripts   @embedded-postgres/linux-x64@18.6.0-beta.19 (postinstall: node scripts/hydrate-symlinks.js)
+2026-11-17T15:15:15.7625639Z npm warn install-scripts   esbuild@0.28.1 (postinstall: node install.js)
+2026-11-17T15:15:15.7626209Z npm warn install-scripts   unrs-resolver@1.12.2 (postinstall: node postinstall.js)
+2026-11-17T15:15:15.7626834Z npm warn install-scripts   workerd@1.20260828.1 (postinstall: node install.js)
+2026-11-17T15:15:15.7627322Z npm warn install-scripts   esbuild@0.28.2 (postinstall: node install.js)
+2026-11-17T15:15:15.7627864Z npm warn install-scripts   workerd@1.20261110.1 (postinstall: node install.js)
+2026-11-17T15:15:15.7628222Z npm warn install-scripts
+2026-11-17T15:15:15.7628712Z npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+2026-11-17T15:15:15.8366939Z ##[group]Run npm run lint
+2026-11-17T15:15:15.8367378Z [36;1mnpm run lint[0m
+2026-11-17T15:15:15.8386532Z shell: /usr/bin/bash -e {0}
+2026-11-17T15:15:15.8386746Z env:
+2026-11-17T15:15:15.8386992Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:15:15.8387295Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:15:15.8387491Z ##[endgroup]
+2026-11-17T15:15:15.9246745Z 
+2026-11-17T15:15:15.9247318Z > the-fact-desk@0.1.0 lint
+2026-11-17T15:15:15.9247613Z > eslint
+2026-11-17T15:15:15.9247714Z 
+2026-11-17T15:15:20.6849378Z ##[group]Run npm run typecheck
+2026-11-17T15:15:20.6849644Z [36;1mnpm run typecheck[0m
+2026-11-17T15:15:20.6867156Z shell: /usr/bin/bash -e {0}
+2026-11-17T15:15:20.6867364Z env:
+2026-11-17T15:15:20.6867605Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:15:20.6867907Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:15:20.6868098Z ##[endgroup]
+2026-11-17T15:15:20.7730357Z 
+2026-11-17T15:15:20.7731000Z > the-fact-desk@0.1.0 typecheck
+2026-11-17T15:15:20.7731392Z > next typegen && tsc --noEmit
+2026-11-17T15:15:20.7731538Z 
+2026-11-17T15:15:21.0057853Z Generating route types...
+2026-11-17T15:15:21.0204176Z ✓ Types generated successfully
+2026-11-17T15:15:24.8619616Z ##[group]Run npm test
+2026-11-17T15:15:24.8619833Z [36;1mnpm test[0m
+2026-11-17T15:15:24.8636697Z shell: /usr/bin/bash -e {0}
+2026-11-17T15:15:24.8636915Z env:
+2026-11-17T15:15:24.8637152Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:15:24.8637447Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:15:24.8637648Z ##[endgroup]
+2026-11-17T15:15:24.9594333Z 
+2026-11-17T15:15:24.9594983Z > the-fact-desk@0.1.0 test
+2026-11-17T15:15:24.9595566Z > node --import tsx --test "src/**/*.test.ts"
+2026-11-17T15:15:24.9595851Z 
+2026-11-17T15:15:25.6806741Z ▶ automation pipeline route
+2026-11-17T15:15:25.6808018Z   ✔ rejects missing admin or cron token (5.174678ms)
+2026-11-17T15:15:25.6818349Z   ✔ forces GET requests to be dry-run even when no query flag is present (0.351778ms)
+2026-11-17T15:15:25.6854703Z   ✔ allows writes only through an explicit POST without dry-run (0.4666ms)
+2026-11-17T15:15:25.6862877Z ✔ automation pipeline route (7.338372ms)
+2026-11-17T15:15:25.7198300Z ✔ unauthenticated and isolated-preview refresh requests cannot fetch or invalidate feeds (9.177659ms)
+2026-11-17T15:15:25.7211683Z ✔ disabled monitoring reports unavailable without contacting feeds or granting write access (27.629444ms)
+2026-11-17T15:15:25.7681870Z ▶ newsletter signup route
+2026-11-17T15:15:25.7705243Z   ✔ rejects invalid email addresses (5.884542ms)
+2026-11-17T15:15:25.7708107Z   ✔ silently accepts honeypot spam submissions without storing PII (1.414291ms)
+2026-11-17T15:15:25.7739962Z ✔ newsletter signup route (8.729037ms)
+2026-11-17T15:15:25.9565181Z ▶ AI Draft Assist route
+2026-11-17T15:15:25.9565751Z   ✔ rejects missing admin token (4.937252ms)
+2026-11-17T15:15:25.9566690Z   ✔ returns unavailable when AI Draft Assist is disabled (1.548752ms)
+2026-11-17T15:15:25.9599660Z ✔ AI Draft Assist route (7.771331ms)
+2026-11-17T15:15:26.1409431Z ▶ review authorization fail-closed
+2026-11-17T15:15:26.1414923Z   ✔ rejects unauthenticated review before touching the database (3.747809ms)
+2026-11-17T15:15:26.1445206Z   ✔ rejects cron credentials and does not authorize them as reviewers (0.635503ms)
+2026-11-17T15:15:26.1468915Z   ✔ refuses to review without a configured server-side reviewer identity (0.731237ms)
+2026-11-17T15:15:26.1494883Z ✔ review authorization fail-closed (6.258354ms)
+2026-11-17T15:15:26.1687877Z ✔ pilot RSS catalog has unique secure source configuration (1.8079ms)
+2026-11-17T15:15:26.1697712Z ✔ catalog validation rejects duplicate ids and feed URLs (0.280701ms)
+2026-11-17T15:15:26.1698758Z ✔ catalog validation rejects non-HTTPS endpoints (0.179489ms)
+2026-11-17T15:15:26.3233828Z ▶ AI editorial draft assist
+2026-11-17T15:15:26.3236791Z   ✔ builds a grounded prompt with sources and evidence assist (0.993189ms)
+2026-11-17T15:15:26.3243717Z   ✔ validates complete JSON output (0.665017ms)
+2026-11-17T15:15:26.3245561Z   ✔ handles missing optional fields safely (0.115103ms)
+2026-11-17T15:15:26.3256269Z   ✔ rejects invalid JSON gracefully (0.382363ms)
+2026-11-17T15:15:26.3259158Z   ✔ uses mocked providers without external API calls (0.202223ms)
+2026-11-17T15:15:26.3260037Z ✔ AI editorial draft assist (3.901769ms)
+2026-11-17T15:15:26.3620785Z ✔ reader citations accept HTTP and HTTPS article URLs (0.917115ms)
+2026-11-17T15:15:26.3622006Z ✔ reader citations refuse dangerous schemes, credentials and malformed links (0.217456ms)
+2026-11-17T15:15:26.3623067Z ✔ live discovery link guard rejects untrusted feed citations (0.211618ms)
+2026-11-17T15:15:26.3624190Z ✔ live feed renders only URLs that passed the citation guard (9.616087ms)
+2026-11-17T15:15:26.4615148Z ▶ admin and cron auth guards
+2026-11-17T15:15:26.4616458Z   ✔ rejects missing or invalid admin bearer token (4.209802ms)
+2026-11-17T15:15:26.4618553Z   ✔ accepts admin and cron bearer tokens only when configured (0.445238ms)
+2026-11-17T15:15:26.4641128Z ✔ admin and cron auth guards (5.720477ms)
+2026-11-17T15:15:26.4944393Z ✔ distinct URLs and newsroom names are not verified independent reporting (1.672587ms)
+2026-11-17T15:15:26.4965840Z ✔ syndicated reports with the same verified origin do not corroborate (0.211717ms)
+2026-11-17T15:15:26.4985229Z ✔ verified independent primary reporting remains eligible (0.174371ms)
+2026-11-17T15:15:26.5004966Z ✔ disputed reporting cannot be an automatic lead (0.429304ms)
+2026-11-17T15:15:26.5015088Z ✔ source kinds must be explicitly publisher or primary (0.175894ms)
+2026-11-17T15:15:26.5015979Z ✔ invalid evidence URLs never count (0.160761ms)
+2026-11-17T15:15:26.5016963Z ✔ incomplete aligned provenance cannot claim two independent sources (0.163896ms)
+2026-11-17T15:15:26.5659124Z ✔ continues a strongly matching draft in the same category (2.039067ms)
+2026-11-17T15:15:26.5660148Z ✔ does not merge a similar title from a different category (0.182264ms)
+2026-11-17T15:15:26.5661033Z ✔ unknown-category clusters never merge across runs (0.145198ms)
+2026-11-17T15:15:26.5661962Z ✔ weak one-term overlap is not enough to merge distinct stories (0.188162ms)
+2026-11-17T15:15:26.6532222Z ▶ guarded publish policy
+2026-11-17T15:15:26.6533193Z   ✔ blocks when automation mode is not guarded auto publish (0.740801ms)
+2026-11-17T15:15:26.6534098Z   ✔ blocks stories without sources (0.141683ms)
+2026-11-17T15:15:26.6534760Z   ✔ allows an official source at moderate threshold (0.13323ms)
+2026-11-17T15:15:26.6535469Z   ✔ blocks claims to verify from AI output (0.177056ms)
+2026-11-17T15:15:26.6536261Z   ✔ blocks low evidence and missing uncertainty for developing stories (0.135493ms)
+2026-11-17T15:15:26.6574731Z   ✔ blocks health auto-publish by default (0.094061ms)
+2026-11-17T15:15:26.6604536Z ✔ guarded publish policy (2.399227ms)
+2026-11-17T15:15:26.6991376Z ▶ automation ranking
+2026-11-17T15:15:26.7015032Z   ✔ ranks stronger evidence higher (0.654822ms)
+2026-11-17T15:15:26.7015927Z   ✔ boosts under-covered signals (0.18722ms)
+2026-11-17T15:15:26.7016643Z   ✔ keeps preference hooks from changing facts (0.340741ms)
+2026-11-17T15:15:26.7017395Z ✔ automation ranking (2.071696ms)
+2026-11-17T15:15:26.7695428Z ▶ story clustering
+2026-11-17T15:15:26.7714649Z   ✔ groups duplicate canonical URLs (2.175582ms)
+2026-11-17T15:15:26.7733304Z   ✔ groups similar titles with shared key terms (0.421723ms)
+2026-11-17T15:15:26.7749519Z ✔ story clustering (3.771144ms)
+2026-11-17T15:15:26.8445304Z ✔ mergeStorySources preserves earlier evidence when a new source arrives (0.781131ms)
+2026-11-17T15:15:26.8447083Z ✔ mergeStorySources deduplicates the same URL and keeps fresh feed metadata (0.168653ms)
+2026-11-17T15:15:26.9101361Z ✔ discovery coalesces concurrent requests and does not relabel a failed refresh as live (2.407529ms)
+2026-11-17T15:15:26.9125009Z ✔ future, undated and old articles cannot seed the discovery cache (0.272279ms)
+2026-11-17T15:15:26.9149941Z ✔ invalidation fences an older refresh and preserves the newer in-flight request (1.124055ms)
+2026-11-17T15:15:26.9548028Z ✔ desk-specific feeds reject cross-posted article paths (0.663365ms)
+2026-11-17T15:15:27.1135571Z ✔ durable envelope forces source-only provenance and reconstructs bounded public fields (8.871341ms)
+2026-11-17T15:15:27.1165289Z ✔ scheduled provenance is bounded, visible and never upgrades editorial evidence (0.839078ms)
+2026-11-17T15:15:27.1166973Z ✔ outage preserves the content timestamp, increments per-feed failures and expires content (0.999509ms)
+2026-11-17T15:15:27.1179499Z ✔ rejects invalid envelopes, timestamp lies, unsafe URLs and publisher-link mismatch (1.692698ms)
+2026-11-17T15:15:27.1180985Z ✔ independent readers recover durable content; failed reads never rejuvenate timestamps (2.491955ms)
+2026-11-17T15:15:27.1182303Z ✔ snapshot reader rejects rollbacks and fences older in-flight results (1.7676ms)
+2026-11-17T15:15:27.1183679Z ✔ production cannot opt into evaluation storage; disabled previews perform no fetch (0.737756ms)
+2026-11-17T15:15:27.1204873Z ✔ remote snapshot reads use only the fixed HTTPS origin and enforce streamed body limits (24.54451ms)
+2026-11-17T15:15:27.1206223Z ✔ rolling feed upgrade accepts exact old manifest but rejects other missing feeds (2.109854ms)
+2026-11-17T15:15:27.4333717Z ﹣ Supabase editorial lifecycle integration (0.597506ms) # Set RUN_INTEGRATION_TESTS=true to run Supabase integration tests.
+2026-11-17T15:15:27.4503773Z ✔ reviewed draft with source evidence is publish-ready (1.659798ms)
+2026-11-17T15:15:27.4504856Z ✔ source-less draft cannot be published (0.23361ms)
+2026-11-17T15:15:27.4505762Z ✔ thin evidence requires explicit uncertainty language (0.174512ms)
+2026-11-17T15:15:27.4506752Z ✔ malformed source URL blocks publication (0.167581ms)
+2026-11-17T15:15:28.3571662Z ▶ native ingestion CLI preserves the accepted snapshot on coverage loss or outage
+2026-11-17T15:15:28.3572950Z   ✔ missing-energy (986.799568ms)
+2026-11-17T15:15:29.2002432Z   ✔ outage (842.938828ms)
+2026-11-17T15:15:30.1935015Z   ✔ complete (993.374058ms)
+2026-11-17T15:15:30.1938597Z ✔ native ingestion CLI preserves the accepted snapshot on coverage loss or outage (2824.955521ms)
+2026-11-17T15:15:30.2097500Z ✔ atomic file ingestion survives restart and failed production without corrupting prior data (36.28385ms)
+2026-11-17T15:15:30.2098966Z ✔ native Git snapshot publication is isolated, read back and protected by exact leases (837.195406ms)
+2026-11-17T15:15:30.2100250Z ✔ scheduler provenance accepts only the fixed GitHub workflow identity (1.695736ms)
+2026-11-17T15:15:30.2101374Z ✔ CLI refuses publication while automatic-build and ingestion gates are closed (313.370771ms)
+2026-11-17T15:15:30.2102129Z ▶ evidence scoring
+2026-11-17T15:15:30.2102770Z   ✔ scores a single RSS/news source as low evidence (2.271095ms)
+2026-11-17T15:15:30.2103881Z   ✔ scores one official source as moderate evidence (0.357125ms)
+2026-11-17T15:15:30.2105075Z   ✔ scores an official source plus secondary source as strong evidence (0.23356ms)
+2026-11-17T15:15:30.2105984Z   ✔ scores three independent news sources as strong evidence (0.265809ms)
+2026-11-17T15:15:30.2106956Z   ✔ does not let duplicate sources inflate unique source count (0.230215ms)
+2026-11-17T15:15:30.2107906Z   ✔ flags no sources and weak support for confirmed confidence (0.251537ms)
+2026-11-17T15:15:30.2108845Z   ✔ mentions uncertainty in explanation when uncertainty note is present (0.368081ms)
+2026-11-17T15:15:30.2109808Z   ✔ marks public-interest low-pickup stories as under-covered candidates (0.213901ms)
+2026-11-17T15:15:30.2110553Z ✔ evidence scoring (6.179575ms)
+2026-11-17T15:15:30.2111185Z ✔ round-trips configured category and signal (1.639919ms)
+2026-11-17T15:15:30.2111857Z ✔ ignores invalid untrusted metadata (0.189694ms)
+2026-11-17T15:15:30.2112597Z ✔ normalizes valid feed timestamps for durable storage (1.097648ms)
+2026-11-17T15:15:30.2113656Z ✔ malformed feed timestamps degrade to null instead of aborting a feed (0.148332ms)
+2026-11-17T15:15:30.2116533Z ✔ explicit lead override remains first (1.389827ms)
+2026-11-17T15:15:30.2117356Z ✔ explicit homepage rank beats unpinned automated score (0.944117ms)
+2026-11-17T15:15:30.2118761Z ✔ unpinned stories use evidence-first automated ordering (0.43967ms)
+2026-11-17T15:15:30.2119725Z ✔ single-source Top Signal cannot outrank supported unpinned coverage (0.425268ms)
+2026-11-17T15:15:30.2120692Z ✔ unverified syndicated copies do not receive automatic corroboration (0.203536ms)
+2026-11-17T15:15:30.2121404Z ✔ duplicate and malformed origins fail closed (0.236625ms)
+2026-11-17T15:15:30.2121986Z ✔ explicit editorial lead remains authoritative without provenance (0.153049ms)
+2026-11-17T15:15:30.2122692Z ✔ whitespace variants of the same origin cannot manufacture corroboration (0.160091ms)
+2026-11-17T15:15:30.2123332Z ✔ same publisher different articles preserve citation alignment (4.52237ms)
+2026-11-17T15:15:30.2124444Z ✔ missing URL and credential-bearing URL do not earn publisher credit (0.375614ms)
+2026-11-17T15:15:30.2125231Z ✔ same URL from different outlets cannot double-count (0.31319ms)
+2026-11-17T15:15:30.2125791Z ✔ disputed reports never become Cross-angle on aggregation (0.484778ms)
+2026-11-17T15:15:30.2126354Z ✔ independent verified origins remain aligned across distinct valid articles (0.83243ms)
+2026-11-17T15:15:30.2127140Z ✔ identical substantive syndicated text is not independent corroboration (0.340882ms)
+2026-11-17T15:15:30.2127668Z ✔ inherited Cross-angle is revoked when citations are unverified (0.282844ms)
+2026-11-17T15:15:30.2128181Z ✔ disputed Cross-angle input cannot survive a failed corroboration gate (0.453ms)
+2026-11-17T15:15:30.2128755Z ✔ different publisher domains without attested origins cannot create Cross-angle (0.492088ms)
+2026-11-17T15:15:30.2129285Z ✔ distinct attested reporting origins support Cross-angle (0.404166ms)
+2026-11-17T15:15:30.2129796Z ✔ different domains sharing one wire origin do not establish independence (0.249104ms)
+2026-11-17T15:15:30.2130673Z ✔ unverified citation volume cannot break equal-priority cluster ties (1.841995ms)
+2026-11-17T15:15:30.2131771Z ✔ untrusted claimed origins cannot break equal-priority cluster ties (1.141795ms)
+2026-11-17T15:15:30.2132871Z ✔ does not let a bridge headline merge otherwise unrelated clusters (3.521978ms)
+2026-11-17T15:15:30.2134228Z ✔ merged citations retain source order when a publisher has no URL (0.83207ms)
+2026-11-17T15:15:30.2135046Z ✔ unresolved disputed confidence survives merging (0.281022ms)
+2026-11-17T15:15:30.2136056Z ✔ merged verified origins remain aligned with their actual publishers (0.407192ms)
+2026-11-17T15:15:30.2137193Z ✔ unverified source cannot inherit representative verified origin (0.354212ms)
+2026-11-17T15:15:30.2138304Z ✔ conflicting origin for repeated article URL is not considered verified (0.255944ms)
+2026-11-17T15:15:30.2139158Z ✔ rejects stories older than the production fourteen-day freshness window (0.183486ms)
+2026-11-17T15:15:30.2140088Z ✔ two related unreviewed publishers remain discovery, not verified corroboration (0.276014ms)
+2026-11-17T15:15:30.2141082Z ✔ institutional headline templates do not merge unrelated releases (0.305999ms)
+2026-11-17T15:15:30.2141945Z ✔ the representative headline and excerpt retain their own first citation (0.425879ms)
+2026-11-17T15:15:30.2142801Z ✔ same-event wording is deduped across social and priority stories (2.438501ms)
+2026-11-17T15:15:30.2143749Z ✔ only recent social/open discovery stories enter the early lane (0.505399ms)
+2026-11-17T15:15:30.2144502Z ✔ duplicates inside the early lane collapse to one event (0.231949ms)
+2026-11-17T15:15:30.2145266Z ✔ headline classification: Solar system planet discovery [World] (2.988637ms)
+2026-11-17T15:15:30.2146055Z ✔ headline classification: Solar eclipse visible tomorrow [World] (0.360351ms)
+2026-11-17T15:15:30.2146880Z ✔ headline classification: Solar storm may disrupt satellites [World] (0.124798ms)
+2026-11-17T15:15:30.2147752Z ✔ headline classification: Solar panels expand electricity output [World] (0.443666ms)
+2026-11-17T15:15:30.2148583Z ✔ headline classification: Solar energy prices fall [World] (0.217898ms)
+2026-11-17T15:15:30.2149381Z ✔ headline classification: Nuclear power plant expansion [World] (0.10689ms)
+2026-11-17T15:15:30.2150585Z ✔ headline classification: NASA telescope images solar corona [World] (0.095763ms)
+2026-11-17T15:15:30.2151435Z ✔ headline classification: Wind power grid upgrade [World] (0.102213ms)
+2026-11-17T15:15:30.2152205Z ✔ headline classification: Oil pipeline shut down [World] (0.111337ms)
+2026-11-17T15:15:30.2153036Z ✔ headline classification: Solar flare threatens power grid [World] (0.135965ms)
+2026-11-17T15:15:30.2154234Z ✔ headline classification: Planet-saving solar energy investments [World] (0.061282ms)
+2026-11-17T15:15:30.2155148Z ✔ headline classification: Solar panel plant expands power production [World] (0.040861ms)
+2026-11-17T15:15:30.2156128Z ✔ headline classification: Astronomers discover exoplanet [World] (0.033149ms)
+2026-11-17T15:15:30.2156972Z ✔ headline classification: Astronomy mission measures solar wind [World] (0.068863ms)
+2026-11-17T15:15:30.2157822Z ✔ headline classification: Solar-powered telescope launch [World] (0.050346ms)
+2026-11-17T15:15:30.2158631Z ✔ headline classification: Solar battery storage prices fall [World] (0.039669ms)
+2026-11-17T15:15:30.2159745Z ✔ headline classification: Nuclear fusion energy reactor announced [World] (0.028082ms)
+2026-11-17T15:15:30.2160754Z ✔ headline classification: Wind power capacity doubles [World] (0.030085ms)
+2026-11-17T15:15:30.2161668Z ✔ headline classification: Cosmic radiation telescope discovery [World] (0.038968ms)
+2026-11-17T15:15:30.2162606Z ✔ headline classification: Solar eclipse tourism boosts local economy [World] (0.035893ms)
+2026-11-17T15:15:30.2163764Z ✔ headline classification: NASA Webb telescope spots an early galaxy [Energy] (0.087822ms)
+2026-11-17T15:15:30.2164849Z ✔ headline classification: Study A.I. Consciousness? The Bots Would Like a Word With You. [Energy] (0.033791ms)
+2026-11-17T15:15:30.2165839Z ✔ headline classification: Cancer drug price falls after FDA approval [Markets] (0.02705ms)
+2026-11-17T15:15:30.2167053Z ✔ headline classification: Trump admin shelves Cyclospora research despite record-breaking outbreak [Technology] (0.054372ms)
+2026-11-17T15:15:30.2168285Z ✔ headline classification: Supreme Court agrees to hear privacy case [World] (0.028343ms)
+2026-11-17T15:15:30.2169259Z ✔ headline classification: Defense lawyers withdraw from murder case [World] (0.029575ms)
+2026-11-17T15:15:30.2170304Z ✔ headline classification: Football star retires after World Cup [World] (0.024006ms)
+2026-11-17T15:15:30.2171371Z ✔ headline classification: Texas Tech head coach blasts USC over poor attendance at LA Coliseum [Technology] (0.031427ms)
+2026-11-17T15:15:30.2172687Z ✔ headline classification: Astronomical energy bills force households to cut back [World] (0.028673ms)
+2026-11-17T15:15:30.2173817Z ✔ headline classification: Wind power costs reach astronomical highs [World] (0.027061ms)
+2026-11-17T15:15:30.2174765Z ✔ headline classification: Electricity bills soar to astronomical levels [World] (0.025649ms)
+2026-11-17T15:15:30.2175771Z ✔ headline classification: Astronomical observations reveal a new solar system [World] (0.051387ms)
+2026-11-17T15:15:30.2176715Z ✔ headline classification: Astronomers map a distant galaxy [Energy] (0.02715ms)
+2026-11-17T15:15:30.2177644Z ✔ headline classification: A solar observatory measures solar radiation [Energy] (0.02699ms)
+2026-11-17T15:15:30.2178507Z ✔ headline classification: Congress passes budget [World] (0.193991ms)
+2026-11-17T15:15:30.2179354Z ✔ headline classification: Federal Reserve cuts interest rates [World] (0.034492ms)
+2026-11-17T15:15:30.2180294Z ✔ headline classification: Software update improves internet security [World] (0.025789ms)
+2026-11-17T15:15:30.2181176Z ✔ headline classification: International talks resume [World] (1.736888ms)
+2026-11-17T15:15:30.2181962Z ✔ headline classification: Cancer vaccine clinical trial begins [World] (0.071307ms)
+2026-11-17T15:15:30.2182760Z ✔ headline classification: Supreme Court issues ruling [World] (0.055303ms)
+2026-11-17T15:15:30.2184138Z ✔ headline classification: Nuclear power plant expands [World] (0.055333ms)
+2026-11-17T15:15:30.2185402Z ✔ headline classification: Film festival announces winners [World] (0.083606ms)
+2026-11-17T15:15:30.2186286Z ✔ headline classification: Solar-panel plant expands power production [World] (0.083276ms)
+2026-11-17T15:15:30.2187168Z ✔ headline classification: Solar wind threatens power grids [Energy] (0.158208ms)
+2026-11-17T15:15:30.2188023Z ✔ headline classification: Astronomer observes a new star [Energy] (0.106911ms)
+2026-11-17T15:15:30.2188916Z ✔ headline classification: School astronomers study distant objects [Energy] (0.067251ms)
+2026-11-17T15:15:30.2189847Z ✔ headline classification: Solar battery storage lowers energy costs [World] (0.055343ms)
+2026-11-17T15:15:30.2190816Z ✔ headline classification: Utility reports astronomical oil and gas costs [World] (0.049845ms)
+2026-11-17T15:15:30.2191810Z ✔ headline classification: NASA telescope schedules a solar eclipse observation [Energy] (0.04605ms)
+2026-11-17T15:15:30.2192939Z ✔ headline classification: Texas Tech head coach discusses astronomical ticket prices [Technology] (0.056645ms)
+2026-11-17T15:15:30.2199434Z ✔ headline classification: James Bond franchise announces a new actor [Markets] (0.04653ms)
+2026-11-17T15:15:30.2200599Z ✔ headline classification: SpaceX successfully catches top of huge Starship rocket for first time [World] (0.049414ms)
+2026-11-17T15:15:30.2201837Z ✔ headline classification: GTA 6 hacker pleads guilty after release from secure hospital [Technology] (0.051457ms)
+2026-11-17T15:15:30.2202865Z ✔ headline classification: Man sentenced over 'horrific' attempted murder of three children [World] (0.072298ms)
+2026-11-17T15:15:30.2203771Z ✔ headline classification: Patient pleads guilty after hospital data theft [Health] (0.046139ms)
+2026-11-17T15:15:30.2204691Z ✔ headline classification: Satellite launch monitors solar storms [Energy] (0.06013ms)
+2026-11-17T15:15:30.2205508Z ✔ broad BBC Science discovery does not default weather to Energy (0.234062ms)
+2026-11-17T15:15:30.2206291Z ✔ feed dates reject impossible calendars and unknown timezones (2.093503ms)
+2026-11-17T15:15:30.2207201Z ✔ live validation precedes limit while the editorial inbox retains undated inputs (31.939374ms)
+2026-11-17T15:15:30.2208145Z ✔ public serialization keeps a useful synopsis but drops article-length body text (4.718604ms)
+2026-11-17T15:15:30.2209053Z ✔ headline inference corrects coarse science and health feed categories (0.627352ms)
+2026-11-17T15:15:30.2209840Z ✔ RSS normalization preserves a natural synopsis boundary (30.331729ms)
+2026-11-17T15:15:30.2210639Z ✔ James Bond casting coverage stays in Culture while financial bonds remain Markets (0.1995ms)
+2026-11-17T15:15:30.2211489Z ✔ court significance cannot be hijacked by unrelated words in feed context (0.169745ms)
+2026-11-17T15:15:30.2212455Z ✔ health story stays health-grounded even when synopsis mentions prices or inflation (0.260701ms)
+2026-11-17T15:15:30.2213306Z ✔ figurative trade-war language is not described as armed conflict (0.269244ms)
+2026-11-17T15:15:30.2214281Z ✔ invasion of privacy is not described as armed conflict (0.221763ms)
+2026-11-17T15:15:30.2214992Z ✔ literal missile conflict still receives conflict context (0.322635ms)
+2026-11-17T15:15:30.2215437Z ▶ RSS parsing
+2026-11-17T15:15:30.2215881Z   ✔ normalizes RSS items for the editorial inbox (3.947977ms)
+2026-11-17T15:15:30.2216355Z ✔ RSS parsing (4.937022ms)
+2026-11-17T15:15:30.2216693Z ▶ bounded RSS transport
+2026-11-17T15:15:30.2217087Z   ✔ reads a complete small body (29.179099ms)
+2026-11-17T15:15:30.2217682Z   ✔ rejects oversized declared Content-Length before streaming (1.003637ms)
+2026-11-17T15:15:30.2218412Z   ✔ rejects chunked oversized feeds even without Content-Length (0.534473ms)
+2026-11-17T15:15:30.2219093Z   ✔ accepts a body exactly at the byte boundary (0.292439ms)
+2026-11-17T15:15:30.2219608Z ✔ bounded RSS transport (31.739864ms)
+2026-11-17T15:15:30.2220264Z ✔ viral X-only signal remains non-lead single-source evidence (2.17759ms)
+2026-11-17T15:15:30.2221243Z ✔ X discovery score is never evidence confidence (0.340111ms)
+2026-11-17T15:15:30.2222023Z ✔ one publisher plus X does not become multi-source corroboration (1.64478ms)
+2026-11-17T15:15:30.2222967Z ✔ two unreviewed publishers with X context cannot establish verified cross-angle (0.438979ms)
+2026-11-17T15:15:30.2224414Z ✔ isolated reader disables inherited database credentials, editorial writes and mock fallback (6.203954ms)
+2026-11-17T15:15:30.2225594Z ✔ Vercel Preview automatically disables privileged clients, tokens and fabricated fallback (0.605119ms)
+2026-11-17T15:15:30.2226505Z ✔ public create payload cannot set reviewer provenance (1.766322ms)
+2026-11-17T15:15:30.2227231Z ✔ public update payload cannot set reviewer provenance (0.285529ms)
+2026-11-17T15:15:30.2228162Z ✔ reader deduplication excludes lead articles across published and RSS sections (1.959883ms)
+2026-11-17T15:15:30.4775190Z ✔ reader routes prefer the durable published story (0.730266ms)
+2026-11-17T15:15:30.4805327Z ✔ reader routes resolve live discovery links without publishing them (0.185819ms)
+2026-11-17T15:15:30.4821159Z ✔ reader routes remain not found when neither source contains the slug (0.151798ms)
+2026-11-17T15:15:30.5104481Z ✔ ordinary single-newsroom Top Signal is not automatic lead eligible (1.812782ms)
+2026-11-17T15:15:30.5105863Z ✔ multi-source Top Signal can become the automatic lead (0.337507ms)
+2026-11-17T15:15:30.5106953Z ✔ primary-only update is recognized but does not become automatic lead (0.231938ms)
+2026-11-17T15:15:30.5108201Z ✔ live items are separated into multi-source, primary-only, and incoming lanes (0.889276ms)
+2026-11-17T15:15:30.5109370Z ✔ multi-source lane ranks stronger corroboration above fresher weak coverage (0.400092ms)
+2026-11-17T15:15:30.5110514Z ✔ unverified extra publishers cannot inflate live priority evidence bonus (1.400052ms)
+2026-11-17T15:15:30.5111687Z ✔ distinct verified origins increase priority evidence, duplicate origins do not (0.358969ms)
+2026-11-17T15:15:30.5113057Z ✔ different unverified publisher domains cannot enter multi-source lane (0.199259ms)
+2026-11-17T15:15:30.5114148Z ✔ syndicated duplicate origin cannot enter multi-source lane (0.756326ms)
+2026-11-17T15:15:30.5114926Z ✔ two verified origins qualify for multi-source lane (0.402895ms)
+2026-11-17T15:15:30.5115442Z ▶ story input validation
+2026-11-17T15:15:30.5115996Z   ✔ creates draft story input from required editor fields (1.971641ms)
+2026-11-17T15:15:30.5116683Z   ✔ forces publishing through the publish action (0.567832ms)
+2026-11-17T15:15:30.5117238Z ✔ story input validation (3.80378ms)
+2026-11-17T15:15:30.6998614Z ▶ story repository fallback
+2026-11-17T15:15:30.6999326Z   ✔ returns published mock stories when Supabase is not configured (0.813982ms)
+2026-11-17T15:15:30.7000953Z   ✔ resolves detail slugs shown by fallback homepage stories (0.210706ms)
+2026-11-17T15:15:30.7004933Z   ✔ allows mock fallback outside production (0.128292ms)
+2026-11-17T15:15:30.7007701Z   ✔ requires explicit mock fallback in production (0.117797ms)
+2026-11-17T15:15:30.7008426Z ✔ story repository fallback (2.232892ms)
+2026-11-17T15:15:30.7011967Z ▶ untrusted fallback provenance
+2026-11-17T15:15:30.7012742Z   ✔ discards forged reviewed origins from a mock story (0.625699ms)
+2026-11-17T15:15:30.7013793Z ✔ untrusted fallback provenance (0.726981ms)
+2026-11-17T15:15:30.7199278Z ▶ url utilities
+2026-11-17T15:15:30.7199769Z   ✔ canonicalizes tracking-heavy URLs (0.760441ms)
+2026-11-17T15:15:30.7200275Z   ✔ builds stable feed-item dedupe keys (0.169305ms)
+2026-11-17T15:15:30.7200697Z ✔ url utilities (1.937018ms)
+2026-11-17T15:15:30.7203385Z ℹ tests 225
+2026-11-17T15:15:30.7203839Z ℹ suites 17
+2026-11-17T15:15:30.7204097Z ℹ pass 225
+2026-11-17T15:15:30.7204343Z ℹ fail 0
+2026-11-17T15:15:30.7204592Z ℹ cancelled 0
+2026-11-17T15:15:30.7204851Z ℹ skipped 0
+2026-11-17T15:15:30.7205109Z ℹ todo 0
+2026-11-17T15:15:30.7205412Z ℹ duration_ms 5728.195364
+2026-11-17T15:15:30.7384163Z ##[group]Run npm run test:e2e
+2026-11-17T15:15:30.7384474Z [36;1mnpm run test:e2e[0m
+2026-11-17T15:15:30.7402046Z shell: /usr/bin/bash -e {0}
+2026-11-17T15:15:30.7402246Z env:
+2026-11-17T15:15:30.7402486Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:15:30.7402776Z   FACT_DESK_E2E_LOCAL: true
+2026-11-17T15:15:30.7402962Z ##[endgroup]
+2026-11-17T15:15:30.8199422Z 
+2026-11-17T15:15:30.8200166Z > the-fact-desk@0.1.0 test:e2e
+2026-11-17T15:15:30.8200487Z > playwright test
+2026-11-17T15:15:30.8200615Z 
+2026-11-17T15:15:44.0214255Z 
+2026-11-17T15:15:44.0214921Z Running 34 tests using 2 workers
+2026-11-17T15:15:44.0215163Z 
+2026-11-17T15:15:57.9665885Z   ✓   1 [desktop-chromium] › e2e/article-reader.spec.ts:5:1 › all eight article routes retain their title, source citations and bounded context (6.4s)
+2026-11-17T15:15:58.4300444Z READER_ACCESSIBILITY []
+2026-11-17T15:15:58.5345529Z   ✓   2 [desktop-chromium] › e2e/accessibility.spec.ts:5:3 › WCAG accessibility: / (7.0s)
+2026-11-17T15:15:58.9910225Z   ✓   3 [desktop-chromium] › e2e/article-reader.spec.ts:28:1 › scrolling tickers are focusable and support keyboard scrolling (983ms)
+2026-11-17T15:15:59.1196097Z   ✓   5 [desktop-chromium] › e2e/article-reader.spec.ts:44:1 › local public-reader mode denies inherited admin and cron credentials over real HTTP (103ms)
+2026-11-17T15:16:00.0081133Z READER_ACCESSIBILITY []
+2026-11-17T15:16:00.0680325Z   ✓   6 [desktop-chromium] › e2e/category-keyboard.spec.ts:3:1 › category tabs support arrows, wraparound, Home and End with one keyboard stop (918ms)
+2026-11-17T15:16:00.1056193Z   ✓   4 [desktop-chromium] › e2e/accessibility.spec.ts:5:3 › WCAG accessibility: /?category=Energy (1.5s)
+2026-11-17T15:16:00.9454654Z   ✓   8 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Politics: populated, source-linked and truthful (817ms)
+2026-11-17T15:16:01.3186041Z   ✓   7 [desktop-chromium] › e2e/category-keyboard.spec.ts:29:1 › category history restores selection and invalid categories retain a populated reader (1.2s)
+2026-11-17T15:16:01.5404401Z   ✓   9 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Markets: populated, source-linked and truthful (566ms)
+2026-11-17T15:16:02.0675358Z   ✓  10 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Technology: populated, source-linked and truthful (496ms)
+2026-11-17T15:16:02.7027349Z   ✓  12 [desktop-chromium] › e2e/reader.spec.ts:7:3 › World: populated, source-linked and truthful (611ms)
+2026-11-17T15:16:03.2716263Z   ✓  13 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Health: populated, source-linked and truthful (547ms)
+2026-11-17T15:16:03.8129883Z   ✓  14 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Courts: populated, source-linked and truthful (525ms)
+2026-11-17T15:16:04.3679306Z   ✓  15 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Energy: populated, source-linked and truthful (543ms)
+2026-11-17T15:16:04.4708204Z READER_ACCESSIBILITY []
+2026-11-17T15:16:04.6658815Z   ✓  11 [mobile-chromium] › e2e/accessibility.spec.ts:5:3 › WCAG accessibility: / (2.2s)
+2026-11-17T15:16:04.9735210Z   ✓  16 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Culture: populated, source-linked and truthful (589ms)
+2026-11-17T15:16:05.9766443Z READER_ACCESSIBILITY []
+2026-11-17T15:16:06.1436536Z   ✓  17 [mobile-chromium] › e2e/accessibility.spec.ts:5:3 › WCAG accessibility: /?category=Energy (1.5s)
+2026-11-17T15:16:06.7796012Z   ✓  18 [desktop-chromium] › e2e/reader.spec.ts:27:1 › category controls navigate and show eight distinct category leads (1.8s)
+2026-11-17T15:16:06.8778912Z   ✓  20 [desktop-chromium] › e2e/reader.spec.ts:43:1 › scheduled health is fresh, complete and from the reviewed producer (84ms)
+2026-11-17T15:16:08.1051404Z   ✓  19 [mobile-chromium] › e2e/article-reader.spec.ts:5:1 › all eight article routes retain their title, source citations and bounded context (1.9s)
+2026-11-17T15:16:08.8925917Z   ✓  21 [mobile-chromium] › e2e/category-keyboard.spec.ts:3:1 › category tabs support arrows, wraparound, Home and End with one keyboard stop (1.1s)
+2026-11-17T15:16:09.1926518Z   ✓  22 [mobile-chromium] › e2e/article-reader.spec.ts:28:1 › scrolling tickers are focusable and support keyboard scrolling (1.1s)
+2026-11-17T15:16:09.2941167Z   ✓  24 [mobile-chromium] › e2e/article-reader.spec.ts:44:1 › local public-reader mode denies inherited admin and cron credentials over real HTTP (99ms)
+2026-11-17T15:16:09.9492458Z   ✓  23 [mobile-chromium] › e2e/category-keyboard.spec.ts:29:1 › category history restores selection and invalid categories retain a populated reader (1.0s)
+2026-11-17T15:16:09.9605415Z   ✓  25 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Politics: populated, source-linked and truthful (630ms)
+2026-11-17T15:16:10.4429197Z   ✓  26 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Markets: populated, source-linked and truthful (454ms)
+2026-11-17T15:16:10.8940447Z   ✓  27 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Technology: populated, source-linked and truthful (442ms)
+2026-11-17T15:16:11.5345918Z   ✓  28 [mobile-chromium] › e2e/reader.spec.ts:7:3 › World: populated, source-linked and truthful (620ms)
+2026-11-17T15:16:11.9987591Z   ✓  29 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Health: populated, source-linked and truthful (454ms)
+2026-11-17T15:16:12.6818392Z   ✓  30 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Courts: populated, source-linked and truthful (665ms)
+2026-11-17T15:16:13.1485841Z   ✓  31 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Energy: populated, source-linked and truthful (452ms)
+2026-11-17T15:16:13.5935454Z   ✓  32 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Culture: populated, source-linked and truthful (431ms)
+2026-11-17T15:16:15.0147534Z   ✓  33 [mobile-chromium] › e2e/reader.spec.ts:27:1 › category controls navigate and show eight distinct category leads (1.4s)
+2026-11-17T15:16:15.0361183Z   ✓  34 [mobile-chromium] › e2e/reader.spec.ts:43:1 › scheduled health is fresh, complete and from the reviewed producer (16ms)
+2026-11-17T15:16:15.1833575Z 
+2026-11-17T15:16:15.1837197Z   34 passed (43.9s)
+2026-11-17T15:16:15.2386751Z Post job cleanup.
+2026-11-17T15:16:15.3456165Z (node:5418) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-17T15:16:15.3456835Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-17T15:16:15.3633566Z Post job cleanup.
+2026-11-17T15:16:15.4404005Z [command]/usr/bin/git version
+2026-11-17T15:16:15.4437263Z git version 2.56.1
+2026-11-17T15:16:15.4466759Z Temporarily overriding HOME='/home/runner/work/_temp/806506d7-2a79-4617-afa2-90e1a1a51b18' before making global git config changes
+2026-11-17T15:16:15.4467818Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-17T15:16:15.4470769Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/the-fact-desk/the-fact-desk
+2026-11-17T15:16:15.4507748Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-17T15:16:15.4538403Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-17T15:16:15.4740061Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-17T15:16:15.4762522Z http.https://github.com/.extraheader
+2026-11-17T15:16:15.4771184Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-17T15:16:15.4801810Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-17T15:16:15.5153338Z Cleaning up orphan processes
+2026-11-17T15:16:15.5467220Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
