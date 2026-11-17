@@ -45,6 +45,9 @@ test("outage preserves the content timestamp, increments per-feed failures and e
   const first = snapshot();
   const failed = buildDiscoverySnapshot({ stories: [], feeds: [] }, first, sourceSha, now + 60_000);
   assert.equal(failed.fetchedAt, first.fetchedAt);
+  assert.equal(summarizeFeedHealth(failed, now + 60_000).ageMs, 60_000, "a failed attempt must not rejuvenate content age");
+  assert.equal(summarizeFeedHealth(failed, now + 60_000).attemptAgeMs, 0);
+  assert.equal(summarizeFeedHealth(null, now).ageMs, null);
   assert.equal(failed.stories.length, 1);
   assert.equal(failed.feeds[0].lastSuccessAt, first.attemptedAt);
   assert.equal(failed.feeds[0].consecutiveFailures, 1);
