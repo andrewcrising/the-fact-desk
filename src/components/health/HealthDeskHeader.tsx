@@ -32,6 +32,8 @@ export function HealthDeskTicker() {
     <div
       className="overflow-x-auto border border-[var(--border-subtle)] bg-[#fafbfc]"
       aria-label="Health desk goals ticker"
+      role="region"
+      tabIndex={0}
     >
       <div className="flex min-w-max divide-x divide-[var(--border-subtle)]">
         {HEALTH_TICKER.map((label) => (

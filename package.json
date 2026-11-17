@@ -36,6 +36,7 @@
     "vinext": "^1.0.0-beta.8"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
     "@cloudflare/vite-plugin": "^1.54.2",
     "@playwright/test": "1.65.1",
     "@tailwindcss/postcss": "^4",
