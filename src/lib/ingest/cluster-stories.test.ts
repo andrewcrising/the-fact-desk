@@ -28,7 +28,8 @@ function story(
   };
 }
 
-test("does not let a bridge headline merge otherwise unrelated clusters", () => {
+test("does not let a bridge headline merge otherwise unrelated clusters", (t) => {
+  t.mock.method(Date, "now", () => Date.parse("2026-08-31T23:00:00.000Z"));
   const publishedAt = "2026-08-31T22:00:00.000Z";
   const first = story(
     "first",

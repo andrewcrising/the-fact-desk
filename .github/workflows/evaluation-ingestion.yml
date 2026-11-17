@@ -1,0 +1,59 @@
+name: Evaluation RSS ingestion (Vercel)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "7,22,37,52 * * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: evaluation-rss-snapshot
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    # Public standard runner; only the fixed evaluation data ref is written.
+    # Vercel Git builds are disabled in the source and emitted data-tree config.
+    if: >-
+      github.repository == 'andrewcrising/the-fact-desk' &&
+      (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    env:
+      REVIEWED_SOURCE_SHA: b2dd33e829bc0cdacea6a690d4f233bb547386fd
+    steps:
+      - name: Require immutable reviewed evaluation source
+        run: |
+          if [[ ! "$REVIEWED_SOURCE_SHA" =~ ^[a-f0-9]{40}$ ]]; then
+            echo "The reviewed evaluation source must be a full lowercase Git commit."
+            exit 1
+          fi
+      - name: Check out reviewed source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 1
+          # The default branch hosts the schedule, but must never select its
+          # older application tree as the evaluation ingestion implementation.
+          ref: ${{ env.REVIEWED_SOURCE_SHA }}
+          # The ephemeral, job-scoped repository token is required for the
+          # explicit data-branch lease push; never use production credentials.
+          persist-credentials: true
+      - name: Verify checked-out source identity
+        run: test "$(git rev-parse HEAD)" = "$REVIEWED_SOURCE_SHA"
+      - name: Verify Vercel automatic-build suppression
+        run: node -e 'require("node:assert/strict").equal(require("./vercel.json").git?.deploymentEnabled, false)'
+      - name: Set up Node 24
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+      - name: Install exact dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Ingest public feeds and publish isolated snapshot
+        env:
+          FACT_DESK_EVALUATION_INGESTION_ENABLED: "true"
+          FACT_DESK_NONPRODUCTION_BUILDS_DISABLED: "true"
+        run: npm run ingest:evaluation -- --state-dir "$RUNNER_TEMP/factdesk-evaluation" --publish
