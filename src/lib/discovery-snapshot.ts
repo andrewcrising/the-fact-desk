@@ -1,4 +1,4 @@
-import { EVALUATION_FEEDS } from "./discovery-feeds";
+import { EVALUATION_FEEDS, ENERGY_FEED_URL } from "./discovery-feeds";
 import { MAX_FALLBACK_AGE_MS } from "./discovery-cache";
 import { isCurrentFeedTimestamp, parseFeedTimestamp } from "./ingest/feed-time";
 import { sanitizeStoryForPublic } from "./ingest/public-story";
@@ -69,7 +69,7 @@ function publicReport(input: unknown, now: number): Story | null {
 export function parseDiscoverySnapshot(input: unknown, now = Date.now()): DiscoverySnapshot | null {
   if (!input || typeof input !== "object") return null;
   const s = input as DiscoverySnapshot;
-  if (s.schemaVersion !== 1 || !/^[a-f0-9]{40}$/.test(s.sourceSha ?? "") || typeof s.attemptedAt !== "string" || !parseFeedTimestamp(s.attemptedAt) || Date.parse(s.attemptedAt) > now || !Array.isArray(s.stories) || s.stories.length > 56 || !Array.isArray(s.feeds) || s.feeds.length !== EVALUATION_FEEDS.length) return null;
+  if (s.schemaVersion !== 1 || !/^[a-f0-9]{40}$/.test(s.sourceSha ?? "") || typeof s.attemptedAt !== "string" || !parseFeedTimestamp(s.attemptedAt) || Date.parse(s.attemptedAt) > now || !Array.isArray(s.stories) || s.stories.length > 56 || !Array.isArray(s.feeds) || ![EVALUATION_FEEDS.length, EVALUATION_FEEDS.length - 1].includes(s.feeds.length)) return null;
   if (s.fetchedAt !== null && (typeof s.fetchedAt !== "string" || !parseFeedTimestamp(s.fetchedAt) || Date.parse(s.fetchedAt) > Date.parse(s.attemptedAt))) return null;
   const producer = s.producer ?? null;
   if (producer !== null && (
@@ -82,7 +82,10 @@ export function parseDiscoverySnapshot(input: unknown, now = Date.now()): Discov
     !/^andrewcrising\/the-fact-desk\/\.github\/workflows\/evaluation-ingestion\.yml@refs\/heads\/[A-Za-z0-9._/-]{1,200}$/.test(producer.workflowRef)
   )) return null;
   const feeds: FeedHealth[] = [];
-  for (const feed of EVALUATION_FEEDS) {
+  // Rolling upgrade: accept only the exact previous manifest or the full new manifest.
+  const expectedFeeds = s.feeds.length === EVALUATION_FEEDS.length - 1
+    ? EVALUATION_FEEDS.filter((feed) => feed.url !== ENERGY_FEED_URL) : EVALUATION_FEEDS;
+  for (const feed of expectedFeeds) {
     const matches = s.feeds.filter((f) => f && f.url === feed.url);
     if (matches.length !== 1) return null;
     const f = matches[0];

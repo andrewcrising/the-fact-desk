@@ -64,7 +64,7 @@ export async function fetchDiscoveryWithDiagnostics() {
   }
   // Related articles retain individually linked citations; clustering does
   // not upgrade unreviewed publishers to independently verified origins.
-  return { stories: clusterAndBalanceStories(stories), feeds };
+  return { stories: clusterAndBalanceStories(stories).slice(0, 56), feeds };
 }
 
 

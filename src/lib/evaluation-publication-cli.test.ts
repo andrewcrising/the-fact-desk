@@ -36,7 +36,8 @@ test("native ingestion CLI preserves the accepted snapshot on coverage loss or o
         for (const file of ["evaluation-snapshot-store.ts", "run-evaluation-ingestion.ts"]) {
           await cp(join(process.cwd(), "scripts", file), join(repo, "scripts", file));
         }
-        git(["-C", repo, "add", "scripts"]);
+        await cp(join(process.cwd(), "src"), join(repo, "src"), { recursive: true });
+        git(["-C", repo, "add", "scripts", "src"]);
         git(["-C", repo, "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "--allow-empty", "-m", "Native fixture source"]);
         await symlink(join(process.cwd(), "node_modules"), join(repo, "node_modules"), "dir");
         const sourceSha = git(["-C", repo, "rev-parse", "HEAD"]);
@@ -60,6 +61,7 @@ test("native ingestion CLI preserves the accepted snapshot on coverage loss or o
             const feed = EVALUATION_FEEDS.find(f => f.url === String(input));
             if (!feed) throw Error('Unexpected network request');
             let category = feed.category;
+            if (mode === 'missing-energy' && category === 'Energy') category = 'World';
             if (feed.name === 'BBC Science' && mode === 'complete') category = 'Energy';
             const host = feed.name.startsWith('BBC') ? 'www.bbc.com' :
               feed.name.startsWith('The Guardian') ? 'www.theguardian.com' :

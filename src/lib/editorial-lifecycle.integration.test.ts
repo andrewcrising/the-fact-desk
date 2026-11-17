@@ -13,17 +13,19 @@ import { POST as promoteFeedItemRoute } from "@/app/api/feed-items/[id]/promote/
 import { GET as listFeedItemsRoute } from "@/app/api/feed-items/route";
 import { GET as ingestRssRoute } from "@/app/api/ingest/rss/route";
 import { POST as newsletterSignupRoute } from "@/app/api/newsletter/signup/route";
+import { PUT as reviewSourceRoute } from "@/app/api/stories/[id]/sources/[sourceId]/review/route";
 import { getOrCreateSource, listSources } from "@/lib/source-repository";
 import { getFeedItemById } from "@/lib/feed-repository";
 import {
   archiveStory,
   getHomepageStories,
   getStoryBySlug,
+  getStoryById,
   listStories,
 } from "@/lib/story-repository";
 import { resetSupabaseAdminForTests } from "@/lib/supabase";
 import { buildDedupeKey } from "@/lib/url";
-import type { NextRequest } from "next/server";
+import { NextRequest } from "next/server";
 import type { PersistedStory } from "@/types/editorial";
 import type { EvidenceProfile } from "@/lib/evidence-scoring";
 
@@ -59,14 +61,14 @@ function jsonRequest(
   body?: Record<string, unknown>,
   token?: string,
 ): NextRequest {
-  return new Request(url, {
+  return new NextRequest(url, {
     method: body ? "POST" : "GET",
     headers: {
       "content-type": "application/json",
       ...(token ? { authorization: `Bearer ${token}` } : {}),
     },
     body: body ? JSON.stringify(body) : undefined,
-  }) as NextRequest;
+  });
 }
 
 function context(id: string) {
@@ -368,6 +370,51 @@ describe("Supabase editorial lifecycle integration", { skip }, () => {
     assert.equal(publicAfterArchive.some((item) => item.id === story.id), false);
 
     await archiveStory(secondStory.id);
+  });
+
+  it("persists only server-authorized source reviews and invalidates them on URL edit and ABA", async () => {
+    const response = await createStoryRoute(jsonRequest("https://example.com/api/stories", {
+      title: `${runId} reviewed source`, slug: `${runId}-reviewed-source`,
+      summary: "Local provenance lifecycle", whatHappened: "Local test", whyItMatters: "Authorization regression",
+      category: "World", signal: "Developing", confidence: "Single-source", evidenceLevel: "Low",
+      uncertaintyNote: "Disposable test report",
+      sourceAttachments: [{ sourceName: "HTTP review fixture", url: "https://example.com/review-original", title: "Fixture",
+        verifiedIndependentOrigin: "forged-input", reviewedBy: "forged-reviewer" }],
+    }, adminToken));
+    assert.equal(response.status, 201);
+    const story = (await json(response)).story as PersistedStory;
+    createdStoryIds.push(story.id);
+    assert.deepEqual(story.verifiedIndependentOrigins, [null]);
+    const source = story.storySources[0];
+    const reviewContext = { params: Promise.resolve({ id: story.id, sourceId: source.id }) };
+    const review = (token: string | undefined, expectedUrl = source.url) => reviewSourceRoute(new NextRequest(
+      `https://example.com/api/stories/${story.id}/sources/${source.id}/review`, {
+        method: "PUT", headers: { "content-type": "application/json", ...(token ? { authorization: `Bearer ${token}` } : {}) },
+        body: JSON.stringify({ originId: "native-http-origin", expectedUrl, reviewedBy: "forged-reviewer" }),
+      }), reviewContext);
+    const priorReviewer = process.env.PROVENANCE_REVIEWER_ID;
+    process.env.PROVENANCE_REVIEWER_ID = "local-http-reviewer";
+    try {
+      assert.equal((await review(undefined)).status, 401);
+      assert.equal((await review(cronSecret)).status, 401);
+      assert.equal((await review(adminToken, "https://example.com/stale")).status, 409);
+      assert.equal((await review(adminToken)).status, 200);
+      const stored = await supabase.from("story_source_reviews").select("*").eq("story_source_id", source.id).single();
+      assert.ifError(stored.error);
+      assert.equal(stored.data.reviewed_by, "local-http-reviewer");
+      assert.equal(stored.data.attested_url, source.url);
+      assert.deepEqual((await getStoryById(story.id))?.verifiedIndependentOrigins, ["native-http-origin"]);
+      for (const url of ["https://example.com/review-replaced", source.url]) {
+        const changed = await supabase.from("story_sources").update({ url }).eq("id", source.id);
+        assert.ifError(changed.error);
+        assert.deepEqual((await getStoryById(story.id))?.verifiedIndependentOrigins, [null]);
+        const remaining = await supabase.from("story_source_reviews").select("story_source_id").eq("story_source_id", source.id);
+        assert.ifError(remaining.error); assert.equal(remaining.data?.length, 0);
+      }
+    } finally {
+      if (priorReviewer === undefined) delete process.env.PROVENANCE_REVIEWER_ID;
+      else process.env.PROVENANCE_REVIEWER_ID = priorReviewer;
+    }
   });
 
   it("exercises newsletter and protected route behavior", async () => {

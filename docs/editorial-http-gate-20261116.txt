@@ -1,0 +1,15 @@
+PASS genuine PostgREST anonymous/authenticated isolation and forged JWT denial
+▶ Supabase editorial lifecycle integration
+  ✔ runs the full editorial lifecycle against Supabase (382.729162ms)
+  ✔ persists only server-authorized source reviews and invalidates them on URL edit and ABA (68.460384ms)
+  ✔ exercises newsletter and protected route behavior (10.182859ms)
+✔ Supabase editorial lifecycle integration (485.758229ms)
+ℹ tests 3
+ℹ suites 1
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 993.684893
+PASS disposable PostgreSQL + PostgREST editorial HTTP release gate

@@ -133,3 +133,13 @@ test("remote snapshot reads use only the fixed HTTPS origin and enforce streamed
     await assert.rejects(loadEvaluationSnapshot(), SyntaxError);
   } finally { globalThis.fetch = original; }
 });
+
+
+test("rolling feed upgrade accepts exact old manifest but rejects other missing feeds", () => {
+  const good = snapshot();
+  const legacy = { ...good, feeds: good.feeds.slice(1) };
+  assert.ok(parseDiscoverySnapshot(legacy, now));
+  const missingWorld = { ...good, feeds: good.feeds.filter((_, i) => i !== 1) };
+  assert.equal(parseDiscoverySnapshot(missingWorld, now), null);
+  assert.equal(parseDiscoverySnapshot({ ...legacy, feeds: legacy.feeds.slice(1) }, now), null);
+});

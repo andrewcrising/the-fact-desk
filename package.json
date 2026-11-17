@@ -21,7 +21,8 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test:postgres": "node scripts/check-provenance-postgres.mjs",
     "check:preview": "node scripts/check-evaluation-config.mjs",
-    "ingest:evaluation": "node --import tsx scripts/run-evaluation-ingestion.ts"
+    "ingest:evaluation": "node --import tsx scripts/run-evaluation-ingestion.ts",
+    "test:editorial-http": "node scripts/check-editorial-http.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.106.2",

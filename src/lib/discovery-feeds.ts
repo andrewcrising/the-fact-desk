@@ -1,4 +1,7 @@
+export const ENERGY_FEED_URL = "https://www.theguardian.com/environment/energy/rss";
+
 export const EVALUATION_FEEDS = [
+  { url: ENERGY_FEED_URL, name: "The Guardian", category: "Energy" },
   { url: "https://feeds.npr.org/1001/rss.xml", name: "NPR", category: "World" },
   { url: "https://feeds.bbci.co.uk/news/world/rss.xml", name: "BBC World", category: "World" },
   { url: "https://www.theguardian.com/world/rss", name: "The Guardian", category: "World" },

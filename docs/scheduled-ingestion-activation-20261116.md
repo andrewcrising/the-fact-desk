@@ -15,11 +15,21 @@ Verified November 16, 2026 (America/Chicago). Supersedes the previous Cloudflare
 - Eight unauthenticated category pages returned HTTP 200 with eight distinct populated lead URLs, HTTPS publisher links and unreviewed labels. Energy lead is Jackdaw gas. Zero unsafe source href values in the rendered reader region; sidebar excluded.
 - Existing draft PR #36 remains b2dab72b84e7e89d20e2f2f330043be0b315dceb; #37 remains 630ba0febb70c0aec13df9c6dc8ffc9d4ee8c970.
 
-## Exact unresolved acceptance gate
+## Independently verified scheduled execution
 
-At 19:37 CST the first genuine scheduled run had not yet appeared. Feed health returned 503/unavailable, zero stories, schedulerObserved=false and producer=null; this correctly does not claim scheduler success. Homepage/category readers remain populated through their existing live-feed path. A schedule installation is not proof of execution.
+The first genuine schedule run 43997692366 succeeded and published 14d073e4b64f0d9cab68473ca94bfb3cf27b0dae, exact discovery.json SHA256 731f26ba3ca02c7045218c38c5503c2f7a26884dfb8a6a9d842b04ebdda968b2. Authenticated Actions logs and independently fetched Git bytes match.
 
-Next: inspect a genuine schedule-triggered run, compare authenticated logs/receipt/source SHA with exact data/evaluation-live-feed:discovery.json SHA256, then verify the Vercel /api/feed-health and all eight reader categories consume that snapshot. Never fabricate GITHUB_ACTIONS/event provenance. Reject failed/partial snapshots while preserving the last accepted data ref.
+The subsequent schedule run 43999146325 succeeded and published 21d101b5319f81213d3c4fcd42fece19e81ab2be, exact discovery.json SHA256 6685aff66e08694c79f6323691c7561ce5238119c74a895ace86d398d0c2e6d3. Source is b2dd33e829bc0cdacea6a690d4f233bb547386fd. Vercel health reported that same producer/run and 51 reports with 14/14 healthy feeds. Eight independently fetched public category pages matched all 51 snapshot IDs and fetchedAt 2026-11-17T01:55:30.050Z, and each visible lead matched its category's snapshot report. Exact results: docs/vercel-snapshot-reader-acceptance-20261116.json. A later genuine run 44002234002 was also observed healthy at 02:20:48.763Z UTC.
+
+The public schedulerVerified field deliberately remains false: an untrusted envelope cannot self-certify. This external comparison of authenticated run identity, logged receipt, Git bytes and actual rendered page payload is the independent verification. Never fabricate event environment or upgrade editorial/source independence labels.
+
+## Newly passed production-readiness gate
+
+The previously unexecuted Supabase-client HTTP lifecycle now runs locally against disposable PostgreSQL 18.6 and genuine PostgREST 16.6. Official Linux x86-64 release archive SHA256 335ea29f00145705fb569b1268b9c8e53d062f8f6f9188192e92ea3781d2dca1 was verified against GitHub release asset metadata. No hosted database or production credential is used. A loopback adapter removes only /rest/v1; PostgREST performs actual JWT authentication, role switching, SQL access and serialization.
+
+The old lifecycle fixture cast Request to NextRequest and failed on request.nextUrl. Creating an actual NextRequest repaired the fixture without changing production route behavior. Three native integration tests pass: editorial create/promote/publish/archive and public reader lifecycle; reviewer authorization/persistence, rejection of forged reviewer identity and stale URL, source-edit and ABA invalidation; newsletter/protected routes. Direct anonymous/authenticated access to stories and review rows is denied and a forged service-role JWT receives 401. App route handlers are invoked directly in these tests; database requests traverse real HTTP. This is not a browser end-to-end or hosted Supabase gateway test.
+
+Reproduce with a verified PostgREST 16.6 executable: POSTGREST_BIN=/absolute/path/to/postgrest npm run test:editorial-http. Script binds only 127.0.0.1, creates temporary credentials/database, clears inherited app credentials from the test child and tears down native servers/storage. Native unit tests 224/224, ESLint and TypeScript also pass.
 
 ## Production and rollback
 
