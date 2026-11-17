@@ -1,0 +1,28 @@
+{
+  "project": "the-fact-desk",
+  "projectId": "prj_65sAGzBT5NGr0qFr1djn41EJn1VJ",
+  "teamId": "team_R8yivBcJgG2l0OvKFqGiBG4g",
+  "sourceSha": "a6a23d9c3f71fdf0e8db43f51f6e3631ecd348f5",
+  "productionAlias": "the-fact-desk.vercel.app",
+  "priorProductionDeployment": "dpl_UpHztX9XQQBV8zDNQDeQuTBopAAm",
+  "priorProductionSha": "db7244c0f12c3173fbc10349e16234265ccd67ad",
+  "productionEnvironmentProposal": {
+    "FACT_DESK_PREVIEW_ISOLATED": "true",
+    "FACT_DESK_SCHEDULED_DISCOVERY": "true",
+    "ALLOW_MOCK_FALLBACK": "false"
+  },
+  "productionEnvironmentChangesApplied": false,
+  "sourceReconciliation": {
+    "pr36HeadIsAncestor": true,
+    "pr37ReviewRouteAndOriginalMigrationIdentical": true,
+    "applicationSourceMatchesBrowserTestedRelease": true
+  },
+  "nativeProductionBuild": "PASS",
+  "nativeProductionConfigurationProbe": "PASS: 47 authentic scheduled reports; inherited database/admin/cron credentials and mock fallback disabled",
+  "rollbackTargetState": "READY",
+  "incrementalCostCapUSD": 10,
+  "postedCharges": "UNAVAILABLE: costs_not_found",
+  "budgetVerification": "BLOCKED: connector lacks budget controls; dashboard sign-in request declined",
+  "deploymentStarted": false,
+  "aliasChanged": false
+}
