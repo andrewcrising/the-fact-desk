@@ -1,0 +1,27 @@
+name: Production reader acceptance
+on:
+  push:
+    branches: ["ops/production-reader-acceptance-20261117"]
+permissions:
+  contents: read
+jobs:
+  public-reader:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+      FACT_DESK_E2E_LOCAL: "false"
+      FACT_DESK_E2E_BASE_URL: https://the-fact-desk.vercel.app
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: 98d6d42fe0970e98f75fda20a2367d6988fa334e
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+      - name: Verify installed browser
+        run: test -x "$PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH"
+      - run: npm ci --no-audit --no-fund
+      - name: Read-only desktop and mobile production acceptance
+        run: npm run test:e2e
