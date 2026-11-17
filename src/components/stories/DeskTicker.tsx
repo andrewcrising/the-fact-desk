@@ -20,6 +20,8 @@ export function DeskTicker({ stories, discoveryStories = [] }: DeskTickerProps) 
     <div
       className="overflow-x-auto border border-[var(--border-subtle)] bg-white"
       aria-label="Desk signal ticker"
+      role="region"
+      tabIndex={0}
     >
       <div className="flex min-w-max divide-x divide-[var(--border-subtle)]">
         {STAT_ITEMS.map(({ key, label }) => (

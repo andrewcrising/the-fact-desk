@@ -14,6 +14,7 @@ jobs:
     timeout-minutes: 10
     env:
       PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+      FACT_DESK_E2E_LOCAL: "true"
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
@@ -27,5 +28,5 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test
-      - name: Desktop and mobile public Vercel acceptance
+      - name: Desktop and mobile production-build acceptance
         run: npm run test:e2e
