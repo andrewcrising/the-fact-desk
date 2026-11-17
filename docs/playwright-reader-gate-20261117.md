@@ -15,3 +15,12 @@ The GitHub workflow uses the preinstalled Chrome on the standard public ubuntu-2
 ## Execution status
 
 225 native tests, lint and TypeScript passed locally. The first local browser attempt did not validate the site: the managed workspace denied Chromium's process-singleton socket, while direct Node API requests could not resolve the external host. Playwright-managed browser download also returned an invalid archive. The alternate authorized execution environment is the GitHub public runner; CI result is pending until read back. Do not describe local environment failures as product regressions or claim browser acceptance until the suite actually passes.
+
+
+## Authenticated CI result: PASS
+
+GitHub Actions run 44079046720, job 134024541540, executed 20/20 desktop Chrome and Pixel 7 Chromium-emulation checks successfully in 24.5 seconds. The same job passed 225 native tests, ESLint and TypeScript. Tested PR head: 48e443991bd7fa425c13e97c7d93427d38f607a7. PR #40 merged into work/vercel-production-gates-20261116 at 2aae11028065f6429ad3fe6515ddd45e10b226e5. This supersedes the pending-CI status above; local socket/DNS failures are closed by successful GitHub execution.
+
+Independent page-payload readback also confirmed all eight category pages consume exactly the corrected snapshot's 47 story IDs and identify their source as scheduled. No forged scheduler or editorial verification fields were introduced.
+
+Production environment metadata exposes only NEXT_PUBLIC_SHOW_LIVE_BETA and reports zero hidden production variables. The evaluated production environment therefore has no inspected Supabase/admin/scheduler configuration. This is configuration metadata evidence, not approval to promote or a hosted database lifecycle pass. Production application remains the older release. Next gate: prepare and verify the intended public-reader production configuration and rollback before cutover. No Vercel deployment or production resource write was started by the browser gate.
