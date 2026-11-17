@@ -116,8 +116,9 @@ export function buildDiscoverySnapshot(result: { stories: Story[]; feeds: FeedAt
 }
 
 export function summarizeFeedHealth(snapshot: DiscoverySnapshot | null, now = Date.now()) {
-  if (!snapshot) return { status: "unavailable", schedulerVerified: false, schedulerObserved: false, producer: null, attemptedAt: null, fetchedAt: null, stories: 0, categories: Object.fromEntries(CATEGORIES.map((c) => [c, 0])), feeds: [] };
-  const ageMs = now - Date.parse(snapshot.attemptedAt);
+  if (!snapshot) return { status: "unavailable", schedulerVerified: false, schedulerObserved: false, producer: null, attemptedAt: null, fetchedAt: null, ageMs: null, attemptAgeMs: null, stories: 0, categories: Object.fromEntries(CATEGORIES.map((c) => [c, 0])), feeds: [] };
+  const attemptAgeMs = now - Date.parse(snapshot.attemptedAt);
+  const ageMs = snapshot.fetchedAt === null ? null : now - Date.parse(snapshot.fetchedAt);
   const current = snapshot.fetchedAt !== null && now - Date.parse(snapshot.fetchedAt) <= MAX_FALLBACK_AGE_MS;
-  return { status: !current || !snapshot.stories.length || ageMs > MAX_FALLBACK_AGE_MS ? "stale" : snapshot.feeds.some((f) => f.status !== "ok") ? "degraded" : "healthy", schedulerVerified: false, schedulerObserved: snapshot.producer?.event === "schedule", producer: snapshot.producer, sourceSha: snapshot.sourceSha, attemptedAt: snapshot.attemptedAt, fetchedAt: snapshot.fetchedAt, ageMs, stories: snapshot.stories.length, categories: Object.fromEntries(CATEGORIES.map((c) => [c, snapshot.stories.filter((s) => s.category === c).length])), feeds: snapshot.feeds };
+  return { status: !current || !snapshot.stories.length || attemptAgeMs > MAX_FALLBACK_AGE_MS ? "stale" : snapshot.feeds.some((f) => f.status !== "ok") ? "degraded" : "healthy", schedulerVerified: false, schedulerObserved: snapshot.producer?.event === "schedule", producer: snapshot.producer, sourceSha: snapshot.sourceSha, attemptedAt: snapshot.attemptedAt, fetchedAt: snapshot.fetchedAt, ageMs, attemptAgeMs, stories: snapshot.stories.length, categories: Object.fromEntries(CATEGORIES.map((c) => [c, snapshot.stories.filter((s) => s.category === c).length])), feeds: snapshot.feeds };
 }
