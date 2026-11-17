@@ -25,13 +25,28 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Require immutable reviewed evaluation source
+        env:
+          REVIEWED_SOURCE_SHA: ${{ vars.FACT_DESK_EVALUATION_SOURCE_SHA }}
+        run: |
+          if [[ ! "$REVIEWED_SOURCE_SHA" =~ ^[a-f0-9]{40}$ ]]; then
+            echo "Set FACT_DESK_EVALUATION_SOURCE_SHA to the reviewed 40-character evaluation commit."
+            exit 1
+          fi
       - name: Check out reviewed source
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           fetch-depth: 1
+          # The default branch hosts the schedule, but must never select its
+          # older application tree as the evaluation ingestion implementation.
+          ref: ${{ vars.FACT_DESK_EVALUATION_SOURCE_SHA }}
           # The ephemeral, job-scoped repository token is required for the
           # explicit data-branch lease push; never use production credentials.
           persist-credentials: true
+      - name: Verify checked-out source identity
+        env:
+          REVIEWED_SOURCE_SHA: ${{ vars.FACT_DESK_EVALUATION_SOURCE_SHA }}
+        run: test "$(git rev-parse HEAD)" = "$REVIEWED_SOURCE_SHA"
       - name: Set up Node 24
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:

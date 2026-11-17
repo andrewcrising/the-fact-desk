@@ -1,11 +1,25 @@
 import { mkdir, readFile, writeFile, rename, rm } from "node:fs/promises";
 import { join } from "node:path";
 import { execFileSync } from "node:child_process";
-import { buildDiscoverySnapshot, parseDiscoverySnapshot, SNAPSHOT_MAX_BYTES, type DiscoverySnapshot, type FeedAttempt, type SnapshotProducer } from "../src/lib/discovery-snapshot";
+import { buildDiscoverySnapshot, CATEGORIES, parseDiscoverySnapshot, SNAPSHOT_MAX_BYTES, type DiscoverySnapshot, type FeedAttempt, type SnapshotProducer } from "../src/lib/discovery-snapshot";
 import type { Story } from "../src/types/story";
 
 export const SNAPSHOT_BRANCH = "data/evaluation-live-feed";
 const ref = `refs/heads/${SNAPSHOT_BRANCH}`;
+
+/** A failed attempt must not replace the last complete public briefing. */
+export function snapshotPublicationIssues(snapshot: DiscoverySnapshot): string[] {
+  const issues: string[] = [];
+  if (!snapshot.stories.length || snapshot.fetchedAt !== snapshot.attemptedAt) {
+    issues.push("no newly fetched source reports");
+  }
+  const missing = CATEGORIES.filter((category) => !snapshot.stories.some((story) => story.category === category));
+  if (missing.length) issues.push(`missing category coverage: ${missing.join(", ")}`);
+  const unavailable = snapshot.feeds.filter((feed) => feed.status !== "ok").length;
+  if (unavailable > Math.floor(snapshot.feeds.length / 2)) issues.push("more than half of the feeds are unavailable");
+  return issues;
+}
+
 function git(repo: string, args: string[], input?: string): string {
   return execFileSync("git", ["-C", repo, ...args], { input, encoding: "utf8", timeout: 30_000, stdio: ["pipe", "pipe", "pipe"], env: { ...process.env, GIT_AUTHOR_NAME: "Fact Desk evaluation ingestion", GIT_AUTHOR_EMAIL: "evaluation@thefactdesk.invalid", GIT_COMMITTER_NAME: "Fact Desk evaluation ingestion", GIT_COMMITTER_EMAIL: "evaluation@thefactdesk.invalid" } }).trim();
 }
