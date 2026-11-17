@@ -1,0 +1,249 @@
+﻿2026-11-17T15:41:53.9017447Z Current runner version: '2.338.2'
+2026-11-17T15:41:53.9046459Z ##[group]Runner Image Provisioner
+2026-11-17T15:41:53.9047469Z Hosted Compute Agent
+2026-11-17T15:41:53.9048360Z Version: 20261103.629
+2026-11-17T15:41:53.9049177Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+2026-11-17T15:41:53.9050065Z Build Date: 2026-11-03T17:26:59Z
+2026-11-17T15:41:53.9050883Z Worker ID: {83f938a1-89e9-46a0-a02a-e3563bdd6fa2}
+2026-11-17T15:41:53.9051897Z Region: eastus2
+2026-11-17T15:41:53.9052641Z Cloud: Azure
+2026-11-17T15:41:53.9053267Z ##[endgroup]
+2026-11-17T15:41:53.9054977Z ##[group]Operating System
+2026-11-17T15:41:53.9055756Z Ubuntu
+2026-11-17T15:41:53.9056375Z 24.04.5
+2026-11-17T15:41:53.9057084Z LTS
+2026-11-17T15:41:53.9057746Z ##[endgroup]
+2026-11-17T15:41:53.9058453Z ##[group]Runner Image
+2026-11-17T15:41:53.9059171Z Image: ubuntu-24.04
+2026-11-17T15:41:53.9059856Z Version: 20261111.370.1
+2026-11-17T15:41:53.9061603Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261111.370/images/ubuntu/Ubuntu2404-Readme.md
+2026-11-17T15:41:53.9063697Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261111.370
+2026-11-17T15:41:53.9064896Z ##[endgroup]
+2026-11-17T15:41:53.9066768Z ##[group]GITHUB_TOKEN Permissions
+2026-11-17T15:41:53.9069129Z Contents: read
+2026-11-17T15:41:53.9069902Z Metadata: read
+2026-11-17T15:41:53.9070724Z ##[endgroup]
+2026-11-17T15:41:53.9073207Z Secret source: Actions
+2026-11-17T15:41:53.9074485Z Cache mode: write
+2026-11-17T15:41:53.9075656Z Prepare workflow directory
+2026-11-17T15:41:53.9504064Z Prepare all required actions
+2026-11-17T15:41:53.9559958Z Getting action download info
+2026-11-17T15:41:54.1606630Z Download action repository 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' (SHA:11bd71901bbe5b1630ceea73d27597364c9af683)
+2026-11-17T15:41:54.3144511Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-11-17T15:41:54.5033178Z Complete job name: public-reader
+2026-11-17T15:41:54.5707554Z ##[group]Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+2026-11-17T15:41:54.5708393Z with:
+2026-11-17T15:41:54.5708800Z   ref: 98d6d42fe0970e98f75fda20a2367d6988fa334e
+2026-11-17T15:41:54.5709320Z   persist-credentials: false
+2026-11-17T15:41:54.5709770Z   repository: andrewcrising/the-fact-desk
+2026-11-17T15:41:54.5712892Z   token: ***
+2026-11-17T15:41:54.5713256Z   ssh-strict: true
+2026-11-17T15:41:54.5713625Z   ssh-user: git
+2026-11-17T15:41:54.5713977Z   clean: true
+2026-11-17T15:41:54.5714364Z   sparse-checkout-cone-mode: true
+2026-11-17T15:41:54.5714799Z   fetch-depth: 1
+2026-11-17T15:41:54.5715157Z   fetch-tags: false
+2026-11-17T15:41:54.5715526Z   show-progress: true
+2026-11-17T15:41:54.5715907Z   lfs: false
+2026-11-17T15:41:54.5716259Z   submodules: false
+2026-11-17T15:41:54.5716635Z   set-safe-directory: true
+2026-11-17T15:41:54.5717176Z env:
+2026-11-17T15:41:54.5717635Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:41:54.5718253Z   FACT_DESK_E2E_LOCAL: false
+2026-11-17T15:41:54.5718742Z   FACT_DESK_E2E_BASE_URL: https://the-fact-desk.vercel.app
+2026-11-17T15:41:54.5719262Z ##[endgroup]
+2026-11-17T15:41:54.8183791Z Syncing repository: andrewcrising/the-fact-desk
+2026-11-17T15:41:54.8186241Z ##[group]Getting Git version info
+2026-11-17T15:41:54.8187043Z Working directory is '/home/runner/work/the-fact-desk/the-fact-desk'
+2026-11-17T15:41:54.8188035Z [command]/usr/bin/git version
+2026-11-17T15:41:54.8257780Z git version 2.56.1
+2026-11-17T15:41:54.8274016Z ##[endgroup]
+2026-11-17T15:41:54.8287080Z Temporarily overriding HOME='/home/runner/work/_temp/c310a0fa-2d04-4d80-9102-9b46f253c899' before making global git config changes
+2026-11-17T15:41:54.8289754Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-17T15:41:54.8292177Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/the-fact-desk/the-fact-desk
+2026-11-17T15:41:54.8336714Z Deleting the contents of '/home/runner/work/the-fact-desk/the-fact-desk'
+2026-11-17T15:41:54.8340339Z ##[group]Initializing the repository
+2026-11-17T15:41:54.8343555Z [command]/usr/bin/git init /home/runner/work/the-fact-desk/the-fact-desk
+2026-11-17T15:41:54.8446253Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-17T15:41:54.8447437Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-17T15:41:54.8448710Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-17T15:41:54.8449532Z hint: call:
+2026-11-17T15:41:54.8450267Z hint:
+2026-11-17T15:41:54.8450825Z hint: 	git config --global init.defaultBranch <name>
+2026-11-17T15:41:54.8451575Z hint:
+2026-11-17T15:41:54.8452115Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-17T15:41:54.8452939Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-17T15:41:54.8453977Z hint:
+2026-11-17T15:41:54.8454449Z hint: 	git branch -m <name>
+2026-11-17T15:41:54.8454927Z hint:
+2026-11-17T15:41:54.8455820Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-17T15:41:54.8457405Z Initialized empty Git repository in /home/runner/work/the-fact-desk/the-fact-desk/.git/
+2026-11-17T15:41:54.8464356Z [command]/usr/bin/git remote add origin https://github.com/andrewcrising/the-fact-desk
+2026-11-17T15:41:54.8510741Z ##[endgroup]
+2026-11-17T15:41:54.8512238Z ##[group]Disabling automatic garbage collection
+2026-11-17T15:41:54.8514331Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-17T15:41:54.8547729Z ##[endgroup]
+2026-11-17T15:41:54.8548854Z ##[group]Setting up auth
+2026-11-17T15:41:54.8553528Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-17T15:41:54.8583676Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-17T15:41:54.8930358Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-17T15:41:54.8958797Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-17T15:41:54.9169471Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-17T15:41:54.9207870Z ##[endgroup]
+2026-11-17T15:41:54.9209048Z ##[group]Fetching the repository
+2026-11-17T15:41:54.9217733Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin 98d6d42fe0970e98f75fda20a2367d6988fa334e
+2026-11-17T15:41:55.1784565Z From https://github.com/andrewcrising/the-fact-desk
+2026-11-17T15:41:55.1785872Z  * branch            98d6d42fe0970e98f75fda20a2367d6988fa334e -> FETCH_HEAD
+2026-11-17T15:41:55.1788679Z ##[endgroup]
+2026-11-17T15:41:55.1789828Z ##[group]Determining the checkout info
+2026-11-17T15:41:55.1791337Z ##[endgroup]
+2026-11-17T15:41:55.1795878Z [command]/usr/bin/git sparse-checkout disable
+2026-11-17T15:41:55.1855852Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-17T15:41:55.1884844Z ##[group]Checking out the ref
+2026-11-17T15:41:55.1889041Z [command]/usr/bin/git checkout --progress --force 98d6d42fe0970e98f75fda20a2367d6988fa334e
+2026-11-17T15:41:55.2038062Z Note: switching to '98d6d42fe0970e98f75fda20a2367d6988fa334e'.
+2026-11-17T15:41:55.2039101Z 
+2026-11-17T15:41:55.2039776Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-11-17T15:41:55.2041579Z changes and commit them, and you can discard any commits you make in this
+2026-11-17T15:41:55.2043201Z state without impacting any branches by switching back to a branch.
+2026-11-17T15:41:55.2044145Z 
+2026-11-17T15:41:55.2044577Z If you want to create a new branch to retain commits you create, you may
+2026-11-17T15:41:55.2045948Z do so (now or later) by using -c with the switch command. Example:
+2026-11-17T15:41:55.2046577Z 
+2026-11-17T15:41:55.2046979Z   git switch -c <new-branch-name>
+2026-11-17T15:41:55.2047579Z 
+2026-11-17T15:41:55.2047946Z Or undo this operation with:
+2026-11-17T15:41:55.2048357Z 
+2026-11-17T15:41:55.2048587Z   git switch -
+2026-11-17T15:41:55.2048910Z 
+2026-11-17T15:41:55.2049493Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-11-17T15:41:55.2050370Z 
+2026-11-17T15:41:55.2051079Z HEAD is now at 98d6d42 Record three executed keyboard release-gate runs and cutover handoff
+2026-11-17T15:41:55.2053889Z ##[endgroup]
+2026-11-17T15:41:55.2088425Z [command]/usr/bin/git log -1 --format=%H
+2026-11-17T15:41:55.2111507Z 98d6d42fe0970e98f75fda20a2367d6988fa334e
+2026-11-17T15:41:55.2119404Z ##[group]Removing auth
+2026-11-17T15:41:55.2123058Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-17T15:41:55.2150473Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-17T15:41:55.2350638Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-17T15:41:55.2374044Z http.https://github.com/.extraheader
+2026-11-17T15:41:55.2380545Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-17T15:41:55.2410107Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-17T15:41:55.2600756Z ##[endgroup]
+2026-11-17T15:41:55.2894991Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+2026-11-17T15:41:55.2895996Z with:
+2026-11-17T15:41:55.2896452Z   node-version: 24
+2026-11-17T15:41:55.2896951Z   always-auth: false
+2026-11-17T15:41:55.2897507Z   check-latest: false
+2026-11-17T15:41:55.2904322Z   token: ***
+2026-11-17T15:41:55.2904768Z env:
+2026-11-17T15:41:55.2905436Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:41:55.2906376Z   FACT_DESK_E2E_LOCAL: false
+2026-11-17T15:41:55.2907143Z   FACT_DESK_E2E_BASE_URL: https://the-fact-desk.vercel.app
+2026-11-17T15:41:55.2907985Z ##[endgroup]
+2026-11-17T15:41:55.4080606Z Found in cache @ /opt/hostedtoolcache/node/24.22.2/x64
+2026-11-17T15:41:55.4085221Z (node:2143) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-17T15:41:55.4088136Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-17T15:41:55.4090791Z ##[group]Environment details
+2026-11-17T15:41:55.9161173Z node: v24.22.2
+2026-11-17T15:41:55.9162337Z npm: 11.19.1
+2026-11-17T15:41:55.9163135Z yarn: 1.22.22
+2026-11-17T15:41:55.9165025Z ##[endgroup]
+2026-11-17T15:41:55.9392977Z ##[group]Run test -x "$PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH"
+2026-11-17T15:41:55.9394524Z [36;1mtest -x "$PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH"[0m
+2026-11-17T15:41:55.9426589Z shell: /usr/bin/bash -e {0}
+2026-11-17T15:41:55.9427507Z env:
+2026-11-17T15:41:55.9428546Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:41:55.9429845Z   FACT_DESK_E2E_LOCAL: false
+2026-11-17T15:41:55.9430989Z   FACT_DESK_E2E_BASE_URL: https://the-fact-desk.vercel.app
+2026-11-17T15:41:55.9432406Z ##[endgroup]
+2026-11-17T15:41:55.9563771Z ##[group]Run npm ci --no-audit --no-fund
+2026-11-17T15:41:55.9564833Z [36;1mnpm ci --no-audit --no-fund[0m
+2026-11-17T15:41:55.9582100Z shell: /usr/bin/bash -e {0}
+2026-11-17T15:41:55.9582961Z env:
+2026-11-17T15:41:55.9583911Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:41:55.9585115Z   FACT_DESK_E2E_LOCAL: false
+2026-11-17T15:41:55.9586157Z   FACT_DESK_E2E_BASE_URL: https://the-fact-desk.vercel.app
+2026-11-17T15:41:55.9587277Z ##[endgroup]
+2026-11-17T15:42:11.5029761Z 
+2026-11-17T15:42:11.5035894Z added 541 packages in 15s
+2026-11-17T15:42:11.5040421Z npm warn install-scripts 6 packages have install scripts not yet covered by allowScripts:
+2026-11-17T15:42:11.5041868Z npm warn install-scripts   @embedded-postgres/linux-x64@18.6.0-beta.19 (postinstall: node scripts/hydrate-symlinks.js)
+2026-11-17T15:42:11.5042876Z npm warn install-scripts   esbuild@0.28.1 (postinstall: node install.js)
+2026-11-17T15:42:11.5043845Z npm warn install-scripts   unrs-resolver@1.12.2 (postinstall: node postinstall.js)
+2026-11-17T15:42:11.5044691Z npm warn install-scripts   workerd@1.20260828.1 (postinstall: node install.js)
+2026-11-17T15:42:11.5045471Z npm warn install-scripts   esbuild@0.28.2 (postinstall: node install.js)
+2026-11-17T15:42:11.5046314Z npm warn install-scripts   workerd@1.20261110.1 (postinstall: node install.js)
+2026-11-17T15:42:11.5046906Z npm warn install-scripts
+2026-11-17T15:42:11.5047688Z npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+2026-11-17T15:42:11.5761783Z ##[group]Run npm run test:e2e
+2026-11-17T15:42:11.5762069Z [36;1mnpm run test:e2e[0m
+2026-11-17T15:42:11.5780143Z shell: /usr/bin/bash -e {0}
+2026-11-17T15:42:11.5780733Z env:
+2026-11-17T15:42:11.5780986Z   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: /opt/google/chrome/chrome
+2026-11-17T15:42:11.5781451Z   FACT_DESK_E2E_LOCAL: false
+2026-11-17T15:42:11.5781829Z   FACT_DESK_E2E_BASE_URL: https://the-fact-desk.vercel.app
+2026-11-17T15:42:11.5782100Z ##[endgroup]
+2026-11-17T15:42:11.6538758Z 
+2026-11-17T15:42:11.6539173Z > the-fact-desk@0.1.0 test:e2e
+2026-11-17T15:42:11.6539562Z > playwright test
+2026-11-17T15:42:11.6539739Z 
+2026-11-17T15:42:12.2429998Z 
+2026-11-17T15:42:12.2430777Z Running 34 tests using 2 workers
+2026-11-17T15:42:12.2431125Z 
+2026-11-17T15:42:25.5390436Z READER_ACCESSIBILITY []
+2026-11-17T15:42:25.6156901Z   ✓   1 [desktop-chromium] › e2e/article-reader.spec.ts:5:1 › all eight article routes retain their title, source citations and bounded context (5.7s)
+2026-11-17T15:42:25.6228571Z   ✓   2 [desktop-chromium] › e2e/accessibility.spec.ts:5:3 › WCAG accessibility: / (5.7s)
+2026-11-17T15:42:26.7462150Z   ✓   3 [desktop-chromium] › e2e/article-reader.spec.ts:28:1 › scrolling tickers are focusable and support keyboard scrolling (1.1s)
+2026-11-17T15:42:26.7713689Z   -   5 [desktop-chromium] › e2e/article-reader.spec.ts:44:1 › local public-reader mode denies inherited admin and cron credentials over real HTTP
+2026-11-17T15:42:27.2496454Z READER_ACCESSIBILITY []
+2026-11-17T15:42:27.3143251Z   ✓   4 [desktop-chromium] › e2e/accessibility.spec.ts:5:3 › WCAG accessibility: /?category=Energy (1.7s)
+2026-11-17T15:42:27.9439859Z   ✓   7 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Politics: populated, source-linked and truthful (593ms)
+2026-11-17T15:42:28.0595135Z   ✓   6 [desktop-chromium] › e2e/category-keyboard.spec.ts:3:1 › category tabs support arrows, wraparound, Home and End with one keyboard stop (1.3s)
+2026-11-17T15:42:28.5276659Z   ✓   8 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Markets: populated, source-linked and truthful (561ms)
+2026-11-17T15:42:29.1233827Z   ✓  10 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Technology: populated, source-linked and truthful (571ms)
+2026-11-17T15:42:29.4609240Z   ✓   9 [desktop-chromium] › e2e/category-keyboard.spec.ts:29:1 › category history restores selection and invalid categories retain a populated reader (1.4s)
+2026-11-17T15:42:29.7324670Z   ✓  11 [desktop-chromium] › e2e/reader.spec.ts:7:3 › World: populated, source-linked and truthful (595ms)
+2026-11-17T15:42:30.3788194Z   ✓  12 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Health: populated, source-linked and truthful (633ms)
+2026-11-17T15:42:30.9989827Z   ✓  14 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Courts: populated, source-linked and truthful (608ms)
+2026-11-17T15:42:31.5755105Z   ✓  15 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Energy: populated, source-linked and truthful (551ms)
+2026-11-17T15:42:32.1843797Z   ✓  16 [desktop-chromium] › e2e/reader.spec.ts:7:3 › Culture: populated, source-linked and truthful (587ms)
+2026-11-17T15:42:32.5049991Z READER_ACCESSIBILITY []
+2026-11-17T15:42:32.7338146Z   ✓  13 [mobile-chromium] › e2e/accessibility.spec.ts:5:3 › WCAG accessibility: / (2.5s)
+2026-11-17T15:42:34.0515408Z READER_ACCESSIBILITY []
+2026-11-17T15:42:34.1696938Z   ✓  17 [desktop-chromium] › e2e/reader.spec.ts:27:1 › category controls navigate and show eight distinct category leads (2.0s)
+2026-11-17T15:42:34.2093331Z   ✓  18 [mobile-chromium] › e2e/accessibility.spec.ts:5:3 › WCAG accessibility: /?category=Energy (1.5s)
+2026-11-17T15:42:34.5959563Z   ✓  19 [desktop-chromium] › e2e/reader.spec.ts:43:1 › scheduled health is fresh, complete and from the reviewed producer (408ms)
+2026-11-17T15:42:36.2766422Z   ✓  20 [mobile-chromium] › e2e/article-reader.spec.ts:5:1 › all eight article routes retain their title, source citations and bounded context (2.0s)
+2026-11-17T15:42:36.4578932Z   ✓  21 [mobile-chromium] › e2e/category-keyboard.spec.ts:3:1 › category tabs support arrows, wraparound, Home and End with one keyboard stop (1.2s)
+2026-11-17T15:42:37.1864052Z   ✓  22 [mobile-chromium] › e2e/article-reader.spec.ts:28:1 › scrolling tickers are focusable and support keyboard scrolling (887ms)
+2026-11-17T15:42:37.1997014Z   -  24 [mobile-chromium] › e2e/article-reader.spec.ts:44:1 › local public-reader mode denies inherited admin and cron credentials over real HTTP
+2026-11-17T15:42:37.6171996Z   ✓  23 [mobile-chromium] › e2e/category-keyboard.spec.ts:29:1 › category history restores selection and invalid categories retain a populated reader (1.1s)
+2026-11-17T15:42:37.8164986Z   ✓  25 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Politics: populated, source-linked and truthful (603ms)
+2026-11-17T15:42:38.6655685Z   ✓  26 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Markets: populated, source-linked and truthful (839ms)
+2026-11-17T15:42:39.2683751Z   ✓  27 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Technology: populated, source-linked and truthful (594ms)
+2026-11-17T15:42:39.7657160Z   ✓  28 [mobile-chromium] › e2e/reader.spec.ts:7:3 › World: populated, source-linked and truthful (489ms)
+2026-11-17T15:42:40.2723942Z   ✓  29 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Health: populated, source-linked and truthful (496ms)
+2026-11-17T15:42:40.9006361Z   ✓  30 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Courts: populated, source-linked and truthful (610ms)
+2026-11-17T15:42:41.4143249Z   ✓  31 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Energy: populated, source-linked and truthful (505ms)
+2026-11-17T15:42:41.9014715Z   ✓  32 [mobile-chromium] › e2e/reader.spec.ts:7:3 › Culture: populated, source-linked and truthful (476ms)
+2026-11-17T15:42:43.6997018Z   ✓  33 [mobile-chromium] › e2e/reader.spec.ts:27:1 › category controls navigate and show eight distinct category leads (1.8s)
+2026-11-17T15:42:43.7933304Z   ✓  34 [mobile-chromium] › e2e/reader.spec.ts:43:1 › scheduled health is fresh, complete and from the reviewed producer (74ms)
+2026-11-17T15:42:43.9206045Z 
+2026-11-17T15:42:43.9210467Z   2 skipped
+2026-11-17T15:42:43.9210825Z   32 passed (31.8s)
+2026-11-17T15:42:43.9747135Z Post job cleanup.
+2026-11-17T15:42:44.0779014Z (node:3831) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-17T15:42:44.0779709Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-17T15:42:44.0952544Z Post job cleanup.
+2026-11-17T15:42:44.1659523Z [command]/usr/bin/git version
+2026-11-17T15:42:44.1691748Z git version 2.56.1
+2026-11-17T15:42:44.1718430Z Temporarily overriding HOME='/home/runner/work/_temp/939be6f9-98d7-40e0-9ea6-a9b94c25894b' before making global git config changes
+2026-11-17T15:42:44.1719508Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-17T15:42:44.1722452Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/the-fact-desk/the-fact-desk
+2026-11-17T15:42:44.1753137Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-17T15:42:44.1781863Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-17T15:42:44.2007589Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-17T15:42:44.2036018Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-17T15:42:44.2373566Z Cleaning up orphan processes
+2026-11-17T15:42:44.2714036Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

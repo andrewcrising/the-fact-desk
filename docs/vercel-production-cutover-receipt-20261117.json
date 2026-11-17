@@ -1,0 +1,59 @@
+{
+  "date": "2026-11-17",
+  "projectId": "prj_65sAGzBT5NGr0qFr1djn41EJn1VJ",
+  "teamId": "team_R8yivBcJgG2l0OvKFqGiBG4g",
+  "url": "https://the-fact-desk.vercel.app",
+  "deployment": "dpl_HGh8UZxq26bGvAGssu2wXFmEuJCE",
+  "source": "98d6d42fe0970e98f75fda20a2367d6988fa334e",
+  "target": "production",
+  "state": "READY",
+  "aliasReadbackVerified": true,
+  "rollback": "dpl_UpHztX9XQQBV8zDNQDeQuTBopAAm",
+  "rollbackReady": true,
+  "productionEnvironment": {
+    "FACT_DESK_PREVIEW_ISOLATED": "true",
+    "FACT_DESK_SCHEDULED_DISCOVERY": "true",
+    "ALLOW_MOCK_FALLBACK": "false"
+  },
+  "browserAcceptance": {
+    "workflowRun": 44117285953,
+    "job": 134158721242,
+    "runner": "ubuntu-24.04",
+    "testedSource": "98d6d42fe0970e98f75fda20a2367d6988fa334e",
+    "passed": 32,
+    "skipped": 2,
+    "reasonSkipped": "Remote mutation probes prohibited; inherited-credential denial covered in local pre-release checks.",
+    "axeScans": 4,
+    "axeViolations": 0
+  },
+  "snapshot": {
+    "runId": "44116821445",
+    "reports": 41,
+    "sha256": "fd3de9fa654a882dcab2b482af122f95a05340a65d7d508c9194e971f88af2d5",
+    "fetchedAt": "2026-11-17T15:39:53.192Z",
+    "sourceSha": "552f4849216cd63c2775c8359da1240dbb5b2a42",
+    "allEightPagesContainAllSnapshotIds": true,
+    "categoryCounts": {
+      "Politics": 6,
+      "Markets": 4,
+      "Technology": 7,
+      "World": 8,
+      "Health": 5,
+      "Courts": 4,
+      "Energy": 3,
+      "Culture": 4
+    },
+    "health": "degraded",
+    "allEightPagesHTTP": 200
+  },
+  "observability": "Deployment-specific error/fatal query returned no matching logs in initial 15-minute window.",
+  "cost": {
+    "authorizationUSDTotal": 10,
+    "newProductionBuilds": 1,
+    "postedCharges": "unavailable: costs_not_found",
+    "hardProjectCapVerified": false,
+    "subscriptionOrPaidServiceAdded": false,
+    "sharedOpsVaultLimitsChanged": false,
+    "userAuthorization": "Go ahead and advance to production, there shouldn't be more than $10 fee"
+  }
+}
