@@ -32,3 +32,13 @@ test("desk eligibility is applied before the per-feed quota without admitting un
     assert.ok(stories.every((story) => new URL(story.sourceUrls![0]).pathname.startsWith("/law/")));
   } finally { globalThis.fetch = original; }
 });
+
+test("feed-specific allowances cannot disable the transport ceiling", async () => {
+  const original = globalThis.fetch;
+  globalThis.fetch = async () => new Response("<rss><channel /></rss>");
+  try {
+    for (const maxBodyBytes of [Number.NaN, Number.POSITIVE_INFINITY, -1, 0, 524289]) {
+      await assert.rejects(fetchRssStories("https://example.com/feed", { strict: true, maxBodyBytes }), /Invalid RSS body size allowance/);
+    }
+  } finally { globalThis.fetch = original; }
+});
