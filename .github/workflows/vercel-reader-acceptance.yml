@@ -27,6 +27,8 @@ jobs:
       - run: npm ci --no-audit --no-fund
       - run: npm run lint
       - run: npm run typecheck
+      - name: Inspect degraded public upstream feeds
+        run: node --import tsx scripts/diagnose-discovery-feeds.ts
       - run: npm test
       - name: Desktop and mobile production-build acceptance
         run: npm run test:e2e
