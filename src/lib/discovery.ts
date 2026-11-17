@@ -25,6 +25,8 @@ export async function fetchDiscoveryWithDiagnostics() {
         limit: 4,
         timeoutMs: 5000,
         strict: true,
+        maxBodyBytes: "maxBodyBytes" in feed ? feed.maxBodyBytes : undefined,
+        isEligibleArticle: (url) => isEligibleFeedArticle(feed, url),
       }),
     ));
     for (const [index, result] of results.entries()) {
