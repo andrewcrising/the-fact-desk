@@ -1,0 +1,66 @@
+[
+  {
+    "category": "Politics",
+    "http": 200,
+    "lead": "James Comer launches bid for Kentucky governor",
+    "publisherUrl": "https://www.foxnews.com/politics/james-comer-launches-bid-kentucky-governor",
+    "sourceLinks": 8,
+    "unsafeLinks": 0
+  },
+  {
+    "category": "Markets",
+    "http": 200,
+    "lead": "Aged 16-24 and looking for work? Use our look-up to find out which areas have the most jobs",
+    "publisherUrl": "https://www.bbc.co.uk/news/articles/cw3djdjk5d7ko?at_medium=RSS&at_campaign=rss",
+    "sourceLinks": 9,
+    "unsafeLinks": 0
+  },
+  {
+    "category": "Technology",
+    "http": 200,
+    "lead": "Perseverance Update: The Ghostly Rocks of \u2018Idubi\u2019 \u2014 Bright Remnants of Aqueous Systems from Long Ago",
+    "publisherUrl": "https://science.nasa.gov/blog/perseverance-update-the-ghostly-rocks-of-idubi-bright-remnants-of-aqueous-systems-from-long-ago/",
+    "sourceLinks": 13,
+    "unsafeLinks": 0
+  },
+  {
+    "category": "World",
+    "http": 200,
+    "lead": "Met Office yellow warning in place as snow could disrupt Tuesday morning travel",
+    "publisherUrl": "https://www.bbc.co.uk/weather/articles/ck5y1g0rnx02o?at_medium=RSS&at_campaign=rss",
+    "sourceLinks": 9,
+    "unsafeLinks": 0
+  },
+  {
+    "category": "Health",
+    "http": 200,
+    "lead": "Cass report author says she does not support draft conversion practices bill",
+    "publisherUrl": "https://www.bbc.co.uk/news/articles/c6m25vd2yxgdo?at_medium=RSS&at_campaign=rss",
+    "sourceLinks": 5,
+    "unsafeLinks": 0
+  },
+  {
+    "category": "Courts",
+    "http": 200,
+    "lead": "Illegal alien leader of violent Dallas home invasion crew sentenced to 20 years for kidnapping victim",
+    "publisherUrl": "https://www.justice.gov/usao-ndtx/pr/illegal-alien-leader-violent-dallas-home-invasion-crew-sentenced-20-years-kidnapping",
+    "sourceLinks": 8,
+    "unsafeLinks": 0
+  },
+  {
+    "category": "Energy",
+    "http": 200,
+    "lead": "Gas starts flowing from Jackdaw after government green light",
+    "publisherUrl": "https://www.bbc.co.uk/news/articles/c9x2elzm047po?at_medium=RSS&at_campaign=rss",
+    "sourceLinks": 2,
+    "unsafeLinks": 0
+  },
+  {
+    "category": "Culture",
+    "http": 200,
+    "lead": "Glenn Close cries! John Malkovich weeps! But it\u2019s Nathan Fielder everyone wants to talk to at the honorary Oscars",
+    "publisherUrl": "https://www.theguardian.com/film/2026/nov/16/governers-awards-honorary-oscars",
+    "sourceLinks": 6,
+    "unsafeLinks": 0
+  }
+]

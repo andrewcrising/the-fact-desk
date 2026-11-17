@@ -1,4 +1,4 @@
-name: Evaluation RSS ingestion (activation gated)
+name: Evaluation RSS ingestion (Vercel)
 
 on:
   workflow_dispatch:
@@ -14,23 +14,22 @@ concurrency:
 
 jobs:
   ingest:
-    # Scheduling requires this workflow on the default branch. Both gates default
-    # closed. Confirm Cloudflare excludes the data branch BEFORE enabling writes.
+    # Public standard runner; only the fixed evaluation data ref is written.
+    # Vercel Git builds are disabled in the source and emitted data-tree config.
     if: >-
       github.repository == 'andrewcrising/the-fact-desk' &&
-      vars.FACT_DESK_EVALUATION_INGESTION_ENABLED == 'true' &&
-      vars.FACT_DESK_NONPRODUCTION_BUILDS_DISABLED == 'true'
+      (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
       contents: write
+    env:
+      REVIEWED_SOURCE_SHA: b2dd33e829bc0cdacea6a690d4f233bb547386fd
     steps:
       - name: Require immutable reviewed evaluation source
-        env:
-          REVIEWED_SOURCE_SHA: ${{ vars.FACT_DESK_EVALUATION_SOURCE_SHA }}
         run: |
           if [[ ! "$REVIEWED_SOURCE_SHA" =~ ^[a-f0-9]{40}$ ]]; then
-            echo "Set FACT_DESK_EVALUATION_SOURCE_SHA to the reviewed 40-character evaluation commit."
+            echo "The reviewed evaluation source must be a full lowercase Git commit."
             exit 1
           fi
       - name: Check out reviewed source
@@ -39,14 +38,14 @@ jobs:
           fetch-depth: 1
           # The default branch hosts the schedule, but must never select its
           # older application tree as the evaluation ingestion implementation.
-          ref: ${{ vars.FACT_DESK_EVALUATION_SOURCE_SHA }}
+          ref: ${{ env.REVIEWED_SOURCE_SHA }}
           # The ephemeral, job-scoped repository token is required for the
           # explicit data-branch lease push; never use production credentials.
           persist-credentials: true
       - name: Verify checked-out source identity
-        env:
-          REVIEWED_SOURCE_SHA: ${{ vars.FACT_DESK_EVALUATION_SOURCE_SHA }}
         run: test "$(git rev-parse HEAD)" = "$REVIEWED_SOURCE_SHA"
+      - name: Verify Vercel automatic-build suppression
+        run: node -e 'require("node:assert/strict").equal(require("./vercel.json").git?.deploymentEnabled, false)'
       - name: Set up Node 24
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:

@@ -1,36 +1,32 @@
-# Scheduled evaluation ingestion: activation readiness
+# Vercel-only evaluation ingestion: activation handoff
 
-## Executed correction
+Verified November 16, 2026 (America/Chicago). Supersedes the previous Cloudflare-login activation blockers in this file. User selected Vercel and instructed that Cloudflare login be ignored. Vercel is the active evaluation and production hosting target; do not request Cloudflare credentials to advance this release.
 
-The actual ingestion CLI previously published before checking category coverage or feed failure. Native CLI tests with disposable local Git remotes reproduced both defects: missing Energy coverage and a complete feed outage each replaced the accepted remote snapshot before exiting with failure.
+## Executed release
 
-Publication now checks fresh content, all eight categories and the existing majority-feed threshold before moving the data ref. Rejected runs retain the accepted remote commit and content timestamp. Successful runs emit the published commit, SHA-256 of the exact committed discovery.json bytes, reviewed source commit and genuine producer metadata (or null for a manual run).
+- PR #38 merged after GitHub Actions run 43996325033 passed regression tests, ESLint and production build.
+- Default branch merge: fb042b920a9d11130a657975362c85735ec5c16d.
+- Only runtime-neutral changes on main: scheduled-ingestion workflow and deterministic test clock for an expired August clustering fixture. Main tests reproduced 15/16 before correction, then passed 16/16; local lint, TypeScript and build passed.
+- The scheduler checks out reviewed ingestion implementation b2dd33e829bc0cdacea6a690d4f233bb547386fd, not the older main application. Its 224 native tests passed again, including real CLI/local-Git rejection and exact-digest publication regressions.
+- Workflow has no repository-variable or Cloudflare dependency. It checks Vercel Git deployment suppression before the fixed evaluation-only data-branch push. Standard public ubuntu-latest runner, five-minute timeout, pinned actions, no scheduler artifact/cache uploads.
+- Vercel preview-only branch variable FACT_DESK_SCHEDULED_DISCOVERY=true installed for work/category-correction-20261116. Production environment untouched.
+- READY preview deployment dpl_E1FfHsgsG2tVe9puUca9F3XJHvHB, unchanged tested reader source 2fb1f2e2ad2646bfbe69cf01072958b9162d52bc.
+- Public evaluation alias reassigned and read back: https://the-fact-desk-evaluation-20261113.vercel.app/ . Existing alias-specific public-access override retained; project-wide protection unchanged.
+- Eight unauthenticated category pages returned HTTP 200 with eight distinct populated lead URLs, HTTPS publisher links and unreviewed labels. Energy lead is Jackdaw gas. Zero unsafe source href values in the rendered reader region; sidebar excluded.
+- Existing draft PR #36 remains b2dab72b84e7e89d20e2f2f330043be0b315dceb; #37 remains 630ba0febb70c0aec13df9c6dc8ffc9d4ee8c970.
 
-The GitHub workflow now requires an explicit immutable FACT_DESK_EVALUATION_SOURCE_SHA, checks out that exact commit and verifies HEAD. Installing just the workflow on the older default branch must not run that branch's older application implementation.
+## Exact unresolved acceptance gate
 
-## Executed validation
+At 19:37 CST the first genuine scheduled run had not yet appeared. Feed health returned 503/unavailable, zero stories, schedulerObserved=false and producer=null; this correctly does not claim scheduler success. Homepage/category readers remain populated through their existing live-feed path. A schedule installation is not proof of execution.
 
-- 224 native project tests passed, including the three actual CLI/local-Git scenarios and exact publication-receipt digest comparison.
-- ESLint and Next type generation/TypeScript passed.
-- Workflow YAML parsed successfully. Seven native Bash preflight cases passed, including empty, malformed, uppercase, oversized and shell-injection-like values.
-- One actual manual ingestion fetched 51 current source reports across all eight categories from 14/14 healthy feeds. Its producer remained null. This is executed feed/parser/storage evidence, not a scheduled-run receipt.
-- The existing ingestion/build-isolation gates remain closed by default. Scheduler envelopes still cannot assert independently verified execution.
+Next: inspect a genuine schedule-triggered run, compare authenticated logs/receipt/source SHA with exact data/evaluation-live-feed:discovery.json SHA256, then verify the Vercel /api/feed-health and all eight reader categories consume that snapshot. Never fabricate GITHUB_ACTIONS/event provenance. Reject failed/partial snapshots while preserving the last accepted data ref.
 
-## Activation remains blocked
+## Production and rollback
 
-- The default main branch does not contain evaluation-ingestion.yml.
-- The fixed data/evaluation-live-feed branch is absent.
-- Cloudflare's dashboard requires sign-in in the available browser; automatic-build exclusions cannot yet be authenticated.
-- The connected GitHub tools do not expose repository-variable mutation or workflow dispatch; the native GitHub CLI is not signed in.
-- No production ref, existing PR, activation variable, scheduler or remote data branch was changed.
+The production application remains READY at db7244c0f12c3173fbc10349e16234265ccd67ad, deployment dpl_UpHztX9XQQBV8zDNQDeQuTBopAAm. Main has automatic Git builds disabled. No production database, editor-write enablement or application promotion occurred.
 
-## Concrete activation sequence after access and approval
+Previous public evaluation deployment dpl_6X3Vb5rNGtLHpU4gWKQ2R3LvkDvG remains the exact alias rollback destination. Disable/remove the ingestion workflow to stop schedules; preview flag is separately scoped. Preserve the SQL/provenance safeguards and finish disposable Supabase/PostgREST HTTP lifecycle tests before enabling production editorial writes. Prior native SQL results do not substitute for that HTTP gate.
 
-1. Authenticate Cloudflare build controls and exclude the data branch from automatic builds before any data-ref write.
-2. Publish the reviewed evaluation source to an isolated development ref only after its build-trigger gates pass.
-3. Add only the reviewed evaluation-ingestion.yml workflow to the default branch through a separately approved workflow-only PR. Keep application source and production unchanged.
-4. Set the reviewed source SHA and the existing ingestion/build-isolation variables only after independently checking their claims.
-5. Dispatch the workflow, compare its authenticated run identity and log receipt with the exact stored snapshot bytes, then enable the isolated reader's scheduled-discovery flag.
-6. Verify an actual subsequent schedule-triggered run and healthy feed readback. Manual ingestion is not evidence of unattended scheduling.
+## Cost boundary
 
-The existing $1 total external-spending cap remains in effect. These new implementation and test steps used the available local execution environment and started no paid compute or deployments.
+Existing $1 total external-spending cap remains. This turn used local execution, standard public GitHub runners and one Vercel preview rebuild (approximately 47 seconds). No paid database, new project, subscription or plan upgrade was created. The Vercel billing endpoint still returns 404 costs_not_found, so posted charges and exact remaining allowance are not verified. Do not claim zero Vercel charges.
