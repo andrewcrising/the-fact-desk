@@ -3,7 +3,11 @@ import { correctionLog } from "@/data/mockSidebar";
 
 export function CorrectionLog() {
   return (
-    <SidebarPanel title="Correction Log">
+    <SidebarPanel title="Correction Log (beta)">
+      <p className="mb-2 text-[11px] leading-relaxed text-[var(--muted-light)]">
+        Demo correction entries until corrected stories are surfaced from the
+        editorial database.
+      </p>
       <ul className="divide-y divide-[var(--border-subtle)]">
         {correctionLog.map((entry) => (
           <li key={entry.id} className="py-3 first:pt-0 last:pb-0">

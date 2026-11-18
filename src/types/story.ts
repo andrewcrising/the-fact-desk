@@ -22,6 +22,9 @@ export type StoryCategory =
   | "Energy"
   | "Culture";
 
+/** Evidence level = how directly the briefing is supported by sources. */
+export type EvidenceLevel = "Low" | "Moderate" | "Strong";
+
 /**
  * Evidence source class. Social/open-web items are discovery signals, not
  * equivalent to independent publisher or primary-record corroboration.
@@ -41,16 +44,19 @@ export interface Story {
   whyItMatters: string;
   category: StoryCategory;
   confidence: Confidence;
+  evidenceLevel?: EvidenceLevel;
   signal: Signal;
   sources: string[];
   sourceUrls?: string[];
-  /** Optional array aligned by index with `sources`. Legacy stories omit it. */
+  /** Optional array aligned by index with `sources`. Legacy/persisted stories may omit it. */
   sourceKinds?: EvidenceSourceKind[];
   publishedAt: string;
   updatedAt: string;
   tags: string[];
   /** Neutral descriptor of how outlets are framing coverage — not partisan branding. */
   coverageAngle?: string;
+  /** What remains unknown, disputed, or not independently confirmed. */
+  uncertaintyNote?: string;
 }
 
 export interface LiveSignal {

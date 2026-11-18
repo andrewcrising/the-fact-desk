@@ -188,8 +188,6 @@ export function storyPriorityScore(story: Story): number {
     (story.signal === "Cross-angle" ? 4 : 0) +
     (story.signal === "Under-covered" ? 2 : 0);
 
-  // A viral social-only item may deserve discovery visibility, but must never
-  // become Major/Urgent merely because of engagement, wording, or recency.
   return isSocialOnlyStory(story) ? Math.min(score, 39) : score;
 }
 

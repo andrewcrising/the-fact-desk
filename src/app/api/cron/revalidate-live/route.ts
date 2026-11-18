@@ -1,4 +1,5 @@
-import { revalidatePath, revalidateTag } from "next/cache";
+import { requireAdminOrCronRequest } from "@/lib/auth";
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -8,16 +9,10 @@ export const dynamic = "force-dynamic";
  * Set CRON_SECRET in Vercel env; cron sends Authorization: Bearer <CRON_SECRET>.
  */
 export async function GET(request: Request) {
-  const secret = process.env.CRON_SECRET;
-  if (secret) {
-    const auth = request.headers.get("authorization");
-    if (auth !== `Bearer ${secret}`) {
-      return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
-    }
-  }
+  const unauthorized = requireAdminOrCronRequest(request);
+  if (unauthorized) return unauthorized;
 
   revalidateTag("live-rss", { expire: 0 });
-  revalidatePath("/");
 
   return NextResponse.json({
     ok: true,

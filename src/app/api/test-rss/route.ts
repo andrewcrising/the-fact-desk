@@ -1,9 +1,10 @@
+import { requireAdminOrCronRequest } from "@/lib/auth";
 import {
   DEFAULT_TEST_RSS_FEED,
   DEFAULT_TEST_RSS_OPTIONS,
   fetchRssStories,
 } from "@/lib/ingest/rss";
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +13,10 @@ export const dynamic = "force-dynamic";
  * Returns normalized Story-shaped JSON from one live RSS feed.
  * Does not affect the homepage mock desk.
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const unauthorized = requireAdminOrCronRequest(request);
+  if (unauthorized) return unauthorized;
+
   try {
     const stories = await fetchRssStories(
       DEFAULT_TEST_RSS_FEED,
