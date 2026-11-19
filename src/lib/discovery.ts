@@ -3,6 +3,7 @@ import { clusterAndBalanceStories } from "@/lib/ingest/cluster-stories";
 import { sanitizeStoryForPublic } from "@/lib/ingest/public-story";
 import { EVALUATION_FEEDS, isEligibleFeedArticle } from "@/lib/discovery-feeds";
 import { getScheduledSnapshot } from "@/lib/scheduled-discovery";
+import { isReadOnlyEvaluation } from "@/lib/evaluation-mode";
 import { createDiscoveryCache } from "@/lib/discovery-cache";
 import type { Story } from "@/types/story";
 
@@ -78,5 +79,7 @@ const getLocalDiscovery = createDiscoveryCache(fetchDiscovery);
 export const getBoundedDiscovery = Object.assign(async () => {
   const snapshot = await getScheduledSnapshot();
   if (snapshot && snapshot.stories.length) return { stories: snapshot.stories, fetchedAt: snapshot.fetchedAt, source: "scheduled" as const };
+  // Isolated previews must not silently substitute request-time RSS for a missing snapshot.
+  if (isReadOnlyEvaluation()) return { stories: [], fetchedAt: null, source: "scheduled" as const };
   return getLocalDiscovery();
 }, { invalidate() { getLocalDiscovery.invalidate(); getScheduledSnapshot.invalidate(); } });
