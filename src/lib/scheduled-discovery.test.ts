@@ -41,3 +41,16 @@ test("invalidation fences pending snapshot results and permits a new load", asyn
   releases[1](null);
   assert.equal(await newer, null);
 });
+
+test("synchronous snapshot loader exceptions fail closed and respect retry backoff", async () => {
+  let now = Date.parse("2026-11-20T06:00:00Z");
+  let calls = 0;
+  const reader = createSnapshotReader(() => { calls++; throw Error("synchronous failure"); }, () => now);
+  assert.deepEqual(await Promise.all([reader(), reader(), reader()]), [null, null, null]);
+  assert.equal(calls, 1);
+  assert.equal(await reader(), null);
+  assert.equal(calls, 1);
+  now += 30_001;
+  assert.equal(await reader(), null);
+  assert.equal(calls, 2);
+});
