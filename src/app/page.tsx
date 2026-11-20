@@ -19,6 +19,7 @@ export default async function Home() {
   const stories = rankHomepageStories(published);
   return (
     <>
+      <a href="#stories" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded focus:bg-white focus:px-4 focus:py-3 focus:text-black focus:shadow-lg">Skip to stories</a>
       <TopNav />
       <Hero />
       <Dashboard
