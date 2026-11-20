@@ -35,6 +35,8 @@ test("invalidation fences pending snapshot results and permits a new load", asyn
   const older = reader();
   reader.invalidate();
   const newer = reader();
+  // The loader is invoked in a microtask so synchronous exceptions become rejections.
+  await Promise.resolve();
   assert.equal(releases.length, 2);
   releases[0](null);
   assert.equal(await older, null);
