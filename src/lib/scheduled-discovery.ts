@@ -12,7 +12,7 @@ export function createSnapshotReader(load: () => Promise<unknown>, now = Date.no
     if (now() < nextAttempt) return parseDiscoverySnapshot(retained, now());
     if (!pending) {
       const currentGeneration = generation;
-      const current = load().then((data) => {
+      const current = Promise.resolve().then(load).then((data) => {
         const snapshot = parseDiscoverySnapshot(data, now());
         if (currentGeneration !== generation) return parseDiscoverySnapshot(retained, now());
         if (snapshot && (!retained || Date.parse(snapshot.attemptedAt) >= Date.parse(retained.attemptedAt))) retained = snapshot;
